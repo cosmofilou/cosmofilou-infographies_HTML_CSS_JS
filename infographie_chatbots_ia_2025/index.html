@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Étude 2025 : Le Big Bang des Chatbots IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-light: #f1f5f9;
+            --bg-dark: #020617;
+            --text-light: #0f172a;
+            --text-dark: #e2e8f0;
+            --card-bg-light: rgba(255, 255, 255, 0.8);
+            --card-bg-dark: rgba(30, 41, 59, 0.8);
+            --border-light: rgba(226, 232, 240, 1);
+            --border-dark: rgba(51, 65, 85, 1);
+            --modal-overlay-dark: rgba(0, 0, 0, 0.7);
+            --modal-overlay-light: rgba(241, 245, 249, 0.7);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body { background-color: var(--bg-dark); color: var(--text-dark); }
+            .glass-card { background-color: var(--card-bg-dark); border-color: var(--border-dark); }
+            .chart-bg { background-color: #1e293b; }
+            .zone-bg { background-blend-mode: overlay; }
+            .modal-overlay { background-color: var(--modal-overlay-dark); }
+        }
+
+        @media (prefers-color-scheme: light) {
+            body { background-color: var(--bg-light); color: var(--text-light); }
+            .glass-card { background-color: var(--card-bg-light); border-color: var(--border-light); }
+            .chart-bg { background-color: #ffffff; }
+            .zone-bg { background-blend-mode: screen; }
+            .modal-overlay { background-color: var(--modal-overlay-light); }
+        }
+
+        .glass-card {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-width: 1px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .ai-bubble {
+            position: absolute;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), inset 0 2px 4px 0 rgba(255,255,255,0.05);
+            transition: transform 0.3s ease, z-index 0s 0s;
+            animation: breathe 6s ease-in-out infinite alternate;
+        }
+        .ai-bubble:hover {
+            transform: scale(1.08);
+            z-index: 50 !important;
+            animation-play-state: paused;
+        }
+        .ai-bubble:hover .ai-details {
+            opacity: 1;
+            transform: translate(-50%, 0) scale(1);
+            pointer-events: all;
+        }
+        .ai-bubble .ai-details {
+            opacity: 0;
+            position: absolute;
+            top: 105%;
+            left: 50%;
+            transform: translate(-50%, -10px) scale(0.95);
+            transition: all 0.3s ease;
+            width: 280px;
+            z-index: 60;
+            pointer-events: none;
+            text-align: left;
+        }
+
+        @keyframes breathe {
+            from { transform: scale(1); }
+            to { transform: scale(1.03); }
+        }
+        
+        .zone-bg {
+            position: absolute;
+            border-radius: 50%;
+            transition: transform 0.5s ease;
+            animation: pulse 15s infinite alternate;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.15; }
+            100% { transform: scale(1.03); opacity: 0.3; }
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal-content {
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        /* Chart Tooltip */
+        .chart-tooltip {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <div class="container mx-auto px-4 py-8 md:py-16">
+        <header class="text-center mb-16 md:mb-24">
+            <div class="flex justify-center items-center gap-2 md:gap-3 fade-in-up" style="animation-delay: 0.1s;">
+                <h1 class="text-5xl md:text-8xl font-black tracking-tighter">AI Chatb
+                    <span class="inline-block align-middle transition-transform duration-300 hover:rotate-12">
+                        <svg class="w-10 h-10 md:w-16 md:h-16 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M8 12.5a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0Z"></path><path d="M16 12.5a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0Z"></path><path d="M12 8.5a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0Z"></path><path d="M12 15.5a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0Z"></path><path d="M5 21a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5ZM16 8.5a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0Z"></path><path d="M8 15.5a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0Z"></path>
+                        </svg>
+                    </span>ts
+                </h1>
+            </div>
+            <h2 class="text-xl md:text-3xl font-bold tracking-tight fade-in-up mt-2" style="animation-delay: 0.2s;">Le "Big Bang" des IA Conversationnelles</h2>
+            <p class="mt-4 text-base md:text-lg max-w-3xl mx-auto text-slate-500 dark:text-slate-400 fade-in-up" style="animation-delay: 0.3s;">
+                De août 2024 à juillet 2025, le top 10 des chatbots a capturé 59,8% du trafic web mondial. ChatGPT reste le leader incontesté avec 48,36% de part de marché. Explorez les données clés de cet écosystème en pleine expansion.
+            </p>
+        </header>
+
+        <main class="relative w-full h-[700px] md:h-[650px] lg:h-[600px] mb-20 fade-in-up" style="animation-delay: 0.5s;" id="ai-galaxy">
+            <svg id="connector-svg" class="absolute top-0 left-0 w-full h-full pointer-events-none z-40">
+                <path id="connector-line" d="" stroke="rgba(139, 92, 246, 0.7)" stroke-width="2" fill="none" stroke-dasharray="5,5" />
+            </svg>
+            <div class="zone-bg" style="width: 650px; height: 650px; top: calc(50% - 325px); left: calc(50% - 325px); background: radial-gradient(circle, rgba(236, 72, 153, 0.5) 0%, rgba(236, 72, 153, 0) 70%); animation-duration: 18s;"></div>
+            <div class="zone-bg" style="width: 450px; height: 450px; top: calc(50% - 225px); left: calc(50% - 225px); background: radial-gradient(circle, rgba(139, 92, 246, 0.5) 0%, rgba(139, 92, 246, 0) 70%); animation-duration: 15s;"></div>
+            <div class="zone-bg" style="width: 280px; height: 280px; top: calc(50% - 140px); left: calc(50% - 140px); background: radial-gradient(circle, rgba(59, 130, 246, 0.6) 0%, rgba(59, 130, 246, 0) 70%); animation-duration: 12s;"></div>
+
+            <!-- AI Bubbles -->
+            <div id="chatgpt" class="ai-bubble glass-card rounded-full" style="width: 180px; height: 180px; top: calc(50% - 90px); left: calc(50% - 90px); z-index: 10; animation-delay: -1s;">
+                <span class="absolute -top-3 -left-3 bg-blue-500 text-white text-xl font-bold rounded-full w-10 h-10 flex items-center justify-center">#1</span>
+                <svg class="w-16 h-16 text-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16.892 10.234c.325-.572.538-1.22.538-1.921 0-2.485-2.015-4.5-4.5-4.5s-4.5 2.015-4.5 4.5c0 .701.213 1.349.538 1.921m7.924 0c.325.572.538 1.22.538 1.921 0 2.485-2.015 4.5-4.5 4.5s-4.5-2.015-4.5-4.5c0-.701.213-1.349.538-1.921m7.924 0-7.924 0M7.108 13.766c-.325.572-.538 1.22-.538 1.921 0 2.485 2.015 4.5 4.5 4.5s4.5-2.015 4.5-4.5c0-.701-.213-1.349-.538-1.921m-7.924 0c-.325-.572-.538-1.22-.538-1.921 0-2.485 2.015-4.5 4.5-4.5s4.5 2.015 4.5-4.5c0 .701-.213 1.349-.538 1.921m-7.924 0h7.924"></path></svg>
+                <h3 class="text-2xl font-bold mt-2">ChatGPT</h3>
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">48.36% PDM</p>
+            </div>
+            
+            <div id="grok" class="ai-bubble glass-card rounded-full" style="width: 100px; height: 100px; top: 12%; left: 75%; z-index: 8; animation-delay: -2s;">
+                <span class="absolute -top-2 -left-2 bg-slate-600 text-white text-sm font-bold rounded-full w-7 h-7 flex items-center justify-center">#2</span>
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 L2 7 L12 12 L22 7 Z M2 17 L12 22 L22 17 M2 12 L12 17 L22 12"></path></svg>
+                <h4 class="font-semibold mt-1">Grok</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">686.91M visites</p>
+            </div>
+            
+            <div id="gemini" class="ai-bubble glass-card rounded-full" style="width: 120px; height: 120px; top: 38%; right: 5%; z-index: 9; animation-delay: -3s;">
+                <span class="absolute -top-2 -left-2 bg-slate-600 text-white text-sm font-bold rounded-full w-7 h-7 flex items-center justify-center">#3</span>
+                <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                <h4 class="font-semibold mt-1">Gemini</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">1.66B visites</p>
+            </div>
+
+            <div id="claude" class="ai-bubble glass-card rounded-full" style="width: 110px; height: 110px; top: 70%; right: 18%; z-index: 8; animation-delay: -4s;">
+                <span class="absolute -top-2 -left-2 bg-slate-600 text-white text-sm font-bold rounded-full w-7 h-7 flex items-center justify-center">#4</span>
+                <svg class="w-9 h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M12 12c-3 0-6 2-6 5"></path></svg>
+                <h4 class="font-semibold mt-1">Claude</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">138.6M visites</p>
+            </div>
+
+            <div id="deepseek" class="ai-bubble glass-card rounded-full" style="width: 90px; height: 90px; bottom: 5%; right: 35%; z-index: 7; animation-delay: -5s;">
+                <span class="absolute -top-2 -left-2 bg-slate-600 text-white text-sm font-bold rounded-full w-7 h-7 flex items-center justify-center">#5</span>
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <h4 class="font-semibold text-sm mt-1">DeepSeek</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">2.74B visites</p>
+            </div>
+            
+            <div id="perplexity" class="ai-bubble glass-card rounded-full" style="width: 95px; height: 95px; bottom: 2%; left: 25%; z-index: 7; animation-delay: -2.5s;">
+                <span class="absolute -top-2 -left-2 bg-slate-600 text-white text-sm font-bold rounded-full w-7 h-7 flex items-center justify-center">#6</span>
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <h4 class="font-semibold text-sm mt-1">Perplexity</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">39.52% croissance</p>
+            </div>
+
+            <div id="copilot" class="ai-bubble glass-card rounded-full" style="width: 130px; height: 130px; top: 65%; left: 10%; z-index: 9; animation-delay: -3.5s;">
+                <span class="absolute -top-2 -left-2 bg-slate-600 text-white text-sm font-bold rounded-full w-7 h-7 flex items-center justify-center">#7</span>
+                <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.8 17.8c-2.4 2.4-6.2 2.4-8.5 0-2.4-2.4-2.4-6.2 0-8.5 2.4-2.4 6.2-2.4 8.5 0 1.2 1.2 1.8 2.8 1.8 4.2s-.6 3-1.8 4.2zM6.2 6.2c2.4-2.4 6.2-2.4 8.5 0 2.4 2.4 2.4 6.2 0 8.5s-6.2 2.4-8.5 0-2.4-6.2 0-8.5z"></path></svg>
+                <h4 class="font-semibold mt-1">MS Copilot</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">378.05M visites</p>
+            </div>
+
+            <div id="poe" class="ai-bubble glass-card rounded-full" style="width: 100px; height: 100px; top: 20%; left: 8%; z-index: 8; animation-delay: -4.5s;">
+                <span class="absolute -top-2 -left-2 bg-slate-600 text-white text-sm font-bold rounded-full w-7 h-7 flex items-center justify-center">#8</span>
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7V17L12 22L22 17V7L12 2Z"></path><path d="M2 7L12 12L22 7"></path><path d="M12 22V12"></path></svg>
+                <h4 class="font-semibold mt-1">Poe</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">15:25 durée/sess.</p>
+            </div>
+            
+            <div id="mistral" class="ai-bubble glass-card rounded-full" style="width: 80px; height: 80px; top: 8%; left: 30%; z-index: 6; animation-delay: -5.5s;">
+                <span class="absolute -top-2 -left-2 bg-slate-600 text-white text-sm font-bold rounded-full w-7 h-7 flex items-center justify-center">#9</span>
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12 C 2 12 7 4 12 12 C 17 20 22 12 22 12"></path><path d="M2 12 C 2 12 7 20 12 12 C 17 4 22 12 22 12"></path></svg>
+                <h4 class="font-semibold text-sm mt-1">Mistral</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">101.39M visites</p>
+            </div>
+
+            <div id="meta" class="ai-bubble glass-card rounded-full" style="width: 85px; height: 85px; top: 25%; left: 25%; z-index: 6; animation-delay: -1.5s;">
+                <span class="absolute -top-2 -left-2 bg-slate-600 text-white text-sm font-bold rounded-full w-7 h-7 flex items-center justify-center">#10</span>
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+                <h4 class="font-semibold text-sm mt-1">Meta AI</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400">130.35M visites</p>
+            </div>
+        </main>
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+            <div class="glass-card chart-bg rounded-2xl p-6 fade-in-up" style="animation-delay: 0.7s;">
+                <h3 class="font-bold text-lg mb-1">Croissance du Trafic Web des Chatbots IA</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Total de <strong>55.88B</strong> visites sur 12 mois.</p>
+                <div id="traffic-chart-container" class="relative h-64">
+                    <div id="traffic-chart" class="h-full flex items-end justify-between gap-2 text-xs text-center"></div>
+                    <div id="traffic-tooltip" class="chart-tooltip glass-card"></div>
+                </div>
+            </div>
+            <div class="glass-card chart-bg rounded-2xl p-6 fade-in-up" style="animation-delay: 0.8s;">
+                <h3 class="font-bold text-lg mb-1">Tendance des Citations Médias</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Total de <strong>7.7M</strong> citations, avec une croissance de <strong>11.15%</strong>.</p>
+                <div id="citations-chart-container" class="h-64 relative">
+                    <svg id="citations-chart" class="w-full h-full" viewBox="0 0 300 150"></svg>
+                    <div id="citations-tooltip" class="chart-tooltip glass-card"></div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center mt-16 text-xs text-slate-400 dark:text-slate-500 fade-in-up" style="animation-delay: 0.9s;">
+            <p>&copy; 2025 Infographie Dynamique. Tous droits réservés.</p>
+            <p class="mt-1">Cette infographie fait partie de "The AI Big Bang Study 2025: Best AI Chatbots". Recherche par OneLittleWeb utilisant des données de Semrush, aitools.fyi, et MuckRack. Pour la méthodologie complète, l'analyse et les visites, consultez notre site web. Lorsque vous partagez ce visuel ou citez des données, veuillez créditer OneLittleWeb.com.</p>
+            <p class="mt-2">Mentions légales | Politique de confidentialité</p>
+        </footer>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="ai-modal" class="modal-overlay">
+        <div class="modal-content glass-card rounded-2xl w-full max-w-lg m-4" id="modal-card">
+            <!-- Content will be injected by JS -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- AI Data ---
+            const aiData = {
+                chatgpt: {
+                    name: "ChatGPT",
+                    description: "Leader du marché par OpenAI",
+                    details: [
+                        "<strong>Modèle phare :</strong> GPT-4o, multimodal natif (texte, audio, vision) avec des performances de pointe.",
+                        "<strong>Écosystème :</strong> Vaste base d'utilisateurs, API robuste, et intégration dans les produits Microsoft.",
+                        "<strong>Actualité :</strong> Focus sur l'adoption en entreprise avec \"ChatGPT Enterprise\" et développement de GPT-5.",
+                        "<strong>Stats :</strong> 46.59B visites/an, 2.4M citations médias."
+                    ]
+                },
+                grok: {
+                    name: "Grok",
+                    description: "L'IA irrévérencieuse de xAI",
+                    details: [
+                        "<strong>Point fort :</strong> Accès en temps réel aux données du réseau X (ex-Twitter), offrant des réponses très actuelles.",
+                        "<strong>Caractéristique :</strong> Propose un mode \"Fun\" avec un ton humoristique et rebelle.",
+                        "<strong>Actualité :</strong> Open-source (Grok-1), croissance rapide et intégration poussée pour les abonnés X Premium+."
+                    ]
+                },
+                gemini: {
+                    name: "Gemini",
+                    description: "Le cerveau IA de Google",
+                    details: [
+                        "<strong>Modèle phare :</strong> Gemini 1.5 Pro avec une fenêtre de contexte massive (1M de tokens).",
+                        "<strong>Écosystème :</strong> Intégré dans tout l'univers Google (Workspace, Android, Recherche).",
+                        "<strong>Actualité :</strong> Déploiement de Gemini 2.0 Ultra, focus sur le raisonnement complexe et les outils pour développeurs via Vertex AI."
+                    ]
+                },
+                claude: {
+                    name: "Claude",
+                    description: "L'IA éthique par Anthropic",
+                    details: [
+                        "<strong>Point fort :</strong> \"IA Constitutionnelle\" pour la sécurité et la fiabilité. Fenêtre de contexte très large.",
+                        "<strong>Modèle phare :</strong> Claude 3.5 Sonnet, surpassant les concurrents sur de nombreux benchmarks.",
+                        "<strong>Actualité :</strong> Forte adoption en entreprise pour l'analyse de documents complexes et le service client."
+                    ]
+                },
+                deepseek: {
+                    name: "DeepSeek",
+                    description: "Le spécialiste du code",
+                    details: [
+                        "<strong>Point fort :</strong> Performances exceptionnelles en génération et compréhension de code.",
+                        "<strong>Caractéristique :</strong> Modèles open-source très populaires auprès des développeurs.",
+                        "<strong>Actualité :</strong> Lancement de DeepSeek-V2, un modèle open-source très performant et efficace."
+                    ]
+                },
+                perplexity: {
+                    name: "Perplexity",
+                    description: "Le moteur de réponse",
+                    details: [
+                        "<strong>Point fort :</strong> Cite systématiquement ses sources web, idéal pour la recherche et la vérification.",
+                        "<strong>Caractéristique :</strong> Se positionne comme un \"moteur de conversation\" plutôt qu'un simple chatbot.",
+                        "<strong>Actualité :</strong> Lancement de \"Pages\" pour créer des rapports détaillés à partir de prompts."
+                    ]
+                },
+                copilot: {
+                    name: "MS Copilot",
+                    description: "L'assistant de Microsoft",
+                    details: [
+                        "<strong>Écosystème :</strong> Intégration profonde dans Windows et la suite Microsoft 365 (Word, Excel, Teams).",
+                        "<strong>Caractéristique :</strong> Accès gratuit aux derniers modèles d'OpenAI (GPT-4o).",
+                        "<strong>Actualité :</strong> Focus sur la sécurité et la productivité en entreprise avec \"Copilot for Security\"."
+                    ]
+                },
+                poe: {
+                    name: "Poe",
+                    description: "L'agrégateur d'IA par Quora",
+                    details: [
+                        "<strong>Point fort :</strong> Permet d'accéder à une multitude de modèles IA (Claude, Gemini, Llama, etc.) via une seule interface.",
+                        "<strong>Caractéristique :</strong> Possibilité de créer et monétiser ses propres chatbots personnalisés.",
+                        "<strong>Actualité :</strong> Ajout constant de nouveaux modèles et amélioration des outils de création de bots."
+                    ]
+                },
+                mistral: {
+                    name: "Mistral",
+                    description: "Le champion européen",
+                    details: [
+                        "<strong>Point fort :</strong> Modèles open-source très performants et efficaces (Mixtral 8x22B).",
+                        "<strong>Caractéristique :</strong> Focus sur l'efficacité et la souveraineté technologique européenne.",
+                        "<strong>Actualité :</strong> Partenariat stratégique avec Microsoft et levées de fonds record."
+                    ]
+                },
+                meta: {
+                    name: "Meta AI",
+                    description: "L'IA sociale de Meta",
+                    details: [
+                        "<strong>Écosystème :</strong> Intégration dans WhatsApp, Messenger, Instagram et les lunettes Ray-Ban.",
+                        "<strong>Modèle phare :</strong> Llama 3, un des modèles open-source les plus puissants disponibles.",
+                        "<strong>Actualité :</strong> Déploiement mondial et ajout de fonctionnalités de génération d'images en temps réel."
+                    ]
+                }
+            };
+
+            // --- Modal Logic ---
+            const modal = document.getElementById('ai-modal');
+            const modalCard = document.getElementById('modal-card');
+            const bubbles = document.querySelectorAll('.ai-bubble');
+
+            bubbles.forEach(bubble => {
+                bubble.addEventListener('click', () => {
+                    const id = bubble.id;
+                    const data = aiData[id];
+                    modalCard.innerHTML = `
+                        <div class="p-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-2xl font-bold">${data.name}</h3>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400">${data.description}</p>
+                                </div>
+                                <button id="close-modal" class="p-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">&times;</button>
+                            </div>
+                            <ul class="mt-4 list-disc list-inside space-y-2 text-sm">
+                                ${data.details.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                            <div class="mt-6 text-center">
+                                <a href="#" class="text-blue-500 font-semibold text-sm hover:underline">Visiter le site &rarr;</a>
+                            </div>
+                        </div>
+                    `;
+                    modal.classList.add('active');
+                });
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal || e.target.id === 'close-modal' || e.target.parentElement.id === 'close-modal') {
+                    modal.classList.remove('active');
+                }
+            });
+
+            // --- Connector Line Logic ---
+            const svg = document.getElementById('connector-svg');
+            const line = document.getElementById('connector-line');
+            const centerBubble = document.getElementById('chatgpt');
+
+            bubbles.forEach(bubble => {
+                if (bubble.id === 'chatgpt') return;
+                bubble.addEventListener('mouseenter', () => {
+                    const rect1 = centerBubble.getBoundingClientRect();
+                    const rect2 = bubble.getBoundingClientRect();
+                    const svgRect = svg.getBoundingClientRect();
+
+                    const x1 = rect1.left + rect1.width / 2 - svgRect.left;
+                    const y1 = rect1.top + rect1.height / 2 - svgRect.top;
+                    const x2 = rect2.left + rect2.width / 2 - svgRect.left;
+                    const y2 = rect2.top + rect2.height / 2 - svgRect.top;
+                    
+                    line.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2}`);
+                    line.style.transition = 'stroke-dashoffset 0.5s ease-out';
+                    const length = line.getTotalLength();
+                    line.style.strokeDasharray = length;
+                    line.style.strokeDashoffset = length;
+                    setTimeout(() => { line.style.strokeDashoffset = 0; }, 10);
+                });
+                bubble.addEventListener('mouseleave', () => {
+                     const length = line.getTotalLength();
+                     line.style.strokeDashoffset = length;
+                });
+            });
+
+
+            // --- Charts with Tooltips ---
+            const trafficData = [
+                { month: 'Août', value: 2.76 }, { month: 'Sep', value: 3.88 },
+                { month: 'Oct', value: 4.81 }, { month: 'Nov', value: 5.01 },
+                { month: 'Déc', value: 5.50 }, { month: 'Jan', value: 5.78 },
+                { month: 'Fév', value: 5.55 }, { month: 'Mar', value: 5.78 },
+                { month: 'Avr', value: 4.81 }, { month: 'Mai', value: 4.90 },
+                { month: 'Juin', value: 5.49 }, { month: 'Juil', value: 6.49 }
+            ];
+            const trafficChart = document.getElementById('traffic-chart');
+            const trafficTooltip = document.getElementById('traffic-tooltip');
+            const maxTraffic = Math.max(...trafficData.map(d => d.value));
+
+            trafficData.forEach(data => {
+                const barContainer = document.createElement('div');
+                barContainer.className = 'flex flex-col items-center h-full justify-end w-full group';
+                const bar = document.createElement('div');
+                const barHeight = (data.value / maxTraffic) * 100;
+                bar.className = 'chart-bar w-full bg-gradient-to-t from-blue-500 to-blue-400 dark:from-blue-400 dark:to-blue-300 rounded-t-md group-hover:opacity-80 transition-opacity';
+                setTimeout(() => { bar.style.height = `${barHeight}%`; }, 600);
+                const monthLabel = document.createElement('span');
+                monthLabel.className = 'mt-2 text-slate-500 dark:text-slate-400';
+                monthLabel.textContent = data.month;
+                
+                barContainer.appendChild(bar);
+                barContainer.appendChild(monthLabel);
+                trafficChart.appendChild(barContainer);
+
+                barContainer.addEventListener('mouseenter', (e) => {
+                    trafficTooltip.textContent = `${data.value.toFixed(2)}B`;
+                    trafficTooltip.style.opacity = '1';
+                    const rect = barContainer.getBoundingClientRect();
+                    const containerRect = trafficChart.parentElement.getBoundingClientRect();
+                    trafficTooltip.style.left = `${rect.left - containerRect.left + rect.width / 2 - trafficTooltip.offsetWidth / 2}px`;
+                    trafficTooltip.style.top = `${rect.top - containerRect.top - trafficTooltip.offsetHeight - 5}px`;
+                });
+                barContainer.addEventListener('mouseleave', () => {
+                    trafficTooltip.style.opacity = '0';
+                });
+            });
+
+            const citationsData = [
+                { month: 'Août', value: 483.1 }, { month: 'Sep', value: 491.2 }, { month: 'Nov', value: 549.2 }, { month: 'Déc', value: 432.0 },
+                { month: 'Jan', value: 411.7 }, { month: 'Fév', value: 488.0 }, { month: 'Mar', value: 585.1 }, { month: 'Avr', value: 617.9 },
+                { month: 'Mai', value: 639.2 }, { month: 'Juin', value: 598.1 }, { month: 'Juil', value: 637.7 }, { month: 'Août', value: 537.2 }
+            ];
+            const citationsChart = document.getElementById('citations-chart');
+            const citationsTooltip = document.getElementById('citations-tooltip');
+            const maxCitations = Math.max(...citationsData.map(d => d.value));
+            const width = 300, height = 150, padding = 10;
+            const points = citationsData.map((d, i) => ({
+                x: (i / (citationsData.length - 1)) * (width - 2 * padding) + padding,
+                y: height - padding - (d.value / maxCitations) * (height - 2 * padding),
+                value: d.value,
+                month: d.month
+            }));
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+            path.setAttribute('points', points.map(p => `${p.x},${p.y}`).join(' '));
+            path.setAttribute('fill', 'none'); path.setAttribute('stroke', 'url(#line-gradient)'); path.setAttribute('stroke-width', '2.5'); path.setAttribute('stroke-linecap', 'round'); path.setAttribute('stroke-linejoin', 'round');
+            path.classList.add('line-chart-path');
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const linearGradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+            linearGradient.id = 'line-gradient'; linearGradient.setAttribute('x1', '0%'); linearGradient.setAttribute('y1', '0%'); linearGradient.setAttribute('x2', '100%'); linearGradient.setAttribute('y2', '0%');
+            const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop1.setAttribute('offset', '0%'); stop1.setAttribute('stop-color', '#8b5cf6');
+            const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop2.setAttribute('offset', '100%'); stop2.setAttribute('stop-color', '#ec4899');
+            linearGradient.appendChild(stop1); linearGradient.appendChild(stop2);
+            defs.appendChild(linearGradient);
+            citationsChart.appendChild(defs); citationsChart.appendChild(path);
+
+            points.forEach(p => {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', p.x); circle.setAttribute('cy', p.y); circle.setAttribute('r', '4'); circle.setAttribute('fill', 'transparent');
+                citationsChart.appendChild(circle);
+                circle.addEventListener('mouseenter', (e) => {
+                    citationsTooltip.textContent = `${p.value.toFixed(1)}K`;
+                    citationsTooltip.style.opacity = '1';
+                    const containerRect = citationsChart.parentElement.getBoundingClientRect();
+                    const svgRect = citationsChart.getBoundingClientRect();
+                    citationsTooltip.style.left = `${(p.x / width) * svgRect.width - citationsTooltip.offsetWidth / 2}px`;
+                    citationsTooltip.style.top = `${(p.y / height) * svgRect.height - citationsTooltip.offsetHeight - 5}px`;
+                });
+                circle.addEventListener('mouseleave', () => {
+                    citationsTooltip.style.opacity = '0';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
