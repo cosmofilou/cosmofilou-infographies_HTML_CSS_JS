@@ -136,6 +136,22 @@
             color: white;
             display: flex;
             align-items: center;
+            position: relative;
+            list-style: none; /* Hide default marker */
+        }
+        details > summary::-webkit-details-marker {
+            display: none; /* Hide default marker for Chrome */
+        }
+        details > summary::before {
+            content: '▶';
+            position: absolute;
+            left: 1rem;
+            transform: rotate(0deg);
+            transition: transform 0.2s;
+            font-size: 0.8em;
+        }
+        details[open] > summary::before {
+            transform: rotate(90deg);
         }
         details[open] > summary {
             border-bottom-left-radius: 0;
@@ -147,6 +163,11 @@
             border-top: none;
             border-bottom-left-radius: 0.5rem;
             border-bottom-right-radius: 0.5rem;
+        }
+        .summary-content {
+            margin-left: 1.5rem;
+            display: flex;
+            align-items: center;
         }
     </style>
 </head>
@@ -174,8 +195,8 @@
             <section id="notice" class="mb-12">
                 <div class="card">
                     <details>
-                        <summary>💡 Notice d'Utilisation Rapide (Cliquez pour déplier)</summary>
-                        <div class="mt-4">
+                        <summary><div class="summary-content"><span>💡</span><span class="ml-3">Notice d'Utilisation Rapide</span></div></summary>
+                        <div>
                             <p class="text-gray-400 mb-6">Suivez ces étapes dans l'ordre pour une construction logique et efficace de votre système.</p>
                             <ol class="list-decimal list-inside space-y-4 text-gray-300">
                                 <li><strong>Construisez d'abord le Noyau Essentiel.</strong><p class="text-sm text-gray-400 pl-6">Créez les 4 bases de données de la Section 1. C'est la fondation.</p></li>
@@ -380,7 +401,7 @@
                     <p class="text-gray-400">Voici le détail des actions à mener pour vos projets prioritaires. Créez les projets et les tâches correspondantes dans votre système.</p>
                     
                     <details>
-                        <summary><span class="mr-3">💰</span>Sujet : `Reprendre le contrôle total de mes finances`</summary>
+                        <summary><div class="summary-content"><span class="mr-3">💰</span>Sujet : `Reprendre le contrôle total de mes finances`</div></summary>
                         <div>
                             <p class="text-sm text-gray-400 mb-4"><strong>Objectif :</strong> Avoir une vision claire de mes finances, identifier les fuites et définir des budgets réalistes pour atteindre mes objectifs d'épargne.</p>
                             <h5 class="font-semibold text-indigo-400 mb-2">Projet à créer : `Analyse et optimisation des finances 2025`</h5>
@@ -401,7 +422,7 @@
                     </details>
 
                     <details>
-                        <summary><span class="mr-3">🔐</span>Sujet : `Optimiser ma sécurité numérique`</summary>
+                        <summary><div class="summary-content"><span class="mr-3">🔐</span>Sujet : `Optimiser ma sécurité numérique`</div></summary>
                         <div>
                             <h5 class="font-semibold text-indigo-400 mb-2">Projet à créer : `Centraliser la gestion des mots de passe`</h5>
                              <ul class="list-disc list-inside text-sm text-gray-300 mt-2 space-y-2 mb-4">
@@ -416,7 +437,7 @@
                     </details>
                     
                     <details>
-                        <summary><span class="mr-3">📂</span>Sujet : `Organiser ma vie numérique`</summary>
+                        <summary><div class="summary-content"><span class="mr-3">📂</span>Sujet : `Organiser ma vie numérique`</div></summary>
                         <div>
                              <h5 class="font-semibold text-indigo-400 mb-2">Projet à créer : `Réorganiser l'arborescence Google Drive`</h5>
                              <p class="text-sm text-gray-400 mb-4"><strong>Objectif :</strong> Avoir une structure de dossiers claire et standardisée.</p>
