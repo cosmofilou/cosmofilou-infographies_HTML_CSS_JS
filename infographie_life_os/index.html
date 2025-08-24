@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocole V4 : Guide de Construction Ultime pour Votre Life OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background: linear-gradient(to bottom right, #111827, #1F2937);
+        }
+        .card {
+            background-color: rgba(31, 41, 55, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(55, 65, 81, 0.7);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .code-block {
+            background-color: #111827;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            position: relative;
+        }
+        .code-block pre code {
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: #374151;
+            color: #D1D5DB;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+        .copy-btn:hover {
+            background-color: #4B5563;
+        }
+        .property-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #374151;
+        }
+        .property-item:last-child {
+            border-bottom: none;
+        }
+        .property-details {
+            display: flex;
+            align-items: center;
+        }
+        .property-icon {
+            margin-right: 0.75rem;
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        .property-type {
+            background-color: #374151;
+            color: #9CA3AF;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            text-align: center;
+            min-width: 80px;
+        }
+        .step-card {
+            background-color: rgba(39, 51, 68, 0.7);
+            border-left: 4px solid #4f46e5;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+        .side-nav {
+            position: fixed;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            background-color: rgba(31, 41, 55, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(55, 65, 81, 0.7);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: none;
+        }
+        @media (min-width: 1280px) {
+            .side-nav {
+                display: block;
+            }
+        }
+        .side-nav a {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            color: #9CA3AF;
+            transition: background-color 0.2s, color 0.2s;
+            font-size: 0.875rem;
+        }
+        .side-nav a:hover {
+            background-color: #374151;
+            color: #E5E7EB;
+        }
+        .side-nav a.active {
+            background-color: #4f46e5;
+            color: white;
+            font-weight: 600;
+        }
+        details > summary {
+            cursor: pointer;
+            padding: 1rem;
+            background-color: rgba(55, 65, 81, 0.5);
+            border-radius: 0.5rem;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        details[open] > summary {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        details > div {
+            padding: 1.5rem;
+            border: 1px solid #374151;
+            border-top: none;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <nav class="side-nav">
+        <ul id="nav-list">
+            <li><a href="#notice" class="nav-link"><span>💡</span><span class="ml-3">Notice</span></a></li>
+            <li><a href="#noyau" class="nav-link"><span>🧠</span><span class="ml-3">Noyau Essentiel</span></a></li>
+            <li><a href="#automatisation" class="nav-link"><span>🤖</span><span class="ml-3">Automatisation</span></a></li>
+            <li><a href="#cockpit" class="nav-link"><span>🕹️</span><span class="ml-3">Cockpit</span></a></li>
+            <li><a href="#plan-action" class="nav-link"><span>🗺️</span><span class="ml-3">Plan d'Action</span></a></li>
+            <li><a href="#modules" class="nav-link"><span>🧩</span><span class="ml-3">Modules</span></a></li>
+            <li><a href="#maintenance" class="nav-link"><span>🛠️</span><span class="ml-3">Maintenance</span></a></li>
+        </ul>
+    </nav>
+
+    <div class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-12 card">
+            <h1 class="text-4xl sm:text-5xl font-bold text-white">🚀 Protocole V4</h1>
+            <p class="mt-4 text-lg text-gray-400">Le Guide de Construction Ultime pour Votre Life OS</p>
+        </header>
+
+        <main>
+            <section id="notice" class="mb-12">
+                <div class="card">
+                    <details>
+                        <summary>💡 Notice d'Utilisation Rapide (Cliquez pour déplier)</summary>
+                        <div class="mt-4">
+                            <p class="text-gray-400 mb-6">Suivez ces étapes dans l'ordre pour une construction logique et efficace de votre système.</p>
+                            <ol class="list-decimal list-inside space-y-4 text-gray-300">
+                                <li><strong>Construisez d'abord le Noyau Essentiel.</strong><p class="text-sm text-gray-400 pl-6">Créez les 4 bases de données de la Section 1. C'est la fondation.</p></li>
+                                <li><strong>Mettez en place votre Cockpit.</strong><p class="text-sm text-gray-400 pl-6">Suivez la Section 3 pour construire votre tableau de bord.</p></li>
+                                <li><strong>Remplissez avec votre Plan d'Action.</strong><p class="text-sm text-gray-400 pl-6">Utilisez la Section 4 pour créer vos premiers projets et tâches.</p></li>
+                                <li><strong>Intégrez les Modules Optionnels un par un.</strong><p class="text-sm text-gray-400 pl-6">Choisissez le module le plus important pour vous et construisez-le.</p></li>
+                                <li><strong>Adoptez la Revue Hebdomadaire.</strong><p class="text-sm text-gray-400 pl-6">La Section 6 est la plus importante pour la viabilité à long terme de votre organisation.</p></li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="noyau" class="mb-12">
+                <h2 class="text-3xl font-bold text-white mb-6 border-b-2 border-indigo-500 pb-2">🧠 Section 1 : Le Noyau Essentiel</h2>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-white mb-2">Fiche 1 : `⚡ Tâches Maîtresse`</h3>
+                    <p class="text-gray-400 mb-4">C'est votre liste de choses à faire universelle. Si une action doit être entreprise, elle doit être ici.</p>
+                    <h4 class="font-semibold text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
+                    <ul class="list-disc list-inside text-sm text-gray-400 mt-2 mb-6">
+                        <li>Nettoyer ma boite outlook</li>
+                        <li>Organiser ma boite gmail</li>
+                        <li>Modifier les adresses sur mes comptes importants</li>
+                        <li>Tâche récurrente : Séance Muscu 1</li>
+                        <li>Tâche récurrente : Nettoyage appartement</li>
+                    </ul>
+                    <ul>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">✏️</span><strong>Nom de la Tâche</strong><span class="text-xs text-gray-400 ml-2">(Task Name)</span></div><span class="property-type">Titre</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Statut</strong><span class="text-xs text-gray-400 ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Échéance</strong><span class="text-xs text-gray-400 ml-2">(Due Date)</span></div><span class="property-type">Date</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">ιε</span><strong>Priorité</strong><span class="text-xs text-gray-400 ml-2">(Priority)</span></div><span class="property-type">Sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Projet</strong><span class="text-xs text-gray-400 ml-2">(Project)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🌳</span><strong>Domaine</strong><span class="text-xs text-gray-400 ml-2">(Area)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">✔️</span><strong>Fait?</strong><span class="text-xs text-gray-400 ml-2">(Done?)</span></div><span class="property-type">Case à cocher</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">➕</span><strong>Date de Création</strong><span class="text-xs text-gray-400 ml-2">(Created Time)</span></div><span class="property-type">Date de création</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📟</span><strong>Urgence</strong><span class="text-xs text-gray-400 ml-2">(Urgency)</span></div><span class="property-type">Formule</span></li>
+                    </ul>
+                    <div class="code-block mt-4">
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copier</button>
+                        <pre><code class="text-sm text-gray-300">if(empty(prop("Échéance")), "⚪️ Planifier", if(formatDate(prop("Échéance"), "L") == formatDate(now(), "L"), "🔥 Aujourd'hui", if(prop("Échéance") < now(), "🚨 En Retard", if(dateBetween(prop("Échéance"), now(), "days") < 7, "🟠 Cette Semaine", "👍 Plus tard"))))</code></pre>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-white mb-2">Fiche 2 : `🎯 Projets`</h3>
+                    <p class="text-gray-400 mb-4">Regroupe des tâches qui visent un objectif commun avec une date de fin claire.</p>
+                    <h4 class="font-semibold text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
+                    <ul class="list-disc list-inside text-sm text-gray-400 mt-2 mb-6">
+                        <li>Achat immobilier Nantes</li>
+                        <li>Centraliser la gestion des mots de passe</li>
+                        <li>Réorganiser l'arborescence Google Drive</li>
+                        <li>Uniformiser la photothèque sur Google Photos</li>
+                        <li>Étudier le passage à la carte AMEX Gold</li>
+                        <li>Migrer la messagerie d'Outlook vers Gmail</li>
+                        <li>Préparer l'état des lieux de sortie</li>
+                        <li>Projet Golfinho (VBA)</li>
+                    </ul>
+                    <ul>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🎯</span><strong>Nom du Projet</strong><span class="text-xs text-gray-400 ml-2">(Project Name)</span></div><span class="property-type">Titre</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🚀</span><strong>Statut</strong><span class="text-xs text-gray-400 ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🌳</span><strong>Domaine</strong><span class="text-xs text-gray-400 ml-2">(Area)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Échéance</strong><span class="text-xs text-gray-400 ml-2">(Due Date)</span></div><span class="property-type">Date</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Tâches</strong><span class="text-xs text-gray-400 ml-2">(Tasks)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📊</span><strong>Progression</strong><span class="text-xs text-gray-400 ml-2">(Progress)</span></div><span class="property-type">Rollup</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📦</span><strong>Archiver</strong><span class="text-xs text-gray-400 ml-2">(Archive)</span></div><span class="property-type">Case à cocher</span></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-white mb-2">Fiche 3 : `🌳 Domaines`</h3>
+                    <p class="text-gray-400 mb-4">Représente les grandes sphères de votre vie qui n'ont pas de date de fin. Ce sont vos responsabilités continues.</p>
+                     <h4 class="font-semibold text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
+                    <ul class="list-disc list-inside text-sm text-gray-400 mt-2 mb-6">
+                        <li>Santé & Bien-être</li>
+                        <li>Finances Personnelles</li>
+                        <li>Carrière (Chef de projet Salesforce)</li>
+                        <li>Appartement Nantes</li>
+                        <li>Animaux (Pauline & Gus)</li>
+                    </ul>
+                    <ul>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🌳</span><strong>Nom du Domaine</strong><span class="text-xs text-gray-400 ml-2">(Area Name)</span></div><span class="property-type">Titre</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Projets Actifs</strong><span class="text-xs text-gray-400 ml-2">(Active Projects)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📚</span><strong>Ressources</strong><span class="text-xs text-gray-400 ml-2">(Resources)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📜</span><strong>Standard à Maintenir</strong><span class="text-xs text-gray-400 ml-2">(Standard to Maintain)</span></div><span class="property-type">Texte</span></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-white mb-2">Fiche 4 : `📚 Ressources & Connaissances`</h3>
+                    <p class="text-gray-400 mb-4">Votre bibliothèque numérique personnelle. Contient des informations, pas des actions.</p>
+                    <h4 class="font-semibold text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
+                    <ul class="list-disc list-inside text-sm text-gray-400 mt-2 mb-6">
+                        <li>Analyse comparative : Google One vs Proton</li>
+                        <li>Recherche : Script Python pour renommer les photos</li>
+                        <li>Toutes vos notes à analyser par Gemini</li>
+                        <li>Quittances de loyer (PDF)</li>
+                    </ul>
+                    <ul>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📄</span><strong>Nom</strong><span class="text-xs text-gray-400 ml-2">(Name)</span></div><span class="property-type">Titre</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔖</span><strong>Type</strong><span class="text-xs text-gray-400 ml-2">(Type)</span></div><span class="property-type">Sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Sujet/Tags</strong><span class="text-xs text-gray-400 ml-2">(Topic/Tags)</span></div><span class="property-type">Multi-sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🌐</span><strong>URL</strong></div><span class="property-type">URL</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Domaine Associé</strong><span class="text-xs text-gray-400 ml-2">(Related Area)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">👀</span><strong>Statut</strong><span class="text-xs text-gray-400 ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="automatisation" class="mb-12">
+                <h2 class="text-3xl font-bold text-white mb-6 border-b-2 border-indigo-500 pb-2">🤖 Section 2 : Automatisation & Optimisation</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="card">
+                        <h3 class="text-xl font-semibold text-white mb-4">Automatisation 1 : Archiver les Projets</h3>
+                        <p class="text-gray-400">Quand le `Statut` d'un projet passe à `🏁 Terminé`, cochez automatiquement la case `Archiver`.</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-xl font-semibold text-white mb-4">Automatisation 2 : Synchroniser les Tâches</h3>
+                        <p class="text-gray-400">Quand le `Statut` d'une tâche passe à `✅ Terminé`, cochez automatiquement la case `Fait?`.</p>
+                    </div>
+                </div>
+                 <div class="card">
+                    <h3 class="text-xl font-semibold text-white mb-4">Optimisation : Modèles de Projets</h3>
+                    <p class="text-gray-400">Dans votre base `🎯 Projets`, créez un <strong>modèle</strong> "Nouveau Projet". À l'intérieur de ce modèle, insérez une <strong>vue liée</strong> de votre base `⚡ Tâches Maîtresse` et filtrez-la pour que `Projet` contienne "Nouveau Projet". Chaque nouveau projet aura ainsi sa propre liste de tâches pré-filtrée.</p>
+                </div>
+            </section>
+            
+            <section id="cockpit" class="mb-12">
+                <h2 class="text-3xl font-bold text-white mb-6 border-b-2 border-indigo-500 pb-2">🕹️ Section 3 : Le Cockpit - Guide de Construction Détaillé</h2>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-white mb-4">Plan d'Action pour votre Cockpit</h3>
+                    <p class="text-gray-400 mb-6">Le Cockpit est votre page d'accueil. Il doit vous montrer ce qui est important, maintenant, sans vous submerger. Suivez ces étapes pour le construire.</p>
+                    
+                    <div class="step-card">
+                        <h4 class="font-bold text-lg text-white">Étape 1 : La Fondation - La Page "Backend"</h4>
+                        <p class="text-sm text-gray-300 mt-2">Pour garder votre espace de travail propre, nous allons cacher les bases de données maîtresses.</p>
+                        <ul class="list-disc list-inside text-sm text-gray-400 mt-2 space-y-2">
+                            <li>Créez une nouvelle page simple et nommez-la `⚙️ Backend`.</li>
+                            <li><strong>Déplacez toutes les bases de données</strong> que vous avez créées (Tâches, Projets, etc.) à l'intérieur de cette page.</li>
+                            <li>Vous n'ouvrirez cette page que rarement. Tout le reste se fera via des vues liées.</li>
+                        </ul>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="font-bold text-lg text-white">Étape 2 : Créer la Page d'Accueil</h4>
+                        <p class="text-sm text-gray-300 mt-2">C'est la page que vous ouvrirez tous les jours.</p>
+                        <ul class="list-disc list-inside text-sm text-gray-400 mt-2 space-y-2">
+                           <li>Créez une nouvelle page et nommez-la `🏠 Centre de Commandement` ou `🕹️ Cockpit`.</li>
+                           <li>Ajoutez une icône et une image de couverture qui vous inspirent.</li>
+                        </ul>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="font-bold text-lg text-white">Étape 3 : Le Message d'Accueil</h4>
+                        <p class="text-sm text-gray-300 mt-2">Juste en dessous du titre de votre page, créez un encadré pour vous accueillir et vous motiver.</p>
+                        <ul class="list-disc list-inside text-sm text-gray-400 mt-2 space-y-2">
+                            <li>Tapez `/encadré` et choisissez "Encadré". Donnez-lui une icône comme `👋`.</li>
+                            <li>À l'intérieur, écrivez un message simple. Exemple : "Bonjour ! Prêt à reprendre le contrôle. Quelle est la priorité aujourd'hui ?".</li>
+                        </ul>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="font-bold text-lg text-white">Étape 4 : La Structure en 3 Colonnes</h4>
+                        <p class="text-sm text-gray-300 mt-2">Nous allons maintenant organiser l'espace. Pour créer des colonnes, glissez-déposez un bloc à droite d'un autre.</p>
+                        <div class="mt-4 grid md:grid-cols-3 gap-6">
+                            <div class="bg-gray-900 p-4 rounded-lg">
+                                <h5 class="font-semibold text-white">Colonne de Gauche</h5>
+                                <p class="text-xs text-gray-400">Centre d'Action</p>
+                            </div>
+                            <div class="bg-gray-900 p-4 rounded-lg">
+                                <h5 class="font-semibold text-white">Colonne Centrale</h5>
+                                <p class="text-xs text-gray-400">Vue d'Ensemble</p>
+                            </div>
+                            <div class="bg-gray-900 p-4 rounded-lg">
+                                <h5 class="font-semibold text-white">Colonne de Droite</h5>
+                                <p class="text-xs text-gray-400">Navigation & Objectifs</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="font-bold text-lg text-white">Étape 5 : Remplir les Colonnes</h4>
+                        <p class="text-sm text-gray-300 mt-2">Maintenant, ajoutons les vues liées et les blocs dans chaque colonne.</p>
+                        
+                        <div class="mt-4">
+                            <strong class="text-indigo-400">Dans la Colonne de Gauche :</strong>
+                            <p class="text-sm text-gray-400 mt-1">Créez <strong>une seule vue liée</strong> de `⚡ Tâches Maîtresse` avec 3 onglets : `🔥 Aujourd'hui`, `📥 Boîte de Réception`, `🗓️ Semaine` (Calendrier). Puis, en dessous, ajoutez un <strong>Bouton</strong> `➕ Ajouter une tâche`.</p>
+                        </div>
+
+                        <div class="mt-4">
+                            <strong class="text-indigo-400">Dans la Colonne Centrale :</strong>
+                            <p class="text-sm text-gray-400 mt-1">Créez une <strong>vue liée</strong> de `🎯 Projets` en affichage <strong>Galerie</strong>, filtrée pour ne montrer que les projets en cours.</p>
+                        </div>
+
+                        <div class="mt-4">
+                            <strong class="text-indigo-400">Dans la Colonne de Droite :</strong>
+                            <p class="text-sm text-gray-400 mt-1">Créez un <strong>Encadré</strong> `🎯 Objectifs de la Semaine` où vous listerez vos 3 priorités. En dessous, créez un titre "Navigation" et glissez-y les liens vers vos pages de <strong>Domaines</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="plan-action" class="mb-12">
+                <h2 class="text-3xl font-bold text-white mb-6 border-b-2 border-indigo-500 pb-2">🗺️ Section 4 : Plan d'Action Détaillé</h2>
+                <div class="card space-y-4">
+                    <p class="text-gray-400">Voici le détail des actions à mener pour vos projets prioritaires. Créez les projets et les tâches correspondantes dans votre système.</p>
+                    
+                    <details>
+                        <summary><span class="mr-3">💰</span>Sujet : `Reprendre le contrôle total de mes finances`</summary>
+                        <div>
+                            <p class="text-sm text-gray-400 mb-4"><strong>Objectif :</strong> Avoir une vision claire de mes finances, identifier les fuites et définir des budgets réalistes pour atteindre mes objectifs d'épargne.</p>
+                            <h5 class="font-semibold text-indigo-400 mb-2">Projet à créer : `Analyse et optimisation des finances 2025`</h5>
+                            <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Contenu à intégrer dans la page du projet</h5>
+                            <p class="text-sm text-gray-300">Créez une section "Analyse Gemini". Préparez des exports de vos comptes (Caisse d'Épargne, Revolut) sur les 6 derniers mois. Utilisez le prompt suivant :</p>
+                            <div class="code-block mt-2 text-sm">
+                                <pre><code>"Analyse ces transactions. Catégorise chaque dépense (Alimentation, Loyer, Loisirs, Transport, etc.). Identifie les 3 plus grands postes de dépenses variables. Suggère 3 pistes d'économies concrètes et réalistes."</code></pre>
+                            </div>
+                            <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Tâches à créer</h5>
+                             <ul class="list-disc list-inside text-sm text-gray-300 mt-2 space-y-2">
+                                <li><strong>Tâche :</strong> Exporter les relevés des 6 derniers mois (Caisse d'Épargne, Revolut).</li>
+                                <li><strong>Tâche :</strong> Soumettre les données à Gemini pour analyse.</li>
+                                <li><strong>Tâche :</strong> Créer les catégories de budget recommandées dans la base `📊 Budgets`.</li>
+                                <li><strong>Tâche :</strong> Lister tous mes abonnements dans la base `🔁 Abonnements`.</li>
+                                <li><strong>Tâche :</strong> Définir des montants pour chaque budget mensuel.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary><span class="mr-3">🔐</span>Sujet : `Optimiser ma sécurité numérique`</summary>
+                        <div>
+                            <h5 class="font-semibold text-indigo-400 mb-2">Projet à créer : `Centraliser la gestion des mots de passe`</h5>
+                             <ul class="list-disc list-inside text-sm text-gray-300 mt-2 space-y-2 mb-4">
+                                <li><strong>Tâche :</strong> Lister tous les comptes et emplacements de mots de passe actuels.</li>
+                                <li><strong>Tâche :</strong> Comparer Google Password Manager vs Trousseau iCloud.</li>
+                                <li><strong>Tâche :</strong> Décider de la plateforme à conserver (Propriété `Échéance` : dans 1 semaine).</li>
+                                <li><strong>Tâche :</strong> Migrer tous les mots de passe.</li>
+                            </ul>
+                            <h5 class="font-semibold text-indigo-400 mb-2">Ressource à créer : `Analyse Google One vs Proton`</h5>
+                            <p class="text-sm text-gray-300">Créez une page dans `📚 Ressources` pour lister les avantages et inconvénients de chaque service (coût, simplicité, IA vs confidentialité) afin de prendre une décision éclairée.</p>
+                        </div>
+                    </details>
+                    
+                    <details>
+                        <summary><span class="mr-3">📂</span>Sujet : `Organiser ma vie numérique`</summary>
+                        <div>
+                             <h5 class="font-semibold text-indigo-400 mb-2">Projet à créer : `Réorganiser l'arborescence Google Drive`</h5>
+                             <p class="text-sm text-gray-400 mb-4"><strong>Objectif :</strong> Avoir une structure de dossiers claire et standardisée.</p>
+                             <div class="code-block mt-2 text-sm">
+                                <pre><code>/ (Racine de Google Drive)
+    ├── 1_Projets/
+    ├── 2_Domaines/
+    ├── 3_Ressources/
+    └── 4_Archives/</code></pre>
+                            </div>
+                            <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Projet à créer : `Uniformiser la photothèque sur Google Photos`</h5>
+                             <ul class="list-disc list-inside text-sm text-gray-300 mt-2 space-y-2 mb-4">
+                                <li><strong>Tâche :</strong> Regrouper toutes les photos des anciens services dans un dossier "Photos-a-trier".</li>
+                                <li><strong>Tâche :</strong> Rechercher un script Python pour renommer et organiser les photos par date.</li>
+                                <li><strong>Tâche :</strong> Uploader et organiser toutes les photos dans Google Photos.</li>
+                            </ul>
+                            <h5 class="font-semibold text-indigo-400 mb-2">Projet à créer : `Migrer la messagerie d'Outlook vers Gmail`</h5>
+                             <ul class="list-disc list-inside text-sm text-gray-300 mt-2 space-y-2">
+                                <li><strong>Tâche :</strong> Récupérer les mails importants (ex: quittances de loyer) et les stocker dans `📚 Ressources`.</li>
+                                <li><strong>Tâche :</strong> Nettoyer et archiver la boite Outlook.</li>
+                                <li><strong>Tâche :</strong> Mettre à jour mon adresse email sur les services importants.</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </section>
+            
+            <section id="modules" class="mb-12">
+                 <h2 class="text-3xl font-bold text-white mb-6 border-b-2 border-indigo-500 pb-2">🧩 Section 5 : Modules Optionnels</h2>
+                 <div class="card">
+                    <h3 class="text-xl font-semibold text-white mb-2">Module Finances `💰`</h3>
+                    <p class="text-gray-400 mb-4">Construisez ces bases de données pour un suivi financier complet.</p>
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.1 : `🏦 Comptes`</h4>
+                            <h5 class="font-medium text-gray-300 mb-2 mt-6 text-sm">Vos Éléments à Inclure</h5>
+                            <ul class="list-disc list-inside text-sm text-gray-400 mt-2 mb-6">
+                                <li>Caisse d'Épargne</li>
+                                <li>Revolut</li>
+                                <li>Compte-titres Natixis</li>
+                            </ul>
+                        </div>
+                         <div>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.2 : `💸 Transactions`</h4>
+                             <h5 class="font-medium text-gray-300 mb-2 mt-6 text-sm">Vos Éléments à Inclure</h5>
+                            <ul class="list-disc list-inside text-sm text-gray-400 mt-2 mb-6">
+                                <li>Dépenses pro (avion, hotel, resto)</li>
+                                <li>Dépenses vétérinaire pour Gus</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.3 : `🔁 Abonnements`</h4>
+                             <h5 class="font-medium text-gray-300 mb-2 mt-6 text-sm">Vos Éléments à Inclure</h5>
+                            <ul class="list-disc list-inside text-sm text-gray-400 mt-2 mb-6">
+                                <li>Google One</li>
+                                <li>Amazon Prime</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold text-white mb-2">Module Carrière & Formations `🎓`</h3>
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.4 : `🎓 Formations`</h4>
+                             <h5 class="font-medium text-gray-300 mb-2 mt-6 text-sm">Vos Éléments à Inclure</h5>
+                            <ul class="list-disc list-inside text-sm text-gray-400 mt-2 mb-6">
+                                <li>L'Excelleur VBA</li>
+                                <li>Maîtrise d'Excel</li>
+                                <li>Formation ChatGPT</li>
+                                <li>Formation Manager (Septembre)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.5 : `🧾 Notes de Frais`</h4>
+                             <p class="text-sm text-gray-400 mb-4">Pour suivre vos avances de frais professionnels.</p>
+                             <h5 class="font-medium text-gray-300 mb-2 mt-6 text-sm">Propriétés Suggérées</h5>
+                             <ul class="list-disc list-inside text-sm text-gray-400 mt-2 mb-6">
+                                <li>Nom (Titre)</li>
+                                <li>Montant (Nombre)</li>
+                                <li>Date (Date)</li>
+                                <li>Statut (Sélection : "Soumise", "Validée", "Remboursée")</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card">
+                    <h3 class="text-xl font-semibold text-white mb-2">Module Maison & Vie Perso `🏡`</h3>
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.6 : `📄 Contrats & Assurances`</h4>
+                             <p class="text-sm text-gray-400 mb-4">Pour centraliser tous vos contrats importants.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.7 : `🛒 Achats & Garanties`</h4>
+                             <p class="text-sm text-gray-400 mb-4">Pour suivre vos achats, factures et dates de garantie.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.8 : `🚗 Véhicules`</h4>
+                             <p class="text-sm text-gray-400 mb-4">Pour suivre vos véhicules passés et actuels, ainsi que leurs assurances.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.9 : `🌿 Plantes`</h4>
+                             <p class="text-sm text-gray-400 mb-4">Pour le suivi de vos plantes.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.10 : `🐾 Animaux`</h4>
+                             <p class="text-sm text-gray-400 mb-4">Pour suivre la santé de Pauline et Gus.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="maintenance" class="mb-12">
+                <h2 class="text-3xl font-bold text-white mb-6 border-b-2 border-indigo-500 pb-2">🛠️ Section 6 : Maintenance</h2>
+                 <div class="card">
+                    <h3 class="text-xl font-semibold text-white mb-4">Le Rituel de la Revue Hebdomadaire</h3>
+                    <p class="text-gray-400 mb-4">Créez un modèle de page récurrent avec cette checklist pour ne rien oublier :</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded bg-gray-700 border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3 text-gray-300">Étape 1 : Vider les Boîtes de Réception</span></label>
+                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded bg-gray-700 border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3 text-gray-300">Étape 2 : Revoir les Projets Actifs</span></label>
+                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded bg-gray-700 border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3 text-gray-300">Étape 3 : Revoir la Semaine Passée et à Venir</span></label>
+                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded bg-gray-700 border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3 text-gray-300">Étape 4 : Revoir les Domaines</span></label>
+                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded bg-gray-700 border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3 text-gray-300">Étape 5 : Vider l'Esprit (Brain Dump)</span></label>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        function copyToClipboard(button) {
+            const codeBlock = button.nextElementSibling;
+            const code = codeBlock.querySelector('code');
+            const textToCopy = code.innerText;
+            const textArea = document.createElement('textarea');
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                button.innerText = 'Copié !';
+                setTimeout(() => {
+                    button.innerText = 'Copier';
+                }, 2000);
+            } catch (err) {
+                console.error('Impossible de copier', err);
+                button.innerText = 'Erreur';
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Animation on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Active nav link on scroll
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href').substring(1) === entry.target.id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { rootMargin: "-50% 0px -50% 0px" });
+
+        document.querySelectorAll('section').forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+    </script>
+
+</body>
+</html>
