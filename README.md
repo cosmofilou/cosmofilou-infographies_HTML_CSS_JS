@@ -18,7 +18,7 @@ Ce dépôt contient une collection d'infographies interactives, créées avec HT
 
 ### 3. Infographie sur les chatbots IA 2025
 
-* **Dossier :** [infographie_chatbots_ia_2025](./infographie_chatbots_ia_2025)
+* **Dossier :** [infographie_chatbots_ia_2025]([./infographie_chatbots_ia_2025](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/infographie_chatbots_ia_2025/))
 * **Description :** Une analyse des tendances et des parts de marché des chatbots conversationnels en 2025.
 
 ### 4. Infographie "Analyse Honor 2025"
