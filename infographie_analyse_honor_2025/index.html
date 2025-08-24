@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographie Angulaire : Analyse Honor 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        // Applique le thème (sombre/clair) au chargement de la page
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        .dark body {
+            background-color: #020617; /* slate-950 */
+        }
+        .sticky-nav {
+            position: sticky; top: 0; z-index: 50;
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 0.75rem; /* rounded-lg */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.7); /* slate-800/70 */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+        .reveal {
+            opacity: 0; transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* Jauges dynamiques */
+        .gauge-bar {
+            transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+            width: 0%;
+        }
+        .gauge-container.visible .gauge-bar {
+            width: var(--gauge-width, 0%);
+        }
+
+        /* Améliorations visuelles */
+        .text-gradient {
+            background-image: linear-gradient(to right, #4338ca, #6d28d9); /* indigo-700 to purple-700 */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        .dark .text-gradient {
+            background-image: linear-gradient(to right, #a5b4fc, #c4b5fd); /* indigo-300 to violet-300 */
+        }
+        .tab-button {
+            border-radius: 0.5rem; /* rounded-md */
+        }
+        .tab-button.active { 
+            color: white; 
+            background-color: #3730a3; /* indigo-800 */
+            box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.1);
+        }
+        .dark .tab-button.active { 
+            background-color: #6366f1; /* indigo-500 */
+            color: #e2e8f0; /* slate-200 */
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body class="transition-colors duration-500">
+
+    <header id="header" class="sticky-nav bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/80 dark:border-slate-800/80">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#intro" class="text-lg font-bold text-gradient">Analyse 2025</a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#products" class="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Produits</a>
+                <a href="#comparison" class="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">vs Apple</a>
+                <a href="#transition" class="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Bilan</a>
+            </div>
+            <div class="flex items-center">
+                <button id="theme-toggle-button" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none"></button>
+                <button id="mobile-menu-button" class="md:hidden ml-2 p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 space-y-2">
+             <a href="#products" class="block py-2 font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Produits</a>
+             <a href="#comparison" class="block py-2 font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">vs Apple</a>
+             <a href="#transition" class="block py-2 font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Bilan</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 md:px-6 py-12 space-y-20">
+        <section id="intro" class="text-center pt-8">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-3 reveal">Analyse <span class="text-gradient">Honor 2025</span></h1>
+            <h2 class="text-xl md:text-2xl font-semibold text-indigo-600 dark:text-indigo-400 mb-6 reveal" style="transition-delay: 150ms;">La Stratégie du Coup d'Éclat</h2>
+            <p class="max-w-3xl mx-auto text-base text-gray-600 dark:text-gray-400 leading-relaxed reveal" style="transition-delay: 300ms;">
+                Honor mise sur une caractéristique "héroïque" pour chaque produit, créant une valeur perçue immense. Mais que cachent ces éclats ? Plongez dans une analyse critique et visuelle.
+            </p>
+        </section>
+
+        <section id="products" class="space-y-20">
+            <!-- Honor Magic7 Pro -->
+            <div id="magic7pro" class="reveal">
+                <div class="glass-card p-6 md:p-8">
+                    <h3 class="text-2xl font-bold mb-2 text-center text-gray-900 dark:text-white">📱 Honor Magic7 Pro</h3>
+                    <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">Le Conquérant par la Force Brute</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">Bilan de Performance</h4>
+                            <div class="space-y-4 gauge-container">
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">📸 Zoom Photo</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-teal-500 h-3 rounded-md" style="--gauge-width: 95%;"></div></div>
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">🔋 Autonomie</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-teal-500 h-3 rounded-md" style="--gauge-width: 90%;"></div></div>
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">⚡ Vitesse de Charge</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-teal-500 h-3 rounded-md" style="--gauge-width: 98%;"></div></div>
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">🎨 Traitement IA de l'image</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-red-500 h-3 rounded-md" style="--gauge-width: 40%;"></div></div>
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">✨ Expérience Logicielle (MagicOS)</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-amber-500 h-3 rounded-md" style="--gauge-width: 60%;"></div></div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-100 dark:bg-slate-900/50 p-6 rounded-lg">
+                            <h4 class="text-lg font-semibold mb-3 text-slate-800 dark:text-slate-200">Analyse Critique & Améliorations</h4>
+                            <p class="mb-4 text-sm text-gray-700 dark:text-gray-300">La puissance matérielle est indéniable, mais le logiciel manque de raffinement. L'IA photo est trop agressive et MagicOS peut être intrusif.</p>
+                            <div class="border-t border-slate-200 dark:border-slate-700 pt-4">
+                                <h5 class="font-semibold text-teal-600 dark:text-teal-400 mb-2 text-sm">💡 Piste d'amélioration :</h5>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">Intégrer un mode "Photo Naturelle" désactivant l'IA agressive et proposer une option d'interface "légère" au démarrage pour les puristes d'Android.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Honor Magic Pad 2 -->
+            <div id="magicpad2" class="reveal">
+                 <div class="glass-card p-6 md:p-8">
+                    <h3 class="text-2xl font-bold mb-2 text-center text-gray-900 dark:text-white">🎬 Honor Magic Pad 2</h3>
+                    <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">Le Sprinter Multimédia</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">Bilan de Performance</h4>
+                            <div class="space-y-4 gauge-container">
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">📺 Qualité d'Écran (OLED)</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-teal-500 h-3 rounded-md" style="--gauge-width: 100%;"></div></div>
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">🔊 Qualité Audio</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-teal-500 h-3 rounded-md" style="--gauge-width: 85%;"></div></div>
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">💰 Rapport Qualité/Prix</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-teal-500 h-3 rounded-md" style="--gauge-width: 95%;"></div></div>
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">🔄 Longévité Logicielle</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-red-500 h-3 rounded-md" style="--gauge-width: 20%;"></div></div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-100 dark:bg-slate-900/50 p-6 rounded-lg">
+                            <h4 class="text-lg font-semibold mb-3 text-slate-800 dark:text-slate-200">Analyse Critique & Améliorations</h4>
+                            <p class="mb-4 text-sm text-gray-700 dark:text-gray-300">Un appareil exceptionnel pour le divertissement, mais son obsolescence logicielle programmée est un défaut majeur qui entache sa valeur à long terme.</p>
+                             <div class="border-t border-slate-200 dark:border-slate-700 pt-4">
+                                <h5 class="font-semibold text-teal-600 dark:text-teal-400 mb-2 text-sm">💡 Piste d'amélioration :</h5>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">S'engager sur un minimum de 3 ans de mises à jour de sécurité. Cela rassurerait les acheteurs et transformerait ce produit en un investissement durable.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Honor MagicBook Art 14 -->
+            <div id="magicbook14" class="reveal">
+                 <div class="glass-card p-6 md:p-8">
+                    <h3 class="text-2xl font-bold mb-2 text-center text-gray-900 dark:text-white">💻 Honor MagicBook Art 14</h3>
+                    <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">L'Ultraportable au Juste Prix</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">Bilan de Performance</h4>
+                            <div class="space-y-4 gauge-container">
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">💎 Design & Finition</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-teal-500 h-3 rounded-md" style="--gauge-width: 90%;"></div></div>
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">🖥️ Qualité d'Écran (OLED)</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-teal-500 h-3 rounded-md" style="--gauge-width: 95%;"></div></div>
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">💰 Rapport Équipement/Prix</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-teal-500 h-3 rounded-md" style="--gauge-width: 90%;"></div></div>
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">🎮 Performance Graphique</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-red-500 h-3 rounded-md" style="--gauge-width: 50%;"></div></div>
+                                <div class="font-medium text-sm text-slate-700 dark:text-slate-300">🎤 Webcam & Micros</div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-md h-3"><div class="gauge-bar bg-amber-500 h-3 rounded-md" style="--gauge-width: 65%;"></div></div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-100 dark:bg-slate-900/50 p-6 rounded-lg">
+                            <h4 class="text-lg font-semibold mb-3 text-slate-800 dark:text-slate-200">Analyse Critique & Améliorations</h4>
+                            <p class="mb-4 text-sm text-gray-700 dark:text-gray-300">Un excellent ultraportable pour la productivité, mais les économies sont faites sur des détails (webcam, GPU) qui peuvent frustrer les utilisateurs plus exigeants.</p>
+                             <div class="border-t border-slate-200 dark:border-slate-700 pt-4">
+                                <h5 class="font-semibold text-teal-600 dark:text-teal-400 mb-2 text-sm">💡 Piste d'amélioration :</h5>
+                                <p class="text-xs text-gray-600 dark:text-gray-400">Standardiser une webcam 1080p et proposer une option avec un GPU dédié d'entrée de gamme pour attirer une clientèle plus créative.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparison" class="reveal">
+            <div class="glass-card p-6 md:p-8">
+                <h3 class="text-2xl font-bold mb-2 text-center text-gray-900 dark:text-white">Face-à-Face : Honor vs. Apple</h3>
+                <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">La force brute contre l'écosystème raffiné.</p>
+                
+                <div class="flex justify-center mb-6 bg-slate-200/80 dark:bg-slate-800/80 rounded-lg p-1">
+                    <button class="tab-button active w-1/3 py-2 px-4 text-sm font-semibold" data-tab="smartphone">📱 Smartphone</button>
+                    <button class="tab-button w-1/3 py-2 px-4 text-sm font-semibold" data-tab="tablette">🎬 Tablette</button>
+                    <button class="tab-button w-1/3 py-2 px-4 text-sm font-semibold" data-tab="pc">💻 PC Portable</button>
+                </div>
+
+                <div id="tab-smartphone" class="tab-content active">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-slate-100 dark:bg-slate-900/50 p-4 rounded-lg">
+                            <h5 class="font-semibold mb-2 text-teal-600 dark:text-teal-400">✅ Avantages Honor</h5>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-slate-700 dark:text-slate-300"><li><strong>Prix & Surenchère :</strong> Plus de "specs" pour moins cher.</li><li><strong>Flexibilité :</strong> Android ouvert et personnalisable.</li></ul>
+                        </div>
+                         <div class="bg-slate-100 dark:bg-slate-900/50 p-4 rounded-lg">
+                            <h5 class="font-semibold mb-2 text-sky-600 dark:text-sky-400">✅ Avantages Apple</h5>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-slate-700 dark:text-slate-300"><li><strong>Écosystème & Simplicité :</strong> Tout fonctionne ensemble, sans effort.</li><li><strong>Valeur & Finition :</strong> Une meilleure décote et une expérience plus soignée.</li></ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-tablette" class="tab-content">
+                     <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-slate-100 dark:bg-slate-900/50 p-4 rounded-lg">
+                            <h5 class="font-semibold mb-2 text-teal-600 dark:text-teal-400">✅ Avantages Honor</h5>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-slate-700 dark:text-slate-300"><li><strong>Écran OLED :</strong> Imbattable pour les films.</li><li><strong>Prix :</strong> Une expérience premium pour le prix du milieu de gamme.</li></ul>
+                        </div>
+                         <div class="bg-slate-100 dark:bg-slate-900/50 p-4 rounded-lg">
+                            <h5 class="font-semibold mb-2 text-sky-600 dark:text-sky-400">✅ Avantages Apple</h5>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-slate-700 dark:text-slate-300"><li><strong>iPadOS & Apps :</strong> Un écosystème logiciel mature et optimisé.</li><li><strong>Longévité :</strong> Des années de mises à jour garanties.</li></ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-pc" class="tab-content">
+                     <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-slate-100 dark:bg-slate-900/50 p-4 rounded-lg">
+                            <h5 class="font-semibold mb-2 text-teal-600 dark:text-teal-400">✅ Avantages Honor</h5>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-slate-700 dark:text-slate-300"><li><strong>Rapport Qualité/Prix :</strong> Écran OLED et design premium pour moins cher.</li><li><strong>Windows :</strong> Compatibilité universelle.</li></ul>
+                        </div>
+                         <div class="bg-slate-100 dark:bg-slate-900/50 p-4 rounded-lg">
+                            <h5 class="font-semibold mb-2 text-sky-600 dark:text-sky-400">✅ Avantages Apple</h5>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-slate-700 dark:text-slate-300"><li><strong>Efficacité Énergétique :</strong> L'autonomie et la puissance des puces M.</li><li><strong>Expérience Utilisateur :</strong> Trackpad, clavier, macOS... tout est au sommet.</li></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="transition" class="reveal">
+            <div class="glass-card p-6 md:p-8">
+                <h3 class="text-2xl font-bold mb-2 text-center text-gray-900 dark:text-white">Bilan de la Transition 🍎 ➔ ✨</h3>
+                <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">Le calcul financier et les compromis à accepter.</p>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="bg-slate-100 dark:bg-slate-900/50 p-6 rounded-lg">
+                        <h4 class="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-200">Simulation Financière</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-baseline"><span class="text-sm text-slate-600 dark:text-slate-400">Revente iPhone 14 Pro :</span><span class="font-semibold text-lg text-teal-500" data-target="700">+ <span class="counter">0</span> €</span></div>
+                             <div class="flex justify-between items-baseline"><span class="text-sm text-slate-600 dark:text-slate-400">Achat Honor Magic7 Pro :</span><span class="font-semibold text-lg text-red-500" data-target="900">- <span class="counter">0</span> €</span></div>
+                            <div class="border-t-2 border-indigo-300 dark:border-indigo-700 pt-3 mt-3 flex justify-between items-baseline">
+                                <span class="font-bold text-slate-800 dark:text-slate-200">Coût net estimé :</span><span class="font-extrabold text-2xl text-gradient" data-target="200"><span class="counter">0</span> €</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-slate-700 dark:text-slate-300">
+                        <h4 class="text-lg font-semibold mb-2 text-slate-800 dark:text-slate-200">Le Verdict</h4>
+                        <p>Pour un coût de renouvellement minime, vous gagnez en puissance photo et en flexibilité, surtout si vous êtes déjà dans l'écosystème Google. Le principal sacrifice reste la perte de la fluidité de l'écosystème Apple (iMessage, AirDrop).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center p-8 mt-12">
+        <div class="container mx-auto text-gray-500 dark:text-gray-600 text-xs">
+            <p>&copy; 2025 Analyse Critique Honor. Tous droits réservés.</p>
+            <p class="mt-1">Auteur: [Votre Nom] - Créé le: 13 Mai 2025</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggleButton = document.getElementById('theme-toggle-button');
+            const sunIcon = `<svg class="w-5 h-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>`;
+            const moonIcon = `<svg class="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>`;
+            
+            const updateThemeIcon = () => {
+                themeToggleButton.innerHTML = document.documentElement.classList.contains('dark') ? sunIcon : moonIcon;
+            };
+            
+            themeToggleButton.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                updateThemeIcon();
+            });
+            updateThemeIcon();
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        if (entry.target.querySelector('.gauge-container')) {
+                            entry.target.querySelector('.gauge-container').classList.add('visible');
+                        }
+                        if (entry.target.id === 'transition') {
+                            animateCounters(entry.target);
+                        }
+                    }
+                });
+            }, { threshold: 0.2 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            
+            const animateCounters = (section) => {
+                section.querySelectorAll('.counter').forEach(counter => {
+                    const target = +counter.parentElement.dataset.target;
+                    if (counter.animated) return;
+                    counter.animated = true;
+                    let current = 0;
+                    const updateCounter = () => {
+                        const increment = target / 100;
+                        if (current < target) {
+                            current += increment;
+                            counter.innerText = Math.ceil(current);
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCounter();
+                });
+            };
+
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    tabContents.forEach(content => {
+                        content.classList.toggle('active', content.id === `tab-${tabId}`);
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
