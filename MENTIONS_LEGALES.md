@@ -4,4 +4,4 @@ Les données et informations présentées dans ces infographies sont issues de d
 
 ### Droit d'auteur
 
-L'ensemble des infographies est la propriété de [Votre Nom ou Pseudo]. La réutilisation est soumise aux termes de la licence MIT.
+L'ensemble des infographies est la propriété de cosmofilou. La réutilisation est soumise aux termes de la licence MIT.
