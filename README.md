@@ -8,7 +8,7 @@ Ce dépôt contient une collection d'infographies interactives, créées avec HT
 
 ### 1. Infographie "Jungle Urbaine"
 
-* **Dossier :** [infographie_jungle_urbaine](./infographie_jungle_urbaine)
+* **Dossier :** [infographie_jungle_urbaine](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/infographie_jungle_urbaine/)
 * **Description :** Un guide visuel et complet pour le suivi et l'entretien de vos plantes d'intérieur.
 
 ### 2. Infographie sur la réinstallation propre d'iOS
@@ -23,12 +23,12 @@ Ce dépôt contient une collection d'infographies interactives, créées avec HT
 
 ### 4. Infographie "Analyse Honor 2025"
 
-* **Dossier :** [infographie_analyse_honor_2025](./infographie_analyse_honor_2025)
+* **Dossier :** [infographie_analyse_honor_2025](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/infographie_analyse_honor_2025/)
 * **Description :** Une infographie comparative et critique sur le smartphone Honor Magic7 Pro.
 
 ### 5. Infographie "Protocole Life OS"
 
-* **Dossier :** [infographie_protocole_v4](./infographie_protocole_v4)
+* **Dossier :** [infographie_protocole_v4](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/infographie_life_os/)
 * **Description :** Un guide de construction ultime pour créer un système d'organisation personnelle "Life OS".
 
 ---
