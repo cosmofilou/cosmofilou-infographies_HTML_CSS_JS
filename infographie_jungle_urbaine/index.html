@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jungle Urbaine | Tableau de Bord Interactif</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles & Theme Variables -->
+    <style>
+        :root {
+            --background: #F8FBF6;
+            --foreground: #1A2E24;
+            --card-bg: rgba(255, 255, 255, 0.6);
+            --card-border: rgba(26, 46, 36, 0.1);
+            --primary: #228B22; /* ForestGreen */
+            --primary-foreground: #FFFFFF;
+            --muted-foreground: #5A6D64;
+            --destructive: #dc2626; /* red-600 */
+        }
+
+        .dark {
+            --background: #121C16;
+            --foreground: #E0EFE6;
+            --card-bg: rgba(18, 28, 22, 0.6);
+            --card-border: rgba(224, 239, 230, 0.1);
+            --primary: #34D399; /* Emerald-400 */
+            --primary-foreground: #121C16;
+            --muted-foreground: #9CB3A8;
+            --destructive: #ef4444; /* red-500 */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .glass-card {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        }
+        .dark .glass-card:hover {
+             box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2), 0 10px 10px -5px rgba(0,0,0,0.1);
+        }
+
+        .nav-link.active { color: var(--primary); font-weight: 700; }
+        
+        /* Animation d'apparition */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Arrière-plan animé subtil */
+        #hero-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .leaf {
+            position: absolute;
+            font-size: 4rem;
+            opacity: 0.05;
+            animation: float 25s infinite linear;
+        }
+        .leaf:nth-child(2) { left: 70%; animation-duration: 35s; font-size: 5rem; }
+        .leaf:nth-child(3) { left: 10%; animation-duration: 29s; }
+        .leaf:nth-child(4) { left: 90%; animation-duration: 22s; font-size: 6rem; }
+        .leaf:nth-child(5) { left: 40%; animation-duration: 38s; }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-10vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+        <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#accueil" class="flex items-center gap-2 text-xl font-bold">
+                <span class="text-2xl">🌿</span>
+                <span>Jungle Urbaine</span>
+            </a>
+            <div class="hidden md:flex items-center gap-6 text-sm font-medium text-[color:var(--muted-foreground)]">
+                <a href="#dashboard" class="nav-link hover:text-[color:var(--primary)] transition-colors">Tableau de Bord</a>
+                <a href="#plantes" class="nav-link hover:text-[color:var(--primary)] transition-colors">Mes Plantes</a>
+                <a href="#bases" class="nav-link hover:text-[color:var(--primary)] transition-colors">Bases de données</a>
+            </div>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-[color:var(--card-border)] transition-colors">
+                <svg id="theme-icon-light" xmlns="http://www.w.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 pt-24">
+        
+        <!-- Section 1: Accueil -->
+        <section id="accueil" class="relative min-h-[80vh] flex flex-col items-center justify-center text-center py-16">
+            <div id="hero-bg">
+                <div class="leaf">🍃</div><div class="leaf">🌿</div><div class="leaf">🌱</div><div class="leaf">🍀</div><div class="leaf">☘️</div>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tighter mb-4 reveal">Votre jungle. Votre guide.</h1>
+            <p class="max-w-2xl text-lg md:text-xl text-[color:var(--muted-foreground)] mb-12 reveal" style="transition-delay: 100ms;">Un écosystème de suivi complet et visuel pour voir vos plantes s'épanouir au quotidien, sans effort.</p>
+            <a href="#dashboard" class="reveal bg-[color:var(--primary)] text-[color:var(--primary-foreground)] font-bold py-3 px-8 rounded-full hover:opacity-90 transition-opacity" style="transition-delay: 200ms;">
+                Accéder à mon tableau de bord
+            </a>
+        </section>
+
+        <!-- Section 2: Tableau de Bord -->
+        <section id="dashboard" class="py-24">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Tableau de Bord</h2>
+                <p class="max-w-3xl mx-auto mt-4 text-[color:var(--muted-foreground)]">Vos actions prioritaires pour une jungle en pleine santé.</p>
+            </div>
+            <div id="dashboard-cards" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Les cartes du tableau de bord seront injectées ici par JS -->
+            </div>
+        </section>
+
+        <!-- Section 3: Vos Plantes -->
+        <section id="plantes" class="py-24">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Ma Collection</h2>
+                <p class="max-w-3xl mx-auto mt-4 text-[color:var(--muted-foreground)]">Gérez, filtrez et interagissez avec votre collection de plantes.</p>
+            </div>
+            <!-- Filtres et Recherche -->
+            <div class="flex flex-col md:flex-row gap-4 mb-8 reveal">
+                <div class="relative flex-grow">
+                    <input type="search" id="search-input" placeholder="Rechercher une plante..." class="w-full pl-10 pr-4 py-2 rounded-full border border-[color:var(--card-border)] bg-transparent focus:ring-2 focus:ring-[color:var(--primary)] focus:outline-none">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[color:var(--muted-foreground)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
+                </div>
+                <div id="filter-buttons" class="flex items-center gap-2 flex-wrap">
+                    <!-- Boutons de filtre injectés par JS -->
+                </div>
+            </div>
+            <div id="plant-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                 <!-- Les cartes de plantes seront injectées ici par JS -->
+            </div>
+            <p id="no-results" class="text-center text-[color:var(--muted-foreground)] hidden mt-8">Aucune plante ne correspond à votre recherche.</p>
+        </section>
+        
+        <!-- Section 4: Bases de Données -->
+        <section id="bases" class="py-24">
+            <div class="text-center mb-12 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Les Fondations de votre Jungle</h2>
+                <p class="max-w-3xl mx-auto mt-4 text-[color:var(--muted-foreground)]">Chaque base est liée pour une gestion centralisée et intelligente.</p>
+            </div>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Contenu des bases de données simplifié pour la démo -->
+                <div class="glass-card p-6 rounded-2xl reveal">
+                    <h3 class="text-xl font-bold flex items-center gap-3 mb-2">🌿 Ma Collection de Plantes</h3>
+                    <p class="text-sm text-[color:var(--muted-foreground)]">Votre catalogue personnel de toutes vos plantes avec leur état et leurs besoins.</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl reveal">
+                    <h3 class="text-xl font-bold flex items-center gap-3 mb-2">🛍️ Mes Achats Jungle</h3>
+                    <p class="text-sm text-[color:var(--muted-foreground)]">Suivez vos dépenses pour chaque plante, pot, et terreau.</p>
+                </div>
+                 <div class="glass-card p-6 rounded-2xl reveal">
+                    <h3 class="text-xl font-bold flex items-center gap-3 mb-2">🗓️ Mon Calendrier d'Entretien</h3>
+                    <p class="text-sm text-[color:var(--muted-foreground)]">Gérez et planifiez vos tâches d'entretien (arrosage, rempotage, etc.).</p>
+                </div>
+                 <div class="glass-card p-6 rounded-2xl reveal">
+                    <h3 class="text-xl font-bold flex items-center gap-3 mb-2">🦠 Maladies & Soins</h3>
+                    <p class="text-sm text-[color:var(--muted-foreground)]">Répertoriez les maladies et les solutions pour une réaction rapide.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="container mx-auto text-center py-8 px-4 mt-16 border-t border-[color:var(--card-border)]">
+        <p class="text-xs text-[color:var(--muted-foreground)]">
+            Ce guide est fourni à titre indicatif. © 2024 Jungle Urbaine.
+        </p>
+    </footer>
+
+    <script>
+        // --- DATA ---
+        const plantData = [
+            { id: 1, name: 'Dracaena', luminosity: 'Modérée', watering: 'Terre sèche en surface', image: '400x400/2c523e/ffffff?text=Dracaena', needsAction: true, status: "A besoin d'eau" },
+            { id: 2, name: 'Chamaedorea', luminosity: 'Faible', watering: 'Dès que la terre est sèche sur 2cm', image: '400x400/2c523e/ffffff?text=Chamaedorea', needsAction: false, status: "En pleine forme" },
+            { id: 3, name: 'Monstera Deliciosa', luminosity: 'Modérée', watering: 'Terre sèche en profondeur', image: '400x400/2c523e/ffffff?text=Monstera', needsAction: false, status: "En pleine forme" },
+            { id: 4, name: 'Sansevieria', luminosity: 'Faible à forte', watering: 'Laisser sécher complètement', image: '400x400/2c523e/ffffff?text=Sansevieria', needsAction: false, status: "En pleine forme" },
+            { id: 5, name: 'Cactus de Noël', luminosity: 'Lumineuse', watering: 'Modéré, régulier', image: '400x400/2c523e/ffffff?text=Cactus+de+Noel', needsAction: true, status: "A besoin d'engrais" },
+            { id: 6, name: 'Orchidées', luminosity: 'Vive indirecte', watering: 'Par bassinage', image: '400x400/2c523e/ffffff?text=Orchidees', needsAction: false, status: "En pleine forme" }
+        ];
+
+        // --- DYNAMIC CONTENT INJECTION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDashboard();
+            renderFilters();
+            renderPlantGallery(plantData);
+            setupEventListeners();
+            setupScrollAnimations();
+        });
+
+        function renderDashboard() {
+            const dashboardContainer = document.getElementById('dashboard-cards');
+            const plantsToWater = plantData.filter(p => p.status === "A besoin d'eau").length;
+            const otherActions = plantData.filter(p => p.needsAction && p.status !== "A besoin d'eau").length;
+            
+            const dashboardHTML = `
+                <div class="glass-card p-6 rounded-2xl reveal">
+                    <h3 class="text-5xl font-bold text-[color:var(--primary)]">${plantsToWater}</h3>
+                    <p class="font-semibold mt-2">Plantes à arroser</p>
+                    <p class="text-sm text-[color:var(--muted-foreground)] mt-1">N'oubliez pas d'hydrater vos plantes qui ont soif.</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl reveal" style="transition-delay: 100ms;">
+                    <h3 class="text-5xl font-bold text-[color:var(--primary)]">${otherActions}</h3>
+                    <p class="font-semibold mt-2">Autres actions requises</p>
+                    <p class="text-sm text-[color:var(--muted-foreground)] mt-1">Engrais, rempotage, ou soins spécifiques.</p>
+                </div>
+                <div class="glass-card p-6 rounded-2xl reveal" style="transition-delay: 200ms;">
+                    <h3 class="text-5xl font-bold text-[color:var(--primary)]">${plantData.length}</h3>
+                    <p class="font-semibold mt-2">Plantes dans votre collection</p>
+                    <p class="text-sm text-[color:var(--muted-foreground)] mt-1">Continuez à agrandir votre jungle !</p>
+                </div>
+            `;
+            dashboardContainer.innerHTML = dashboardHTML;
+        }
+
+        function renderFilters() {
+            const filterContainer = document.getElementById('filter-buttons');
+            const filters = ['Tout', 'Action requise', 'Faible lumière', 'Lumière vive'];
+            let buttonsHTML = '';
+            filters.forEach((filter, index) => {
+                const baseClasses = 'px-4 py-1.5 text-sm font-semibold rounded-full transition-colors';
+                if (index === 0) {
+                    buttonsHTML += `<button class="filter-btn active ${baseClasses} bg-[color:var(--primary)] text-[color:var(--primary-foreground)]" data-filter="Tout">Tout</button>`;
+                } else {
+                    buttonsHTML += `<button class="filter-btn ${baseClasses} bg-[color:var(--card-border)] hover:bg-[color:var(--primary)] hover:text-[color:var(--primary-foreground)]" data-filter="${filter}">${filter}</button>`;
+                }
+            });
+            filterContainer.innerHTML = buttonsHTML;
+        }
+
+        function renderPlantGallery(plants) {
+            const gallery = document.getElementById('plant-gallery');
+            const noResults = document.getElementById('no-results');
+            gallery.innerHTML = '';
+
+            if (plants.length === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            plants.forEach((plant, index) => {
+                const plantCard = document.createElement('div');
+                plantCard.className = 'glass-card rounded-2xl overflow-hidden group relative reveal';
+                plantCard.style.transitionDelay = `${index * 50}ms`;
+
+                const statusBadge = plant.needsAction
+                    ? `<span class="absolute top-3 right-3 text-xs font-bold py-1 px-2.5 rounded-full bg-[color:var(--destructive)] text-white">${plant.status}</span>`
+                    : `<span class="absolute top-3 right-3 text-xs font-bold py-1 px-2.5 rounded-full bg-green-500 text-white">En forme</span>`;
+
+                plantCard.innerHTML = `
+                    <img src="https://placehold.co/${plant.image}" alt="${plant.name}" class="w-full h-60 object-cover" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e2e8f0/94a3b8?text=Image+N/A';">
+                    ${statusBadge}
+                    <div class="p-5">
+                        <h4 class="text-xl font-bold">${plant.name}</h4>
+                        <div class="mt-4 space-y-3 text-sm">
+                            <div class="flex items-start gap-2"><span class="mt-0.5">☀️</span><div><span class="font-semibold">Luminosité:</span> <span class="text-[color:var(--muted-foreground)]">${plant.luminosity}</span></div></div>
+                            <div class="flex items-start gap-2"><span class="mt-0.5">💧</span><div><span class="font-semibold">Arrosage:</span> <span class="text-[color:var(--muted-foreground)]">${plant.watering}</span></div></div>
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button class="bg-white/20 backdrop-blur-sm text-white font-bold py-2 px-4 rounded-full hover:bg-white/30">💧 Arroser</button>
+                        <button class="bg-white/20 backdrop-blur-sm text-white font-bold py-2 px-4 rounded-full hover:bg-white/30">📝 Fiche</button>
+                    </div>
+                `;
+                gallery.appendChild(plantCard);
+            });
+        }
+        
+        function setupEventListeners() {
+            // Recherche
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', filterAndSearchPlants);
+
+            // Filtres
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active', 'bg-[color:var(--primary)]', 'text-[color:var(--primary-foreground)]'));
+                    e.currentTarget.classList.add('active', 'bg-[color:var(--primary)]', 'text-[color:var(--primary-foreground)]');
+                    filterAndSearchPlants();
+                });
+            });
+        }
+
+        function filterAndSearchPlants() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            
+            let filteredPlants = plantData;
+
+            // Appliquer le filtre
+            if (activeFilter === 'Action requise') {
+                filteredPlants = filteredPlants.filter(p => p.needsAction);
+            } else if (activeFilter === 'Faible lumière') {
+                filteredPlants = filteredPlants.filter(p => p.luminosity.toLowerCase().includes('faible'));
+            } else if (activeFilter === 'Lumière vive') {
+                filteredPlants = filteredPlants.filter(p => p.luminosity.toLowerCase().includes('vive') || p.luminosity.toLowerCase().includes('lumineuse'));
+            }
+
+            // Appliquer la recherche
+            if (searchTerm) {
+                filteredPlants = filteredPlants.filter(p => p.name.toLowerCase().includes(searchTerm));
+            }
+
+            renderPlantGallery(filteredPlants);
+            // On doit relancer l'animation pour les nouveaux éléments filtrés
+            setupScrollAnimations();
+        }
+
+        // --- ANIMATIONS AU DÉFILEMENT ---
+        function setupScrollAnimations() {
+            const revealElements = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            revealElements.forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // --- THEME SWITCHER ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const lightIcon = document.getElementById('theme-icon-light');
+        const darkIcon = document.getElementById('theme-icon-dark');
+        const htmlEl = document.documentElement;
+        const setTheme = (isDark) => {
+            htmlEl.classList.toggle('dark', isDark);
+            lightIcon.classList.toggle('hidden', isDark);
+            darkIcon.classList.toggle('hidden', !isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        };
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(savedTheme ? savedTheme === 'dark' : prefersDark);
+        themeToggle.addEventListener('click', () => setTheme(!htmlEl.classList.contains('dark')));
+
+        // --- HEADER STYLE ON SCROLL ---
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('py-2', window.scrollY > 10);
+            header.classList.toggle('glass-card', window.scrollY > 10);
+            header.classList.toggle('shadow-md', window.scrollY > 10);
+            header.classList.toggle('py-3', window.scrollY <= 10);
+        });
+
+        // --- ACTIVE NAV LINK ON SCROLL ---
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                    });
+                }
+            });
+        }, { root: null, rootMargin: '0px', threshold: 0.4 });
+        sections.forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>
