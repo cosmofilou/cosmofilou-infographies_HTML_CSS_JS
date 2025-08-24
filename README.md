@@ -26,7 +26,7 @@ Ce dépôt contient une collection d'infographies interactives, créées avec HT
 * **Dossier :** [infographie_analyse_honor_2025](./infographie_analyse_honor_2025)
 * **Description :** Une infographie comparative et critique sur le smartphone Honor Magic7 Pro.
 
-### 5. Infographie "Protocole V4"
+### 5. Infographie "Protocole Life OS"
 
 * **Dossier :** [infographie_protocole_v4](./infographie_protocole_v4)
 * **Description :** Un guide de construction ultime pour créer un système d'organisation personnelle "Life OS".
