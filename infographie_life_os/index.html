@@ -17,56 +17,74 @@
         }
     </script>
     <style>
-        /* Styles de Base */
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --text-muted-color: #64748b;
+            --heading-color: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-border: #e2e8f0;
+            --accent-color: #4f46e5;
+            --property-item-border: #e2e8f0;
+            --property-type-bg: #e2e8f0;
+            --property-type-color: #475569;
+            --code-block-bg: #f1f5f9;
+            --code-block-color: #1e293b;
+            --details-summary-bg: rgba(241, 245, 249, 0.7);
+            --details-summary-color: #1e293b;
+            --details-div-border: #e2e8f0;
+            --step-card-bg: rgba(248, 250, 252, 0.7);
+        }
+
+        .dark {
+            --bg-gradient-start: #111827;
+            --bg-gradient-end: #1F2937;
+            --text-color: #d1d5db;
+            --text-muted-color: #6b7280;
+            --heading-color: #ffffff;
+            --card-bg: rgba(31, 41, 55, 0.5);
+            --card-border: rgba(55, 65, 81, 0.7);
+            --property-item-border: #374151;
+            --property-type-bg: #374151;
+            --property-type-color: #9CA3AF;
+            --code-block-bg: #111827;
+            --code-block-color: #d1d5db;
+            --details-summary-bg: rgba(55, 65, 81, 0.5);
+            --details-summary-color: white;
+            --details-div-border: #374151;
+            --step-card-bg: rgba(39, 51, 68, 0.7);
+        }
+
+        /* Appliquer les variables */
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
         }
-
-        /* Thème Clair (Défaut) */
-        body {
-            background-color: #f8fafc; /* slate-50 */
-            color: #1e293b; /* slate-800 */
+        .dark body {
+            background: linear-gradient(to bottom right, var(--bg-gradient-start), var(--bg-gradient-end));
         }
         .card, .side-nav {
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid #e2e8f0; /* slate-200 */
+            transition: background-color 0.3s, border-color 0.3s;
         }
-        .side-nav a { color: #475569; }
-        .side-nav a:hover { background-color: #f1f5f9; color: #0f172a; }
-        h1, h2, h3, h4, h5, h6 { color: #0f172a; }
-        .text-muted { color: #64748b; }
-        .border-accent { border-color: #4f46e5; }
-        .property-item { border-color: #e2e8f0; }
-        .property-type { background-color: #e2e8f0; color: #475569; }
-        .code-block { background-color: #f1f5f9; }
-        .code-block pre code { color: #1e293b; }
-        details > summary { background-color: rgba(241, 245, 249, 0.7); color: #1e293b; }
-        details > div { border-color: #e2e8f0; }
-        .step-card { background-color: rgba(248, 250, 252, 0.7); }
-
-        /* Thème Sombre */
-        .dark body {
-            background: linear-gradient(to bottom right, #111827, #1F2937);
-            color: #d1d5db;
-        }
-        .dark .card, .dark .side-nav {
-            background-color: rgba(31, 41, 55, 0.5);
-            border: 1px solid rgba(55, 65, 81, 0.7);
-        }
-        .dark .side-nav a { color: #9CA3AF; }
-        .dark .side-nav a:hover { background-color: #374151; color: #E5E7EB; }
-        .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 { color: #ffffff; }
-        .dark .text-muted { color: #6b7280; }
-        .dark .property-item { border-color: #374151; }
-        .dark .property-type { background-color: #374151; color: #9CA3AF; }
-        .dark .code-block { background-color: #111827; }
-        .dark .code-block pre code { color: #d1d5db; }
-        .dark details > summary { background-color: rgba(55, 65, 81, 0.5); color: white; }
-        .dark details > div { border-color: #374151; }
-        .dark .step-card { background-color: rgba(39, 51, 68, 0.7); }
+        .side-nav a { color: var(--text-muted-color); }
+        .side-nav a:hover { background-color: var(--property-type-bg); color: var(--text-color); }
+        h1, h2, h3, h4, h5, h6 { color: var(--heading-color); }
+        .text-muted { color: var(--text-muted-color); }
+        .border-accent { border-color: var(--accent-color); }
+        .property-item { border-color: var(--property-item-border); }
+        .property-type { background-color: var(--property-type-bg); color: var(--property-type-color); }
+        .code-block { background-color: var(--code-block-bg); }
+        .code-block pre code { color: var(--code-block-color); }
+        details > summary { background-color: var(--details-summary-bg); color: var(--heading-color); }
+        details > div { border-color: var(--details-div-border); }
+        .step-card { background-color: var(--step-card-bg); border-left-color: var(--accent-color);}
 
         /* Styles Généraux (inchangés) */
         .card {
@@ -86,7 +104,7 @@
         .property-details { display: flex; align-items: center; }
         .property-icon { margin-right: 0.75rem; width: 1.25rem; height: 1.25rem; }
         .property-type { font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 9999px; text-align: center; min-width: 80px; }
-        .step-card { border-left: 4px solid #4f46e5; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; }
+        .step-card { border-left-width: 4px; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; }
         .side-nav {
             position: fixed; top: 50%; left: 1rem; transform: translateY(-50%);
             border-radius: 0.75rem; padding: 1rem; display: none;
@@ -96,7 +114,7 @@
             display: flex; align-items: center; padding: 0.5rem; margin-bottom: 0.5rem;
             border-radius: 0.5rem; transition: background-color 0.2s, color 0.2s; font-size: 0.875rem;
         }
-        .side-nav a.active { background-color: #4f46e5; color: white; font-weight: 600; }
+        .side-nav a.active { background-color: var(--accent-color); color: white; font-weight: 600; }
         details > summary {
             cursor: pointer; padding: 1rem; border-radius: 0.5rem; font-weight: 600;
             position: relative; list-style: none;
@@ -108,7 +126,7 @@
         }
         details[open] > summary::before { transform: rotate(90deg); }
         details[open] > summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-        details > div { padding: 1.5rem; border-top: none; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; }
+        details > div { padding: 1.5rem; border-width: 1px; border-top: none; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; }
         .summary-content { margin-left: 1.5rem; display: flex; align-items: center; }
     </style>
 </head>
@@ -551,4 +569,4 @@
 
 </body>
 </html>
-
+" selected in the canvas.
