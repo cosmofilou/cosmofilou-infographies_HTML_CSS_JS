@@ -197,6 +197,19 @@
                         <button class="copy-btn" onclick="copyToClipboard(this)">Copier</button>
                         <pre><code class="text-sm">if(empty(prop("Échéance")), "⚪️ Planifier", if(formatDate(prop("Échéance"), "L") == formatDate(now(), "L"), "🔥 Aujourd'hui", if(prop("Échéance") < now(), "🚨 En Retard", if(dateBetween(prop("Échéance"), now(), "days") < 7, "🟠 Cette Semaine", "👍 Plus tard"))))</code></pre>
                     </div>
+                    <div class="mt-4">
+                         <details>
+                            <summary><div class="summary-content"><span>📝</span><span class="ml-3">Modèle par Défaut : "Nouvelle Tâche"</span></div></summary>
+                            <div>
+                                <p class="text-sm text-muted mb-4"><strong>Propriétés :</strong> Pré-remplissez la `Priorité` sur `🔵 Basse`.</p>
+                                <p class="text-sm text-muted"><strong>Contenu de la page :</strong> Pour les tâches plus complexes, utilisez cette structure simple à l'intérieur de la page :</p>
+                                <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-1">
+                                    <li>Titre H3 : `📝 Notes`</li>
+                                    <li>Titre H3 : `✅ Sous-tâches` (avec une liste de cases à cocher)</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
                 </div>
                 <div class="card">
                     <h3 class="text-xl font-semibold mb-2">Fiche 2 : `🎯 Projets`</h3>
@@ -221,6 +234,20 @@
                         <li class="property-item"><div class="property-details"><span class="property-icon">📊</span><strong>Progression</strong><span class="text-xs text-muted ml-2">(Progress)</span></div><span class="property-type">Rollup</span></li>
                         <li class="property-item"><div class="property-details"><span class="property-icon">📦</span><strong>Archiver</strong><span class="text-xs text-muted ml-2">(Archive)</span></div><span class="property-type">Case à cocher</span></li>
                     </ul>
+                    <div class="mt-4">
+                         <details>
+                            <summary><div class="summary-content"><span>📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Projet"</span></div></summary>
+                            <div>
+                                <p class="text-sm text-muted mb-4"><strong>Propriétés :</strong> Pré-remplissez le `Statut` sur `Planifié`.</p>
+                                <p class="text-sm text-muted"><strong>Contenu de la page :</strong> C'est le modèle le plus important. Utilisez cette structure à l'intérieur de la page :</p>
+                                 <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
+                                    <li>Un <strong>encadré</strong> `🎯 Objectif Principal` pour décrire le résultat attendu.</li>
+                                    <li>Un titre H3 `🔗 Liens & Ressources` pour les documents importants.</li>
+                                    <li>Un titre H3 `✅ Plan d'Action` sous lequel vous insérez une <strong>vue liée</strong> de la base `⚡ Tâches Maîtresse`, filtrée pour que `Projet` contienne `Nouveau Projet`.</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
                 </div>
                 <div class="card">
                     <h3 class="text-xl font-semibold mb-2">Fiche 3 : `🌳 Domaines`</h3>
@@ -239,6 +266,19 @@
                         <li class="property-item"><div class="property-details"><span class="property-icon">📚</span><strong>Ressources</strong><span class="text-xs text-muted ml-2">(Resources)</span></div><span class="property-type">Relation</span></li>
                         <li class="property-item"><div class="property-details"><span class="property-icon">📜</span><strong>Standard à Maintenir</strong><span class="text-xs text-muted ml-2">(Standard to Maintain)</span></div><span class="property-type">Texte</span></li>
                     </ul>
+                     <div class="mt-4">
+                         <details>
+                            <summary><div class="summary-content"><span>📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Domaine"</span></div></summary>
+                            <div>
+                                <p class="text-sm text-muted"><strong>Contenu de la page :</strong> Utilisez cette structure pour créer un tableau de bord pour chaque domaine :</p>
+                                <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
+                                    <li>Un titre H2 `🧭 Vision & Objectifs`.</li>
+                                    <li>Un titre H2 `📊 Tableau de Bord`.</li>
+                                    <li>En dessous, créez 2 colonnes. À gauche, une <strong>vue liée</strong> de `🎯 Projets` (filtrée sur ce domaine). À droite, une <strong>vue liée</strong> de `📚 Ressources` (filtrée sur ce domaine).</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
                 </div>
                 <div class="card">
                     <h3 class="text-xl font-semibold mb-2">Fiche 4 : `📚 Ressources & Connaissances`</h3>
@@ -258,6 +298,20 @@
                         <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Domaine Associé</strong><span class="text-xs text-muted ml-2">(Related Area)</span></div><span class="property-type">Relation</span></li>
                         <li class="property-item"><div class="property-details"><span class="property-icon">👀</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
                     </ul>
+                     <div class="mt-4">
+                         <details>
+                            <summary><div class="summary-content"><span>📝</span><span class="ml-3">Modèle par Défaut : "Nouvelle Note"</span></div></summary>
+                            <div>
+                                <p class="text-sm text-muted mb-4"><strong>Propriétés :</strong> Pré-remplissez le `Statut` sur `À lire / À traiter`.</p>
+                                <p class="text-sm text-muted"><strong>Contenu de la page :</strong> Utilisez cette structure simple pour guider votre prise de notes :</p>
+                                <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-1">
+                                    <li>Titre H3 : `💡 Idée Principale`</li>
+                                    <li>Titre H3 : `📝 Notes Détaillées`</li>
+                                    <li>Titre H3 : `🤔 Mes Réflexions`</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
                 </div>
             </section>
 
@@ -569,4 +623,4 @@
 
 </body>
 </html>
-" selected in the canvas.
+
