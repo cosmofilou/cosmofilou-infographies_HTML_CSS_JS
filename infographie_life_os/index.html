@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
-        // Met le thème avant le rendu de la page pour éviter le flash
+        // Applique le thème avant le rendu de la page pour éviter le "flash" de couleur
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark')
         } else {
@@ -18,12 +18,13 @@
     </script>
     <style>
         :root {
-            --bg-color: #f8fafc;
-            --text-color: #1e293b;
-            --text-muted-color: #64748b;
-            --heading-color: #0f172a;
+            --bg-image: none;
+            --bg-color: #f8fafc; /* slate-50 */
+            --text-color: #1e293b; /* slate-800 */
+            --text-muted-color: #64748b; /* slate-500 */
+            --heading-color: #0f172a; /* slate-900 */
             --card-bg: rgba(255, 255, 255, 0.7);
-            --card-border: #e2e8f0;
+            --card-border: #e2e8f0; /* slate-200 */
             --accent-color: #4f46e5;
             --property-item-border: #e2e8f0;
             --property-type-bg: #e2e8f0;
@@ -31,14 +32,13 @@
             --code-block-bg: #f1f5f9;
             --code-block-color: #1e293b;
             --details-summary-bg: rgba(241, 245, 249, 0.7);
-            --details-summary-color: #1e293b;
             --details-div-border: #e2e8f0;
             --step-card-bg: rgba(248, 250, 252, 0.7);
         }
 
         .dark {
-            --bg-gradient-start: #111827;
-            --bg-gradient-end: #1F2937;
+            --bg-image: linear-gradient(to bottom right, #111827, #1F2937);
+            --bg-color: #111827; /* Fallback */
             --text-color: #d1d5db;
             --text-muted-color: #6b7280;
             --heading-color: #ffffff;
@@ -50,7 +50,6 @@
             --code-block-bg: #111827;
             --code-block-color: #d1d5db;
             --details-summary-bg: rgba(55, 65, 81, 0.5);
-            --details-summary-color: white;
             --details-div-border: #374151;
             --step-card-bg: rgba(39, 51, 68, 0.7);
         }
@@ -60,11 +59,10 @@
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
             background-color: var(--bg-color);
+            background-image: var(--bg-image);
             color: var(--text-color);
             transition: background-color 0.3s, color 0.3s;
-        }
-        .dark body {
-            background: linear-gradient(to bottom right, var(--bg-gradient-start), var(--bg-gradient-end));
+            min-height: 100vh;
         }
         .card, .side-nav {
             background-color: var(--card-bg);
@@ -74,7 +72,7 @@
             transition: background-color 0.3s, border-color 0.3s;
         }
         .side-nav a { color: var(--text-muted-color); }
-        .side-nav a:hover { background-color: var(--property-type-bg); color: var(--text-color); }
+        .side-nav a:hover { background-color: var(--property-type-bg); color: var(--heading-color); }
         h1, h2, h3, h4, h5, h6 { color: var(--heading-color); }
         .text-muted { color: var(--text-muted-color); }
         .border-accent { border-color: var(--accent-color); }
@@ -623,4 +621,5 @@
 
 </body>
 </html>
+" selected in the canvas.
 
