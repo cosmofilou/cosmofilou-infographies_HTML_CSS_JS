@@ -8,14 +8,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        // Met le thème avant le rendu de la page pour éviter le flash
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
     <style>
-        /* Base Styles */
+        /* Styles de Base */
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
         }
 
-        /* Light Mode Styles (Default) */
+        /* Thème Clair (Défaut) */
         body {
             background-color: #f8fafc; /* slate-50 */
             color: #1e293b; /* slate-800 */
@@ -29,7 +37,6 @@
         .side-nav a { color: #475569; }
         .side-nav a:hover { background-color: #f1f5f9; color: #0f172a; }
         h1, h2, h3, h4, h5, h6 { color: #0f172a; }
-        p, li, ol { color: #334155; }
         .text-muted { color: #64748b; }
         .border-accent { border-color: #4f46e5; }
         .property-item { border-color: #e2e8f0; }
@@ -40,7 +47,7 @@
         details > div { border-color: #e2e8f0; }
         .step-card { background-color: rgba(248, 250, 252, 0.7); }
 
-        /* Dark Mode Styles */
+        /* Thème Sombre */
         .dark body {
             background: linear-gradient(to bottom right, #111827, #1F2937);
             color: #d1d5db;
@@ -52,7 +59,6 @@
         .dark .side-nav a { color: #9CA3AF; }
         .dark .side-nav a:hover { background-color: #374151; color: #E5E7EB; }
         .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 { color: #ffffff; }
-        .dark p, .dark li, .dark ol { color: #d1d5db; }
         .dark .text-muted { color: #6b7280; }
         .dark .property-item { border-color: #374151; }
         .dark .property-type { background-color: #374151; color: #9CA3AF; }
@@ -62,7 +68,7 @@
         .dark details > div { border-color: #374151; }
         .dark .step-card { background-color: rgba(39, 51, 68, 0.7); }
 
-        /* General Unchanged Styles */
+        /* Styles Généraux (inchangés) */
         .card {
             border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem;
             opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out;
@@ -158,17 +164,17 @@
                         <li>Tâche récurrente : Séance Muscu 1</li>
                         <li>Tâche récurrente : Nettoyage appartement</li>
                     </ul>
-                    <div class="space-y-4">
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">✏️</span><strong>Nom de la Tâche</strong><span class="text-xs text-muted ml-2">(Task Name)</span></div><div class="text-sm property-type mt-1 ml-6">Titre</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🏷️</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><div class="text-sm property-type mt-1 ml-6">Sélection</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🗓️</span><strong>Échéance</strong><span class="text-xs text-muted ml-2">(Due Date)</span></div><div class="text-sm property-type mt-1 ml-6">Date</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">ιε</span><strong>Priorité</strong><span class="text-xs text-muted ml-2">(Priority)</span></div><div class="text-sm property-type mt-1 ml-6">Sélection</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🔗</span><strong>Projet</strong><span class="text-xs text-muted ml-2">(Project)</span></div><div class="text-sm property-type mt-1 ml-6">Relation</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🌳</span><strong>Domaine</strong><span class="text-xs text-muted ml-2">(Area)</span></div><div class="text-sm property-type mt-1 ml-6">Relation</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">✔️</span><strong>Fait?</strong><span class="text-xs text-muted ml-2">(Done?)</span></div><div class="text-sm property-type mt-1 ml-6">Case à cocher</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">➕</span><strong>Date de Création</strong><span class="text-xs text-muted ml-2">(Created Time)</span></div><div class="text-sm property-type mt-1 ml-6">Date de création</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">📟</span><strong>Urgence</strong><span class="text-xs text-muted ml-2">(Urgency)</span></div><div class="text-sm property-type mt-1 ml-6">Formule</div></div></div>
-                    </div>
+                    <ul>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">✏️</span><strong>Nom de la Tâche</strong><span class="text-xs text-muted ml-2">(Task Name)</span></div><span class="property-type">Titre</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Échéance</strong><span class="text-xs text-muted ml-2">(Due Date)</span></div><span class="property-type">Date</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">ιε</span><strong>Priorité</strong><span class="text-xs text-muted ml-2">(Priority)</span></div><span class="property-type">Sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Projet</strong><span class="text-xs text-muted ml-2">(Project)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🌳</span><strong>Domaine</strong><span class="text-xs text-muted ml-2">(Area)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">✔️</span><strong>Fait?</strong><span class="text-xs text-muted ml-2">(Done?)</span></div><span class="property-type">Case à cocher</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">➕</span><strong>Date de Création</strong><span class="text-xs text-muted ml-2">(Created Time)</span></div><span class="property-type">Date de création</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📟</span><strong>Urgence</strong><span class="text-xs text-muted ml-2">(Urgency)</span></div><span class="property-type">Formule</span></li>
+                    </ul>
                     <div class="code-block mt-4">
                         <button class="copy-btn" onclick="copyToClipboard(this)">Copier</button>
                         <pre><code class="text-sm">if(empty(prop("Échéance")), "⚪️ Planifier", if(formatDate(prop("Échéance"), "L") == formatDate(now(), "L"), "🔥 Aujourd'hui", if(prop("Échéance") < now(), "🚨 En Retard", if(dateBetween(prop("Échéance"), now(), "days") < 7, "🟠 Cette Semaine", "👍 Plus tard"))))</code></pre>
@@ -188,15 +194,15 @@
                         <li>Préparer l'état des lieux de sortie</li>
                         <li>Projet Golfinho (VBA)</li>
                     </ul>
-                    <div class="space-y-4">
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🎯</span><strong>Nom du Projet</strong><span class="text-xs text-muted ml-2">(Project Name)</span></div><div class="text-sm property-type mt-1 ml-6">Titre</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🚀</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><div class="text-sm property-type mt-1 ml-6">Sélection</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🌳</span><strong>Domaine</strong><span class="text-xs text-muted ml-2">(Area)</span></div><div class="text-sm property-type mt-1 ml-6">Relation</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🗓️</span><strong>Échéance</strong><span class="text-xs text-muted ml-2">(Due Date)</span></div><div class="text-sm property-type mt-1 ml-6">Date</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🔗</span><strong>Tâches</strong><span class="text-xs text-muted ml-2">(Tasks)</span></div><div class="text-sm property-type mt-1 ml-6">Relation</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">📊</span><strong>Progression</strong><span class="text-xs text-muted ml-2">(Progress)</span></div><div class="text-sm property-type mt-1 ml-6">Rollup</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">📦</span><strong>Archiver</strong><span class="text-xs text-muted ml-2">(Archive)</span></div><div class="text-sm property-type mt-1 ml-6">Case à cocher</div></div></div>
-                    </div>
+                    <ul>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🎯</span><strong>Nom du Projet</strong><span class="text-xs text-muted ml-2">(Project Name)</span></div><span class="property-type">Titre</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🚀</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🌳</span><strong>Domaine</strong><span class="text-xs text-muted ml-2">(Area)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Échéance</strong><span class="text-xs text-muted ml-2">(Due Date)</span></div><span class="property-type">Date</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Tâches</strong><span class="text-xs text-muted ml-2">(Tasks)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📊</span><strong>Progression</strong><span class="text-xs text-muted ml-2">(Progress)</span></div><span class="property-type">Rollup</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📦</span><strong>Archiver</strong><span class="text-xs text-muted ml-2">(Archive)</span></div><span class="property-type">Case à cocher</span></li>
+                    </ul>
                 </div>
                 <div class="card">
                     <h3 class="text-xl font-semibold mb-2">Fiche 3 : `🌳 Domaines`</h3>
@@ -209,12 +215,12 @@
                         <li>Appartement Nantes</li>
                         <li>Animaux (Pauline & Gus)</li>
                     </ul>
-                    <div class="space-y-4">
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🌳</span><strong>Nom du Domaine</strong><span class="text-xs text-muted ml-2">(Area Name)</span></div><div class="text-sm property-type mt-1 ml-6">Titre</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🔗</span><strong>Projets Actifs</strong><span class="text-xs text-muted ml-2">(Active Projects)</span></div><div class="text-sm property-type mt-1 ml-6">Relation</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">📚</span><strong>Ressources</strong><span class="text-xs text-muted ml-2">(Resources)</span></div><div class="text-sm property-type mt-1 ml-6">Relation</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">📜</span><strong>Standard à Maintenir</strong><span class="text-xs text-muted ml-2">(Standard to Maintain)</span></div><div class="text-sm property-type mt-1 ml-6">Texte</div></div></div>
-                    </div>
+                    <ul>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🌳</span><strong>Nom du Domaine</strong><span class="text-xs text-muted ml-2">(Area Name)</span></div><span class="property-type">Titre</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Projets Actifs</strong><span class="text-xs text-muted ml-2">(Active Projects)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📚</span><strong>Ressources</strong><span class="text-xs text-muted ml-2">(Resources)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📜</span><strong>Standard à Maintenir</strong><span class="text-xs text-muted ml-2">(Standard to Maintain)</span></div><span class="property-type">Texte</span></li>
+                    </ul>
                 </div>
                 <div class="card">
                     <h3 class="text-xl font-semibold mb-2">Fiche 4 : `📚 Ressources & Connaissances`</h3>
@@ -226,14 +232,14 @@
                         <li>Toutes vos notes à analyser par Gemini</li>
                         <li>Quittances de loyer (PDF)</li>
                     </ul>
-                    <div class="space-y-4">
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">📄</span><strong>Nom</strong><span class="text-xs text-muted ml-2">(Name)</span></div><div class="text-sm property-type mt-1 ml-6">Titre</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🔖</span><strong>Type</strong><span class="text-xs text-muted ml-2">(Type)</span></div><div class="text-sm property-type mt-1 ml-6">Sélection</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🏷️</span><strong>Sujet/Tags</strong><span class="text-xs text-muted ml-2">(Topic/Tags)</span></div><div class="text-sm property-type mt-1 ml-6">Multi-sélection</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🌐</span><strong>URL</strong></div><div class="text-sm property-type mt-1 ml-6">URL</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">🔗</span><strong>Domaine Associé</strong><span class="text-xs text-muted ml-2">(Related Area)</span></div><div class="text-sm property-type mt-1 ml-6">Relation</div></div></div>
-                        <div class="property-item"><div><div class="flex items-center"><span class="mr-2">👀</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><div class="text-sm property-type mt-1 ml-6">Sélection</div></div></div>
-                    </div>
+                    <ul>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📄</span><strong>Nom</strong><span class="text-xs text-muted ml-2">(Name)</span></div><span class="property-type">Titre</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔖</span><strong>Type</strong><span class="text-xs text-muted ml-2">(Type)</span></div><span class="property-type">Sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Sujet/Tags</strong><span class="text-xs text-muted ml-2">(Topic/Tags)</span></div><span class="property-type">Multi-sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🌐</span><strong>URL</strong></div><span class="property-type">URL</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Domaine Associé</strong><span class="text-xs text-muted ml-2">(Related Area)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">👀</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
+                    </ul>
                 </div>
             </section>
 
@@ -489,13 +495,6 @@
     </div>
 
     <script>
-        // Script to detect and apply theme
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-
         function copyToClipboard(button) {
             const codeBlock = button.nextElementSibling;
             const code = codeBlock.querySelector('code');
@@ -552,3 +551,4 @@
 
 </body>
 </html>
+
