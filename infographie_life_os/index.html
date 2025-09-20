@@ -187,7 +187,6 @@
 
             <section id="noyau" class="mb-12">
                 <h2 class="text-3xl font-bold mb-6 border-b-2 border-accent pb-2">🧠 Section 1 : Le Noyau Essentiel</h2>
-                <!-- CONTENU COMPLET DU NOYAU ICI -->
                 <div class="card">
                     <h3 class="text-xl font-semibold mb-2">Fiche 1 : `⚡ Tâches Maîtresse`</h3>
                     <p class="text-muted mb-4">C'est votre liste de choses à faire universelle. Si une action doit être entreprise, elle doit être ici.</p>
@@ -606,6 +605,19 @@
                                     </div>
                                 </details>
                             </div>
+                             <div class="step-card">
+                                <h4 class="font-bold text-lg">Mode Opératoire : Calculer le Solde Actuel</h4>
+                                <p class="text-sm mt-2 text-muted">Ce rollup additionne simplement toutes les transactions liées. Le vrai solde sera calculé avec une formule dans une future version pour plus de simplicité.</p>
+                                <ol class="list-decimal list-inside text-sm text-muted mt-4 space-y-2">
+                                    <li>Configurez le Rollup `📈 Solde Actuel` :
+                                        <ul class="list-disc list-inside pl-6">
+                                            <li><strong>Relation :</strong> Choisissez `💸 Transactions`.</li>
+                                            <li><strong>Propriété :</strong> Choisissez `💶 Montant`.</li>
+                                            <li><strong>Calculer :</strong> Choisissez `Somme`.</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
                         </div>
                          <div class="card">
                             <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.2 : `💸 Transactions`</h4>
@@ -647,6 +659,20 @@
                                         <p class="text-sm text-muted"><strong>Icône :</strong> `💰`. Pas de contenu de page nécessaire.</p>
                                     </div>
                                 </details>
+                            </div>
+                            <div class="step-card">
+                                <h4 class="font-bold text-lg">Mode Opératoire : Suivi des Dépenses</h4>
+                                <ol class="list-decimal list-inside text-sm text-muted mt-4 space-y-2">
+                                    <li>Configurez le Rollup `쓴 Dépenses du Mois` :
+                                        <ul class="list-disc list-inside pl-6">
+                                            <li><strong>Relation :</strong> Choisissez `💸 Transactions`.</li>
+                                            <li><strong>Propriété :</strong> `💶 Montant`.</li>
+                                            <li><strong>Calculer :</strong> `Somme`.</li>
+                                            <li><strong>IMPORTANT :</strong> Ajoutez un filtre pour que la `Date` de la transaction soit `Ce mois-ci`.</li>
+                                        </ul>
+                                    </li>
+                                    <li>Pour la propriété `📈 Restant`, utilisez la formule : `prop("Budget Mensuel") - prop("Dépenses du Mois")`.</li>
+                                </ol>
                             </div>
                         </div>
                         <div class="card">
