@@ -288,6 +288,7 @@
         const dbData = [
             {
                 icon: '🌿', title: 'Ma Collection de Plantes',
+                description: "C'est la base de données centrale. Chaque page est une plante que vous possédez, agissant comme sa carte d'identité.",
                 properties: [
                     { emoji: '🏷️', fr: 'Nom', en: 'Name', type: 'Titre' },
                     { emoji: '🛍️', fr: 'Achats', en: 'Purchases', type: 'Relation (avec Achats)' },
@@ -295,15 +296,17 @@
                     { emoji: '☀️', fr: 'Luminosité', en: 'Luminosity', type: 'Select', options: ['Faible', 'Modérée', 'Lumineuse', 'Vive indirecte', 'Plein soleil'] },
                     { emoji: '💧', fr: 'Dernier arrosage', en: 'LastWatered', type: 'Date' },
                     { emoji: '🗓️', fr: 'Prochain arrosage', en: 'NextWatering', type: 'Formule' },
-                    { emoji: '✨', fr: 'État', en: 'Status', type: 'Select', options: ['En pleine forme ✨', "A besoin d'eau 💧", "A besoin d'engrais 💊", 'Malade 🦠', 'En dormance 💤'] },
+                    { emoji: '✨', fr: 'État', en: 'Status', type: 'Select', options: ['En pleine forme ✨', "A besoin d'eau 💧", "A besoin d'engrais 💊", 'Malade 🦠', 'En dormance 💤', 'Offerte / Vendue 💸'] },
                     { emoji: '🦠', fr: 'Maladies', en: 'Diseases', type: 'Relation (avec Maladies)' },
                 ]
             },
             {
                 icon: '🛍️', title: 'Mes Achats Jungle',
+                description: "Suivez toutes vos dépenses liées aux plantes, des pots au terreau, pour garder un oeil sur votre budget.",
                 properties: [
                     { emoji: '🛒', fr: 'Article', en: 'Item', type: 'Titre' },
                     { emoji: '🌿', fr: 'Plantes liées', en: 'RelatedPlants', type: 'Relation (avec Collection)' },
+                    { emoji: '📋', fr: 'Type', en: 'Type', type: 'Select', options: ['Plante', 'Pot / Cache-pot', 'Terreau / Substrat', 'Engrais', 'Outil', 'Décoration'] },
                     { emoji: '💰', fr: 'Coût', en: 'Cost', type: 'Nombre' },
                     { emoji: '📅', fr: 'Date', en: 'Date', type: 'Date' },
                     { emoji: '🏬', fr: 'Enseigne', en: 'Store', type: 'Relation (avec Enseignes)' },
@@ -311,6 +314,7 @@
             },
             {
                 icon: '🗓️', title: 'Calendrier d\'Entretien',
+                description: "Le centre de commande pour toutes vos tâches. Ne manquez plus jamais un arrosage, un rempotage ou une fertilisation.",
                 properties: [
                     { emoji: '📝', fr: 'Tâche', en: 'Task', type: 'Titre' },
                     { emoji: '🌿', fr: 'Plante concernée', en: 'Plant', type: 'Relation (avec Collection)' },
@@ -321,33 +325,27 @@
             },
             {
                 icon: '🦠', title: 'Maladies & Soins',
+                description: "Votre journal de santé pour les plantes. Documentez les problèmes, les traitements et leur efficacité pour agir vite.",
                 properties: [
                     { emoji: '🔬', fr: 'Maladie', en: 'Disease', type: 'Titre' },
                     { emoji: '🌿', fr: 'Plantes affectées', en: 'AffectedPlants', type: 'Relation (avec Collection)' },
+                    { emoji: '📅', fr: 'Date d\'apparition', en: 'DateDetected', type: 'Date' },
                     { emoji: '📝', fr: 'Symptômes', en: 'Symptoms', type: 'Texte' },
                     { emoji: '💊', fr: 'Traitement', en: 'Treatment', type: 'Texte' },
-                    { emoji: '✨', fr: 'Statut', en: 'Status', type: 'Select', options: ['En observation 👀', 'En cours de traitement 💊', 'Traité ✅', 'Non résolu 😥'] },
+                    { emoji: '✨', fr: 'Statut', en: 'Status', type: 'Select', options: ['En observation 👀', 'En cours de traitement 💊', 'Guéri ✅', 'Non résolu 😥'] },
                 ]
             },
             {
                 icon: '🏬', title: 'Nos Enseignes',
+                description: "Votre carnet d'adresses pour retrouver facilement vos jardineries et magasins de bricolage préférés.",
                 properties: [
                     { emoji: '🏷️', fr: 'Nom', en: 'Name', type: 'Titre' },
                     { emoji: '🛍️', fr: 'Achats effectués', en: 'Purchases', type: 'Relation (avec Achats)' },
+                    { emoji: '⭐', fr: 'Type', en: 'Type', type: 'Select', options: ['Jardinerie', 'Grande surface', 'En ligne', 'Boutique spécialisée'] },
                     { emoji: '📍', fr: 'Adresse', en: 'Address', type: 'Texte' },
-                    { emoji: '�', fr: 'Site Web', en: 'Website', type: 'URL' },
+                    { emoji: '🌐', fr: 'Site Web', en: 'Website', type: 'URL' },
                 ]
             },
-            {
-                icon: '💡', title: 'Exemple d\'entrée pour "Maladies & Soins"',
-                properties: [
-                     { emoji: '🔬', fr: 'Maladie', en: 'Cochenilles Farineuses', type: '' },
-                     { emoji: '🌿', fr: 'Plantes affectées', en: 'Lier la page de votre "Dracaena"', type: '' },
-                     { emoji: '📝', fr: 'Symptômes', en: 'Amas blancs cotonneux, feuilles collantes (miellat)', type: '' },
-                     { emoji: '💊', fr: 'Traitement', en: 'Coton-tige + alcool. Pulvérisation eau + savon noir + huile. Répéter chaque semaine pendant 1 mois.', type: '' },
-                     { emoji: '✨', fr: 'Statut', en: 'En cours de traitement 💊', type: '' },
-                ]
-            }
         ];
         
         const templateData = [
@@ -440,6 +438,7 @@
                     <div class="accordion-content">
                         <div>
                             <div class="px-5 pb-5 pt-2 border-t border-[color:var(--card-border)]">
+                                <p class="text-sm text-[color:var(--muted-foreground)] mb-4">${db.description || ''}</p>
                                 <ul class="space-y-2 text-sm">
                                     ${db.properties.map(p => `
                                         <li class="p-2 rounded-md hover:bg-[color:var(--background)]">
@@ -581,4 +580,4 @@
     </script>
 </body>
 </html>
-```�
+```
