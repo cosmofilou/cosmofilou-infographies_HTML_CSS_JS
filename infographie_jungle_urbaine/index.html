@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jungle Urbaine | Tableau de Bord Interactif</title>
+    <title>Jungle Urbaine | Guide Complet Notion</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -23,7 +23,8 @@
             --primary: #228B22; /* ForestGreen */
             --primary-foreground: #FFFFFF;
             --muted-foreground: #5A6D64;
-            --destructive: #dc2626; /* red-600 */
+            --destructive: #dc2626;
+            --tag-bg: rgba(26, 46, 36, 0.05);
         }
 
         .dark {
@@ -34,14 +35,14 @@
             --primary: #34D399; /* Emerald-400 */
             --primary-foreground: #121C16;
             --muted-foreground: #9CB3A8;
-            --destructive: #ef4444; /* red-500 */
+            --destructive: #ef4444;
+            --tag-bg: rgba(224, 239, 230, 0.1);
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--background);
             color: var(--foreground);
-            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
         }
 
         .glass-card {
@@ -53,48 +54,36 @@
         }
         .glass-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-        }
-        .dark .glass-card:hover {
-             box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2), 0 10px 10px -5px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.07);
         }
 
         .nav-link.active { color: var(--primary); font-weight: 700; }
         
-        /* Animation d'apparition */
-        .reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        /* Arrière-plan animé subtil */
-        #hero-bg {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100%; height: 100%;
-            overflow: hidden;
-            z-index: -1;
+        /* Modal Styles */
+        .modal {
+            visibility: hidden; opacity: 0; transition: visibility 0s 0.3s, opacity 0.3s ease;
         }
-        .leaf {
-            position: absolute;
-            font-size: 4rem;
-            opacity: 0.05;
-            animation: float 25s infinite linear;
+        .modal.is-open {
+            visibility: visible; opacity: 1; transition: opacity 0.3s ease;
         }
-        .leaf:nth-child(2) { left: 70%; animation-duration: 35s; font-size: 5rem; }
-        .leaf:nth-child(3) { left: 10%; animation-duration: 29s; }
-        .leaf:nth-child(4) { left: 90%; animation-duration: 22s; font-size: 6rem; }
-        .leaf:nth-child(5) { left: 40%; animation-duration: 38s; }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); }
-            100% { transform: translateY(-10vh) rotate(360deg); }
+        .modal-content {
+            transform: scale(0.95); transition: transform 0.3s ease;
         }
+        .modal.is-open .modal-content {
+            transform: scale(1);
+        }
+        
+        /* Accordion */
+        .accordion-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s ease-in-out;
+        }
+        .accordion-item.active .accordion-content { grid-template-rows: 1fr; }
+        .accordion-content > div { overflow: hidden; }
     </style>
 </head>
 <body class="antialiased">
@@ -107,13 +96,14 @@
                 <span>Jungle Urbaine</span>
             </a>
             <div class="hidden md:flex items-center gap-6 text-sm font-medium text-[color:var(--muted-foreground)]">
-                <a href="#dashboard" class="nav-link hover:text-[color:var(--primary)] transition-colors">Tableau de Bord</a>
-                <a href="#plantes" class="nav-link hover:text-[color:var(--primary)] transition-colors">Mes Plantes</a>
-                <a href="#bases" class="nav-link hover:text-[color:var(--primary)] transition-colors">Bases de données</a>
+                <a href="#dashboard" class="nav-link">Tableau de Bord</a>
+                <a href="#plantes" class="nav-link">Ma Collection</a>
+                <a href="#bases" class="nav-link">Bases de Données</a>
+                <a href="#workflows" class="nav-link">Workflows</a>
+                <a href="#templates" class="nav-link">Modèles</a>
             </div>
             <button id="theme-toggle" class="p-2 rounded-full hover:bg-[color:var(--card-border)] transition-colors">
-                <svg id="theme-icon-light" xmlns="http://www.w.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <!-- Theme icons here -->
             </button>
         </nav>
     </header>
@@ -121,227 +111,427 @@
     <main class="container mx-auto px-4 pt-24">
         
         <!-- Section 1: Accueil -->
-        <section id="accueil" class="relative min-h-[80vh] flex flex-col items-center justify-center text-center py-16">
-            <div id="hero-bg">
-                <div class="leaf">🍃</div><div class="leaf">🌿</div><div class="leaf">🌱</div><div class="leaf">🍀</div><div class="leaf">☘️</div>
-            </div>
-            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tighter mb-4 reveal">Votre jungle. Votre guide.</h1>
-            <p class="max-w-2xl text-lg md:text-xl text-[color:var(--muted-foreground)] mb-12 reveal" style="transition-delay: 100ms;">Un écosystème de suivi complet et visuel pour voir vos plantes s'épanouir au quotidien, sans effort.</p>
-            <a href="#dashboard" class="reveal bg-[color:var(--primary)] text-[color:var(--primary-foreground)] font-bold py-3 px-8 rounded-full hover:opacity-90 transition-opacity" style="transition-delay: 200ms;">
-                Accéder à mon tableau de bord
+        <section id="accueil" class="min-h-[80vh] flex flex-col items-center justify-center text-center py-16">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tighter mb-4">Votre jungle. Votre guide.</h1>
+            <p class="max-w-2xl text-lg md:text-xl text-[color:var(--muted-foreground)] mb-12">Le guide complet pour construire votre système de suivi de plantes sur Notion.</p>
+            <a href="#dashboard" class="bg-[color:var(--primary)] text-[color:var(--primary-foreground)] font-bold py-3 px-8 rounded-full hover:opacity-90 transition-opacity">
+                Commencer
             </a>
         </section>
 
         <!-- Section 2: Tableau de Bord -->
         <section id="dashboard" class="py-24">
-            <div class="text-center mb-12 reveal">
+            <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Tableau de Bord</h2>
-                <p class="max-w-3xl mx-auto mt-4 text-[color:var(--muted-foreground)]">Vos actions prioritaires pour une jungle en pleine santé.</p>
+                <p class="max-w-3xl mx-auto mt-4 text-[color:var(--muted-foreground)]">Vos actions prioritaires et les raccourcis pour gérer votre jungle.</p>
             </div>
-            <div id="dashboard-cards" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Les cartes du tableau de bord seront injectées ici par JS -->
+            <div id="dashboard-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Dashboard cards injected by JS -->
             </div>
         </section>
 
         <!-- Section 3: Vos Plantes -->
         <section id="plantes" class="py-24">
-            <div class="text-center mb-12 reveal">
-                <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Ma Collection</h2>
-                <p class="max-w-3xl mx-auto mt-4 text-[color:var(--muted-foreground)]">Gérez, filtrez et interagissez avec votre collection de plantes.</p>
+            <div class="flex flex-col md:flex-row justify-between items-center mb-12">
+                <div class="text-center md:text-left">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Ma Collection</h2>
+                    <p class="max-w-3xl mt-4 text-[color:var(--muted-foreground)]">Gérez, filtrez et interagissez avec votre collection de plantes.</p>
+                </div>
+                <button id="add-plant-btn" class="mt-4 md:mt-0 flex items-center gap-2 bg-[color:var(--primary)] text-[color:var(--primary-foreground)] font-bold py-2 px-5 rounded-full hover:opacity-90 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                    Ajouter une plante
+                </button>
             </div>
             <!-- Filtres et Recherche -->
-            <div class="flex flex-col md:flex-row gap-4 mb-8 reveal">
+            <div class="flex flex-col md:flex-row gap-4 mb-8">
                 <div class="relative flex-grow">
                     <input type="search" id="search-input" placeholder="Rechercher une plante..." class="w-full pl-10 pr-4 py-2 rounded-full border border-[color:var(--card-border)] bg-transparent focus:ring-2 focus:ring-[color:var(--primary)] focus:outline-none">
                     <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[color:var(--muted-foreground)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" /></svg>
                 </div>
-                <div id="filter-buttons" class="flex items-center gap-2 flex-wrap">
-                    <!-- Boutons de filtre injectés par JS -->
-                </div>
+                <div id="filter-buttons" class="flex items-center gap-2 flex-wrap"></div>
             </div>
-            <div id="plant-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                 <!-- Les cartes de plantes seront injectées ici par JS -->
-            </div>
+            <div id="plant-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
             <p id="no-results" class="text-center text-[color:var(--muted-foreground)] hidden mt-8">Aucune plante ne correspond à votre recherche.</p>
         </section>
         
         <!-- Section 4: Bases de Données -->
         <section id="bases" class="py-24">
-            <div class="text-center mb-12 reveal">
-                <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Les Fondations de votre Jungle</h2>
-                <p class="max-w-3xl mx-auto mt-4 text-[color:var(--muted-foreground)]">Chaque base est liée pour une gestion centralisée et intelligente.</p>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Détail des Bases de Données</h2>
+                <p class="max-w-3xl mx-auto mt-4 text-[color:var(--muted-foreground)]">Voici la structure exacte à reproduire dans Notion pour chaque base, avec les noms de propriétés en anglais pour les formules.</p>
             </div>
-            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Contenu des bases de données simplifié pour la démo -->
-                <div class="glass-card p-6 rounded-2xl reveal">
-                    <h3 class="text-xl font-bold flex items-center gap-3 mb-2">🌿 Ma Collection de Plantes</h3>
-                    <p class="text-sm text-[color:var(--muted-foreground)]">Votre catalogue personnel de toutes vos plantes avec leur état et leurs besoins.</p>
+            <div id="db-accordion-container" class="space-y-4 max-w-4xl mx-auto"></div>
+        </section>
+
+        <!-- Section 5: Workflows -->
+        <section id="workflows" class="py-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Workflows & Automatisations</h2>
+                <p class="max-w-3xl mx-auto mt-4 text-[color:var(--muted-foreground)]">Connectez vos bases de données avec des boutons pour automatiser les tâches répétitives.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Workflow Ajouter une Plante -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold flex items-center gap-3 mb-3">➕ Bouton "Nouvelle Plante"</h3>
+                    <p class="text-sm text-[color:var(--muted-foreground)] mb-4">Ce bouton, placé sur votre page d'accueil Notion, crée une nouvelle entrée dans votre collection.</p>
+                    <ol class="list-decimal list-inside text-sm space-y-2">
+                        <li><b>Action :</b> Ajouter une page à...</li>
+                        <li><b>Base de données :</b> `🌿 Ma Collection de Plantes`</li>
+                        <li><b>Propriétés pré-remplies :</b></li>
+                        <li class="ml-4">`✨ État` (`Status`) → "En pleine forme"</li>
+                        <li class="ml-4">`💧 Dernier arrosage` (`LastWatered`) → "@Aujourd'hui"</li>
+                        <li><b>Ouvrir la page :</b> Activer pour remplir les autres détails.</li>
+                    </ol>
                 </div>
-                <div class="glass-card p-6 rounded-2xl reveal">
-                    <h3 class="text-xl font-bold flex items-center gap-3 mb-2">🛍️ Mes Achats Jungle</h3>
-                    <p class="text-sm text-[color:var(--muted-foreground)]">Suivez vos dépenses pour chaque plante, pot, et terreau.</p>
+                <!-- Workflow Ajouter un Achat -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold flex items-center gap-3 mb-3">🛒 Bouton "Nouvel Achat"</h3>
+                    <p class="text-sm text-[color:var(--muted-foreground)] mb-4">Permet d'enregistrer rapidement un nouvel achat (plante, pot, terreau...).</p>
+                    <ol class="list-decimal list-inside text-sm space-y-2">
+                        <li><b>Action :</b> Ajouter une page à...</li>
+                        <li><b>Base de données :</b> `🛍️ Mes Achats Jungle`</li>
+                         <li><b>Propriétés pré-remplies :</b></li>
+                        <li class="ml-4">`📅 Date` (`Date`) → "@Aujourd'hui"</li>
+                        <li><b>Ouvrir la page :</b> Activer pour lier la plante, entrer le coût, etc.</li>
+                    </ol>
                 </div>
-                 <div class="glass-card p-6 rounded-2xl reveal">
-                    <h3 class="text-xl font-bold flex items-center gap-3 mb-2">🗓️ Mon Calendrier d'Entretien</h3>
-                    <p class="text-sm text-[color:var(--muted-foreground)]">Gérez et planifiez vos tâches d'entretien (arrosage, rempotage, etc.).</p>
+                <!-- Workflow Arrosage -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold flex items-center gap-3 mb-3">💧 Bouton "Arroser"</h3>
+                    <p class="text-sm text-[color:var(--muted-foreground)] mb-4">Ce bouton, DANS un modèle de la base `🌿 Ma Collection de Plantes`, met à jour la date de dernier arrosage.</p>
+                    <ol class="list-decimal list-inside text-sm space-y-2">
+                        <li><b>Action :</b> Modifier des pages dans...</li>
+                        <li><b>Base de données :</b> `🌿 Ma Collection de Plantes`</li>
+                        <li><b>Filtre :</b> `Nom` est `Cette page`</li>
+                        <li><b>Propriété à modifier :</b> `💧 Dernier arrosage` (`LastWatered`)</li>
+                        <li><b>Valeur :</b> `@Aujourd'hui`</li>
+                    </ol>
                 </div>
-                 <div class="glass-card p-6 rounded-2xl reveal">
-                    <h3 class="text-xl font-bold flex items-center gap-3 mb-2">🦠 Maladies & Soins</h3>
-                    <p class="text-sm text-[color:var(--muted-foreground)]">Répertoriez les maladies et les solutions pour une réaction rapide.</p>
+                <!-- Workflow Tâche terminée -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold flex items-center gap-3 mb-3">✅ Bouton "Tâche terminée"</h3>
+                    <p class="text-sm text-[color:var(--muted-foreground)] mb-4">Dans votre base `🗓️ Calendrier`, ce bouton marque une tâche comme faite.</p>
+                    <ol class="list-decimal list-inside text-sm space-y-2">
+                        <li><b>Action :</b> Modifier des pages dans...</li>
+                        <li><b>Base de données :</b> `🗓️ Mon Calendrier d'Entretien`</li>
+                        <li><b>Filtre :</b> `Tâche` est `Cette page`</li>
+                        <li><b>Propriété à modifier :</b> `✅ Statut` (`Status`)</li>
+                        <li><b>Valeur :</b> `Fait` ✔️</li>
+                    </ol>
                 </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Modèles -->
+        <section id="templates" class="py-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Modèles de Page</h2>
+                <p class="max-w-3xl mx-auto mt-4 text-[color:var(--muted-foreground)]">Configurez ces modèles pour chaque base de données afin de standardiser vos pages et d'intégrer vos boutons.</p>
+            </div>
+            <div id="template-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Template cards injected by JS -->
             </div>
         </section>
     </main>
 
     <!-- Footer -->
     <footer class="container mx-auto text-center py-8 px-4 mt-16 border-t border-[color:var(--card-border)]">
-        <p class="text-xs text-[color:var(--muted-foreground)]">
-            Ce guide est fourni à titre indicatif. © 2024 Jungle Urbaine.
-        </p>
+        <p class="text-xs text-[color:var(--muted-foreground)]">© 2024 Jungle Urbaine</p>
     </footer>
+    
+    <!-- Modal pour ajouter une plante -->
+    <div id="plant-modal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-overlay fixed inset-0 bg-black/50" onclick="closeModal('plant-modal')"></div>
+        <div class="modal-content glass-card rounded-2xl w-full max-w-md p-6 relative">
+            <h2 class="text-2xl font-bold mb-4">Ajouter une nouvelle plante</h2>
+            <form id="add-plant-form">
+                <div class="space-y-4">
+                    <div>
+                        <label for="plant-name" class="text-sm font-medium">Nom de la plante</label>
+                        <input type="text" id="plant-name" required class="w-full mt-1 p-2 rounded-md border border-[color:var(--card-border)] bg-transparent focus:ring-2 focus:ring-[color:var(--primary)]">
+                    </div>
+                    <div>
+                        <label for="plant-luminosity" class="text-sm font-medium">Luminosité</label>
+                        <select id="plant-luminosity" class="w-full mt-1 p-2 rounded-md border border-[color:var(--card-border)] bg-[color:var(--background)]">
+                            <option>Faible</option>
+                            <option>Modérée</option>
+                            <option>Lumineuse</option>
+                            <option>Vive indirecte</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="plant-watering" class="text-sm font-medium">Arrosage</label>
+                        <input type="text" id="plant-watering" placeholder="Ex: Laisser sécher complètement" required class="w-full mt-1 p-2 rounded-md border border-[color:var(--card-border)] bg-transparent focus:ring-2 focus:ring-[color:var(--primary)]">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-4 mt-6">
+                    <button type="button" onclick="closeModal('plant-modal')" class="py-2 px-4 rounded-md font-semibold hover:bg-[color:var(--card-border)]">Annuler</button>
+                    <button type="submit" class="py-2 px-4 rounded-md font-semibold bg-[color:var(--primary)] text-[color:var(--primary-foreground)]">Ajouter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <script>
         // --- DATA ---
-        const plantData = [
-            { id: 1, name: 'Dracaena', luminosity: 'Modérée', watering: 'Terre sèche en surface', image: '400x400/2c523e/ffffff?text=Dracaena', needsAction: true, status: "A besoin d'eau" },
+        let plantData = [
+            { id: 1, name: 'Dracaena', luminosity: 'Modérée', watering: 'Terre sèche en surface', image: '400x400/2c523e/ffffff?text=Dracaena', needsAction: true, status: "Malade (cochenilles)" },
             { id: 2, name: 'Chamaedorea', luminosity: 'Faible', watering: 'Dès que la terre est sèche sur 2cm', image: '400x400/2c523e/ffffff?text=Chamaedorea', needsAction: false, status: "En pleine forme" },
             { id: 3, name: 'Monstera Deliciosa', luminosity: 'Modérée', watering: 'Terre sèche en profondeur', image: '400x400/2c523e/ffffff?text=Monstera', needsAction: false, status: "En pleine forme" },
-            { id: 4, name: 'Sansevieria', luminosity: 'Faible à forte', watering: 'Laisser sécher complètement', image: '400x400/2c523e/ffffff?text=Sansevieria', needsAction: false, status: "En pleine forme" },
+            { id: 4, name: 'Sansevieria', luminosity: 'Faible', watering: 'Laisser sécher complètement', image: '400x400/2c523e/ffffff?text=Sansevieria', needsAction: false, status: "En pleine forme" },
             { id: 5, name: 'Cactus de Noël', luminosity: 'Lumineuse', watering: 'Modéré, régulier', image: '400x400/2c523e/ffffff?text=Cactus+de+Noel', needsAction: true, status: "A besoin d'engrais" },
-            { id: 6, name: 'Orchidées', luminosity: 'Vive indirecte', watering: 'Par bassinage', image: '400x400/2c523e/ffffff?text=Orchidees', needsAction: false, status: "En pleine forme" }
+            { id: 6, name: 'Orchidées', luminosity: 'Vive indirecte', watering: 'Par bassinage', image: '400x400/2c523e/ffffff?text=Orchidees', needsAction: false, status: "En pleine forme" },
+            { id: 7, name: 'Hoya Carnosa Tricolor', luminosity: 'Vive indirecte', watering: 'Laisser sécher entre les arrosages', image: '400x400/2c523e/ffffff?text=Hoya', needsAction: false, status: "En pleine forme" }
         ];
 
-        // --- DYNAMIC CONTENT INJECTION ---
+        const dbData = [
+            {
+                icon: '🌿', title: 'Ma Collection de Plantes',
+                properties: [
+                    { emoji: '🏷️', fr: 'Nom', en: 'Name', type: 'Titre' },
+                    { emoji: '🛍️', fr: 'Achats', en: 'Purchases', type: 'Relation (avec Achats)' },
+                    { emoji: '📍', fr: 'Emplacement', en: 'Location', type: 'Select', options: ['Salon', 'Chambre', 'Bureau', 'Cuisine', 'Balcon'] },
+                    { emoji: '☀️', fr: 'Luminosité', en: 'Luminosity', type: 'Select', options: ['Faible', 'Modérée', 'Lumineuse', 'Vive indirecte', 'Plein soleil'] },
+                    { emoji: '💧', fr: 'Dernier arrosage', en: 'LastWatered', type: 'Date' },
+                    { emoji: '🗓️', fr: 'Prochain arrosage', en: 'NextWatering', type: 'Formule' },
+                    { emoji: '✨', fr: 'État', en: 'Status', type: 'Select', options: ['En pleine forme ✨', "A besoin d'eau 💧", "A besoin d'engrais 💊", 'Malade 🦠', 'En dormance 💤'] },
+                    { emoji: '🦠', fr: 'Maladies', en: 'Diseases', type: 'Relation (avec Maladies)' },
+                ]
+            },
+            {
+                icon: '🛍️', title: 'Mes Achats Jungle',
+                properties: [
+                    { emoji: '🛒', fr: 'Article', en: 'Item', type: 'Titre' },
+                    { emoji: '🌿', fr: 'Plantes liées', en: 'RelatedPlants', type: 'Relation (avec Collection)' },
+                    { emoji: '💰', fr: 'Coût', en: 'Cost', type: 'Nombre' },
+                    { emoji: '📅', fr: 'Date', en: 'Date', type: 'Date' },
+                    { emoji: '🏬', fr: 'Enseigne', en: 'Store', type: 'Relation (avec Enseignes)' },
+                ]
+            },
+            {
+                icon: '🗓️', title: 'Calendrier d\'Entretien',
+                properties: [
+                    { emoji: '📝', fr: 'Tâche', en: 'Task', type: 'Titre' },
+                    { emoji: '🌿', fr: 'Plante concernée', en: 'Plant', type: 'Relation (avec Collection)' },
+                    { emoji: '✅', fr: 'Statut', en: 'Status', type: 'Select', options: ['À faire ⬜', 'En cours ⏳', 'Fait ✔️'] },
+                    { emoji: '📅', fr: 'Date', en: 'Date', type: 'Date' },
+                    { emoji: '🔁', fr: 'Récurrence', en: 'Recurrence', type: 'Select', options: ['Ponctuel', 'Hebdomadaire', 'Mensuel', 'Annuel'] },
+                ]
+            },
+            {
+                icon: '🦠', title: 'Maladies & Soins',
+                properties: [
+                    { emoji: '🔬', fr: 'Maladie', en: 'Disease', type: 'Titre' },
+                    { emoji: '🌿', fr: 'Plantes affectées', en: 'AffectedPlants', type: 'Relation (avec Collection)' },
+                    { emoji: '📝', fr: 'Symptômes', en: 'Symptoms', type: 'Texte' },
+                    { emoji: '💊', fr: 'Traitement', en: 'Treatment', type: 'Texte' },
+                    { emoji: '✨', fr: 'Statut', en: 'Status', type: 'Select', options: ['En observation 👀', 'En cours de traitement 💊', 'Traité ✅', 'Non résolu 😥'] },
+                ]
+            },
+            {
+                icon: '🏬', title: 'Nos Enseignes',
+                properties: [
+                    { emoji: '🏷️', fr: 'Nom', en: 'Name', type: 'Titre' },
+                    { emoji: '🛍️', fr: 'Achats effectués', en: 'Purchases', type: 'Relation (avec Achats)' },
+                    { emoji: '📍', fr: 'Adresse', en: 'Address', type: 'Texte' },
+                    { emoji: '�', fr: 'Site Web', en: 'Website', type: 'URL' },
+                ]
+            },
+            {
+                icon: '💡', title: 'Exemple d\'entrée pour "Maladies & Soins"',
+                properties: [
+                     { emoji: '🔬', fr: 'Maladie', en: 'Cochenilles Farineuses', type: '' },
+                     { emoji: '🌿', fr: 'Plantes affectées', en: 'Lier la page de votre "Dracaena"', type: '' },
+                     { emoji: '📝', fr: 'Symptômes', en: 'Amas blancs cotonneux, feuilles collantes (miellat)', type: '' },
+                     { emoji: '💊', fr: 'Traitement', en: 'Coton-tige + alcool. Pulvérisation eau + savon noir + huile. Répéter chaque semaine pendant 1 mois.', type: '' },
+                     { emoji: '✨', fr: 'Statut', en: 'En cours de traitement 💊', type: '' },
+                ]
+            }
+        ];
+        
+        const templateData = [
+            {
+                icon: '🌿',
+                title: 'Nouvelle Plante',
+                bdd: 'Ma Collection de Plantes',
+                content: "Ce modèle doit être défini par défaut. À l'intérieur, placez le bouton <b>💧 Arroser</b>. Vous pouvez aussi ajouter des sections pour des notes, une galerie photo de l'évolution de la plante, etc."
+            },
+            {
+                icon: '💧',
+                title: 'Arrosage Hebdomadaire',
+                bdd: "Calendrier d'Entretien",
+                content: "Utilisez ce modèle pour créer une tâche récurrente. Dans le corps de la page, vous pouvez mettre une checklist des plantes à arroser chaque semaine. La propriété <b>Récurrence</b> doit être réglée sur 'Hebdomadaire'."
+            },
+            {
+                icon: '🦠',
+                title: 'Nouveau Cas de Maladie',
+                bdd: "Maladies & Soins",
+                content: "Ce modèle sert à documenter rapidement un problème. Dans le corps de la page, ajoutez des sections : 'Observation initiale', 'Actions entreprises', 'Suivi de l'évolution'. Réglez le <b>Statut</b> par défaut sur 'En observation 👀'."
+            }
+        ];
+
+        // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             renderDashboard();
             renderFilters();
             renderPlantGallery(plantData);
+            renderDbAccordion();
+            renderTemplates();
             setupEventListeners();
             setupScrollAnimations();
         });
 
+        // --- RENDER FUNCTIONS ---
         function renderDashboard() {
-            const dashboardContainer = document.getElementById('dashboard-cards');
-            const plantsToWater = plantData.filter(p => p.status === "A besoin d'eau").length;
+            const container = document.getElementById('dashboard-cards');
+            const toWater = plantData.filter(p => p.status === "A besoin d'eau").length;
             const otherActions = plantData.filter(p => p.needsAction && p.status !== "A besoin d'eau").length;
-            
-            const dashboardHTML = `
-                <div class="glass-card p-6 rounded-2xl reveal">
-                    <h3 class="text-5xl font-bold text-[color:var(--primary)]">${plantsToWater}</h3>
-                    <p class="font-semibold mt-2">Plantes à arroser</p>
-                    <p class="text-sm text-[color:var(--muted-foreground)] mt-1">N'oubliez pas d'hydrater vos plantes qui ont soif.</p>
-                </div>
-                <div class="glass-card p-6 rounded-2xl reveal" style="transition-delay: 100ms;">
-                    <h3 class="text-5xl font-bold text-[color:var(--primary)]">${otherActions}</h3>
-                    <p class="font-semibold mt-2">Autres actions requises</p>
-                    <p class="text-sm text-[color:var(--muted-foreground)] mt-1">Engrais, rempotage, ou soins spécifiques.</p>
-                </div>
-                <div class="glass-card p-6 rounded-2xl reveal" style="transition-delay: 200ms;">
-                    <h3 class="text-5xl font-bold text-[color:var(--primary)]">${plantData.length}</h3>
-                    <p class="font-semibold mt-2">Plantes dans votre collection</p>
-                    <p class="text-sm text-[color:var(--muted-foreground)] mt-1">Continuez à agrandir votre jungle !</p>
-                </div>
+            container.innerHTML = `
+                <div class="glass-card p-6 rounded-2xl"><h3 class="text-5xl font-bold text-[color:var(--primary)]">${toWater}</h3><p class="font-semibold mt-2">Plantes à arroser</p></div>
+                <div class="glass-card p-6 rounded-2xl"><h3 class="text-5xl font-bold text-[color:var(--destructive)]">${otherActions}</h3><p class="font-semibold mt-2">Autres actions</p></div>
+                <div class="glass-card p-6 rounded-2xl"><h3 class="text-5xl font-bold text-[color:var(--primary)]">${plantData.length}</h3><p class="font-semibold mt-2">Plantes au total</p></div>
+                <a href="#workflows" class="glass-card p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:border-[color:var(--primary)]"><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[color:var(--primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg><p class="font-semibold mt-2">Ajouter un achat</p></a>
             `;
-            dashboardContainer.innerHTML = dashboardHTML;
         }
 
         function renderFilters() {
-            const filterContainer = document.getElementById('filter-buttons');
-            const filters = ['Tout', 'Action requise', 'Faible lumière', 'Lumière vive'];
-            let buttonsHTML = '';
-            filters.forEach((filter, index) => {
-                const baseClasses = 'px-4 py-1.5 text-sm font-semibold rounded-full transition-colors';
-                if (index === 0) {
-                    buttonsHTML += `<button class="filter-btn active ${baseClasses} bg-[color:var(--primary)] text-[color:var(--primary-foreground)]" data-filter="Tout">Tout</button>`;
-                } else {
-                    buttonsHTML += `<button class="filter-btn ${baseClasses} bg-[color:var(--card-border)] hover:bg-[color:var(--primary)] hover:text-[color:var(--primary-foreground)]" data-filter="${filter}">${filter}</button>`;
-                }
-            });
-            filterContainer.innerHTML = buttonsHTML;
+            const container = document.getElementById('filter-buttons');
+            const filters = ['Tout', 'Action requise', 'Faible', 'Vive indirecte'];
+            container.innerHTML = filters.map((f, i) => `<button class="filter-btn px-4 py-1.5 text-sm font-semibold rounded-full transition-colors ${i === 0 ? 'active bg-[color:var(--primary)] text-[color:var(--primary-foreground)]' : 'bg-[color:var(--card-border)] hover:bg-[color:var(--primary)] hover:text-[color:var(--primary-foreground)]'}" data-filter="${f}">${f}</button>`).join('');
         }
 
         function renderPlantGallery(plants) {
             const gallery = document.getElementById('plant-gallery');
             const noResults = document.getElementById('no-results');
             gallery.innerHTML = '';
-
-            if (plants.length === 0) {
-                noResults.classList.remove('hidden');
-            } else {
-                noResults.classList.add('hidden');
-            }
-
+            noResults.classList.toggle('hidden', plants.length > 0);
             plants.forEach((plant, index) => {
-                const plantCard = document.createElement('div');
-                plantCard.className = 'glass-card rounded-2xl overflow-hidden group relative reveal';
-                plantCard.style.transitionDelay = `${index * 50}ms`;
-
                 const statusBadge = plant.needsAction
                     ? `<span class="absolute top-3 right-3 text-xs font-bold py-1 px-2.5 rounded-full bg-[color:var(--destructive)] text-white">${plant.status}</span>`
                     : `<span class="absolute top-3 right-3 text-xs font-bold py-1 px-2.5 rounded-full bg-green-500 text-white">En forme</span>`;
-
-                plantCard.innerHTML = `
-                    <img src="https://placehold.co/${plant.image}" alt="${plant.name}" class="w-full h-60 object-cover" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x400/e2e8f0/94a3b8?text=Image+N/A';">
-                    ${statusBadge}
-                    <div class="p-5">
-                        <h4 class="text-xl font-bold">${plant.name}</h4>
-                        <div class="mt-4 space-y-3 text-sm">
-                            <div class="flex items-start gap-2"><span class="mt-0.5">☀️</span><div><span class="font-semibold">Luminosité:</span> <span class="text-[color:var(--muted-foreground)]">${plant.luminosity}</span></div></div>
-                            <div class="flex items-start gap-2"><span class="mt-0.5">💧</span><div><span class="font-semibold">Arrosage:</span> <span class="text-[color:var(--muted-foreground)]">${plant.watering}</span></div></div>
+                gallery.innerHTML += `
+                    <div class="glass-card rounded-2xl overflow-hidden group relative reveal" style="transition-delay: ${index * 50}ms;">
+                        <img src="https://placehold.co/${plant.image}" alt="${plant.name}" class="w-full h-60 object-cover" loading="lazy">
+                        ${statusBadge}
+                        <div class="p-5">
+                            <h4 class="text-xl font-bold">${plant.name}</h4>
+                            <div class="mt-4 space-y-3 text-sm">
+                                <div class="flex items-start gap-2">☀️ <span class="font-semibold">Luminosité:</span> <span class="text-[color:var(--muted-foreground)]">${plant.luminosity}</span></div>
+                                <div class="flex items-start gap-2">💧 <span class="font-semibold">Arrosage:</span> <span class="text-[color:var(--muted-foreground)]">${plant.watering}</span></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button class="bg-white/20 backdrop-blur-sm text-white font-bold py-2 px-4 rounded-full hover:bg-white/30">💧 Arroser</button>
-                        <button class="bg-white/20 backdrop-blur-sm text-white font-bold py-2 px-4 rounded-full hover:bg-white/30">📝 Fiche</button>
-                    </div>
-                `;
-                gallery.appendChild(plantCard);
+                        <div class="absolute inset-0 bg-black/50 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button class="bg-white/20 backdrop-blur-sm text-white font-bold py-2 px-4 rounded-full hover:bg-white/30">💧 Arroser</button>
+                            <button class="bg-white/20 backdrop-blur-sm text-white font-bold py-2 px-4 rounded-full hover:bg-white/30">📝 Fiche</button>
+                        </div>
+                    </div>`;
             });
         }
-        
-        function setupEventListeners() {
-            // Recherche
-            const searchInput = document.getElementById('search-input');
-            searchInput.addEventListener('input', filterAndSearchPlants);
 
-            // Filtres
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active', 'bg-[color:var(--primary)]', 'text-[color:var(--primary-foreground)]'));
-                    e.currentTarget.classList.add('active', 'bg-[color:var(--primary)]', 'text-[color:var(--primary-foreground)]');
-                    filterAndSearchPlants();
-                });
-            });
+        function renderDbAccordion() {
+            const container = document.getElementById('db-accordion-container');
+            container.innerHTML = dbData.map(db => `
+                <div class="accordion-item glass-card rounded-2xl">
+                    <div class="accordion-header p-5 cursor-pointer flex justify-between items-center gap-4">
+                        <div class="flex items-center gap-4"><span class="text-2xl">${db.icon}</span><h3 class="text-lg font-semibold">${db.title}</h3></div>
+                        <svg class="chevron w-5 h-5 text-[color:var(--muted-foreground)] transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                    </div>
+                    <div class="accordion-content">
+                        <div>
+                            <div class="px-5 pb-5 pt-2 border-t border-[color:var(--card-border)]">
+                                <ul class="space-y-2 text-sm">
+                                    ${db.properties.map(p => `
+                                        <li class="p-2 rounded-md hover:bg-[color:var(--background)]">
+                                            <div class="flex items-center justify-between">
+                                                <span class="font-medium">${p.emoji} ${p.fr}</span>
+                                                <span class="text-xs font-mono p-1 bg-[color:var(--card-border)] rounded">${p.en} ${p.type ? `(${p.type})` : ''}</span>
+                                            </div>
+                                            ${p.options ? `<div class="mt-2 flex flex-wrap gap-2">${p.options.map(o => `<span class="text-xs font-medium px-2 py-0.5 rounded-full bg-[color:var(--tag-bg)]">${o}</span>`).join('')}</div>` : ''}
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            document.querySelectorAll('.accordion-header').forEach(header => header.addEventListener('click', toggleAccordion));
+        }
+        
+        function renderTemplates() {
+            const container = document.getElementById('template-cards');
+            container.innerHTML = templateData.map(t => `
+                <div class="glass-card p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold flex items-center gap-3 mb-1">${t.icon} ${t.title}</h3>
+                    <p class="text-xs font-semibold text-[color:var(--primary)] mb-4">Pour la BDD : ${t.bdd}</p>
+                    <p class="text-sm text-[color:var(--muted-foreground)]">${t.content}</p>
+                </div>
+            `).join('');
+        }
+
+        // --- EVENT HANDLERS & LOGIC ---
+        function setupEventListeners() {
+            document.getElementById('add-plant-btn').addEventListener('click', () => openModal('plant-modal'));
+            document.getElementById('add-plant-form').addEventListener('submit', handleAddPlant);
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.addEventListener('click', handleFilterClick));
+            document.getElementById('search-input').addEventListener('input', filterAndSearchPlants);
+        }
+
+        function handleAddPlant(e) {
+            e.preventDefault();
+            const name = document.getElementById('plant-name').value;
+            const luminosity = document.getElementById('plant-luminosity').value;
+            const watering = document.getElementById('plant-watering').value;
+            const newPlant = {
+                id: Date.now(),
+                name, luminosity, watering,
+                image: `400x400/2c523e/ffffff?text=${encodeURIComponent(name)}`,
+                needsAction: false,
+                status: "En pleine forme"
+            };
+            plantData.push(newPlant);
+            renderPlantGallery(plantData);
+            renderDashboard();
+            closeModal('plant-modal');
+            e.target.reset();
+        }
+
+        function handleFilterClick(e) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active', 'bg-[color:var(--primary)]', 'text-[color:var(--primary-foreground)]'));
+            e.currentTarget.classList.add('active', 'bg-[color:var(--primary)]', 'text-[color:var(--primary-foreground)]');
+            filterAndSearchPlants();
         }
 
         function filterAndSearchPlants() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
             const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
-            
-            let filteredPlants = plantData;
+            let filtered = plantData;
 
-            // Appliquer le filtre
-            if (activeFilter === 'Action requise') {
-                filteredPlants = filteredPlants.filter(p => p.needsAction);
-            } else if (activeFilter === 'Faible lumière') {
-                filteredPlants = filteredPlants.filter(p => p.luminosity.toLowerCase().includes('faible'));
-            } else if (activeFilter === 'Lumière vive') {
-                filteredPlants = filteredPlants.filter(p => p.luminosity.toLowerCase().includes('vive') || p.luminosity.toLowerCase().includes('lumineuse'));
+            if (activeFilter !== 'Tout') {
+                if (activeFilter === 'Action requise') filtered = filtered.filter(p => p.needsAction);
+                else filtered = filtered.filter(p => p.luminosity.toLowerCase().includes(activeFilter.toLowerCase()));
             }
 
-            // Appliquer la recherche
             if (searchTerm) {
-                filteredPlants = filteredPlants.filter(p => p.name.toLowerCase().includes(searchTerm));
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm));
             }
 
-            renderPlantGallery(filteredPlants);
-            // On doit relancer l'animation pour les nouveaux éléments filtrés
+            renderPlantGallery(filtered);
             setupScrollAnimations();
         }
+        
+        function toggleAccordion(e) {
+            const item = e.currentTarget.parentElement;
+            item.classList.toggle('active');
+            item.querySelector('.chevron').classList.toggle('rotate-180');
+        }
 
-        // --- ANIMATIONS AU DÉFILEMENT ---
+        function openModal(id) { document.getElementById(id).classList.add('is-open'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('is-open'); }
+
+        // --- UI & ANIMATIONS ---
         function setupScrollAnimations() {
-            const revealElements = document.querySelectorAll('.reveal');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -350,14 +540,12 @@
                     }
                 });
             }, { threshold: 0.1 });
-
-            revealElements.forEach(el => {
-                observer.observe(el);
-            });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
         // --- THEME SWITCHER ---
         const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.innerHTML = `<svg id="theme-icon-light" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg><svg id="theme-icon-dark" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`;
         const lightIcon = document.getElementById('theme-icon-light');
         const darkIcon = document.getElementById('theme-icon-dark');
         const htmlEl = document.documentElement;
@@ -371,14 +559,10 @@
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         setTheme(savedTheme ? savedTheme === 'dark' : prefersDark);
         themeToggle.addEventListener('click', () => setTheme(!htmlEl.classList.contains('dark')));
-
+        
         // --- HEADER STYLE ON SCROLL ---
-        const header = document.getElementById('header');
         window.addEventListener('scroll', () => {
-            header.classList.toggle('py-2', window.scrollY > 10);
             header.classList.toggle('glass-card', window.scrollY > 10);
-            header.classList.toggle('shadow-md', window.scrollY > 10);
-            header.classList.toggle('py-3', window.scrollY <= 10);
         });
 
         // --- ACTIVE NAV LINK ON SCROLL ---
@@ -397,3 +581,4 @@
     </script>
 </body>
 </html>
+```�
