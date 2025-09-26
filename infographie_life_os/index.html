@@ -863,10 +863,15 @@
                                 <li class="property-item"><div class="property-details"><span class="property-icon">🛒</span><strong>Article</strong></div><span class="property-type">Titre</span></li>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">🔖</span><strong>Catégorie</strong></div><span class="property-type">Sélection</span></li>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Date d'Achat</strong></div><span class="property-type">Date</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🛡️</span><strong>Fin de Garantie</strong></div><span class="property-type">Date</span></li>
+                                <li class="property-item"><div class="property-details"><span class="property-icon">⏳</span><strong>Fin de Garantie</strong></div><span class="property-type">Date</span></li>
+                                <li class="property-item"><div class="property-details"><span class="property-icon">🛡️</span><strong>Statut Garantie</strong><span class="text-xs text-muted ml-2">(Warranty Status)</span></div><span class="property-type">Formule</span></li>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">💶</span><strong>Prix</strong></div><span class="property-type">Nombre</span></li>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">📎</span><strong>Facture</strong></div><span class="property-type">Fichier</span></li>
                              </ul>
+                              <div class="code-block mt-4">
+                                <button class="copy-btn" onclick="copyToClipboard(this)">Copier</button>
+                                <pre><code class="text-sm">if(empty(prop("Fin de Garantie")), "⚪️ N/A", if(now() > prop("Fin de Garantie"), "❌ Expirée", "✅ Active"))</code></pre>
+                            </div>
                               <div class="mt-4 space-y-4">
                                 <details>
                                     <summary><div class="summary-content"><span>🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
@@ -887,6 +892,21 @@
                                     </div>
                                 </details>
                             </div>
+                            <div class="step-card">
+                                <h4 class="font-bold text-lg">Mode Opératoire : Calculer le Statut de la Garantie</h4>
+                                <p class="text-sm mt-2 text-muted">Cette formule vérifie si la date actuelle a dépassé la date de fin de garantie.</p>
+                                <ol class="list-decimal list-inside text-sm text-muted mt-4 space-y-2">
+                                    <li>Créez la propriété `🛡️ Statut Garantie` de type <strong>Formule</strong>.</li>
+                                    <li>Copiez et collez la formule ci-dessus.</li>
+                                    <li><strong>Logique expliquée :</strong>
+                                        <ul class="list-disc list-inside pl-6">
+                                            <li>Si la date de "Fin de Garantie" est vide, elle affiche "N/A".</li>
+                                            <li>Si la date d'aujourd'hui est supérieure à la "Fin de Garantie", elle affiche "Expirée".</li>
+                                            <li>Sinon, elle affiche "Active".</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
                         </div>
                         <div class="card">
                             <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.10 : `🚗 Véhicules`</h4>
@@ -897,6 +917,24 @@
                                 <li class="property-item"><div class="property-details"><span class="property-icon">🆔</span><strong>Plaque</strong></div><span class="property-type">Texte</span></li>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">📄</span><strong>Assurance</strong></div><span class="property-type">Relation</span></li>
                              </ul>
+                              <div class="mt-4 space-y-4">
+                                <details>
+                                    <summary><div class="summary-content"><span>🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
+                                    <div>
+                                        <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Statut" :</h5>
+                                        <ul class="list-disc list-inside text-sm text-muted">
+                                            <li>✅ Actif</li>
+                                            <li>⚫️ Vendu</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <details>
+                                    <summary><div class="summary-content"><span>📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Véhicule"</span></div></summary>
+                                    <div>
+                                        <p class="text-sm text-muted"><strong>Icône :</strong> `🚗`. </p>
+                                    </div>
+                                </details>
+                            </div>
                         </div>
                         <div class="card">
                             <h4 class="font-semibold text-indigo-400 mb-2">Fiche 5.11 : `🌿 Plantes`</h4>
@@ -911,6 +949,26 @@
                               <div class="code-block mt-4">
                                 <button class="copy-btn" onclick="copyToClipboard(this)">Copier</button>
                                 <pre><code class="text-sm">if(prop("Dernier Arrosage") and prop("Fréquence Arrosage (j)"), dateAdd(prop("Dernier Arrosage"), prop("Fréquence Arrosage (j)"), "days"), fromTimestamp(0))</code></pre>
+                            </div>
+                            <div class="mt-4 space-y-4">
+                                <details>
+                                    <summary><div class="summary-content"><span>🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
+                                    <div>
+                                        <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Emplacement" :</h5>
+                                        <ul class="list-disc list-inside text-sm text-muted">
+                                            <li>Salon</li>
+                                            <li>Cuisine</li>
+                                            <li>Chambre</li>
+                                            <li>Extérieur</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <details>
+                                    <summary><div class="summary-content"><span>📝</span><span class="ml-3">Modèle par Défaut : "Nouvelle Plante"</span></div></summary>
+                                    <div>
+                                        <p class="text-sm text-muted"><strong>Icône :</strong> `🌱`. </p>
+                                    </div>
+                                </details>
                             </div>
                         </div>
                         <div class="card">
