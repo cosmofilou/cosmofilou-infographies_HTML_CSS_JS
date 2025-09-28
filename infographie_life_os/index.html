@@ -311,6 +311,14 @@
                         <li class="property-item"><div class="property-details"><span class="property-icon">📊</span><strong>Progression</strong></div><span class="property-type">Rollup</span></li>
                         <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Statut</strong></div><span class="property-type">Sélection</span></li>
                     </ul>
+                     <div class="step-card mt-6">
+                        <h4 class="font-bold text-lg flex items-center gap-2"><i data-lucide="link" class="w-4 h-4 text-indigo-400"></i> Aide à la Connexion</h4>
+                        <p class="text-sm mt-2 text-muted">
+                           <strong>Exemple :</strong> Créez un objectif `Devenir propriétaire à Nantes en 2026`.<br>
+                           • **Résultats Clés :** "Constituer un apport de 20 000€", "Obtenir une simulation de prêt", "Visiter 10 biens immobiliers".<br>
+                           • **Projet Associé :** Votre projet `Achat immobilier Nantes` est directement lié à cet objectif. En le connectant via la relation, vous visualisez comment vos actions concrètes vous rapprochent de votre but.
+                        </p>
+                    </div>
                     <div class="mt-4 space-y-4">
                         <details>
                             <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
@@ -413,6 +421,12 @@
                         </button>
                         <pre><code class="text-sm">if(empty(prop("Échéance")), "⚪️ Planifier", if(formatDate(prop("Échéance"), "L") == formatDate(now(), "L"), "🔥 Aujourd'hui", if(prop("Échéance") < now(), "🚨 En Retard", if(dateBetween(prop("Échéance"), now(), "days") < 7, "🟠 Cette Semaine", "👍 Plus tard"))))</code></pre>
                     </div>
+                     <div class="step-card mt-6">
+                        <h4 class="font-bold text-lg flex items-center gap-2"><i data-lucide="link" class="w-4 h-4 text-indigo-400"></i> Aide à la Connexion</h4>
+                        <p class="text-sm mt-2 text-muted">
+                           Chaque tâche (ou presque) doit être liée à un **Projet**. Une tâche isolée est souvent un symptôme de désorganisation. Si vous créez la tâche "Prendre RDV avec le courtier", liez-la immédiatement à votre projet `Achat immobilier Nantes`. Cela garantit que chaque action a un but précis.
+                        </p>
+                    </div>
                     <div class="mt-4 space-y-4">
                         <details>
                             <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
@@ -470,6 +484,12 @@
                         <li class="property-item"><div class="property-details"><span class="property-icon">📊</span><strong>Progression</strong><span class="text-xs text-muted ml-2">(Progress)</span></div><span class="property-type">Rollup</span></li>
                         <li class="property-item"><div class="property-details"><span class="property-icon">📦</span><strong>Archiver</strong><span class="text-xs text-muted ml-2">(Archive)</span></div><span class="property-type">Case à cocher</span></li>
                     </ul>
+                    <div class="step-card mt-6">
+                        <h4 class="font-bold text-lg flex items-center gap-2"><i data-lucide="link" class="w-4 h-4 text-indigo-400"></i> Aide à la Connexion</h4>
+                        <p class="text-sm mt-2 text-muted">
+                           Un projet est le pont entre vos grandes ambitions et vos actions quotidiennes. Il doit toujours être lié à un **Domaine** (ex: `Achat immobilier Nantes` est lié au domaine `Finances Personnelles` ou `Appartement Nantes`) et, idéalement, à un **Objectif** (ex: `Devenir propriétaire`).
+                        </p>
+                    </div>
                     <div class="mt-4 space-y-4">
                         <details>
                             <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
@@ -715,6 +735,13 @@
                     <details>
                         <summary><div class="summary-content"><span class="property-icon">💰</span>Sujet : `Reprendre le contrôle total de mes finances`</div></summary>
                         <div>
+                            <div class="callout callout-purple">
+                                <p class="font-semibold text-sm flex items-center gap-2"><i data-lucide="link" class="w-4 h-4"></i> Connexion Stratégique</p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                                    <li><strong>Objectif servi :</strong> `Atteindre la sérénité financière`</li>
+                                    <li><strong>Domaine impacté :</strong> `Finances Personnelles`</li>
+                                </ul>
+                            </div>
                            <div class="callout callout-blue">
                                 <p class="font-semibold"><strong>Projet à créer :</strong> `Analyse et optimisation des finances 2025`</p>
                            </div>
@@ -728,18 +755,18 @@
                                     <li>Définir des montants pour chaque budget mensuel.</li>
                                 </ul>
                            </div>
-                           <div class="callout callout-purple">
-                                <p class="font-semibold"><strong>Analyse Gemini :</strong></p>
-                                <p class="text-sm mt-2">Utilisez ce prompt dans la page de votre projet :</p>
-                                <div class="code-block mt-2 text-sm">
-                                    <pre><code>"Analyse ces transactions. Catégorise chaque dépense (Alimentation, Loyer, Loisirs, Transport, etc.). Identifie les 3 plus grands postes de dépenses variables. Suggère 3 pistes d'économies concrètes et réalistes."</code></pre>
-                                </div>
-                           </div>
                         </div>
                     </details>
                     <details>
                         <summary><div class="summary-content"><span class="property-icon">🔐</span>Sujet : `Optimiser ma sécurité numérique`</div></summary>
-                        <div>
+                         <div>
+                            <div class="callout callout-purple">
+                                <p class="font-semibold text-sm flex items-center gap-2"><i data-lucide="link" class="w-4 h-4"></i> Connexion Stratégique</p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                                    <li><strong>Objectif servi :</strong> `Simplifier et sécuriser ma vie numérique`</li>
+                                    <li><strong>Domaine impacté :</strong> `Système & Organisation` (à créer si besoin)</li>
+                                </ul>
+                            </div>
                            <div class="callout callout-blue">
                                 <p class="font-semibold"><strong>Projet à créer :</strong> `Centraliser la gestion des mots de passe`</p>
                            </div>
@@ -757,6 +784,13 @@
                     <details>
                         <summary><div class="summary-content"><span class="property-icon">📂</span>Sujet : `Organiser ma vie numérique`</div></summary>
                         <div>
+                             <div class="callout callout-purple">
+                                <p class="font-semibold text-sm flex items-center gap-2"><i data-lucide="link" class="w-4 h-4"></i> Connexion Stratégique</p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                                    <li><strong>Objectif servi :</strong> `Simplifier et sécuriser ma vie numérique`</li>
+                                    <li><strong>Domaine impacté :</strong> `Système & Organisation`</li>
+                                </ul>
+                            </div>
                            <div class="callout callout-blue">
                                <p class="font-semibold"><strong>Projet à créer :</strong> `Réorganiser l'arborescence Google Drive`</p>
                            </div>
@@ -779,7 +813,7 @@
                     <p class="text-muted mb-4">Construisez ces bases de données pour un suivi financier complet.</p>
                     <div class="space-y-4">
                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.1 : `🏦 Comptes`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.1 : `🏦 Comptes`</h4>
                             <p class="text-muted mb-4">La liste de vos comptes bancaires réels pour avoir une vue d'ensemble de vos actifs.</p>
                             <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">🏦</span><strong>Nom du Compte</strong><span class="text-xs text-muted ml-2">(Account Name)</span></div><span class="property-type">Titre</span></li>
@@ -810,7 +844,7 @@
                             </div>
                         </div>
                          <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.2 : `💸 Transactions`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.2 : `💸 Transactions`</h4>
                             <p class="text-muted mb-4">Chaque dépense et chaque revenu. C'est la base la plus importante pour l'analyse financière.</p>
                             <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">💬</span><strong>Description</strong></div><span class="property-type">Titre</span></li>
@@ -829,7 +863,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.3 : `📊 Budgets`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.3 : `📊 Budgets`</h4>
                             <p class="text-muted mb-4">Les catégories de dépenses que vous souhaitez suivre pour maîtriser vos finances.</p>
                             <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">📊</span><strong>Catégorie</strong><span class="text-xs text-muted ml-2">(Category)</span></div><span class="property-type">Titre</span></li>
@@ -847,7 +881,7 @@
                             </div>
                         </div>
                          <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.4 : `🔁 Abonnements`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.4 : `🔁 Abonnements`</h4>
                             <p class="text-muted mb-4">Le suivi de tous vos paiements récurrents pour éviter les mauvaises surprises.</p>
                             <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">🔁</span><strong>Service</strong></div><span class="property-type">Titre</span></li>
@@ -881,7 +915,7 @@
                     <p class="text-muted mb-4">Pour un suivi précis de votre évolution, ce module utilise 2 bases de données liées.</p>
                     <div class="space-y-4">
                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.5 : `🎓 Formations`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.5 : `🎓 Formations`</h4>
                             <p class="text-muted mb-4">Le hub central pour toutes vos formations, passées, présentes et futures.</p>
                             <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">🎓</span><strong>Nom de la Formation</strong><span class="text-xs text-muted ml-2">(Course Name)</span></div><span class="property-type">Titre</span></li>
@@ -917,7 +951,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.6 : `📚 Modules de Formation`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.6 : `📚 Modules de Formation`</h4>
                            <p class="text-muted mb-4">Chaque module d'une formation est une entrée ici. C'est la clé pour les barres de progression.</p>
                            <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">📚</span><strong>Nom du Module</strong><span class="text-xs text-muted ml-2">(Module Name)</span></div><span class="property-type">Titre</span></li>
@@ -934,7 +968,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.7 : `🧾 Notes de Frais`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.7 : `🧾 Notes de Frais`</h4>
                             <p class="text-muted mb-4">Pour suivre vos avances de frais professionnels.</p>
                             <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">🧾</span><strong>Description</strong></div><span class="property-type">Titre</span></li>
@@ -969,7 +1003,7 @@
                     <p class="text-muted mb-4">Toutes les bases pour gérer votre environnement personnel et vos biens.</p>
                     <div class="space-y-4">
                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.8 : `📄 Contrats & Assurances`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.8 : `📄 Contrats & Assurances`</h4>
                             <p class="text-muted mb-4">Pour centraliser tous vos contrats importants.</p>
                             <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">📄</span><strong>Nom</strong></div><span class="property-type">Titre</span></li>
@@ -999,7 +1033,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.9 : `🛒 Achats & Garanties`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.9 : `🛒 Achats & Garanties`</h4>
                             <p class="text-muted mb-4">Pour suivre vos achats, factures et dates de garantie.</p>
                             <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">🛒</span><strong>Objet</strong></div><span class="property-type">Titre</span></li>
@@ -1025,7 +1059,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.10 : `🚗 Véhicules`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.10 : `🚗 Véhicules`</h4>
                             <p class="text-muted mb-4">Pour suivre vos véhicules passés et actuels, ainsi que leurs assurances.</p>
                             <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">🚗</span><strong>Modèle</strong></div><span class="property-type">Titre</span></li>
@@ -1054,7 +1088,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.11 : `🌿 Plantes`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.11 : `🌿 Plantes`</h4>
                             <p class="text-muted mb-4">Pour le suivi de vos plantes.</p>
                             <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">🌿</span><strong>Nom</strong></div><span class="property-type">Titre</span></li>
@@ -1069,7 +1103,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.12 : `🐾 Animaux`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.12 : `🐾 Animaux`</h4>
                             <p class="text-muted mb-4">Pour suivre la santé de Pauline et Gus.</p>
                              <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">🐾</span><strong>Nom</strong></div><span class="property-type">Titre</span></li>
@@ -1094,7 +1128,7 @@
                             </div>
                         </div>
                          <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.13 : `❤️ Relations`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.13 : `❤️ Relations`</h4>
                             <p class="text-muted mb-4">Un CRM personnel pour entretenir les liens avec les personnes qui comptent.</p>
                              <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">❤️</span><strong>Nom</strong></div><span class="property-type">Titre</span></li>
@@ -1119,7 +1153,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.14 : `🔄 Suivi des Habitudes`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.14 : `🔄 Suivi des Habitudes`</h4>
                             <p class="text-muted mb-4">Pour construire de bonnes habitudes, jour après jour.</p>
                              <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">📅</span><strong>Date</strong></div><span class="property-type">Titre</span></li>
@@ -1135,7 +1169,7 @@
                             </div>
                         </div>
                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 6.15 : `✍️ Création de Contenu`</h4>
+                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.15 : `✍️ Création de Contenu`</h4>
                             <p class="text-muted mb-4">Pour gérer vos idées et projets créatifs, du brouillon à la publication.</p>
                              <ul>
                                 <li class="property-item"><div class="property-details"><span class="property-icon">✍️</span><strong>Titre</strong></div><span class="property-type">Titre</span></li>
