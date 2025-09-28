@@ -173,10 +173,10 @@
                         <h4 class="font-bold text-lg">1. Utiliser le Système pour la Prise de Décision</h4>
                         <p class="text-sm mt-2 text-muted">Pour des décisions complexes comme `Google One vs Proton`, ne vous contentez pas de lister des "pour" et des "contre". Créez une page dans `📚 Ressources` et structurez-la avec une base de données simple :</p>
                         <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
-                           <li><strong>Critères :</strong> Coût, Simplicité, Sécurité, Intégration IA.</li>
-                           <li><strong>Pondération :</strong> Donnez un poids à chaque critère (ex: Sécurité 10/10, Coût 7/10).</li>
-                           <li><strong>Score :</strong> Notez chaque solution sur chaque critère.</li>
-                           <li><strong>Conclusion :</strong> Une formule simple (`prop("Pondération") * prop("Score")`) vous donnera un score pondéré pour une décision basée sur les données.</li>
+                           <li>**Critères :** Coût, Simplicité, Sécurité, Intégration IA.</li>
+                           <li>**Pondération :** Donnez un poids à chaque critère (ex: Sécurité 10/10, Coût 7/10).</li>
+                           <li>**Score :** Notez chaque solution sur chaque critère.</li>
+                           <li>**Conclusion :** Une formule simple (`prop("Pondération") * prop("Score")`) vous donnera un score pondéré pour une décision basée sur les données.</li>
                         </ul>
                     </div>
                      <div class="step-card">
@@ -235,9 +235,207 @@
 
             <section id="noyau" class="mb-12">
                 <h2 class="text-3xl font-bold mb-6 border-b-2 border-accent pb-2">🧠 Section 1 : Le Noyau Essentiel</h2>
-                <!-- CONTENU COMPLET DE LA SECTION 1 -->
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-2">Fiche 1 : `⚡ Tâches Maîtresse`</h3>
+                    <p class="text-muted mb-4">C'est votre liste de choses à faire universelle. Si une action doit être entreprise, elle doit être ici.</p>
+                    <h4 class="font-semibold text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
+                    <ul class="list-disc list-inside text-sm text-muted mt-2 mb-6">
+                        <li>Nettoyer ma boite outlook</li>
+                        <li>Organiser ma boite gmail</li>
+                        <li>Modifier les adresses sur mes comptes importants</li>
+                        <li>Tâche récurrente : Séance Muscu 1</li>
+                        <li>Tâche récurrente : Nettoyage appartement</li>
+                    </ul>
+                    <ul>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">✏️</span><strong>Nom de la Tâche</strong><span class="text-xs text-muted ml-2">(Task Name)</span></div><span class="property-type">Titre</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Échéance</strong><span class="text-xs text-muted ml-2">(Due Date)</span></div><span class="property-type">Date</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🚦</span><strong>Priorité</strong><span class="text-xs text-muted ml-2">(Priority)</span></div><span class="property-type">Sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Projet</strong><span class="text-xs text-muted ml-2">(Project)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🌳</span><strong>Domaine</strong><span class="text-xs text-muted ml-2">(Area)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">✔️</span><strong>Fait?</strong><span class="text-xs text-muted ml-2">(Done?)</span></div><span class="property-type">Case à cocher</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">➕</span><strong>Date de Création</strong><span class="text-xs text-muted ml-2">(Created Time)</span></div><span class="property-type">Date de création</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📟</span><strong>Urgence</strong><span class="text-xs text-muted ml-2">(Urgency)</span></div><span class="property-type">Formule</span></li>
+                    </ul>
+                    <div class="code-block mt-4">
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copier</button>
+                        <pre><code class="text-sm">if(empty(prop("Échéance")), "⚪️ Planifier", if(formatDate(prop("Échéance"), "L") == formatDate(now(), "L"), "🔥 Aujourd'hui", if(prop("Échéance") < now(), "🚨 En Retard", if(dateBetween(prop("Échéance"), now(), "days") < 7, "🟠 Cette Semaine", "👍 Plus tard"))))</code></pre>
+                    </div>
+                    <div class="mt-4 space-y-4">
+                         <details>
+                            <summary><div class="summary-content"><span>🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
+                            <div>
+                                <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Statut" :</h5>
+                                <ul class="list-disc list-inside text-sm text-muted">
+                                    <li>⚪️ À faire (Gris)</li>
+                                    <li>🔵 En cours (Bleu)</li>
+                                    <li>🟡 En attente (Jaune)</li>
+                                    <li>🟢 Terminé (Vert)</li>
+                                </ul>
+                                <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Propriété "Priorité" :</h5>
+                                <ul class="list-disc list-inside text-sm text-muted">
+                                    <li>🔥 Haute (Rouge)</li>
+                                    <li>🟠 Moyenne (Orange)</li>
+                                    <li>🔵 Basse (Bleu)</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <details>
+                            <summary><div class="summary-content"><span>📝</span><span class="ml-3">Modèle par Défaut : "Nouvelle Tâche"</span></div></summary>
+                            <div>
+                                <p class="text-sm text-muted mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `📄`.</p>
+                                <p class="text-sm text-muted mb-4"><strong>Propriétés :</strong> Pré-remplissez la `Priorité` sur `🔵 Basse`.</p>
+                                <p class="text-sm text-muted"><strong>Contenu de la page :</strong> Pour les tâches plus complexes, utilisez cette structure simple à l'intérieur de la page :</p>
+                                <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-1">
+                                    <li>Titre H3 : `📝 Notes`</li>
+                                    <li>Titre H3 : `✅ Sous-tâches` (avec une liste de cases à cocher)</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-2">Fiche 2 : `🎯 Projets`</h3>
+                    <p class="text-muted mb-4">Regroupe des tâches qui visent un objectif commun avec une date de fin claire.</p>
+                    <h4 class="font-semibold text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
+                    <ul class="list-disc list-inside text-sm text-muted mt-2 mb-6">
+                        <li>Achat immobilier Nantes</li>
+                        <li>Centraliser la gestion des mots de passe</li>
+                        <li>Réorganiser l'arborescence Google Drive</li>
+                        <li>Uniformiser la photothèque sur Google Photos</li>
+                        <li>Étudier le passage à la carte AMEX Gold</li>
+                        <li>Migrer la messagerie d'Outlook vers Gmail</li>
+                        <li>Préparer l'état des lieux de sortie</li>
+                        <li>Projet Golfinho (VBA)</li>
+                    </ul>
+                    <ul>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🎯</span><strong>Nom du Projet</strong><span class="text-xs text-muted ml-2">(Project Name)</span></div><span class="property-type">Titre</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🚀</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🌳</span><strong>Domaine</strong><span class="text-xs text-muted ml-2">(Area)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Échéance</strong><span class="text-xs text-muted ml-2">(Due Date)</span></div><span class="property-type">Date</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Tâches</strong><span class="text-xs text-muted ml-2">(Tasks)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📊</span><strong>Progression</strong><span class="text-xs text-muted ml-2">(Progress)</span></div><span class="property-type">Rollup</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📦</span><strong>Archiver</strong><span class="text-xs text-muted ml-2">(Archive)</span></div><span class="property-type">Case à cocher</span></li>
+                    </ul>
+                    <div class="mt-4 space-y-4">
+                        <details>
+                            <summary><div class="summary-content"><span>🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
+                            <div>
+                                <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Statut" :</h5>
+                                <ul class="list-disc list-inside text-sm text-muted">
+                                    <li>⚪️ Planifié (Gris)</li>
+                                    <li>🔵 En cours (Bleu)</li>
+                                    <li>🟡 En pause (Jaune)</li>
+                                    <li>🟢 Terminé (Vert)</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <details>
+                            <summary><div class="summary-content"><span>📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Projet"</span></div></summary>
+                            <div>
+                                <p class="text-sm text-muted mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `🚀`.</p>
+                                <p class="text-sm text-muted mb-4"><strong>Propriétés :</strong> Pré-remplissez le `Statut` sur `Planifié`.</p>
+                                <p class="text-sm text-muted"><strong>Contenu de la page :</strong> C'est le modèle le plus important. Utilisez cette structure à l'intérieur de la page :</p>
+                                 <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
+                                    <li>Un <strong>encadré</strong> `🎯 Objectif Principal` pour décrire le résultat attendu.</li>
+                                    <li>Un titre H3 `🔗 Liens & Ressources` pour les documents importants.</li>
+                                    <li>Un titre H3 `✅ Plan d'Action` sous lequel vous insérez une <strong>vue liée</strong> de la base `⚡ Tâches Maîtresse`, filtrée pour que `Projet` contienne `Nouveau Projet`.</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-2">Fiche 3 : `🌳 Domaines`</h3>
+                    <p class="text-muted mb-4">Représente les grandes sphères de votre vie qui n'ont pas de date de fin. Ce sont vos responsabilités continues.</p>
+                     <h4 class="font-semibold text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
+                    <ul class="list-disc list-inside text-sm text-muted mt-2 mb-6">
+                        <li>Santé & Bien-être</li>
+                        <li>Finances Personnelles</li>
+                        <li>Carrière (Chef de projet Salesforce)</li>
+                        <li>Appartement Nantes</li>
+                        <li>Animaux (Pauline & Gus)</li>
+                    </ul>
+                    <ul>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🌳</span><strong>Nom du Domaine</strong><span class="text-xs text-muted ml-2">(Area Name)</span></div><span class="property-type">Titre</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Projets Actifs</strong><span class="text-xs text-muted ml-2">(Active Projects)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📚</span><strong>Ressources</strong><span class="text-xs text-muted ml-2">(Resources)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📜</span><strong>Standard à Maintenir</strong><span class="text-xs text-muted ml-2">(Standard to Maintain)</span></div><span class="property-type">Texte</span></li>
+                    </ul>
+                     <div class="mt-4">
+                         <details>
+                            <summary><div class="summary-content"><span>📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Domaine"</span></div></summary>
+                            <div>
+                                <p class="text-sm text-muted mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `🧭`.</p>
+                                <p class="text-sm text-muted"><strong>Contenu de la page :</strong> Utilisez cette structure pour créer un tableau de bord pour chaque domaine :</p>
+                                <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
+                                    <li>Un titre H2 `🧭 Vision & Objectifs`.</li>
+                                    <li>Un titre H2 `📊 Tableau de Bord`.</li>
+                                    <li>En dessous, créez 2 colonnes. À gauche, une <strong>vue liée</strong> de `🎯 Projets` (filtrée sur ce domaine). À droite, une <strong>vue liée</strong> de `📚 Ressources` (filtrée sur ce domaine).</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-2">Fiche 4 : `📚 Ressources & Connaissances`</h3>
+                    <p class="text-muted mb-4">Votre bibliothèque numérique personnelle. Contient des informations, pas des actions.</p>
+                    <h4 class="font-semibold text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
+                    <ul class="list-disc list-inside text-sm text-muted mt-2 mb-6">
+                        <li>Analyse comparative : Google One vs Proton</li>
+                        <li>Recherche : Script Python pour renommer les photos</li>
+                        <li>Toutes vos notes à analyser par Gemini</li>
+                        <li>Quittances de loyer (PDF)</li>
+                    </ul>
+                    <ul>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">📄</span><strong>Nom</strong><span class="text-xs text-muted ml-2">(Name)</span></div><span class="property-type">Titre</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔖</span><strong>Type</strong><span class="text-xs text-muted ml-2">(Type)</span></div><span class="property-type">Sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Sujet/Tags</strong><span class="text-xs text-muted ml-2">(Topic/Tags)</span></div><span class="property-type">Multi-sélection</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🌐</span><strong>URL</strong></div><span class="property-type">URL</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Domaine Associé</strong><span class="text-xs text-muted ml-2">(Related Area)</span></div><span class="property-type">Relation</span></li>
+                        <li class="property-item"><div class="property-details"><span class="property-icon">👀</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
+                    </ul>
+                     <div class="mt-4 space-y-4">
+                         <details>
+                            <summary><div class="summary-content"><span>🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
+                            <div>
+                                <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Type" :</h5>
+                                <ul class="list-disc list-inside text-sm text-muted">
+                                    <li>Article</li>
+                                    <li>Livre</li>
+                                    <li>Vidéo</li>
+                                    <li>Note de Réunion</li>
+                                    <li>Idée</li>
+                                </ul>
+                                <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Propriété "Sujet/Tags" (Exemples) :</h5>
+                                <ul class="list-disc list-inside text-sm text-muted">
+                                   <li>IA, Productivité, Finance, VBA, Salesforce, Immobilier</li>
+                                </ul>
+                                <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Propriété "Statut" :</h5>
+                                <ul class="list-disc list-inside text-sm text-muted">
+                                    <li>📥 À traiter (Gris)</li>
+                                    <li>🟡 En cours (Jaune)</li>
+                                    <li>✅ Terminé (Vert)</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <details>
+                            <summary><div class="summary-content"><span>📝</span><span class="ml-3">Modèle par Défaut : "Nouvelle Note"</span></div></summary>
+                            <div>
+                                <p class="text-sm text-muted mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `💡`.</p>
+                                <p class="text-sm text-muted mb-4"><strong>Propriétés :</strong> Pré-remplissez le `Statut` sur `À lire / À traiter`.</p>
+                                <p class="text-sm text-muted"><strong>Contenu de la page :</strong> Utilisez cette structure simple pour guider votre prise de notes :</p>
+                                <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-1">
+                                    <li>Titre H3 : `💡 Idée Principale`</li>
+                                    <li>Titre H3 : `📝 Notes Détaillées`</li>
+                                    <li>Titre H3 : `🤔 Mes Réflexions`</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
+                </div>
             </section>
-
+            
             <section id="relations" class="mb-12">
                  <h2 class="text-3xl font-bold mb-6 border-b-2 border-accent pb-2">🕸️ Section 2 : Relations Avancées</h2>
                  <div class="card">
@@ -253,17 +451,174 @@
 
             <section id="automatisation" class="mb-12">
                 <h2 class="text-3xl font-bold mb-6 border-b-2 border-accent pb-2">🤖 Section 3 : Automatisation & Optimisation</h2>
-                <!-- CONTENU COMPLET DE LA SECTION 3 -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="card">
+                        <h3 class="text-xl font-semibold mb-4">Automatisation 1 : Archiver les Projets</h3>
+                        <p class="text-muted">Quand le `Statut` d'un projet passe à `🏁 Terminé`, cochez automatiquement la case `Archiver`.</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-xl font-semibold mb-4">Automatisation 2 : Synchroniser les Tâches</h3>
+                        <p class="text-muted">Quand le `Statut` d'une tâche passe à `✅ Terminé`, cochez automatiquement la case `Fait?`.</p>
+                    </div>
+                </div>
+                 <div class="card">
+                    <h3 class="text-xl font-semibold mb-4">Optimisation : Modèles de Projets</h3>
+                    <p class="text-muted">Dans votre base `🎯 Projets`, créez un <strong>modèle</strong> "Nouveau Projet". À l'intérieur de ce modèle, insérez une <strong>vue liée</strong> de votre base `⚡ Tâches Maîtresse` et filtrez-la pour que `Projet` contienne "Nouveau Projet". Chaque nouveau projet aura ainsi sa propre liste de tâches pré-filtrée.</p>
+                </div>
             </section>
             
             <section id="cockpit" class="mb-12">
-                <h2 class="text-3xl font-bold mb-6 border-b-2 border-accent pb-2">🕹️ Section 4 : Le Cockpit</h2>
-                <!-- CONTENU COMPLET DE LA SECTION 4 -->
+                <h2 class="text-3xl font-bold mb-6 border-b-2 border-accent pb-2">🕹️ Section 4 : Le Cockpit - Guide de Construction Détaillé</h2>
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-4">Plan d'Action pour votre Cockpit</h3>
+                    <p class="text-muted mb-6">Le Cockpit est votre page d'accueil. Il doit vous montrer ce qui est important, maintenant, sans vous submerger. Suivez ces étapes pour le construire.</p>
+                    
+                    <div class="step-card">
+                        <h4 class="font-bold text-lg">Étape 1 : La Fondation - La Page "Backend"</h4>
+                        <p class="text-sm text-muted mt-2">Pour garder votre espace de travail propre, nous allons cacher les bases de données maîtresses.</p>
+                        <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
+                            <li>Créez une nouvelle page simple et nommez-la `⚙️ Backend`.</li>
+                            <li><strong>Déplacez toutes les bases de données</strong> que vous avez créées (Tâches, Projets, etc.) à l'intérieur de cette page.</li>
+                            <li><strong>Organisez la page Backend</strong> avec des titres H2 pour chaque groupe : `🧠 Noyau Essentiel`, `💰 Module Finances`, `🎓 Module Carrière`, `🏡 Module Maison`.</li>
+                        </ul>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="font-bold text-lg">Étape 2 : Créer la Page d'Accueil</h4>
+                        <p class="text-sm text-muted mt-2">C'est la page que vous ouvrirez tous les jours.</p>
+                        <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
+                           <li>Créez une nouvelle page vide.</li>
+                           <li>Donnez-lui un titre inspirant, par exemple : `<strong>[Votre Nom]'s Life OS</strong>` ou `<strong>Centre de Commandement</strong>`. Ajoutez l'icône `🚀`.</li>
+                           <li>Ajoutez une image de couverture qui vous motive (une photo de nature, une image abstraite, etc.).</li>
+                        </ul>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="font-bold text-lg">Étape 3 : Le Message d'Accueil Personnalisé</h4>
+                        <p class="text-sm text-muted mt-2">Juste en dessous du titre, créez un encadré pour un accueil dynamique et motivant.</p>
+                        <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
+                            <li>Tapez `/encadré` et choisissez l'icône `👋`.</li>
+                            <li>À l'intérieur, écrivez un message qui vous parle. Exemple :<br>
+                                "Bonjour ! Nous sommes le <code class="text-xs">@Aujourd'hui</code>. <br>
+                                <em>"Nous sommes ce que nous faisons à plusieurs reprises. L'excellence n'est donc pas un acte, mais une habitude."</em> - Aristote<br>
+                                Quelle est la priorité absolue aujourd'hui pour avancer vers tes objectifs ?
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="font-bold text-lg">Étape 4 : La Structure Visuelle avec les Encadrés</h4>
+                        <p class="text-sm text-muted mt-2">Organisez votre espace en 3 colonnes. Dans chaque colonne, nous utiliserons des encadrés pour délimiter visuellement chaque section.</p>
+                        <div class="mt-4 grid md:grid-cols-3 gap-6">
+                            <div class="bg-gray-900/5 dark:bg-gray-900/20 p-4 rounded-lg">
+                                <h5 class="font-semibold text-center">Colonne 1 : ACTION</h5>
+                                <p class="text-xs text-center text-muted">Ce que je dois faire</p>
+                            </div>
+                            <div class="bg-gray-900/5 dark:bg-gray-900/20 p-4 rounded-lg">
+                                <h5 class="font-semibold text-center">Colonne 2 : VISION</h5>
+                                <p class="text-xs text-center text-muted">Où je vais</p>
+                            </div>
+                           <div class="bg-gray-900/5 dark:bg-gray-900/20 p-4 rounded-lg">
+                                <h5 class="font-semibold text-center">Colonne 3 : NAVIGATION</h5>
+                                <p class="text-xs text-center text-muted">Comment j'y vais</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="font-bold text-lg">Étape 5 : Remplir les Colonnes</h4>
+                        
+                        <div class="mt-4">
+                            <strong class="text-indigo-400">Dans la Colonne de Gauche (ACTION) :</strong>
+                             <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
+                                <li>Créez un <strong>encadré</strong> `📥 Boîte de Réception & Actions` (icône `📥`). À l'intérieur, placez votre <strong>vue liée</strong> de `⚡ Tâches Maîtresse` avec les 3 onglets (`🔥 Aujourd'hui`, `📥 Boîte de Réception`, `🗓️ Semaine`).</li>
+                                <li>Juste en dessous de cet encadré, ajoutez votre <strong>Bouton</strong> `➕ Nouvelle Tâche Rapide`.</li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-4">
+                            <strong class="text-indigo-400">Dans la Colonne Centrale (VISION) :</strong>
+                             <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
+                                <li>Créez un <strong>encadré</strong> `🎯 Projets Actifs` (icône `🎯`). À l'intérieur, placez votre <strong>vue liée</strong> de `🎯 Projets` en affichage <strong>Galerie</strong>, filtrée pour ne montrer que les projets en cours.</li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-4">
+                            <strong class="text-indigo-400">Dans la Colonne de Droite (NAVIGATION) :</strong>
+                             <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
+                                <li>Créez un <strong>encadré</strong> `🏆 Objectifs de la Semaine` (icône `🏆`). À l'intérieur, utilisez une simple liste à puces pour noter vos 3 priorités de la semaine.</li>
+                                <li>Créez un second <strong>encadré</strong> `🧭 Navigation Rapide` (icône `🧭`). À l'intérieur, tapez `/lien` pour ajouter les liens vers vos pages de <strong>Domaines</strong> les plus importantes (`Finances`, `Carrière`, etc.).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <section id="plan-action" class="mb-12">
                 <h2 class="text-3xl font-bold mb-6 border-b-2 border-accent pb-2">🗺️ Section 5 : Plan d'Action Détaillé</h2>
-                <!-- CONTENU COMPLET DE LA SECTION 5 -->
+                <div class="card space-y-4">
+                    <p class="text-muted">Voici le détail des actions à mener pour vos projets prioritaires. Créez les projets et les tâches correspondantes dans votre système.</p>
+                    
+                    <details>
+                        <summary><div class="summary-content"><span class="mr-3">💰</span>Sujet : `Reprendre le contrôle total de mes finances`</div></summary>
+                        <div>
+                           <div class="callout callout-blue">
+                               <p class="font-semibold"><strong>Projet à créer :</strong> `Analyse et optimisation des finances 2025`</p>
+                           </div>
+                           <div class="callout callout-green">
+                               <p class="font-semibold"><strong>Tâches à créer :</strong></p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-2">
+                                    <li>Exporter les relevés des 6 derniers mois (Caisse d'Épargne, Revolut).</li>
+                                    <li>Soumettre les données à Gemini pour analyse.</li>
+                                    <li>Créer les catégories de budget recommandées dans la base `📊 Budgets`.</li>
+                                    <li>Lister tous mes abonnements dans la base `🔁 Abonnements`.</li>
+                                    <li>Définir des montants pour chaque budget mensuel.</li>
+                                </ul>
+                           </div>
+                           <div class="callout callout-purple">
+                                <p class="font-semibold"><strong>Analyse Gemini :</strong></p>
+                                <p class="text-sm mt-2">Utilisez ce prompt dans la page de votre projet :</p>
+                                <div class="code-block mt-2 text-sm">
+                                    <pre><code>"Analyse ces transactions. Catégorise chaque dépense (Alimentation, Loyer, Loisirs, Transport, etc.). Identifie les 3 plus grands postes de dépenses variables. Suggère 3 pistes d'économies concrètes et réalistes."</code></pre>
+                                </div>
+                           </div>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary><div class="summary-content"><span class="mr-3">🔐</span>Sujet : `Optimiser ma sécurité numérique`</div></summary>
+                         <div>
+                           <div class="callout callout-blue">
+                               <p class="font-semibold"><strong>Projet à créer :</strong> `Centraliser la gestion des mots de passe`</p>
+                           </div>
+                           <div class="callout callout-green">
+                               <p class="font-semibold"><strong>Tâches à créer :</strong></p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-2">
+                                     <li>Lister tous les comptes et emplacements de mots de passe actuels.</li>
+                                    <li>Comparer Google Password Manager vs Trousseau iCloud.</li>
+                                    <li>Décider de la plateforme à conserver (Propriété `Échéance` : dans 1 semaine).</li>
+                                    <li>Migrer tous les mots de passe.</li>
+                                </ul>
+                           </div>
+                        </div>
+                    </details>
+                    
+                    <details>
+                        <summary><div class="summary-content"><span class="mr-3">📂</span>Sujet : `Organiser ma vie numérique`</div></summary>
+                        <div>
+                           <div class="callout callout-blue">
+                               <p class="font-semibold"><strong>Projet à créer :</strong> `Réorganiser l'arborescence Google Drive`</p>
+                           </div>
+                             <div class="callout callout-green">
+                                <p class="font-semibold"><strong>Tâches à créer :</strong></p>
+                                 <ul class="list-disc list-inside text-sm mt-2 space-y-2">
+                                    <li>Créer la structure de dossiers racine (1_Projets, 2_Domaines, etc.).</li>
+                                    <li>Déplacer tous les documents existants dans la nouvelle arborescence.</li>
+                                 </ul>
+                           </div>
+                        </div>
+                    </details>
+                </div>
             </section>
             
             <section id="modules" class="mb-12">
@@ -390,4 +745,3 @@
 
 </body>
 </html>
-
