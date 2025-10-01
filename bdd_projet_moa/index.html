@@ -24,20 +24,42 @@
             border-radius: 20px;
             border: 3px solid transparent;
         }
+        
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+            border-left: 3px solid transparent; /* Pour éviter le décalage de layout */
+        }
+        .nav-link:hover {
+            background-color: #f3f4f6; /* bg-gray-100 */
+            transform: translateX(4px);
+        }
+        .dark .nav-link:hover {
+             background-color: #374151; /* dark:bg-gray-700 */
+        }
+
         .nav-link.active {
-            background-color: #3b82f6; /* bg-blue-500 */
-            color: white;
+            background-color: #eff6ff; /* bg-blue-50 */
+            color: #2563eb; /* text-blue-600 */
+            font-weight: 600;
+            border-left-color: #3b82f6; /* border-blue-500 */
+        }
+        .dark .nav-link.active {
+            background-color: #1e293b; /* dark:bg-slate-800 */
+            color: #60a5fa; /* dark:text-blue-400 */
         }
         .nav-link.active svg {
-            color: white;
+            color: #3b82f6;
+        }
+        .dark .nav-link.active svg {
+            color: #60a5fa;
         }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
 
     <!-- Menu Flottant (Sidebar) -->
-    <nav class="fixed top-0 left-0 h-full w-64 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg border-r border-gray-200 dark:border-gray-700 p-6 z-10 hidden lg:flex flex-col">
-        <div class="flex items-center gap-3 mb-10">
+    <nav class="fixed top-0 left-0 h-full w-64 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg border-r border-gray-200 dark:border-gray-700 p-4 z-10 hidden lg:flex flex-col">
+        <div class="flex items-center gap-3 mb-10 p-2">
             <div class="p-2 bg-blue-500 rounded-lg shrink-0">
                 <!-- Nouveau Logo -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -50,14 +72,15 @@
             </div>
         </div>
         <ul id="nav-menu" class="space-y-2">
-            <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 8v5c0 .512.195 1.024.586 1.414l7 7a2 2 0 002.828 0l7-7a2 2 0 000-2.828l-7-7A2 2 0 0012 3H7a2 2 0 00-2 2v5a2 2 0 002 2z" /></svg> Taxonomie Blindée</a></li>
-            <li><a href="#migration-statuts" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg> Migration des Statuts</a></li>
-            <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg> Templates Ciblés</a></li>
-            <li><a href="#vues-op" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> Vues Opérationnelles</a></li>
-            <li><a href="#pilotage" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> Pilotage Stratégique</a></li>
-            <li><a href="#etapes" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Prochaines Étapes</a></li>
+            <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2 rounded-r-lg font-medium text-gray-600 dark:text-gray-300"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 8v5c0 .512.195 1.024.586 1.414l7 7a2 2 0 002.828 0l7-7a2 2 0 000-2.828l-7-7A2 2 0 0012 3H7a2 2 0 00-2 2v5a2 2 0 002 2z" /></svg> Taxonomie Blindée</a></li>
+            <li><a href="#processus-cle" class="nav-link flex items-center gap-3 px-4 py-2 rounded-r-lg font-medium text-gray-600 dark:text-gray-300"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg> Processus Clés</a></li>
+            <li><a href="#migration-statuts" class="nav-link flex items-center gap-3 px-4 py-2 rounded-r-lg font-medium text-gray-600 dark:text-gray-300"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg> Migration des Statuts</a></li>
+            <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2 rounded-r-lg font-medium text-gray-600 dark:text-gray-300"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg> Templates Ciblés</a></li>
+            <li><a href="#vues-op" class="nav-link flex items-center gap-3 px-4 py-2 rounded-r-lg font-medium text-gray-600 dark:text-gray-300"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> Vues Opérationnelles</a></li>
+            <li><a href="#pilotage" class="nav-link flex items-center gap-3 px-4 py-2 rounded-r-lg font-medium text-gray-600 dark:text-gray-300"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> Pilotage Stratégique</a></li>
+            <li><a href="#etapes" class="nav-link flex items-center gap-3 px-4 py-2 rounded-r-lg font-medium text-gray-600 dark:text-gray-300"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Prochaines Étapes</a></li>
         </ul>
-        <div class="mt-auto">
+        <div class="mt-auto p-2">
             <button id="theme-toggle" class="w-full flex items-center justify-center gap-3 px-4 py-2 rounded-lg font-medium bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all">
                 <svg id="theme-toggle-dark-icon" class="h-5 w-5 hidden"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" fill="currentColor"></path></svg>
                 <svg id="theme-toggle-light-icon" class="h-5 w-5 hidden"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill="currentColor"></path></svg>
@@ -70,7 +93,7 @@
     <main class="lg:ml-64 p-6 md:p-10">
         <header class="mb-12">
             <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">🚀 Guide de Refonte de la BDD Notion</h1>
-            <p class="text-lg text-gray-500 dark:text-gray-400">Version 6 - Le Guide Ultime MOA</p>
+            <p class="text-lg text-gray-500 dark:text-gray-400">Version 8 - Le Guide Ultime MOA</p>
         </header>
 
         <!-- Section I: Taxonomie -->
@@ -98,6 +121,36 @@
                                 <span class="block">❔ Question / Assistance</span>
                             </td>
                             <td class="px-6 py-4"><strong>Le point de départ.</strong> Scindé pour mieux distinguer ce qui relève de la formation et ce qui relève du support.</td>
+                        </tr>
+                        <tr class="border-b dark:border-gray-700">
+                            <td class="px-6 py-4 font-semibold">Statut</td>
+                            <td class="px-6 py-4"><code>Sélection</code></td>
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col items-start gap-2">
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">🔴 0. À TRIER</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300">❓ 0a. EN ATTENTE D'INFOS</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">🔎 1. En ANALYSE MOA</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">📝 2. PRÊT pour DEV</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-300">🏗️ 3. EN COURS de DEV</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">🚧 3a. BLOQUÉ / EN ATTENTE</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300">✅ 4. EN RECETTE MOA</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">📦 5. TERMINÉ / Livré</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">❌ 6. ANNULÉ / Refusé</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4"><strong>Le cycle de vie.</strong> Ajout de statuts d'attente pour identifier les goulots d'étranglement.</td>
+                        </tr>
+                        <tr class="border-b dark:border-gray-700">
+                            <td class="px-6 py-4 font-semibold">🧑‍💻 Équipe en charge</td>
+                            <td class="px-6 py-4"><code>Sélection</code></td>
+                             <td class="px-6 py-4 space-y-1">
+                                <span class="block">MOA</span>
+                                <span class="block">DEV N2</span>
+                                <span class="block"><strong>DSI N3</strong></span>
+                                <span class="block">Utilisateur</span>
+                                <span class="block">Équipe Externe</span>
+                            </td>
+                            <td class="px-6 py-4"><strong>Qui a la main ?</strong> Essentiel pour gérer les escalades et les attentes sans multiplier les statuts.</td>
                         </tr>
                          <tr class="border-b dark:border-gray-700">
                             <td class="px-6 py-4 font-semibold">Domaine Fonctionnel</td>
@@ -154,29 +207,45 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4"><strong>En choix multiple.</strong> Cette liste enrichie couvre les spécificités du comptage (Parc, Télérelève). À adapter à votre contexte. Évitez de créer une option "Autre".</td>
-                        </tr>
-                        <tr class="border-b dark:border-gray-700">
-                            <td class="px-6 py-4 font-semibold">Statut</td>
-                            <td class="px-6 py-4"><code>Sélection</code></td>
-                            <td class="px-6 py-4">
-                                <div class="flex flex-col items-start gap-2">
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">🔴 0. À TRIER</span>
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300">❓ 0a. EN ATTENTE D'INFOS</span>
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">🔎 1. En ANALYSE MOA</span>
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">📝 2. PRÊT pour DEV</span>
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-300">🏗️ 3. EN COURS de DEV</span>
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">🚧 3a. BLOQUÉ / EN ATTENTE</span>
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300">✅ 4. EN RECETTE MOA</span>
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">📦 5. TERMINÉ / Livré</span>
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">❌ 6. ANNULÉ / Refusé</span>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4"><strong>Workflow enrichi.</strong> Ajout de statuts d'attente pour ne pas polluer les vues et identifier les goulots d'étranglement.</td>
+                            <td class="px-6 py-4"><strong>En choix multiple.</strong> Cette liste couvre les spécificités du comptage. À adapter à votre contexte.</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+        </section>
+
+        <!-- Section: Processus Clés -->
+        <section id="processus-cle" class="scroll-mt-20 mb-16">
+             <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">🔑 Processus Clés : Triage vs. Analyse</h2>
+             <p class="mb-8 text-gray-600 dark:text-gray-400">Comprendre la distinction entre ces deux premières étapes est fondamental pour l'efficacité du pipeline.</p>
+             <div class="grid md:grid-cols-2 gap-8">
+                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 border-red-500">
+                    <h3 class="text-xl font-bold mb-4">🔴 0. À TRIER : Le Guichet d'Accueil</h3>
+                    <p class="text-sm mb-4">Phase de filtre rapide (1-5 min par ticket). Le but n'est pas de résoudre, mais de valider la pertinence de la demande.</p>
+                    <div class="text-sm p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <p class="font-semibold mb-2">Questions à se poser :</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>La demande est-elle compréhensible ?</li>
+                            <li>Est-ce un doublon d'un ticket existant ?</li>
+                            <li>Est-ce une question simple avec réponse immédiate ?</li>
+                            <li>La demande est-elle recevable ?</li>
+                        </ul>
+                    </div>
+                 </div>
+                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+                    <h3 class="text-xl font-bold mb-4">🔎 1. En ANALYSE MOA : L'Instruction du Dossier</h3>
+                    <p class="text-sm mb-4">Phase d'investigation approfondie. Le ticket a été jugé valide et nécessite une véritable analyse fonctionnelle.</p>
+                     <div class="text-sm p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <p class="font-semibold mb-2">Actions typiques :</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Reproduire le bug rapporté.</li>
+                            <li>Organiser des ateliers avec les métiers.</li>
+                            <li>Évaluer les impacts et la complexité.</li>
+                            <li>Rédiger les spécifications / User Stories.</li>
+                        </ul>
+                    </div>
+                 </div>
+             </div>
         </section>
 
         <!-- Section: Migration des Statuts -->
@@ -300,7 +369,7 @@
         <section id="vues-op" class="scroll-mt-20 mb-16">
             <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">📊 Vues de Pilotage Opérationnel</h2>
             <p class="mb-8 text-gray-600 dark:text-gray-400">Ces vues aident à gérer le flux de travail au quotidien.</p>
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
                     <h3 class="text-xl font-bold mb-2">🔥 Mon Triage MOA</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Qualifier les nouvelles demandes.</p>
@@ -317,6 +386,12 @@
                     <h3 class="text-xl font-bold mb-2">🚧 Points de blocage</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Identifier et résoudre les blocages.</p>
                     <p><strong>Filtre :</strong> `Statut` est <code class="bg-gray-200 dark:bg-gray-700 rounded px-1">🚧 BLOQUÉ</code> ou <code class="bg-gray-200 dark:bg-gray-700 rounded px-1">❓ EN ATTENTE D'INFOS</code></p>
+                </div>
+                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-t-4 border-red-500">
+                    <h3 class="text-xl font-bold mb-2">📡 Suivi Escalades N3</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Piloter les cas complexes.</p>
+                    <p><strong>Filtre :</strong> `Équipe en charge` est <code class="bg-gray-200 dark:bg-gray-700 rounded px-1">DSI N3</code></p>
+                    <p class="mt-2"><strong>Logique :</strong> Quand un ticket est escaladé, passer le `Statut` à <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">BLOQUÉ</span> et `Équipe` à <code class="bg-gray-200 dark:bg-gray-700 rounded px-1">DSI N3</code>.</p>
                 </div>
             </div>
         </section>
@@ -356,9 +431,9 @@
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
                 <h3 class="text-xl font-bold mb-4">Plan de Mise en Œuvre</h3>
                 <ul class="space-y-3">
-                    <li class="flex items-start"><span class="mr-3 text-blue-500">1.</span><span><strong>Configuration :</strong> Appliquer la taxonomie V5 (Types, Statuts, Domaines multiples).</span></li>
+                    <li class="flex items-start"><span class="mr-3 text-blue-500">1.</span><span><strong>Configuration :</strong> Appliquer la taxonomie V8 (Types, Statuts, Domaines, <strong>Équipes</strong>).</span></li>
                     <li class="flex items-start"><span class="mr-3 text-blue-500">2.</span><span><strong>Création des Templates :</strong> Mettre en place les nouveaux templates ciblés.</span></li>
-                    <li class="flex items-start"><span class="mr-3 text-blue-500">3.</span><span><strong>Mise en place des Vues :</strong> Configurer les vues opérationnelles et stratégiques.</span></li>
+                    <li class="flex items-start"><span class="mr-3 text-blue-500">3.</span><span><strong>Mise en place des Vues :</strong> Configurer les vues opérationnelles (y compris la vue Escalades N3) et stratégiques.</span></li>
                     <li class="flex items-start"><span class="mr-3 text-blue-500">4.</span><span><strong>Migration :</strong> Mettre à jour les tickets existants en utilisant le guide de migration ci-dessus.</span></li>
                     <li class="flex items-start"><span class="mr-3 text-blue-500">5.</span><span><strong>Communication & Formation :</strong> Présenter le pipeline, sa nouvelle logique et ses bénéfices aux équipes.</span></li>
                 </ul>
@@ -367,7 +442,7 @@
 
         <!-- Footer -->
         <footer class="text-center mt-16 text-sm text-gray-400 dark:text-gray-500">
-            <p>&copy; 2025 - Guide de Refonte Notion V6. Tous droits réservés.</p>
+            <p>&copy; 2025 - Guide de Refonte Notion V8. Tous droits réservés.</p>
         </footer>
 
     </main>
