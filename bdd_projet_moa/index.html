@@ -121,58 +121,140 @@
                 </span>
                 Taxonomie Blindée
             </h2>
-            <div class="space-y-6">
-                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                    <div class="md:flex md:gap-8">
-                        <div class="md:w-1/3 mb-4 md:mb-0">
-                            <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">Type de Demande</h3>
-                            <span class="text-sm font-mono bg-slate-100 dark:bg-slate-700 text-indigo-500 dark:text-indigo-400 rounded px-2 py-1">Sélection</span>
-                        </div>
-                        <div class="md:w-2/3 grid grid-cols-2 gap-4">
-                            <div>
-                                <h4 class="font-semibold mb-2">Valeurs Clés</h4>
-                                <ul class="space-y-1 text-sm">
-                                    <li><span class="font-mono text-red-500 mr-2">🐞</span>Dysfonctionnement</li>
-                                    <li><span class="font-mono text-blue-500 mr-2">🔌</span>GAP (Proxirel)</li>
-                                    <li><span class="font-mono text-sky-500 mr-2">🔌</span>GAP (Hydroplan)</li>
-                                    <li><span class="font-mono text-amber-500 mr-2">💡</span>Nouv. fonctionnalité</li>
-                                    <li><span class="font-mono text-green-500 mr-2">🔧</span>Correction Données</li>
-                                    <li><span class="font-mono text-orange-500 mr-2">🤦</span>Erreur Manipulation</li>
-                                    <li><span class="font-mono text-slate-500 mr-2">❔</span>Question / Assistance</li>
+            <div class="space-y-8">
+                 <!-- Catégorie: Qualification Initiale -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100 border-b pb-2">Qualification Initiale</h3>
+                    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 mt-4 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                        <div class="grid md:grid-cols-3 gap-8">
+                            <!-- Colonne 1: Type de Demande -->
+                            <div class="md:col-span-1">
+                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Type de Demande</h4>
+                                <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection`</p>
+                                <ul class="space-y-2 text-sm">
+                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">🐞 Dysfonctionnement</code></li>
+                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">🔌 GAP (Proxirel)</code></li>
+                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">🔌 GAP (Hydroplan)</code></li>
+                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">💡 Nouvelle fonctionnalité</code></li>
+                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">🔧 Correction Données</code></li>
+                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">🤦 Erreur Manipulation</code></li>
+                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">❔ Question / Assistance</code></li>
                                 </ul>
                             </div>
-                            <div>
-                                <h4 class="font-semibold mb-2">Rôle & Vigilance</h4>
-                                <p class="text-sm"><strong>Le point de départ.</strong> La distinction entre un GAP (rattrapage) et une Innovation (nouveauté) est cruciale pour la priorisation.</p>
+                            <!-- Colonne 2 & 3: Domaine Fonctionnel -->
+                            <div class="md:col-span-2">
+                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Domaine Fonctionnel</h4>
+                                <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection Multiple`</p>
+                                <div class="grid sm:grid-cols-2 gap-x-8 gap-y-6 text-sm mt-4">
+                                    <div>
+                                        <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Client & Contrat</h5>
+                                        <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
+                                            <li>Commerce / Prospection</li>
+                                            <li>Souscription / Nouveau Contrat</li>
+                                            <li>Gestion de Contrat</li>
+                                            <li>Résiliation</li>
+                                            <li>Relation Client (Portail, Contact)</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Intervention & Relevé</h5>
+                                        <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
+                                            <li>Workflow Pose / Dépose</li>
+                                            <li>Planification / Tournée</li>
+                                            <li>Mobilité Technicien</li>
+                                            <li>Relevé Manuel</li>
+                                            <li>Télérelève / Relevé à distance</li>
+                                            <li>Validation des Index</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Gestion du Parc / Patrimoine</h5>
+                                        <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
+                                            <li>Gestion des Compteurs</li>
+                                            <li>Gestion du Stock Matériel</li>
+                                            <li>Maintenance & Qualité</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Facturation & Recouvrement</h5>
+                                        <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
+                                            <li>Cycle de Facturation</li>
+                                            <li>Paiement & Encaissement</li>
+                                            <li>Recouvrement</li>
+                                            <li>Avoirs & Remboursements</li>
+                                        </ul>
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Transverse & Reporting</h5>
+                                        <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
+                                            <li>Éditique (Documents)</li>
+                                            <li>Notifications</li>
+                                            <li>Synchro Inter-applicative</li>
+                                            <li>Tableaux de Bord & Rapports</li>
+                                            <li>Gestion des Droits & Accès</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                    <div class="md:flex md:gap-8">
-                         <div class="md:w-1/3 mb-4 md:mb-0">
-                            <h3 class="font-bold text-lg text-slate-800 dark:text-slate-100">Statut</h3>
-                            <span class="text-sm font-mono bg-slate-100 dark:bg-slate-700 text-indigo-500 dark:text-indigo-400 rounded px-2 py-1">Sélection</span>
+
+                <!-- Catégorie: Cycle de Vie -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100 border-b pb-2">Cycle de Vie & Suivi</h3>
+                    <div class="grid md:grid-cols-2 gap-6 mt-4">
+                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-100">Statut</h4>
+                            <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection`</p>
+                            <div class="flex flex-col items-start gap-2 text-xs font-medium">
+                                <span class="px-2.5 py-1 rounded-full bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300">🔴 0. À TRIER</span>
+                                <span class="px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300">❓ 0a. EN ATTENTE D'INFOS</span>
+                                <span class="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">🔎 1. En ANALYSE MOA</span>
+                                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">📝 2. PRÊT pour DEV</span>
+                                <span class="px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300">🏗️ 3. EN COURS de DEV</span>
+                                <span class="px-2.5 py-1 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300">🚧 3a. BLOQUÉ / EN ATTENTE</span>
+                                <span class="px-2.5 py-1 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900/50 dark:text-pink-300">✅ 4. EN RECETTE MOA</span>
+                                <span class="px-2.5 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">📦 5. TERMINÉ / Livré</span>
+                                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">❌ 6. ANNULÉ / Refusé</span>
+                            </div>
                         </div>
-                        <div class="md:w-2/3 grid grid-cols-2 gap-4">
-                             <div>
-                                <h4 class="font-semibold mb-2">Cycle de vie</h4>
-                                <div class="flex flex-col items-start gap-2">
-                                    <span class="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300"><span class="w-2 h-2 mr-2 bg-red-500 rounded-full"></span>0. À TRIER</span>
-                                    <span class="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300"><span class="w-2 h-2 mr-2 bg-purple-500 rounded-full"></span>0a. EN ATTENTE D'INFOS</span>
-                                    <span class="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300"><span class="w-2 h-2 mr-2 bg-blue-500 rounded-full"></span>1. En ANALYSE MOA</span>
-                                    <span class="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300"><span class="w-2 h-2 mr-2 bg-slate-500 rounded-full"></span>2. PRÊT pour DEV</span>
-                                    <span class="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300"><span class="w-2 h-2 mr-2 bg-sky-500 rounded-full"></span>3. EN COURS de DEV</span>
-                                    <span class="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300"><span class="w-2 h-2 mr-2 bg-orange-500 rounded-full"></span>3a. BLOQUÉ / EN ATTENTE</span>
-                                    <span class="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900/50 dark:text-pink-300"><span class="w-2 h-2 mr-2 bg-pink-500 rounded-full"></span>4. EN RECETTE MOA</span>
-                                    <span class="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300"><span class="w-2 h-2 mr-2 bg-green-500 rounded-full"></span>5. TERMINÉ / Livré</span>
-                                    <span class="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300"><span class="w-2 h-2 mr-2 bg-slate-500 rounded-full"></span>6. ANNULÉ / Refusé</span>
-                                </div>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold mb-2">Rôle & Vigilance</h4>
-                                <p class="text-sm"><strong>Le moteur du pipeline.</strong> Les statuts d'attente (0a, 3a) sont cruciaux pour identifier les goulots d'étranglement.</p>
-                            </div>
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-100">Équipe en charge</h4>
+                             <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection`</p>
+                             <ul class="space-y-2 text-sm">
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Utilisateur</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">MOA (N2)</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">DSI (N3)</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">DEV Externe</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Catégorie: Priorisation Stratégique -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100 border-b pb-2">Priorisation Stratégique</h3>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                           <h4 class="font-bold text-slate-800 dark:text-slate-100">Impact</h4>
+                           <p class="text-xs font-mono mb-2 text-indigo-500">Propriété `Nombre`</p>
+                           <p class="text-sm">Note de 1 à 5 sur le gain métier ou le nombre d'utilisateurs impactés.</p>
+                        </div>
+                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                           <h4 class="font-bold text-slate-800 dark:text-slate-100">Confiance</h4>
+                           <p class="text-xs font-mono mb-2 text-indigo-500">Propriété `Nombre` (format %)</p>
+                           <p class="text-sm">Certitude sur l'estimation de l'impact et de l'effort (ex: 80%).</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                           <h4 class="font-bold text-slate-800 dark:text-slate-100">Effort</h4>
+                           <p class="text-xs font-mono mb-2 text-indigo-500">Propriété `Nombre`</p>
+                           <p class="text-sm">Estimation du temps de développement en jours-homme.</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                           <h4 class="font-bold text-slate-800 dark:text-slate-100">Score RICE</h4>
+                           <p class="text-xs font-mono mb-2 text-indigo-500">Propriété `Formule`</p>
+                           <p class="text-sm">Calcul automatique pour un classement objectif.</p>
                         </div>
                     </div>
                 </div>
@@ -470,3 +552,4 @@
     </script>
 </body>
 </html>
+
