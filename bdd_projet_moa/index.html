@@ -24,17 +24,11 @@
             border-radius: 20px;
             border: 3px solid transparent;
         }
-        .toggle-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
-        }
-        .toggle-content.open {
-            max-height: 1000px; /* Assez grand pour contenir le contenu */
-            transition: max-height 1s ease-in-out;
-        }
         .nav-link.active {
             background-color: #3b82f6; /* bg-blue-500 */
+            color: white;
+        }
+        .nav-link.active svg {
             color: white;
         }
     </style>
@@ -44,17 +38,24 @@
     <!-- Menu Flottant (Sidebar) -->
     <nav class="fixed top-0 left-0 h-full w-64 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg border-r border-gray-200 dark:border-gray-700 p-6 z-10 hidden lg:flex flex-col">
         <div class="flex items-center gap-3 mb-10">
-            <div class="p-2 bg-blue-500 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M2 17s.5-1 2-1 2 1 2 1 1-1 2-1 2 1 2 1 .5-1 2-1 2 1 2 1M2 7s.5-1 2-1 2 1 2 1 1-1 2-1 2 1 2 1 .5-1 2-1 2 1 2 1M12 22V2"/></svg>
+            <div class="p-2 bg-blue-500 rounded-lg shrink-0">
+                <!-- Nouveau Logo -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13V7m0 13a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m7-1a2 2 0 00-2-2h-2a2 2 0 00-2 2v10a2 2 0 002 2h2a2 2 0 002-2V8z" />
+                </svg>
             </div>
-            <h1 class="text-lg font-bold text-gray-900 dark:text-white">Guide Notion V4</h1>
+            <div>
+                <h1 class="text-base font-bold text-gray-900 dark:text-white">Guide Notion</h1>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Pipeline des Demandes</p>
+            </div>
         </div>
         <ul id="nav-menu" class="space-y-2">
-            <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">🧬 Taxonomie Blindée</a></li>
-            <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">📄 Templates Ciblés</a></li>
-            <li><a href="#vues-op" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">📊 Vues Opérationnelles</a></li>
-            <li><a href="#pilotage" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">🎯 Pilotage Stratégique</a></li>
-            <li><a href="#etapes" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">🚀 Prochaines Étapes</a></li>
+            <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 8v5c0 .512.195 1.024.586 1.414l7 7a2 2 0 002.828 0l7-7a2 2 0 000-2.828l-7-7A2 2 0 0012 3H7a2 2 0 00-2 2v5a2 2 0 002 2z" /></svg> Taxonomie Blindée</a></li>
+            <li><a href="#migration-statuts" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg> Migration des Statuts</a></li>
+            <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg> Templates Ciblés</a></li>
+            <li><a href="#vues-op" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg> Vues Opérationnelles</a></li>
+            <li><a href="#pilotage" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> Pilotage Stratégique</a></li>
+            <li><a href="#etapes" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"><svg class="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> Prochaines Étapes</a></li>
         </ul>
         <div class="mt-auto">
             <button id="theme-toggle" class="w-full flex items-center justify-center gap-3 px-4 py-2 rounded-lg font-medium bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all">
@@ -69,7 +70,7 @@
     <main class="lg:ml-64 p-6 md:p-10">
         <header class="mb-12">
             <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">🚀 Guide de Refonte de la BDD Notion</h1>
-            <p class="text-lg text-gray-500 dark:text-gray-400">Version 4 - Adaptée Métier Comptage</p>
+            <p class="text-lg text-gray-500 dark:text-gray-400">Version 6 - Le Guide Ultime MOA</p>
         </header>
 
         <!-- Section I: Taxonomie -->
@@ -158,14 +159,18 @@
                         <tr class="border-b dark:border-gray-700">
                             <td class="px-6 py-4 font-semibold">Statut</td>
                             <td class="px-6 py-4"><code>Sélection</code></td>
-                            <td class="px-6 py-4 space-y-1">
-                                <span class="block">🔴 0. À TRIER</span>
-                                <span class="block"><strong class="text-purple-500">❓ 0a. EN ATTENTE D'INFOS</strong></span>
-                                <span class="block">🔎 1. En ANALYSE MOA</span>
-                                <span class="block">...</span>
-                                <span class="block"><strong class="text-orange-500">🚧 3a. BLOQUÉ / EN ATTENTE</strong></span>
-                                <span class="block">...</span>
-                                 <span class="block">📦 5. TERMINÉ / Livré</span>
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col items-start gap-2">
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">🔴 0. À TRIER</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300">❓ 0a. EN ATTENTE D'INFOS</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">🔎 1. En ANALYSE MOA</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">📝 2. PRÊT pour DEV</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-300">🏗️ 3. EN COURS de DEV</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">🚧 3a. BLOQUÉ / EN ATTENTE</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300">✅ 4. EN RECETTE MOA</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">📦 5. TERMINÉ / Livré</span>
+                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">❌ 6. ANNULÉ / Refusé</span>
+                                </div>
                             </td>
                             <td class="px-6 py-4"><strong>Workflow enrichi.</strong> Ajout de statuts d'attente pour ne pas polluer les vues et identifier les goulots d'étranglement.</td>
                         </tr>
@@ -173,6 +178,86 @@
                 </table>
             </div>
         </section>
+
+        <!-- Section: Migration des Statuts -->
+        <section id="migration-statuts" class="scroll-mt-20 mb-16">
+            <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">🔄 Guide de Migration des Statuts</h2>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4">Comprendre la Logique du Nouveau Workflow</h3>
+                <p class="mb-4">Votre ancien système de statuts mélangeait des étapes, des états et des actions. Le nouveau système se concentre uniquement sur <strong>l'étape du cycle de vie</strong> pour simplifier le pilotage.</p>
+                <div class="mb-6 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                    <p class="font-semibold mb-2">La logique de numérotation :</p>
+                    <ul class="list-disc list-inside space-y-2 text-sm">
+                        <li><strong class="font-mono bg-gray-200 dark:bg-gray-600 px-1 rounded">0, 1, 2...</strong> : Indique les étapes séquentielles du processus, le chemin idéal.</li>
+                        <li><strong class="font-mono bg-gray-200 dark:bg-gray-600 px-1 rounded">0a, 3a...</strong> : Indique un état d'attente ou de blocage à une étape donnée. Le ticket est en pause.</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-xl font-bold mb-4">Table de Correspondance</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 rounded-l-lg">Ancien Statut</th>
+                                <th scope="col" class="px-6 py-3 rounded-r-lg">Nouvel Équivalent & Logique</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b dark:border-gray-700"><td colspan="2" class="px-6 py-2 font-semibold bg-gray-50 dark:bg-gray-700/50">Groupe "À faire"</td></tr>
+                            <tr class="border-b dark:border-gray-700">
+                                <td class="px-6 py-4"><code>En cours d'analyse</code>, <code>À requalifier (DT)</code></td>
+                                <td class="px-6 py-4">➡️ <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">🔎 1. En ANALYSE MOA</span></td>
+                            </tr>
+                            <tr class="border-b dark:border-gray-700">
+                                <td class="px-6 py-4"><code>En attente</code></td>
+                                <td class="px-6 py-4">➡️ Dépend de la situation : <br><span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300">❓ 0a. EN ATTENTE D'INFOS</span> (on attend le demandeur) <br><span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">🚧 3a. BLOQUÉ / EN ATTENTE</span> (on attend un tiers)</td>
+                            </tr>
+                             <tr class="border-b dark:border-gray-700">
+                                <td class="px-6 py-4"><code>Invalidation agence</code></td>
+                                <td class="px-6 py-4">➡️ <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">❌ 6. ANNULÉ / Refusé</span></td>
+                            </tr>
+
+                            <tr class="border-b dark:border-gray-700"><td colspan="2" class="px-6 py-2 font-semibold bg-gray-50 dark:bg-gray-700/50">Groupe "En cours"</td></tr>
+                            <tr class="border-b dark:border-gray-700">
+                                <td class="px-6 py-4"><code>Jira à rédiger</code>, <code>Atelier à faire</code></td>
+                                <td class="px-6 py-4">Le statut est <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">🔎 1. En ANALYSE MOA</span>. L'action devient une simple tâche (To-Do) dans la page Notion.</td>
+                            </tr>
+                            <tr class="border-b dark:border-gray-700">
+                                <td class="px-6 py-4"><code>Jira à soumettre</code></td>
+                                <td class="px-6 py-4">Le ticket passe à <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">📝 2. PRÊT pour DEV</span>.</td>
+                            </tr>
+                            <tr class="border-b dark:border-gray-700">
+                                <td class="px-6 py-4"><code>Prise en charge DT DSI</code>, <code>Jira en cours</code></td>
+                                <td class="px-6 py-4">➡️ <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-300">🏗️ 3. EN COURS de DEV</span></td>
+                            </tr>
+                             <tr class="border-b dark:border-gray-700">
+                                <td class="px-6 py-4"><code>En attente d'entrants</code></td>
+                                <td class="px-6 py-4">➡️ <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">🚧 3a. BLOQUÉ / EN ATTENTE</span></td>
+                            </tr>
+                             <tr class="border-b dark:border-gray-700">
+                                <td class="px-6 py-4"><code>À recetter</code>, <code>Validée en recette</code>, <code>Attente validation agence</code></td>
+                                <td class="px-6 py-4">➡️ <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300">✅ 4. EN RECETTE MOA</span></td>
+                            </tr>
+
+                             <tr class="border-b dark:border-gray-700"><td colspan="2" class="px-6 py-2 font-semibold bg-gray-50 dark:bg-gray-700/50">Groupe "Terminé"</td></tr>
+                             <tr class="border-b dark:border-gray-700">
+                                <td class="px-6 py-4"><code>Terminée DT</code>, <code>Terminée</code></td>
+                                <td class="px-6 py-4">➡️ <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">📦 5. TERMINÉ / Livré</span></td>
+                            </tr>
+                             <tr class="border-b dark:border-gray-700">
+                                <td class="px-6 py-4"><code>Annulée</code></td>
+                                <td class="px-6 py-4">➡️ <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">❌ 6. ANNULÉ / Refusé</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                 <div class="mt-6 border-l-4 border-blue-400 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg">
+                    <h4 class="font-bold text-blue-800 dark:text-blue-300">Changement de Philosophie</h4>
+                    <p class="mt-2 text-sm"><strong>Avant :</strong> Le statut décrivait "ce qu'il faut faire". <br><strong>Maintenant :</strong> Le statut décrit "où en est la demande". Les actions spécifiques sont gérées par des To-Do lists à l'intérieur du ticket.</p>
+                </div>
+            </div>
+        </section>
+
 
         <!-- Section II: Templates -->
         <section id="templates" class="scroll-mt-20 mb-16">
@@ -271,18 +356,18 @@
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
                 <h3 class="text-xl font-bold mb-4">Plan de Mise en Œuvre</h3>
                 <ul class="space-y-3">
-                    <li class="flex items-start"><span class="mr-3 text-blue-500">1.</span><span><strong>Configuration :</strong> Appliquer la taxonomie V4 (Types, Statuts, Domaines multiples).</span></li>
+                    <li class="flex items-start"><span class="mr-3 text-blue-500">1.</span><span><strong>Configuration :</strong> Appliquer la taxonomie V5 (Types, Statuts, Domaines multiples).</span></li>
                     <li class="flex items-start"><span class="mr-3 text-blue-500">2.</span><span><strong>Création des Templates :</strong> Mettre en place les nouveaux templates ciblés.</span></li>
                     <li class="flex items-start"><span class="mr-3 text-blue-500">3.</span><span><strong>Mise en place des Vues :</strong> Configurer les vues opérationnelles et stratégiques.</span></li>
-                    <li class="flex items-start"><span class="mr-3 text-blue-500">4.</span><span><strong>Migration :</strong> Mettre à jour les tickets existants. C'est le moment de faire un grand nettoyage !</span></li>
-                    <li class="flex items-start"><span class="mr-3 text-blue-500">5.</span><span><strong>Communication & Formation :</strong> Présenter le pipeline et ses bénéfices aux équipes.</span></li>
+                    <li class="flex items-start"><span class="mr-3 text-blue-500">4.</span><span><strong>Migration :</strong> Mettre à jour les tickets existants en utilisant le guide de migration ci-dessus.</span></li>
+                    <li class="flex items-start"><span class="mr-3 text-blue-500">5.</span><span><strong>Communication & Formation :</strong> Présenter le pipeline, sa nouvelle logique et ses bénéfices aux équipes.</span></li>
                 </ul>
             </div>
         </section>
 
         <!-- Footer -->
         <footer class="text-center mt-16 text-sm text-gray-400 dark:text-gray-500">
-            <p>&copy; 2025 - Guide de Refonte Notion V4. Tous droits réservés.</p>
+            <p>&copy; 2025 - Guide de Refonte Notion V6. Tous droits réservés.</p>
         </footer>
 
     </main>
@@ -318,18 +403,6 @@
                 const isDark = document.documentElement.classList.toggle('dark');
                 localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
                 updateThemeUI(isDark);
-            });
-
-            // --- GESTION DES TOGGLES (ACCORDÉON) ---
-            // Cette fonctionnalité n'est plus utilisée dans V3 mais le code est gardé pour référence
-            const toggleHeaders = document.querySelectorAll('.toggle-header');
-            toggleHeaders.forEach(header => {
-                header.addEventListener('click', () => {
-                    const content = header.nextElementSibling;
-                    const icon = header.querySelector('svg');
-                    content.classList.toggle('open');
-                    icon.classList.toggle('rotate-180');
-                });
             });
 
             // --- GESTION DU SCROLLSPY POUR LE MENU ---
