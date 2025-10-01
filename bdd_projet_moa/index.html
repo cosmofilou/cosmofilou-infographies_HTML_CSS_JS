@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Ultime de Refonte Notion - Pipeline des Demandes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Style pour la barre de défilement */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(156, 163, 175, 0.5);
+            border-radius: 20px;
+            border: 3px solid transparent;
+        }
+        .toggle-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+        }
+        .toggle-content.open {
+            max-height: 1000px; /* Assez grand pour contenir le contenu */
+            transition: max-height 1s ease-in-out;
+        }
+        .nav-link.active {
+            background-color: #3b82f6; /* bg-blue-500 */
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+
+    <!-- Menu Flottant (Sidebar) -->
+    <nav class="fixed top-0 left-0 h-full w-64 bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg border-r border-gray-200 dark:border-gray-700 p-6 z-10 hidden lg:flex flex-col">
+        <div class="flex items-center gap-3 mb-10">
+            <div class="p-2 bg-blue-500 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M2 17s.5-1 2-1 2 1 2 1 1-1 2-1 2 1 2 1 .5-1 2-1 2 1 2 1M2 7s.5-1 2-1 2 1 2 1 1-1 2-1 2 1 2 1 .5-1 2-1 2 1 2 1M12 22V2"/></svg>
+            </div>
+            <h1 class="text-lg font-bold text-gray-900 dark:text-white">Guide Notion V4</h1>
+        </div>
+        <ul id="nav-menu" class="space-y-2">
+            <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">🧬 Taxonomie Blindée</a></li>
+            <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">📄 Templates Ciblés</a></li>
+            <li><a href="#vues-op" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">📊 Vues Opérationnelles</a></li>
+            <li><a href="#pilotage" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">🎯 Pilotage Stratégique</a></li>
+            <li><a href="#etapes" class="nav-link flex items-center gap-3 px-4 py-2 rounded-lg font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all">🚀 Prochaines Étapes</a></li>
+        </ul>
+        <div class="mt-auto">
+            <button id="theme-toggle" class="w-full flex items-center justify-center gap-3 px-4 py-2 rounded-lg font-medium bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all">
+                <svg id="theme-toggle-dark-icon" class="h-5 w-5 hidden"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" fill="currentColor"></path></svg>
+                <svg id="theme-toggle-light-icon" class="h-5 w-5 hidden"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill="currentColor"></path></svg>
+                <span id="theme-toggle-text"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Contenu Principal -->
+    <main class="lg:ml-64 p-6 md:p-10">
+        <header class="mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">🚀 Guide de Refonte de la BDD Notion</h1>
+            <p class="text-lg text-gray-500 dark:text-gray-400">Version 4 - Adaptée Métier Comptage</p>
+        </header>
+
+        <!-- Section I: Taxonomie -->
+        <section id="taxonomie" class="scroll-mt-20 mb-16">
+            <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">🧬 Taxonomie Blindée</h2>
+            <div class="overflow-x-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Propriété</th>
+                            <th scope="col" class="px-6 py-3">Type</th>
+                            <th scope="col" class="px-6 py-3">Valeurs Clés Recommandées</th>
+                            <th scope="col" class="px-6 py-3">Rôle & Points de Vigilance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b dark:border-gray-700">
+                            <td class="px-6 py-4 font-semibold">Type de Demande</td>
+                            <td class="px-6 py-4"><code>Sélection</code></td>
+                            <td class="px-6 py-4 space-y-1">
+                                <span class="block">🐞 Dysfonctionnement</span>
+                                <span class="block">✨ Évolution</span>
+                                <span class="block">🔧 Correction Données</span>
+                                <span class="block">🤦 Erreur Manipulation</span>
+                                <span class="block">❔ Question / Assistance</span>
+                            </td>
+                            <td class="px-6 py-4"><strong>Le point de départ.</strong> Scindé pour mieux distinguer ce qui relève de la formation et ce qui relève du support.</td>
+                        </tr>
+                         <tr class="border-b dark:border-gray-700">
+                            <td class="px-6 py-4 font-semibold">Domaine Fonctionnel</td>
+                            <td class="px-6 py-4"><code>Sélection Multiple</code></td>
+                            <td class="px-6 py-4 text-xs">
+                                <div class="grid grid-cols-3 gap-x-6 gap-y-4">
+                                    <div>
+                                        <h5 class="font-semibold mb-1 text-gray-800 dark:text-gray-200">Client & Contrat</h5>
+                                        <ul class="list-disc list-inside space-y-1">
+                                            <li>Commerce / Prospection</li>
+                                            <li>Souscription / Nouveau Contrat</li>
+                                            <li>Gestion de Contrat</li>
+                                            <li>Résiliation</li>
+                                            <li>Relation Client (Portail, Contact)</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold mb-1 text-gray-800 dark:text-gray-200">Intervention & Relevé</h5>
+                                        <ul class="list-disc list-inside space-y-1">
+                                            <li>Workflow Pose / Dépose</li>
+                                            <li>Planification / Tournée</li>
+                                            <li>Mobilité Technicien</li>
+                                            <li>Relevé Manuel</li>
+                                            <li>Télérelève / Relevé à distance</li>
+                                            <li>Validation des Index</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold mb-1 text-gray-800 dark:text-gray-200">Gestion du Parc / Patrimoine</h5>
+                                        <ul class="list-disc list-inside space-y-1">
+                                            <li>Gestion des Compteurs</li>
+                                            <li>Gestion du Stock Matériel</li>
+                                            <li>Maintenance & Qualité</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-semibold mb-1 text-gray-800 dark:text-gray-200">Facturation & Recouvrement</h5>
+                                        <ul class="list-disc list-inside space-y-1">
+                                            <li>Cycle de Facturation</li>
+                                            <li>Paiement & Encaissement</li>
+                                            <li>Recouvrement</li>
+                                            <li>Avoirs & Remboursements</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-span-2">
+                                        <h5 class="font-semibold mb-1 text-gray-800 dark:text-gray-200">Transverse & Reporting</h5>
+                                        <ul class="list-disc list-inside space-y-1">
+                                            <li>Éditique (Documents)</li>
+                                            <li>Notifications</li>
+                                            <li>Synchro Inter-applicative</li>
+                                            <li>Tableaux de Bord & Rapports</li>
+                                            <li>Gestion des Droits & Accès</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4"><strong>En choix multiple.</strong> Cette liste enrichie couvre les spécificités du comptage (Parc, Télérelève). À adapter à votre contexte. Évitez de créer une option "Autre".</td>
+                        </tr>
+                        <tr class="border-b dark:border-gray-700">
+                            <td class="px-6 py-4 font-semibold">Statut</td>
+                            <td class="px-6 py-4"><code>Sélection</code></td>
+                            <td class="px-6 py-4 space-y-1">
+                                <span class="block">🔴 0. À TRIER</span>
+                                <span class="block"><strong class="text-purple-500">❓ 0a. EN ATTENTE D'INFOS</strong></span>
+                                <span class="block">🔎 1. En ANALYSE MOA</span>
+                                <span class="block">...</span>
+                                <span class="block"><strong class="text-orange-500">🚧 3a. BLOQUÉ / EN ATTENTE</strong></span>
+                                <span class="block">...</span>
+                                 <span class="block">📦 5. TERMINÉ / Livré</span>
+                            </td>
+                            <td class="px-6 py-4"><strong>Workflow enrichi.</strong> Ajout de statuts d'attente pour ne pas polluer les vues et identifier les goulots d'étranglement.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section II: Templates -->
+        <section id="templates" class="scroll-mt-20 mb-16">
+            <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">📄 Templates Ciblés</h2>
+            <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-4 rounded-r-lg mb-8">
+                <h4 class="font-bold">Comment bien créer un ticket ?</h4>
+                <p>Même si vous n'êtes pas sûr, essayez de remplir au mieux les 3 champs : `Type`, `Périmètre`, `Domaine`. Une ébauche vaut mieux qu'un ticket vide. La MOA affinera la qualification.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Template Dysfonctionnement -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                    <h3 class="text-2xl font-bold mb-4">🐞 Template : Dysfonctionnement</h3>
+                    <p class="mb-6"><strong>Propriétés pré-remplies :</strong> `Type` = 🐞 Dysfonctionnement, `Statut` = 🔴 À TRIER.</p>
+                    <div class="border-l-4 border-red-500 bg-red-50 dark:bg-red-900/20 p-4 rounded-r-lg">
+                        <h4 class="font-bold text-red-800 dark:text-red-300">Problématique & Reproduction</h4>
+                        <ul class="list-disc list-inside mt-2 text-sm">
+                            <li>Comportement attendu vs observé</li>
+                            <li>Étapes de reproduction claires</li>
+                            <li>Utilisateur(s) impacté(s) & exemples</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Template Erreur Manipulation -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                    <h3 class="text-2xl font-bold mb-4">🤦 Template : Erreur de Manipulation</h3>
+                    <p class="mb-6"><strong>Propriétés pré-remplies :</strong> `Type` = 🤦 Erreur Manipulation, `Statut` = 🔎 En ANALYSE MOA.</p>
+                     <div class="border-l-4 border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-r-lg">
+                        <h4 class="font-bold text-yellow-800 dark:text-yellow-300">Description de la situation</h4>
+                         <ul class="list-disc list-inside mt-2 text-sm">
+                            <li>Quel était l'objectif de l'utilisateur ?</li>
+                            <li>Quelle manipulation a été effectuée ?</li>
+                            <li>Quelle est la bonne procédure à suivre ?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section III: Vues Opérationnelles -->
+        <section id="vues-op" class="scroll-mt-20 mb-16">
+            <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">📊 Vues de Pilotage Opérationnel</h2>
+            <p class="mb-8 text-gray-600 dark:text-gray-400">Ces vues aident à gérer le flux de travail au quotidien.</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-2">🔥 Mon Triage MOA</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Qualifier les nouvelles demandes.</p>
+                    <p><strong>Filtre :</strong> `Statut` est <code class="bg-gray-200 dark:bg-gray-700 rounded px-1">À TRIER</code></p>
+                    <p><strong>Groupement :</strong> par `Périmètre Applicatif`</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-2">🏗️ Pipeline Dev Actif</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Suivre ce qui n'est pas bloqué.</p>
+                    <p><strong>Filtre :</strong> `Statut` n'est pas <code class="bg-gray-200 dark:bg-gray-700 rounded px-1">🚧 BLOQUÉ</code></p>
+                    <p><strong>Groupement :</strong> par `Statut` (Kanban)</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-2">🚧 Points de blocage</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Identifier et résoudre les blocages.</p>
+                    <p><strong>Filtre :</strong> `Statut` est <code class="bg-gray-200 dark:bg-gray-700 rounded px-1">🚧 BLOQUÉ</code> ou <code class="bg-gray-200 dark:bg-gray-700 rounded px-1">❓ EN ATTENTE D'INFOS</code></p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section V: Pilotage Stratégique -->
+        <section id="pilotage" class="scroll-mt-20 mb-16">
+            <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">🎯 Du Suivi à la Stratégie</h2>
+            <p class="mb-8 text-gray-600 dark:text-gray-400">Utilisez vos données pour prendre de la hauteur. Créez une page "Tableaux de bord" distincte avec ces vues.</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-t-4 border-green-500">
+                    <h3 class="text-xl font-bold mb-2">🩺 Santé des Applications</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">L'outil est-il de plus en plus stable ?</p>
+                    <p><strong>Type de vue :</strong> `Graphique` ou `Tableau croisé dynamique`</p>
+                    <p><strong>Configuration :</strong> Compter les tickets où `Type` est `🐞 Dysfonctionnement`, groupés par `Périmètre Applicatif` et par mois.</p>
+                    <p class="mt-2 text-green-600 font-semibold">Objectif : Voir la courbe baisser.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-t-4 border-yellow-500">
+                    <h3 class="text-xl font-bold mb-2">🎓 Radar Formation</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Où les utilisateurs ont-ils le plus besoin d'aide ?</p>
+                    <p><strong>Type de vue :</strong> `Tableau`</p>
+                    <p><strong>Configuration :</strong> Compter les tickets où `Type` est `🤦 Erreur Manipulation`, groupés par `Domaine Fonctionnel`.</p>
+                    <p class="mt-2 text-yellow-600 font-semibold">Objectif : Identifier les zones où concentrer la formation.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-t-4 border-red-500">
+                    <h3 class="text-xl font-bold mb-2">⏳ Analyse des Délais</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Où notre processus est-il le plus lent ?</p>
+                    <p><strong>Type de vue :</strong> `Tableau` (avec formules Notion)</p>
+                    <p><strong>Configuration :</strong> Utiliser l'historique des statuts pour calculer le temps moyen passé dans chaque étape (Triage, Analyse, Dev, Recette).</p>
+                    <p class="mt-2 text-red-600 font-semibold">Objectif : Identifier les goulots d'étranglement.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section VI: Prochaines Étapes -->
+        <section id="etapes" class="scroll-mt-20">
+            <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">🚀 Prochaines Étapes</h2>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4">Plan de Mise en Œuvre</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-start"><span class="mr-3 text-blue-500">1.</span><span><strong>Configuration :</strong> Appliquer la taxonomie V4 (Types, Statuts, Domaines multiples).</span></li>
+                    <li class="flex items-start"><span class="mr-3 text-blue-500">2.</span><span><strong>Création des Templates :</strong> Mettre en place les nouveaux templates ciblés.</span></li>
+                    <li class="flex items-start"><span class="mr-3 text-blue-500">3.</span><span><strong>Mise en place des Vues :</strong> Configurer les vues opérationnelles et stratégiques.</span></li>
+                    <li class="flex items-start"><span class="mr-3 text-blue-500">4.</span><span><strong>Migration :</strong> Mettre à jour les tickets existants. C'est le moment de faire un grand nettoyage !</span></li>
+                    <li class="flex items-start"><span class="mr-3 text-blue-500">5.</span><span><strong>Communication & Formation :</strong> Présenter le pipeline et ses bénéfices aux équipes.</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center mt-16 text-sm text-gray-400 dark:text-gray-500">
+            <p>&copy; 2025 - Guide de Refonte Notion V4. Tous droits réservés.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- GESTION DU THÈME SOMBRE/CLAIR ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+            const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+            const themeToggleText = document.getElementById('theme-toggle-text');
+
+            const updateThemeUI = (isDarkMode) => {
+                if (isDarkMode) {
+                    document.documentElement.classList.add('dark');
+                    themeToggleLightIcon.classList.remove('hidden');
+                    themeToggleDarkIcon.classList.add('hidden');
+                    themeToggleText.textContent = 'Mode Clair';
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    themeToggleLightIcon.classList.add('hidden');
+                    themeToggleDarkIcon.classList.remove('hidden');
+                    themeToggleText.textContent = 'Mode Sombre';
+                }
+            };
+
+            // Appliquer le thème au chargement
+            const isDarkMode = localStorage.getItem('color-theme') === 'dark' || 
+                               (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            updateThemeUI(isDarkMode);
+
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+                updateThemeUI(isDark);
+            });
+
+            // --- GESTION DES TOGGLES (ACCORDÉON) ---
+            // Cette fonctionnalité n'est plus utilisée dans V3 mais le code est gardé pour référence
+            const toggleHeaders = document.querySelectorAll('.toggle-header');
+            toggleHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('svg');
+                    content.classList.toggle('open');
+                    icon.classList.toggle('rotate-180');
+                });
+            });
+
+            // --- GESTION DU SCROLLSPY POUR LE MENU ---
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const navMenu = document.getElementById('nav-menu');
+
+            const activateNavLink = (id) => {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if(link.getAttribute('href') === `#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        activateNavLink(entry.target.id);
+                    }
+                });
+            }, { rootMargin: '-30% 0px -70% 0px' });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
+
