@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guide de Mise en Place du Pipeline Notion</title>
+    <title>Guide de Déploiement du Pipeline Unifié</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -81,8 +81,8 @@
                 </svg>
             </div>
             <div>
-                <h1 class="text-base font-bold text-slate-900 dark:text-white">Guide de Mise en Place</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Pipeline Notion</p>
+                <h1 class="text-base font-bold text-slate-900 dark:text-white">Guide de Déploiement</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Pipeline Unifié</p>
             </div>
         </div>
         <ul id="nav-menu" class="space-y-1.5">
@@ -108,9 +108,9 @@
     <main class="lg:ml-64 p-6 md:p-12">
         <header class="mb-16 text-center lg:text-left fade-in-up">
             <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-3">
-                <span class="bg-gradient-to-r from-indigo-500 to-sky-400 bg-clip-text text-transparent">Votre Pipeline Notion Stratégique</span>
+                <span class="bg-gradient-to-r from-indigo-500 to-sky-400 bg-clip-text text-transparent">Votre Pipeline Notion Unifié</span>
             </h1>
-            <p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0">Bienvenue dans le guide de déploiement. Suivez ces étapes pour transformer votre gestion de projet en un système de pilotage puissant et automatisé.</p>
+            <p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0">Bienvenue dans le guide de déploiement. L'objectif est de centraliser vos différentes bases de suivi en un système de pilotage unique, cohérent et puissant.</p>
         </header>
 
         <!-- Section I: Taxonomie -->
@@ -119,7 +119,7 @@
                 <span class="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg text-indigo-600 dark:text-indigo-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                 </span>
-                Taxonomie Blindée
+                Taxonomie Unifiée
             </h2>
             <div class="space-y-10">
                  <!-- Catégorie: Qualification Initiale -->
@@ -131,10 +131,9 @@
                             <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection`</p>
                             <ul class="space-y-2 text-sm">
                                 <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">🐞 Dysfonctionnement</code></li>
-                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">🔌 GAP (Proxirel)</code></li>
-                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">🔌 GAP (Hydroplan)</code></li>
-                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">💡 Nouvelle fonctionnalité</code></li>
-                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">🔧 Correction Données</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">💡 Nouvelle fonctionnalité / Evolution</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">🔌 GAP (Proxirel / Hydroplan)</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">🔧 Correction</code> (données ou fonctionnelle)</li>
                                 <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">🤦 Erreur Manipulation</code></li>
                                 <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded w-full inline-block">❔ Question / Assistance</code></li>
                             </ul>
@@ -154,32 +153,43 @@
                         </div>
                     </div>
                     <div class="bg-white dark:bg-slate-800 rounded-xl p-6 mt-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h4 class="font-bold text-slate-800 dark:text-slate-100">Domaine Fonctionnel</h4>
+                        <h4 class="font-bold text-slate-800 dark:text-slate-100">Domaine Fonctionnel / Process</h4>
                         <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection Multiple`</p>
-                        <div class="grid sm:grid-cols-2 gap-x-8 gap-y-6 text-sm mt-4">
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6 text-sm mt-4">
                             <div>
-                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Client & Contrat</h5>
+                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Commerce & Contrat</h5>
                                 <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
                                     <li>Commerce / Prospection</li>
-                                    <li>Souscription / Nouveau Contrat</li>
-                                    <li>Gestion de Contrat</li>
+                                    <li>Création de proposition</li>
+                                    <li>Création de contrat</li>
+                                    <li>Gestion de contrat</li>
                                     <li>Résiliation</li>
-                                    <li>Relation Client (Portail, Contact)</li>
                                 </ul>
                             </div>
                             <div>
                                 <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Intervention & Relevé</h5>
                                 <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
+                                    <li>Initialisation WO</li>
+                                    <li>WO de passage</li>
                                     <li>Workflow Pose / Dépose</li>
                                     <li>Planification / Tournée</li>
                                     <li>Mobilité Technicien</li>
-                                    <li>Relevé Manuel</li>
-                                    <li>Télérelève / Relevé à distance</li>
+                                    <li>Relevé (Manuel & Télérelève)</li>
                                     <li>Validation des Index</li>
                                 </ul>
                             </div>
+                             <div>
+                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Facturation & Recouvrement</h5>
+                                <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
+                                    <li>Cycle de Facturation</li>
+                                    <li>Paiement & Encaissement</li>
+                                    <li>Recouvrement</li>
+                                    <li>Avoirs & Remboursements</li>
+                                    <li>Queue de chantier</li>
+                                </ul>
+                            </div>
                             <div>
-                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Gestion du Parc / Patrimoine</h5>
+                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Patrimoine & Stock</h5>
                                 <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
                                     <li>Gestion des Compteurs</li>
                                     <li>Gestion du Stock Matériel</li>
@@ -187,22 +197,15 @@
                                 </ul>
                             </div>
                             <div>
-                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Facturation & Recouvrement</h5>
+                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Transverse & Outils</h5>
                                 <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
-                                    <li>Cycle de Facturation</li>
-                                    <li>Paiement & Encaissement</li>
-                                    <li>Recouvrement</li>
-                                    <li>Avoirs & Remboursements</li>
-                                </ul>
-                            </div>
-                            <div class="sm:col-span-2">
-                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Transverse & Reporting</h5>
-                                <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
+                                    <li>Relation Client (Portail, Contact)</li>
                                     <li>Éditique (Documents)</li>
                                     <li>Notifications</li>
-                                    <li>Synchro Inter-applicative</li>
-                                    <li>Tableaux de Bord & Rapports</li>
-                                    <li>Gestion des Droits & Accès</li>
+                                    <li>Synchro Inter-applicative (EDI)</li>
+                                    <li>Tableaux de Bord & Rapports (RDD)</li>
+                                    <li>Droits & Accès</li>
+                                    <li>Ergonomie / UX</li>
                                 </ul>
                             </div>
                         </div>
@@ -248,7 +251,7 @@
                                 <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Vivien</code></li>
                             </ul>
                         </div>
-                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 md:col-span-2 lg:col-span-3">
+                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 lg:col-span-3">
                             <h4 class="font-bold text-slate-800 dark:text-slate-100">Dates Clés</h4>
                             <p class="text-xs font-mono mb-3 text-indigo-500">Propriétés `Date`</p>
                             <ul class="space-y-2 text-sm">
@@ -261,27 +264,36 @@
 
                 <!-- Catégorie: Priorisation Stratégique -->
                 <div>
-                    <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100 border-b pb-2">Priorisation Stratégique</h3>
-                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
+                    <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100 border-b pb-2">Priorisation Opérationnelle & Stratégique</h3>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-6 mt-4">
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                           <h4 class="font-bold text-slate-800 dark:text-slate-100">Priorité</h4>
+                           <p class="text-xs font-mono mb-2 text-indigo-500">Propriété `Sélection`</p>
+                           <ul class="space-y-2 text-sm">
+                                <li><code class="bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300 px-2 py-1 rounded">Haute</code></li>
+                                <li><code class="bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300 px-2 py-1 rounded">Moyenne</code></li>
+                                <li><code class="bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 px-2 py-1 rounded">Basse</code></li>
+                            </ul>
+                        </div>
                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                            <h4 class="font-bold text-slate-800 dark:text-slate-100">Impact</h4>
                            <p class="text-xs font-mono mb-2 text-indigo-500">Propriété `Nombre`</p>
-                           <p class="text-sm">Note de 1 à 5 sur le gain métier ou le nombre d'utilisateurs impactés.</p>
+                           <p class="text-sm">Note de 1 à 5.</p>
                         </div>
                          <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                            <h4 class="font-bold text-slate-800 dark:text-slate-100">Confiance</h4>
-                           <p class="text-xs font-mono mb-2 text-indigo-500">Propriété `Nombre` (format %)</p>
-                           <p class="text-sm">Certitude sur l'estimation de l'impact et de l'effort (ex: 80%).</p>
+                           <p class="text-xs font-mono mb-2 text-indigo-500">Propriété `Nombre` (%)</p>
+                           <p class="text-sm">Certitude (ex: 80%).</p>
                         </div>
                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                            <h4 class="font-bold text-slate-800 dark:text-slate-100">Effort</h4>
                            <p class="text-xs font-mono mb-2 text-indigo-500">Propriété `Nombre`</p>
-                           <p class="text-sm">Estimation du temps de développement en jours-homme.</p>
+                           <p class="text-sm">En jours-homme.</p>
                         </div>
                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                            <h4 class="font-bold text-slate-800 dark:text-slate-100">Score RICE</h4>
                            <p class="text-xs font-mono mb-2 text-indigo-500">Propriété `Formule`</p>
-                           <p class="text-sm">Calcul automatique pour un classement objectif.</p>
+                           <p class="text-sm">Priorisation objective.</p>
                         </div>
                     </div>
                 </div>
@@ -337,16 +349,52 @@
                 <span class="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg text-indigo-600 dark:text-indigo-300">
                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                 </span>
-                Guide de Migration des Statuts
+                Guide de Migration : De l'Action à l'État
             </h2>
             <div class="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                <p class="mb-6">Le nouveau système se concentre sur <strong>l'étape du cycle de vie</strong> et non sur l'action à réaliser, pour un pilotage plus clair.</p>
-                <div class="mb-8 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg text-sm">
-                    <p class="font-semibold mb-2">La logique de numérotation :</p>
-                    <ul class="list-disc list-inside space-y-2">
-                        <li><strong class="font-mono bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">0, 1, 2...</strong> : Le chemin idéal, les étapes séquentielles du processus.</li>
-                        <li><strong class="font-mono bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">0a, 3a...</strong> : Le chemin parallèle, un état d'attente ou de blocage à une étape donnée.</li>
-                    </ul>
+                <div class="mb-6 p-4 bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-500 rounded-r-lg">
+                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200">Changement de Philosophie</h4>
+                    <p class="text-sm mt-1">Vos anciens statuts décrivaient des <strong>actions</strong> ("Jira à rédiger", "Atelier à faire"). Le nouveau système se concentre sur l'<strong>état</strong> du ticket ("En analyse MOA"). Les actions deviennent des tâches concrètes (To-Do) dans le corps du ticket.</p>
+                </div>
+                
+                <h4 class="text-lg font-semibold mb-4">Table de Correspondance (Exemples)</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-slate-100 dark:bg-slate-700">
+                            <tr>
+                                <th class="p-3 text-left font-semibold">Ancien Statut (Action)</th>
+                                <th class="p-3 text-left font-semibold">Nouveau Statut (État)</th>
+                                <th class="p-3 text-left font-semibold">Logique de Transition</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                            <tr>
+                                <td class="p-3"><code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Atelier à faire</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Jira à rédiger</code></td>
+                                <td class="p-3"><span class="px-2 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 text-xs">🔎 En analyse MOA</span></td>
+                                <td class="p-3">L'analyse n'est pas finie. L'action devient une To-Do dans le ticket.</td>
+                            </tr>
+                             <tr>
+                                <td class="p-3"><code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Jira à soumettre</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">à transmettre</code></td>
+                                <td class="p-3"><span class="px-2 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs">📝 Prêt pour DEV</span></td>
+                                <td class="p-3">L'analyse MOA est terminée. Le ticket attend la prise en charge.</td>
+                            </tr>
+                             <tr>
+                                <td class="p-3"><code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Jira en cours</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Prise en charge DSI</code></td>
+                                <td class="p-3"><span class="px-2 py-1 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300 text-xs">🏗️ En cours de DEV</span></td>
+                                <td class="p-3">Le développement a commencé.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">À recetter</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Validée en recette</code></td>
+                                <td class="p-3"><span class="px-2 py-1 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900/50 dark:text-pink-300 text-xs">✅ En recette MOA</span></td>
+                                <td class="p-3">La validation fonctionnelle est en cours.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3"><code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">En attente d'entrants</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Stand-by</code></td>
+                                <td class="p-3"><span class="px-2 py-1 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300 text-xs">🚧 Bloqué / En attente</span></td>
+                                <td class="p-3">Le ticket dépend d'un élément externe.</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
