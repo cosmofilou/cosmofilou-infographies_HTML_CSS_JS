@@ -456,31 +456,55 @@
                 <span class="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg text-indigo-600 dark:text-indigo-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
                 </span>
-                Guide des Templates Intelligents
+                Templates Unifiés & Statiques
             </h2>
             <div class="space-y-8">
-                <!-- Template Fusionné -->
+                <!-- Template Unifié Support -->
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                     <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">🔧 Template : Support & Correction</h3>
-                    <p class="mb-6 text-sm">Ce template unique et adaptable couvre les dysfonctionnements, corrections, erreurs de manipulation et questions.</p>
-                    <div class="border-l-4 border-amber-500 bg-amber-50 dark:bg-amber-900/20 p-4 rounded-r-lg text-sm">
-                        <h4 class="font-bold text-amber-800 dark:text-amber-300 mb-4">Contenu du ticket :</h4>
-                        <div class="space-y-4">
-                            <div>
-                                <h5 class="font-semibold">1. Nature de la demande</h5>
-                                <p class="text-slate-600 dark:text-slate-400">L'utilisateur choisit le type de demande au début du ticket (Bug, Correction de données, Question...) pour afficher les sections pertinentes.</p>
+                    <p class="mb-6 text-sm">Un template unique pour toutes les demandes de type support : Bug, Correction, Question, Erreur de manipulation. Remplissez simplement les sections pertinentes.</p>
+                    
+                    <div class="space-y-4 text-sm">
+                        <!-- Encadré 1 -->
+                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">1. Résumé du Problème / Question</h4>
+                            <p class="text-slate-600 dark:text-slate-400">Décrire en une ou deux phrases le problème rencontré ou la question posée.</p>
+                        </div>
+
+                        <!-- Encadré 2 -->
+                        <div class="border-l-4 border-red-500 bg-red-50 dark:bg-red-900/20 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-red-800 dark:text-red-300 mb-2">2. Contexte du Bug (si applicable)</h4>
+                            <div class="space-y-2">
+                                <div>
+                                    <h5 class="font-semibold">Étapes de Reproduction :</h5>
+                                    <p class="text-slate-600 dark:text-slate-400">Lister les actions exactes pour reproduire le bug.</p>
+                                </div>
+                                <div>
+                                    <h5 class="font-semibold">Comportement Attendu vs. Observé :</h5>
+                                    <p class="text-slate-600 dark:text-slate-400"><strong>Attendu :</strong> ... <br><strong>Observé :</strong> ...</p>
+                                </div>
                             </div>
-                            <div>
-                                <h5 class="font-semibold">2. Description (section commune)</h5>
-                                <p class="text-slate-600 dark:text-slate-400">Un champ pour décrire le problème ou la question de manière générale.</p>
+                        </div>
+
+                        <!-- Encadré 3 -->
+                        <div class="border-l-4 border-sky-500 bg-sky-50 dark:bg-sky-900/20 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-sky-800 dark:text-sky-300 mb-2">3. Contexte de la Correction (si applicable)</h4>
+                             <div class="space-y-2">
+                                <div>
+                                    <h5 class="font-semibold">Données à corriger :</h5>
+                                    <p class="text-slate-600 dark:text-slate-400">Préciser les identifiants, URL, ou exemples concernés.</p>
+                                </div>
+                                <div>
+                                    <h5 class="font-semibold">Valeur attendue :</h5>
+                                    <p class="text-slate-600 dark:text-slate-400">Quelle devrait être la bonne information ?</p>
+                                </div>
                             </div>
-                            <div>
-                                <h5 class="font-semibold">3. Contexte spécifique (sections conditionnelles)</h5>
-                                <ul class="list-disc list-inside mt-2 space-y-1 text-slate-600 dark:text-slate-400">
-                                    <li><strong>Si Bug :</strong> Afficher "Étapes de reproduction" et "Attendu vs. Observé".</li>
-                                    <li><strong>Si Correction :</strong> Afficher "Données à corriger" et "Valeur attendue".</li>
-                                </ul>
-                            </div>
+                        </div>
+
+                         <!-- Encadré 4 -->
+                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">4. Pièces Jointes</h4>
+                            <p class="text-slate-600 dark:text-slate-400">Ajouter ici les captures d'écran, vidéos, ou logs. Ne pas oublier de masquer les données sensibles.</p>
                         </div>
                     </div>
                 </div>
@@ -489,17 +513,14 @@
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                     <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">💡 Template : Évolution & GAP</h3>
                     <p class="mb-6 text-sm">Ce template reste dédié aux nouvelles fonctionnalités et au rattrapage des anciens outils.</p>
-                    <div class="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg text-sm">
-                        <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-4">Contenu du ticket :</h4>
-                        <div class="space-y-4">
-                            <div>
-                                <h5 class="font-semibold">❓ Quel est le besoin métier ? (Le "Pourquoi")</h5>
-                                <p class="text-slate-600 dark:text-slate-400">Expliquer le contexte et l'objectif de cette demande.</p>
-                            </div>
-                            <div>
-                                <h5 class="font-semibold">📋 Description de la Cible Fonctionnelle (Le "Quoi")</h5>
-                                <p class="text-slate-600 dark:text-slate-400">Décrire le fonctionnement attendu.</p>
-                            </div>
+                    <div class="space-y-4 text-sm">
+                         <div class="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">1. Quel est le besoin métier ? (Le "Pourquoi")</h4>
+                            <p class="text-slate-600 dark:text-slate-400">Expliquer le contexte et l'objectif de cette demande. Quel problème cherche-t-on à résoudre ?</p>
+                        </div>
+                         <div class="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">2. Description de la Cible Fonctionnelle (Le "Quoi")</h4>
+                            <p class="text-slate-600 dark:text-slate-400">Décrire le fonctionnement attendu de la nouvelle fonctionnalité. Utiliser des listes à puces pour les critères d'acceptance.</p>
                         </div>
                     </div>
                 </div>
