@@ -212,7 +212,7 @@
                 <!-- Catégorie: Cycle de Vie -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100 border-b pb-2">Cycle de Vie & Suivi</h3>
-                    <div class="grid md:grid-cols-2 gap-6 mt-4">
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
                          <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                             <h4 class="font-bold text-slate-800 dark:text-slate-100">Statut</h4>
                             <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection`</p>
@@ -236,6 +236,24 @@
                                 <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">MOA (N2)</code></li>
                                 <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">DSI (N3)</code></li>
                                 <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">DEV Externe</code></li>
+                            </ul>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-100">Rapporteur</h4>
+                             <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Personne`</p>
+                             <ul class="space-y-2 text-sm">
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Jessica</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Aurélien</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Christopher</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Vivien</code></li>
+                            </ul>
+                        </div>
+                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 md:col-span-2 lg:col-span-3">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-100">Dates Clés</h4>
+                            <p class="text-xs font-mono mb-3 text-indigo-500">Propriétés `Date`</p>
+                            <ul class="space-y-2 text-sm">
+                               <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Date de création</code> : Gérée automatiquement par Notion.</li>
+                               <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Date de résolution</code> : À remplir automatiquement via un bouton lorsque le ticket est terminé.</li>
                             </ul>
                         </div>
                     </div>
@@ -341,27 +359,45 @@
                 </span>
                 Qualité & Automatisation par Boutons
             </h2>
-            <div class="grid md:grid-cols-2 gap-8 mb-8">
-                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-                    <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">✅ Definition of Ready (DoR)</h3>
-                    <p class="text-sm">Une demande est "prête" si elle respecte une checklist précise avant de passer au développement.</p>
-                </div>
-                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-                    <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">📦 Definition of Done (DoD)</h3>
-                    <p class="text-sm">Une demande est "terminée" quand elle répond à tous les critères de livraison.</p>
-                </div>
-            </div>
-            <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                 <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">🤖 Automatisation : Bouton "Escalader à la DSI"</h3>
-                 <p class="text-sm mb-4">Créez un bouton dans vos templates qui exécute une séquence d'actions pour fiabiliser et accélérer le processus d'escalade.</p>
-                 <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                    <p class="font-semibold mb-3">Configuration du bouton :</p>
-                    <ol class="list-decimal list-inside space-y-2 text-sm">
-                        <li><strong>Étape 1 :</strong> Modifier la propriété <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">Statut</code> et la définir sur <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">🚧 3a. BLOQUÉ / EN ATTENTE</code>.</li>
-                        <li><strong>Étape 2 :</strong> Modifier la propriété <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">Équipe en charge</code> et la définir sur <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">DSI (N3)</code>.</li>
-                        <li><strong>Étape 3 :</strong> Ajouter un commentaire dans la page avec le texte : <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">"@DSI - Merci de prendre en charge ce ticket pour analyse."</code></li>
-                        <li><strong>Étape 4 :</strong> Ajouter une étape de confirmation pour s'assurer que l'action est voulue.</li>
-                    </ol>
+            <div class="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                 <h3 class="text-xl font-bold mb-6 text-slate-800 dark:text-slate-100">Boutons d'Action Pertinents</h3>
+                 <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Bouton Résoudre -->
+                    <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
+                        <h4 class="font-bold text-lg mb-2">✅ Résoudre le Ticket</h4>
+                        <p class="text-sm mb-3">Finalise une demande, met à jour son statut et enregistre la date de clôture.</p>
+                        <ol class="list-decimal list-inside space-y-1 text-xs">
+                            <li><strong>Action :</strong> Définir <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Statut</code> sur <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">📦 TERMINÉ</code>.</li>
+                            <li><strong>Action :</strong> Définir <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Date de résolution</code> sur <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Aujourd'hui</code>.</li>
+                        </ol>
+                    </div>
+                    <!-- Bouton Escalader -->
+                    <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
+                        <h4 class="font-bold text-lg mb-2">📡 Escalader à la DSI</h4>
+                        <p class="text-sm mb-3">Transfère la responsabilité à l'équipe N3 et met le ticket en attente.</p>
+                        <ol class="list-decimal list-inside space-y-1 text-xs">
+                           <li><strong>Action :</strong> Définir <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Statut</code> sur <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">🚧 BLOQUÉ</code>.</li>
+                           <li><strong>Action :</strong> Définir <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Équipe</code> sur <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">DSI (N3)</code>.</li>
+                           <li><strong>Action :</strong> Ajouter un commentaire "@DSI...".</li>
+                        </ol>
+                    </div>
+                    <!-- Bouton Prêt pour Dev -->
+                     <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
+                        <h4 class="font-bold text-lg mb-2">📝 Prêt pour Dev</h4>
+                        <p class="text-sm mb-3">Indique que l'analyse MOA est terminée et que le ticket est prêt pour le développement.</p>
+                        <ol class="list-decimal list-inside space-y-1 text-xs">
+                            <li><strong>Action :</strong> Définir <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Statut</code> sur <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">📝 PRÊT pour DEV</code>.</li>
+                        </ol>
+                    </div>
+                     <!-- Bouton Demander Infos -->
+                    <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
+                        <h4 class="font-bold text-lg mb-2">❓ Demander Infos</h4>
+                        <p class="text-sm mb-3">Met le ticket en pause en attendant un retour du demandeur.</p>
+                        <ol class="list-decimal list-inside space-y-1 text-xs">
+                           <li><strong>Action :</strong> Définir <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Statut</code> sur <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">❓ EN ATTENTE D'INFOS</code>.</li>
+                           <li><strong>Action :</strong> Ajouter un commentaire "@Demandeur...".</li>
+                        </ol>
+                    </div>
                  </div>
             </div>
         </section>
