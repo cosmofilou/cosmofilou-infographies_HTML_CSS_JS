@@ -646,30 +646,58 @@
             const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
             const themeToggleText = document.getElementById('theme-toggle-text');
 
-            const updateThemeUI = (isDarkMode) => {
-                if (isDarkMode) {
-                    document.documentElement.classList.add('dark');
+            // --- Fonctions de gestion du thème ---
+
+            // Met à jour l'apparence du bouton (icône et texte)
+            const updateButtonUI = (isDark) => {
+                if (isDark) {
                     themeToggleLightIcon.classList.remove('hidden');
                     themeToggleDarkIcon.classList.add('hidden');
                     themeToggleText.textContent = 'Mode Clair';
                 } else {
-                    document.documentElement.classList.remove('dark');
                     themeToggleLightIcon.classList.add('hidden');
                     themeToggleDarkIcon.classList.remove('hidden');
                     themeToggleText.textContent = 'Mode Sombre';
                 }
             };
 
-            const isDarkMode = localStorage.getItem('color-theme') === 'dark' || 
+            // Applique le thème (classe 'dark') au document
+            const applyTheme = (isDark) => {
+                if (isDark) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            };
+            
+            // --- Logique au chargement de la page ---
+
+            // 1. Détermine le thème initial (localStorage ou préférence système)
+            const initialIsDark = localStorage.getItem('color-theme') === 'dark' ||
                                (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            updateThemeUI(isDarkMode);
+            
+            // 2. Applique le thème et met à jour le bouton
+            applyTheme(initialIsDark);
+            updateButtonUI(initialIsDark);
+
+            // --- Logique au clic sur le bouton ---
 
             themeToggleBtn.addEventListener('click', () => {
-                const isDark = document.documentElement.classList.toggle('dark');
-                localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
-                updateThemeUI(isDark);
+                // 1. Détermine le nouvel état en inversant l'état actuel
+                const newIsDark = !document.documentElement.classList.contains('dark');
+                
+                // 2. Applique le nouveau thème
+                applyTheme(newIsDark);
+                
+                // 3. Met à jour l'apparence du bouton
+                updateButtonUI(newIsDark);
+                
+                // 4. Sauvegarde la préférence dans localStorage
+                localStorage.setItem('color-theme', newIsDark ? 'dark' : 'light');
             });
 
+
+            // --- Gestion du scrollspy pour le menu (inchangé) ---
             const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('.nav-link');
 
@@ -694,6 +722,7 @@
                 scrollObserver.observe(section);
             });
             
+            // --- Animation d'apparition au scroll (inchangé) ---
             const animatedElements = document.querySelectorAll('.fade-in-up');
             const animationObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
@@ -711,5 +740,4 @@
     </script>
 </body>
 </html>
-
 
