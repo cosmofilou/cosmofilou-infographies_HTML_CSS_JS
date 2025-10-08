@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guide de Déploiement du Pipeline Unifié</title>
+    <title>Le Guide Ultime du Pipeline Unifié</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,14 +78,14 @@
             </div>
         </div>
         <ul id="nav-menu" class="space-y-1.5">
-            <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏷️</span> Taxonomie</a></li>
-            <li><a href="#processus-cle" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🔑</span> Processus Clés</a></li>
-            <li><a href="#migration-statuts" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🔄</span> Migration Statuts</a></li>
-            <li><a href="#qualite-automatisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🤖</span> Qualité & Automation</a></li>
-            <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">📋</span> Templates Ciblés</a></li>
-            <li><a href="#vues-op" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">📊</span> Vues Opérationnelles</a></li>
-            <li><a href="#pilotage-strategique" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🎯</span> Pilotage Stratégique</a></li>
-            <li><a href="#mise-en-place" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🛠️</span> Mise en Place</a></li>
+            <li><a href="#hub" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏠</span> Hub Projet</a></li>
+            <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏷️</span> Base de Données</a></li>
+            <li><a href="#priorisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🚀</span> Priorisation & Sprints</a></li>
+            <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">📋</span> Templates d'Action</a></li>
+            <li><a href="#qualite-automatisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🤖</span> Automatisation</a></li>
+            <li><a href="#vues-op" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">📊</span> Vues de Pilotage</a></li>
+            <li><a href="#migration-statuts" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🔄</span> Migration</a></li>
+            <li><a href="#mise-en-place" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🛠️</span> Plan de Déploiement</a></li>
         </ul>
         <div class="mt-auto p-2">
             <button id="theme-toggle" class="w-full flex items-center justify-center gap-3 px-4 py-2 rounded-lg font-medium bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-all">
@@ -100,16 +100,53 @@
     <main class="lg:ml-64 p-6 md:p-12">
         <header class="mb-16 text-center lg:text-left fade-in-up">
             <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-3">
-                <span class="bg-gradient-to-r from-indigo-500 to-sky-400 bg-clip-text text-transparent">Votre Pipeline Notion Unifié</span>
+                <span class="bg-gradient-to-r from-indigo-500 to-sky-400 bg-clip-text text-transparent">Le Guide Ultime du Pipeline Unifié</span>
             </h1>
-            <p class="text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0">Bienvenue dans le guide de déploiement. L'objectif est de centraliser vos différentes bases de suivi en un système de pilotage unique, cohérent et puissant.</p>
+            <p class="text-lg text-slate-500 dark:text-slate-400 max-w-3xl mx-auto lg:mx-0">Ce document est votre plan directeur pour fusionner les suivis de projets Licorne, Hydroplan et GAP en un système de pilotage centralisé, puissant et décisionnel sur Notion.</p>
         </header>
 
-        <!-- Section I: Taxonomie -->
+        <!-- NOUVELLE Section: Hub Projet -->
+        <section id="hub" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
+                🏠 Le Hub Projet : Votre Nouveau Point d'Entrée
+            </h2>
+            <div class="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                <p class="mb-6">Cette page remplacera les différents accueils existants. Elle doit être simple, orientée action et fournir une vue d'ensemble immédiate.</p>
+                
+                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg mb-8">
+                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200 mb-2">Message d'Accueil à Intégrer :</h4>
+                    <div class="text-sm space-y-2 text-slate-600 dark:text-slate-300">
+                        <p><strong>Bienvenue sur le Hub de suivi du projet Licorne !</strong></p>
+                        <p>Ce projet, supervisé par la Direction Technique, vise à unifier et améliorer l'efficacité de nos opérations. Cet espace centralise toutes les demandes, qu'il s'agisse de bugs, d'évolutions (Stories) ou de rattrapage des anciens systèmes (GAP).</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-semibold text-lg mb-4">Tableau de Bord d'Actions</h4>
+                        <div class="space-y-3">
+                            <p class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">🔘 Bouton : <code class="font-semibold">🐞 Déclarer un Bug</code> (ouvre le template de support pré-rempli avec le type "Bug")</p>
+                            <p class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">🔘 Bouton : <code class="font-semibold">✨ Proposer une Story</code> (ouvre le template d'évolution)</p>
+                            <p class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">🔘 Bouton : <code class="font-semibold">🔌 Identifier un GAP</code> (ouvre le template d'évolution pré-rempli avec le type "GAP")</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-lg mb-4">Vues Clés</h4>
+                         <div class="space-y-3">
+                            <p class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">➡️ Vue liée : <code class="font-semibold">Mes Demandes en Cours</code> (filtrée sur le rapporteur connecté)</p>
+                            <p class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">➡️ Vue liée : <code class="font-semibold">Recettes en Attente</code> (filtrée sur le statut "En recette MOA")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODIFIÉE Section: Taxonomie -->
         <section id="taxonomie" class="scroll-mt-20 mb-20 fade-in-up">
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                🏷️ Taxonomie Unifiée
+                🏷️ La Base de Données : Taxonomie Unifiée
             </h2>
+             <p class="mb-8 text-slate-600 dark:text-slate-400">Le cœur du système. Une base de données unique nommée <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">"Pipeline Global des Demandes"</code> avec une structure de propriétés solide et standardisée.</p>
             <div class="space-y-10">
                  <!-- Catégorie: Qualification Initiale -->
                 <div>
@@ -119,12 +156,12 @@
                             <h4 class="font-bold text-slate-800 dark:text-slate-100">Type de Demande</h4>
                             <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection`</p>
                             <ul class="space-y-2 text-sm">
-                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">🐞 Dysfonctionnement</code></li>
-                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">💡 Nouvelle fonctionnalité / Evolution</code></li>
-                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">🔌 GAP (Proxirel / Hydroplan)</code></li>
-                                <li class="flex items-center gap-2"><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">🔧 Correction</code> <span class="text-xs text-slate-500">(données ou fonctionnelle)</span></li>
-                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">🤦 Erreur Manipulation</code></li>
-                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">❔ Question / Assistance</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">🐞 Bug</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">✨ Story</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">🔌 GAP</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">🔧 Correction</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">🎓 Formation</code></li>
+                                <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">💬 Question</code></li>
                             </ul>
                         </div>
                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
@@ -142,59 +179,69 @@
                         </div>
                     </div>
                     <div class="bg-white dark:bg-slate-800 rounded-xl p-6 mt-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h4 class="font-bold text-slate-800 dark:text-slate-100">Domaine Fonctionnel / Process</h4>
+                        <h4 class="font-bold text-slate-800 dark:text-slate-100">Domaine Fonctionnel</h4>
                         <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection Multiple`</p>
                         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6 text-sm mt-4">
                             <div>
                                 <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Commerce & Contrat</h5>
                                 <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
-                                    <li>Commerce / Prospection</li>
-                                    <li>Création de proposition</li>
+                                    <li>Prospection</li>
+                                    <li>Proposition commerciale</li>
                                     <li>Création de contrat</li>
                                     <li>Gestion de contrat</li>
                                     <li>Résiliation</li>
                                 </ul>
                             </div>
                             <div>
-                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Intervention & Relevé</h5>
+                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Chantiers & Interventions</h5>
                                 <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
-                                    <li>Initialisation WO</li>
-                                    <li>WO de passage</li>
-                                    <li>Workflow Pose / Dépose</li>
-                                    <li>Planification / Tournée</li>
+                                    <li>Chantier de pose</li>
+                                    <li>Planification & Tournée</li>
                                     <li>Mobilité Technicien</li>
-                                    <li>Relevé (Manuel & Télérelève)</li>
-                                    <li>Validation des Index</li>
                                 </ul>
                             </div>
                              <div>
+                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Relevé & Intégrations</h5>
+                                <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
+                                    <li>Relevé (Manuel & Télérelève)</li>
+                                    <li>Intégrations EDI</li>
+                                    <li>Paramétrage EDI</li>
+                                </ul>
+                            </div>
+                            <div>
                                 <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Facturation & Recouvrement</h5>
                                 <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
                                     <li>Cycle de Facturation</li>
                                     <li>Paiement & Encaissement</li>
                                     <li>Recouvrement</li>
                                     <li>Avoirs & Remboursements</li>
-                                    <li>Queue de chantier</li>
                                 </ul>
                             </div>
                             <div>
-                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Patrimoine & Stock</h5>
+                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Patrimoine & Appareils</h5>
                                 <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
-                                    <li>Gestion des Compteurs</li>
-                                    <li>Gestion du Stock Matériel</li>
-                                    <li>Maintenance & Qualité</li>
+                                    <li>Patrimoine (Résidences, Bâtiments)</li>
+                                    <li>Gestion des Appareils</li>
+                                    <li>Gestion du Stock</li>
                                 </ul>
                             </div>
                             <div>
-                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Transverse & Outils</h5>
+                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Outils & Transverse</h5>
                                 <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
-                                    <li>Relation Client (Portail, Contact)</li>
+                                    <li>Portail Client</li>
                                     <li>Éditique (Documents)</li>
                                     <li>Notifications</li>
-                                    <li>Synchro Inter-applicative (EDI)</li>
-                                    <li>Tableaux de Bord & Rapports (RDD)</li>
+                                    <li>Tableaux de Bord</li>
+                                    <li>Reprise de Données (RDD)</li>
                                     <li>Droits & Accès</li>
-                                    <li>Ergonomie / UX</li>
+                                    <li>Ergonomie & UX</li>
+                                </ul>
+                            </div>
+                            <div class="sm:col-span-2 lg:col-span-3">
+                                <h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Autonomie & Performance</h5>
+                                <ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400">
+                                    <li>Autonomie des Agences</li>
+                                    <li>Performance & Synchronisation</li>
                                 </ul>
                             </div>
                         </div>
@@ -214,10 +261,10 @@
                                 <span class="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">🔎 1. En analyse MOA</span>
                                 <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">📝 2. Prêt pour DEV</span>
                                 <span class="px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300">🏗️ 3. En cours de DEV</span>
-                                <span class="px-2.5 py-1 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300">🚧 3a. Bloqué / En attente</span>
+                                <span class="px-2.5 py-1 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300">🚧 3a. Bloqué</span>
                                 <span class="px-2.5 py-1 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900/50 dark:text-pink-300">✅ 4. En recette MOA</span>
-                                <span class="px-2.5 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">📦 5. Terminé / Livré</span>
-                                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">❌ 6. Annulé / Refusé</span>
+                                <span class="px-2.5 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">📦 5. Terminé</span>
+                                <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">❌ 6. Annulé</span>
                             </div>
                         </div>
                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
@@ -240,7 +287,12 @@
                                 <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Vivien</code></li>
                             </ul>
                         </div>
-                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 lg:col-span-3">
+                        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-100">N° de Ticket</h4>
+                            <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `ID`</p>
+                            <p class="text-sm">Génère un identifiant unique et incrémental (ex: LIC-1, LIC-2) pour chaque nouvelle demande. Géré automatiquement par Notion.</p>
+                        </div>
+                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 lg:col-span-2">
                             <h4 class="font-bold text-slate-800 dark:text-slate-100">Dates Clés</h4>
                             <p class="text-xs font-mono mb-3 text-indigo-500">Propriétés `Date`</p>
                             <ul class="space-y-2 text-sm">
@@ -311,6 +363,41 @@
 
             </div>
         </section>
+        
+        <!-- NOUVELLE Section: Priorisation & Sprints -->
+        <section id="priorisation" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
+                🚀 Priorisation & Sprints
+            </h2>
+            <div class="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                 <div class="mb-6 p-4 bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-500 rounded-r-lg">
+                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200">Répondre au besoin de votre chef : "Bouger des blocs pour re-prioriser"</h4>
+                    <p class="text-sm mt-1">La solution est de créer une page dédiée "Backlog & Sprints" avec une vue Kanban. Cette vue permettra de visualiser et de modifier la priorité des demandes par un simple glisser-déposer.</p>
+                </div>
+                <h4 class="text-lg font-semibold mb-4">Mise en Place de la Vue Kanban de Priorisation</h4>
+                <ol class="list-decimal list-inside space-y-4 text-sm">
+                    <li>
+                        <strong>Ajouter une propriété `Sprint` :</strong> Dans votre base de données "Pipeline Global", ajoutez une propriété de type `Sélection` nommée "Sprint".
+                        <ul class="list-disc list-inside ml-6 mt-2">
+                            <li>Options : <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">🧊 Backlog</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">▶️ Sprint Actuel</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">⏭️ Sprint Suivant</code>.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Créer une nouvelle page "Backlog & Sprints" :</strong> C'est ici que vous gérerez votre roadmap.
+                    </li>
+                     <li>
+                        <strong>Créer la vue Kanban :</strong> Sur cette page, créez une vue liée de votre base de données. Choisissez la disposition "Tableau" (Kanban) et groupez par la propriété `Sprint`.
+                    </li>
+                    <li>
+                        <strong>Prioriser par glisser-déposer :</strong> Vous pouvez maintenant "bouger les blocs" !
+                         <ul class="list-disc list-inside ml-6 mt-2">
+                            <li><strong>Déplacer une carte d'une colonne à l'autre</strong> (ex: de "Backlog" à "Sprint Actuel") pour planifier le travail.</li>
+                            <li><strong>Réorganiser les cartes verticalement</strong> dans la colonne "Sprint Actuel" pour définir l'ordre de priorité de développement.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
 
         <!-- Section: Processus Clés -->
         <section id="processus-cle" class="scroll-mt-20 mb-20 fade-in-up">
@@ -323,61 +410,8 @@
                     <p class="text-sm mb-4">Le <strong>Triage</strong> est un filtre rapide (1-5 min) pour valider la clarté et l'unicité. L'<strong>Analyse</strong> est une investigation fonctionnelle approfondie.</p>
                 </div>
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-                    <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">🔌 GAP vs. Innovation 💡</h3>
-                    <p class="text-sm mb-4">Un <strong>GAP</strong> est un rattrapage par rapport à un ancien outil. Une <strong>Innovation</strong> est une pure nouvelle fonctionnalité.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section: Migration des Statuts -->
-        <section id="migration-statuts" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                🔄 Guide de Migration : De l'Action à l'État
-            </h2>
-            <div class="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                <div class="mb-6 p-4 bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-500 rounded-r-lg">
-                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200">Changement de Philosophie</h4>
-                    <p class="text-sm mt-1">Vos anciens statuts décrivaient des <strong>actions</strong> ("Jira à rédiger", "Atelier à faire"). Le nouveau système se concentre sur l'<strong>état</strong> du ticket ("En analyse MOA"). Les actions deviennent des tâches concrètes (To-Do) dans le corps du ticket.</p>
-                </div>
-                
-                <h4 class="text-lg font-semibold mb-4">Table de Correspondance (Exemples)</h4>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead class="bg-slate-100 dark:bg-slate-700">
-                            <tr>
-                                <th class="p-3 text-left font-semibold">Ancien Statut (Action)</th>
-                                <th class="p-3 text-left font-semibold">Nouveau Statut (État)</th>
-                                <th class="p-3 text-left font-semibold">Logique de Transition</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
-                            <tr>
-                                <td class="p-3"><code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Atelier à faire</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Jira à rédiger</code></td>
-                                <td class="p-3"><span class="px-2 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 text-xs">🔎 En analyse MOA</span></td>
-                                <td class="p-3">L'analyse n'est pas finie. L'action devient une To-Do dans le ticket.</td>
-                            </tr>
-                             <tr>
-                                <td class="p-3"><code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Jira à soumettre</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">à transmettre</code></td>
-                                <td class="p-3"><span class="px-2 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300 text-xs">📝 Prêt pour DEV</span></td>
-                                <td class="p-3">L'analyse MOA est terminée. Le ticket attend la prise en charge.</td>
-                            </tr>
-                             <tr>
-                                <td class="p-3"><code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Jira en cours</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Prise en charge DSI</code></td>
-                                <td class="p-3"><span class="px-2 py-1 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300 text-xs">🏗️ En cours de DEV</span></td>
-                                <td class="p-3">Le développement a commencé.</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3"><code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">À recetter</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Validée en recette</code></td>
-                                <td class="p-3"><span class="px-2 py-1 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900/50 dark:text-pink-300 text-xs">✅ En recette MOA</span></td>
-                                <td class="p-3">La validation fonctionnelle est en cours.</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3"><code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">En attente d'entrants</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Stand-by</code></td>
-                                <td class="p-3"><span class="px-2 py-1 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300 text-xs">🚧 Bloqué / En attente</span></td>
-                                <td class="p-3">Le ticket dépend d'un élément externe.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">🔌 GAP vs. Story ✨</h3>
+                    <p class="text-sm mb-4">Un <strong>GAP</strong> est un rattrapage par rapport à un ancien outil. Une <strong>Story</strong> est une pure nouvelle fonctionnalité.</p>
                 </div>
             </div>
         </section>
@@ -392,7 +426,7 @@
                  <div class="grid md:grid-cols-2 gap-6">
                     <!-- Bouton Résoudre -->
                     <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h4 class="font-bold text-lg mb-2">✅ Résoudre le Ticket</h4>
+                        <h4 class="font-bold text-lg mb-2">✅ Terminer le Ticket</h4>
                         <p class="text-sm mb-3">Finalise une demande, met à jour son statut et enregistre la date de clôture.</p>
                         <ol class="list-decimal list-inside space-y-1 text-xs">
                             <li><strong>Action :</strong> Définir <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Statut</code> sur <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">📦 Terminé</code>.</li>
@@ -430,67 +464,66 @@
             </div>
         </section>
 
-        <!-- MISE À JOUR Section: Templates Ciblés -->
+        <!-- MISE À JOUR Section: Templates d'Action -->
         <section id="templates" class="scroll-mt-20 mb-20 fade-in-up">
              <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                📋 Templates Unifiés & Statiques
+                📋 Templates d'Action
             </h2>
             <div class="space-y-8">
                 <!-- Template Unifié Support -->
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                     <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">🔧 Template : Support & Correction</h3>
-                    <p class="mb-6 text-sm">Un template unique pour toutes les demandes de type support : Bug, Correction, Question, Erreur de manipulation. Remplissez simplement les sections pertinentes.</p>
+                    <p class="mb-6 text-sm">Template unique pour le support (Bug, Correction, Question...). Les sections sont dans des blocs dépliants (toggles) pour garder le ticket propre.</p>
                     
                     <div class="space-y-4 text-sm">
-                        <!-- Encadré 1 -->
+                        <!-- Bloc Actions -->
                         <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">1. Résumé du Problème / Question</h4>
-                            <p class="text-slate-600 dark:text-slate-400">Décrire en une ou deux phrases le problème rencontré ou la question posée.</p>
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">🕹️ Actions Rapides</h4>
+                            <p class="text-slate-600 dark:text-slate-400">Placer ici les boutons : <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">❓ Demander Infos</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">📡 Escalader à la DSI</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">✅ Terminer le Ticket</code></p>
+                        </div>
+                        
+                        <!-- Bloc Résumé -->
+                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">📝 Résumé du Problème / Question</h4>
+                            <p class="text-slate-600 dark:text-slate-400">Synthétiser ici la demande initiale de l'utilisateur. Quelle est la question posée ou le problème final à résoudre ?</p>
                         </div>
 
-                        <!-- Encadré 2 -->
+                        <!-- Bloc Dépliant Bug -->
                         <div class="border-l-4 border-red-500 bg-red-50 dark:bg-red-900/20 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-red-800 dark:text-red-300 mb-2">2. Contexte du Bug (si applicable)</h4>
-                            <div class="space-y-2">
-                                <div>
-                                    <h5 class="font-semibold">Étapes de Reproduction :</h5>
-                                    <p class="text-slate-600 dark:text-slate-400">Lister les actions exactes pour reproduire le bug.</p>
-                                </div>
-                                <div>
-                                    <h5 class="font-semibold">Comportement Attendu vs. Observé :</h5>
-                                    <p class="text-slate-600 dark:text-slate-400"><strong>Attendu :</strong> ... <br><strong>Observé :</strong> ...</p>
-                                </div>
-                            </div>
+                            <h4 class="font-bold text-red-800 dark:text-red-300">▶️ Analyse du Bug (si applicable)</h4>
+                            <p class="text-slate-600 dark:text-slate-400 mt-2">Déplier cette section pour documenter précisément un dysfonctionnement.<br>☐ Étapes de Reproduction<br>☐ Comportement Attendu<br>☐ Comportement Observé</p>
                         </div>
 
-                        <!-- Encadré 3 -->
+                        <!-- Bloc Dépliant Correction -->
                         <div class="border-l-4 border-sky-500 bg-sky-50 dark:bg-sky-900/20 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-sky-800 dark:text-sky-300 mb-2">3. Contexte de la Correction (si applicable)</h4>
-                             <div class="space-y-2">
-                                <div>
-                                    <h5 class="font-semibold">Données à corriger :</h5>
-                                    <p class="text-slate-600 dark:text-slate-400">Préciser les identifiants, URL, ou exemples concernés.</p>
-                                </div>
-                                <div>
-                                    <h5 class="font-semibold">Valeur attendue :</h5>
-                                    <p class="text-slate-600 dark:text-slate-400">Quelle devrait être la bonne information ?</p>
-                                </div>
-                            </div>
+                            <h4 class="font-bold text-sky-800 dark:text-sky-300">▶️ Analyse de la Correction (si applicable)</h4>
+                            <p class="text-slate-600 dark:text-slate-400 mt-2">Déplier cette section pour spécifier les données à modifier.<br>☐ Données à corriger<br>☐ Valeur attendue</p>
                         </div>
 
-                         <!-- Encadré 4 -->
+                        <!-- NOUVEAU Bloc Dépliant Question/Assistance -->
+                        <div class="border-l-4 border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-yellow-800 dark:text-yellow-300">▶️ Analyse de la Question/Assistance (si applicable)</h4>
+                            <p class="text-slate-600 dark:text-slate-400 mt-2">Déplier cette section pour tracer une demande d'information.<br>☐ Question détaillée de l'utilisateur<br>☐ Réponse apportée / Action à mener</p>
+                        </div>
+
+                         <!-- NOUVEAU Bloc Pièces Jointes -->
                         <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">4. Pièces Jointes</h4>
-                            <p class="text-slate-600 dark:text-slate-400">Ajouter ici les captures d'écran, vidéos, ou logs. Ne pas oublier de masquer les données sensibles.</p>
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">📎 Pièces Jointes</h4>
+                            <p class="text-slate-600 dark:text-slate-400">Ajouter ici les captures d'écran, vidéos, ou logs. Attention à masquer les données personnelles ou sensibles.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Template Évolution / GAP -->
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">💡 Template : Évolution & GAP</h3>
-                    <p class="mb-6 text-sm">Ce template reste dédié aux nouvelles fonctionnalités et au rattrapage des anciens outils.</p>
+                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">✨ Template : Story & GAP</h3>
+                    <p class="mb-6 text-sm">Template dédié aux nouvelles fonctionnalités et au rattrapage.</p>
                     <div class="space-y-4 text-sm">
+                         <!-- Bloc Actions -->
+                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">🕹️ Actions Rapides</h4>
+                            <p class="text-slate-600 dark:text-slate-400">Placer ici les boutons : <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">📝 Prêt pour Dev</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">❓ Demander Infos</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">📡 Escalader</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">✅ Terminer</code></p>
+                        </div>
                          <div class="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg">
                             <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">1. Quel est le besoin métier ? (Le "Pourquoi")</h4>
                             <p class="text-slate-600 dark:text-slate-400">Expliquer le contexte et l'objectif de cette demande. Quel problème cherche-t-on à résoudre ?</p>
@@ -498,6 +531,16 @@
                          <div class="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg">
                             <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">2. Description de la Cible Fonctionnelle (Le "Quoi")</h4>
                             <p class="text-slate-600 dark:text-slate-400">Décrire le fonctionnement attendu de la nouvelle fonctionnalité. Utiliser des listes à puces pour les critères d'acceptance.</p>
+                        </div>
+                        <!-- NOUVEAU Bloc Pièces Jointes -->
+                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">3. Pièces Jointes</h4>
+                            <p class="text-slate-600 dark:text-slate-400">Ajouter ici les maquettes, schémas, ou tout autre document pertinent pour aider à la compréhension.</p>
+                        </div>
+                        <!-- NOUVEAU Bloc Rédaction Jira -->
+                        <div class="border-l-4 border-green-500 bg-green-50 dark:bg-green-900/20 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-green-800 dark:text-green-300 mb-2">4. Rédaction du Ticket de Développement (Jira)</h4>
+                            <p class="text-slate-600 dark:text-slate-400">Une fois l'analyse validée, utiliser cette section comme checklist avant de passer le statut à "Prêt pour Dev".<br>☐ Le ticket Jira est créé.<br>☐ Le lien du ticket Jira est ajouté dans les propriétés de cette page.<br>☐ Les user stories et critères d'acceptance sont copiés dans le ticket Jira.</p>
                         </div>
                     </div>
                 </div>
@@ -507,7 +550,7 @@
         <!-- Section V: Vues Opérationnelles -->
         <section id="vues-op" class="scroll-mt-20 mb-20 fade-in-up">
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                 📊 Vues de Pilotage Opérationnel
+                 📊 Vues de Pilotage
             </h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                  <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
@@ -536,7 +579,7 @@
         <!-- MISE À JOUR Section: Pilotage Stratégique -->
         <section id="pilotage-strategique" class="scroll-mt-20 mb-20 fade-in-up">
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                🎯 Pilotage Stratégique & Priorisation
+                🎯 Pilotage Stratégique
             </h2>
             <div class="grid lg:grid-cols-2 gap-8 mb-8">
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
@@ -545,18 +588,10 @@
                     <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg text-center font-mono text-lg text-indigo-600 dark:text-indigo-300">
                         (Impact × Confiance) / Effort
                     </div>
-                    <div class="grid grid-cols-3 gap-2 mt-4 text-center text-xs">
-                        <div><span class="font-bold block">Impact</span>Gain métier</div>
-                        <div><span class="font-bold block">Confiance</span>Certitude</div>
-                        <div><span class="font-bold block">Effort</span>Coût dev</div>
-                    </div>
                 </div>
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                     <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">🗺️ Épopées & Projets Stratégiques</h3>
                     <p class="text-sm mb-4">Reliez chaque demande à un objectif d'entreprise plus large pour construire une roadmap cohérente.</p>
-                    <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg text-sm">
-                        <p>Chaque ticket devient une brique d'un projet plus grand (ex: "Refonte portail client").</p>
-                    </div>
                 </div>
             </div>
             
@@ -565,17 +600,17 @@
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 border-t-4 border-green-500">
                     <h3 class="text-lg font-bold mb-2">🩺 Santé des Applications</h3>
                     <p class="text-sm text-slate-500 mb-4">L'outil est-il de plus en plus stable ?</p>
-                    <p class="text-xs"><strong>Filtre :</strong> `Type` est `🐞 Dysfonctionnement`</p>
+                    <p class="text-xs"><strong>Filtre :</strong> `Type` est `🐞 Bug`</p>
                 </div>
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 border-t-4 border-amber-500">
                     <h3 class="text-lg font-bold mb-2">🎓 Radar Formation</h3>
                     <p class="text-sm text-slate-500 mb-4">Où les utilisateurs ont-ils besoin d'aide ?</p>
-                    <p class="text-xs"><strong>Filtre :</strong> `Type` est `🤦 Erreur Manipulation`</p>
+                    <p class="text-xs"><strong>Filtre :</strong> `Type` est `🎓 Formation`</p>
                 </div>
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 border-t-4 border-blue-500">
                     <h3 class="text-lg font-bold mb-2">🔌 Suivi des GAPs</h3>
                     <p class="text-sm text-slate-500 mb-4">Où en est le rattrapage de l'existant ?</p>
-                    <p class="text-xs"><strong>Filtre :</strong> `Type` contient `GAP`</p>
+                    <p class="text-xs"><strong>Filtre :</strong> `Type` est `🔌 GAP`</p>
                 </div>
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 border-t-4 border-red-500">
                     <h3 class="text-lg font-bold mb-2">⏱️ Analyse des Délais</h3>
@@ -588,46 +623,31 @@
         <!-- NOUVELLE Section: Mise en Place -->
         <section id="mise-en-place" class="scroll-mt-20 fade-in-up">
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                🛠️ Guide de Mise en Place
+                🛠️ Plan de Déploiement
             </h2>
             <div class="space-y-12">
                 <!-- Phase 1 -->
                 <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md ring-1 ring-slate-200 dark:ring-slate-700 p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-slate-100">Phase 1 : Configuration de la Base de Données</h3>
-                    <p class="mb-6 text-sm">La première étape consiste à créer une nouvelle base de données et à configurer toutes les propriétés définies dans la section <a href="#taxonomie" class="text-indigo-600 hover:underline">Taxonomie</a>. C'est le squelette de votre système.</p>
-                    <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                        <h4 class="font-semibold mb-2">Checklist de configuration :</h4>
-                        <ul class="grid md:grid-cols-2 gap-x-8 gap-y-2 text-sm list-disc list-inside">
-                           <li>Propriété `Type de Demande`</li>
-                           <li>Propriété `Périmètre`</li>
-                           <li>Propriété `Domaine Fonctionnel`</li>
-                           <li>Propriété `Statut` (avec couleurs)</li>
-                           <li>Propriété `Équipe en charge`</li>
-                           <li>Propriété `Rapporteur`</li>
-                           <li>Propriété `Date de résolution`</li>
-                           <li>Propriétés `Impact`, `Confiance`, `Effort`</li>
-                           <li>Propriété `Score RICE` (formule)</li>
-                           <li>Propriétés `Ticket Freshservice`, `Jira`, `Réf. GAP`</li>
-                        </ul>
-                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-slate-100">Phase 1 : Construction du Socle</h3>
+                    <p class="mb-6 text-sm">Créer la base de données <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Pipeline Global</code> et configurer toutes les propriétés de la section <a href="#taxonomie" class="text-indigo-600 hover:underline">Taxonomie</a>.</p>
                 </div>
                 <!-- Phase 2 -->
                  <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md ring-1 ring-slate-200 dark:ring-slate-700 p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-slate-100">Phase 2 : Création des Templates & Boutons</h3>
-                    <p class="mb-6 text-sm">Créez les <a href="#templates" class="text-indigo-600 hover:underline">deux templates de page principaux</a>. Dans chaque template, ajoutez les <a href="#qualite-automatisation" class="text-indigo-600 hover:underline">boutons d'action</a> pertinents pour guider les utilisateurs et automatiser les tâches répétitives.</p>
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-slate-100">Phase 2 : Création de l'Espace de Travail</h3>
+                    <p class="mb-6 text-sm">Construire la page d'accueil <a href="#hub" class="text-indigo-600 hover:underline">Hub Projet</a>, les <a href="#templates" class="text-indigo-600 hover:underline">templates</a> et les <a href="#qualite-automatisation" class="text-indigo-600 hover:underline">boutons</a>. Créer la page et la vue Kanban de <a href="#priorisation" class="text-indigo-600 hover:underline">Priorisation & Sprints</a>.</p>
                 </div>
                 <!-- Phase 3 -->
                  <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md ring-1 ring-slate-200 dark:ring-slate-700 p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-slate-100">Phase 3 : Configuration des Vues</h3>
-                    <p class="mb-6 text-sm">Créez des vues de base de données liées sur une page de pilotage pour permettre à chaque équipe de se concentrer sur ce qui est important. Inspirez-vous de la section <a href="#vues-op" class="text-indigo-600 hover:underline">Vues Opérationnelles</a>.</p>
-                </div>
-                <!-- Phase 4 -->
-                 <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md ring-1 ring-slate-200 dark:ring-slate-700 p-8">
-                    <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-slate-100">Phase 4 : Migration & Formation</h3>
-                    <p class="mb-6 text-sm">Migrez les tickets existants en utilisant le <a href="#migration-statuts" class="text-indigo-600 hover:underline">guide de migration</a>. Planifiez ensuite des sessions de formation courtes pour présenter le nouveau système, sa logique et ses avantages aux équipes.</p>
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-slate-100">Phase 3 : Migration & Formation</h3>
+                    <p class="mb-6 text-sm">Migrer un petit lot de tickets existants en utilisant le <a href="#migration-statuts" class="text-indigo-600 hover:underline">guide de migration</a>. Former le groupe pilote (votre assistant) sur le nouveau processus.</p>
                     <blockquote class="border-l-4 border-indigo-500 pl-4 mt-4 text-sm italic text-slate-600 dark:text-slate-400">
-                        <strong>Conseil de Chef MOA :</strong> Commencez par migrer et former un petit groupe pilote. Leurs retours seront précieux pour ajuster le système avant un déploiement plus large.
+                        <strong>Conseil d'Expert :</strong> Le retour du groupe pilote est crucial. Ajustez la taxonomie ou les templates si nécessaire AVANT de migrer la totalité des données.
                     </blockquote>
+                </div>
+                 <!-- Phase 4 -->
+                 <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md ring-1 ring-slate-200 dark:ring-slate-700 p-8">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-slate-100">Phase 4 : Déploiement Complet</h3>
+                    <p class="mb-6 text-sm">Après validation du pilote, migrer l'ensemble des tickets restants. Communiquer officiellement le lancement du nouveau Hub à toutes les parties prenantes et archiver les anciens espaces.</p>
                 </div>
             </div>
         </section>
