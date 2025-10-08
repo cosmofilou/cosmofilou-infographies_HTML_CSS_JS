@@ -581,17 +581,38 @@
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
                 🎯 Pilotage Stratégique
             </h2>
-            <div class="grid lg:grid-cols-2 gap-8 mb-8">
-                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                    <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">⭐ Score de Priorisation (RICE)</h3>
-                    <p class="text-sm mb-4">Passez d'une priorisation subjective à un classement objectif basé sur une formule simple.</p>
-                    <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg text-center font-mono text-lg text-indigo-600 dark:text-indigo-300">
-                        (Impact × Confiance) / Effort
+             <div class="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 mb-8">
+                <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">Comment Construire vos Indicateurs de Priorisation</h3>
+                <div class="space-y-6">
+                    <!-- RICE Score details -->
+                    <div>
+                        <h4 class="font-semibold text-lg mb-2">⭐ Mettre en place le Score RICE</h4>
+                        <p class="text-sm mb-4">Oui, il s'agit bien d'une propriété de type <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">'Formule'</code> dans Notion. Voici comment la configurer :</p>
+                        <ol class="list-decimal list-inside space-y-2 text-sm">
+                            <li>Assurez-vous d'avoir les 3 propriétés numériques : `Impact` (nombre de 1 à 5), `Confiance` (nombre de 0 à 100), `Effort` (nombre en jours-homme).</li>
+                            <li>Créez une nouvelle propriété `Score RICE` de type `Formule`.</li>
+                            <li>Cliquez sur "Modifier la formule" et collez la formule suivante :</li>
+                        </ol>
+                        <div class="p-4 bg-slate-100 dark:bg-slate-700 rounded-lg mt-4 font-mono text-sm">
+                            <code>(prop("Impact") * (prop("Confiance") / 100)) / prop("Effort")</code>
+                        </div>
+                         <p class="text-xs mt-2 text-slate-500"><strong>Note :</strong> La formule divise la Confiance par 100 pour la transformer en multiplicateur (ex: 80% devient 0.8). Si l'Effort est 0, la formule renverra une erreur ; assurez-vous de toujours estimer l'effort (minimum 0.5 pour une petite tâche).</p>
                     </div>
-                </div>
-                <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                    <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">🗺️ Épopées & Projets Stratégiques</h3>
-                    <p class="text-sm mb-4">Reliez chaque demande à un objectif d'entreprise plus large pour construire une roadmap cohérente.</p>
+
+                     <!-- Time Analysis details -->
+                     <div>
+                        <h4 class="font-semibold text-lg mb-2">⏱️ Mettre en place l'Analyse des Délais</h4>
+                         <p class="text-sm mb-4">Cet indicateur, aussi appelé "Lead Time", mesure le temps total entre la création d'une demande et sa résolution. Il se calcule aussi avec une formule.</p>
+                         <ol class="list-decimal list-inside space-y-2 text-sm">
+                             <li>Vous avez déjà les propriétés `Date de création` et `Date de résolution`.</li>
+                             <li>Créez une nouvelle propriété `Délai de Résolution (jours)` de type `Formule`.</li>
+                             <li>Cliquez sur "Modifier la formule" et collez la formule suivante :</li>
+                         </ol>
+                          <div class="p-4 bg-slate-100 dark:bg-slate-700 rounded-lg mt-4 font-mono text-sm">
+                             <code>if(prop("Statut") == "📦 Terminé", dateBetween(prop("Date de résolution"), prop("Date de création"), "days"), null)</code>
+                         </div>
+                         <p class="text-xs mt-2 text-slate-500"><strong>Note :</strong> Cette formule n'affichera un résultat que si le statut est "Terminé", ce qui garde votre base de données propre. Dans une vue de type "Tableau", vous pourrez ensuite cliquer en bas de cette colonne pour calculer automatiquement la moyenne des délais de résolution.</p>
+                    </div>
                 </div>
             </div>
             
