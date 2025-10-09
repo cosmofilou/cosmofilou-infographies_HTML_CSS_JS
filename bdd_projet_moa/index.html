@@ -170,9 +170,10 @@
                            <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
                                <p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p>
                                <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Action : Ajouter une page à <code class="font-semibold">Pipeline Global</code></li>
                                    <li>Template : <code class="font-semibold">Support & Correction</code></li>
-                                   <li>Périmètre : <code class="font-semibold">Prox-Hydro</code></li>
-                                   <li>Type : <code class="font-semibold">Bug</code></li>
+                                   <li>Périmètre (pré-rempli) : <code class="font-semibold">Prox-Hydro</code></li>
+                                   <li>Type (pré-rempli) : <code class="font-semibold">Bug</code></li>
                                </ul>
                            </div>
                             <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
@@ -654,19 +655,36 @@
                         <!-- Bloc Dépliant Bug -->
                         <div class="border-l-4 border-red-500 bg-red-50 dark:bg-red-900/20 p-4 rounded-r-lg">
                             <h4 class="font-bold text-red-800 dark:text-red-300">▶️ Analyse du Bug (si applicable)</h4>
-                            <p class="text-slate-600 dark:text-slate-400 mt-2">Déplier cette section pour documenter précisément un dysfonctionnement.<br>☐ Étapes de Reproduction<br>☐ Comportement Attendu<br>☐ Comportement Observé</p>
+                            <div class="text-slate-600 dark:text-slate-400 mt-2">
+                                <strong>Étapes de Reproduction :</strong><br>
+                                <em class="text-slate-500">Lister les actions exactes pour reproduire le bug. Ex: 1. Aller sur..., 2. Cliquer sur...</em><br><br>
+                                <strong>Comportement Attendu :</strong><br>
+                                <em class="text-slate-500">Décrire ce qui aurait dû se passer.</em><br><br>
+                                <strong>Comportement Observé :</strong><br>
+                                <em class="text-slate-500">Décrire ce qui s'est réellement passé (inclure les messages d'erreur).</em>
+                            </div>
                         </div>
 
                         <!-- Bloc Dépliant Correction -->
                         <div class="border-l-4 border-sky-500 bg-sky-50 dark:bg-sky-900/20 p-4 rounded-r-lg">
                             <h4 class="font-bold text-sky-800 dark:text-sky-300">▶️ Analyse de la Correction (si applicable)</h4>
-                            <p class="text-slate-600 dark:text-slate-400 mt-2">Déplier cette section pour spécifier les données à modifier.<br>☐ Données à corriger<br>☐ Valeur attendue</p>
+                             <div class="text-slate-600 dark:text-slate-400 mt-2">
+                                <strong>Données à corriger :</strong><br>
+                                <em class="text-slate-500">Préciser les identifiants, URL, ou exemples concernés.</em><br><br>
+                                <strong>Valeur attendue :</strong><br>
+                                <em class="text-slate-500">Quelle devrait être la bonne information ?</em>
+                            </div>
                         </div>
 
                         <!-- NOUVEAU Bloc Dépliant Question/Assistance -->
                         <div class="border-l-4 border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-r-lg">
                             <h4 class="font-bold text-yellow-800 dark:text-yellow-300">▶️ Analyse de la Question/Assistance (si applicable)</h4>
-                            <p class="text-slate-600 dark:text-slate-400 mt-2">Déplier cette section pour tracer une demande d'information.<br>☐ Question détaillée de l'utilisateur<br>☐ Réponse apportée / Action à mener</p>
+                            <div class="text-slate-600 dark:text-slate-400 mt-2">
+                                <strong>Question détaillée de l'utilisateur :</strong><br>
+                                <em class="text-slate-500">Reformuler et détailler la question pour bien cerner le besoin.</em><br><br>
+                                <strong>Réponse apportée / Action à mener :</strong><br>
+                                <em class="text-slate-500">Documenter la solution fournie ou les prochaines étapes.</em>
+                            </div>
                         </div>
 
                          <!-- NOUVEAU Bloc Pièces Jointes -->
@@ -703,7 +721,12 @@
                         <!-- NOUVEAU Bloc Rédaction Jira -->
                         <div class="border-l-4 border-green-500 bg-green-50 dark:bg-green-900/20 p-4 rounded-r-lg">
                             <h4 class="font-bold text-green-800 dark:text-green-300 mb-2">4. Rédaction du Ticket de Développement (Jira)</h4>
-                            <p class="text-slate-600 dark:text-slate-400">Une fois l'analyse validée, utiliser cette section comme checklist avant de passer le statut à "Prêt pour Dev".<br>☐ Le ticket Jira est créé.<br>☐ Le lien du ticket Jira est ajouté dans les propriétés de cette page.<br>☐ Les user stories et critères d'acceptance sont copiés dans le ticket Jira.</p>
+                            <p class="text-slate-600 dark:text-slate-400">Une fois l'analyse validée, s'assurer que les points suivants sont complétés avant de passer le statut à "Prêt pour Dev" :</p>
+                            <ul class="list-disc list-inside mt-2 text-slate-600 dark:text-slate-400">
+                                <li>Le ticket Jira est créé.</li>
+                                <li>Le lien du ticket Jira est ajouté dans les propriétés de cette page.</li>
+                                <li>Les user stories et critères d'acceptance sont copiés dans le ticket Jira.</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
