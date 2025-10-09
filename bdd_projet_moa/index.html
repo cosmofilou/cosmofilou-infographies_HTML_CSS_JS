@@ -79,6 +79,7 @@
         </div>
         <ul id="nav-menu" class="space-y-1.5">
             <li><a href="#hub" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏠</span> Hub Projet</a></li>
+            <li><a href="#portail-agences" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏢</span> Portail Agences</a></li>
             <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏷️</span> Base de Données</a></li>
             <li><a href="#priorisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🚀</span> Priorisation & Sprints</a></li>
             <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">📋</span> Templates d'Action</a></li>
@@ -136,6 +137,168 @@
                             <p class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">➡️ Vue liée : <code class="font-semibold">Mes Demandes en Cours</code> (filtrée sur le rapporteur connecté)</p>
                             <p class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">➡️ Vue liée : <code class="font-semibold">Recettes en Attente</code> (filtrée sur le statut "En recette MOA")</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOUVELLE Section: Portail Agences -->
+        <section id="portail-agences" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
+                🏢 Portail Agences : Simplifier la Saisie
+            </h2>
+            <div class="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
+                <p class="mb-6">Pour faciliter l'adoption et garantir la qualité des données, il est essentiel de fournir aux agences un point d'entrée unique et ultra-simplifié. Cette page dédiée leur permettra de créer des tickets pré-configurés sans se perdre dans la base de données principale.</p>
+                
+                <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg mb-8">
+                    <h4 class="font-bold text-yellow-800 dark:text-yellow-200 mb-2">Message d'Accueil du Portail Agences :</h4>
+                    <div class="text-sm space-y-2 text-slate-600 dark:text-slate-300">
+                        <p><strong>Bienvenue sur le portail de suivi des demandes Licorne.</strong></p>
+                        <p>Utilisez les boutons ci-dessous pour signaler un dysfonctionnement ou proposer une évolution. Votre demande sera automatiquement assignée à la bonne équipe. Assurez-vous de remplir le modèle qui s'ouvrira avec le plus de détails possible.</p>
+                        <p>En cas de problème avec ce portail, contactez : <strong>Aurélien DA COSTA</strong>, Chef de Projet MOA (adacosta@proxiserve.fr).</p>
+                    </div>
+                </div>
+
+                <h4 class="font-semibold text-lg mb-4">Tableau de Bord de Création par Périmètre</h4>
+                <p class="text-sm mb-6">Chaque encadré ci-dessous est dédié à un périmètre spécifique. Les boutons créent une nouvelle demande avec les informations déjà pré-remplies pour vous faire gagner du temps.</p>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Prox-Hydro -->
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                       <h5 class="font-bold text-slate-800 dark:text-slate-200">Prox-Hydro</h5>
+                       <div class="flex flex-wrap gap-4 mt-3">
+                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
+                               <p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p>
+                               <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Template : <code class="font-semibold">Support & Correction</code></li>
+                                   <li>Périmètre : <code class="font-semibold">Prox-Hydro</code></li>
+                                   <li>Type : <code class="font-semibold">Bug</code></li>
+                               </ul>
+                           </div>
+                            <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
+                               <p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Proposer une Évolution</code></p>
+                               <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Template : <code class="font-semibold">Story & GAP</code></li>
+                                   <li>Périmètre : <code class="font-semibold">Prox-Hydro</code></li>
+                                   <li>Type : <code class="font-semibold">Story</code></li>
+                               </ul>
+                           </div>
+                       </div>
+                    </div>
+                    
+                    <!-- Agence PXS Est -->
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                       <h5 class="font-bold text-slate-800 dark:text-slate-200">Agence PXS Est</h5>
+                       <div class="flex flex-wrap gap-4 mt-3">
+                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
+                               <p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p>
+                               <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Template : <code class="font-semibold">Support & Correction</code></li>
+                                   <li>Périmètre : <code class="font-semibold">Agence PXS Est</code></li>
+                                   <li>Type : <code class="font-semibold">Bug</code></li>
+                               </ul>
+                           </div>
+                            <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
+                               <p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Proposer une Évolution</code></p>
+                               <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Template : <code class="font-semibold">Story & GAP</code></li>
+                                   <li>Périmètre : <code class="font-semibold">Agence PXS Est</code></li>
+                                   <li>Type : <code class="font-semibold">Story</code></li>
+                               </ul>
+                           </div>
+                       </div>
+                    </div>
+
+                    <!-- Agence PXS IDF -->
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                       <h5 class="font-bold text-slate-800 dark:text-slate-200">Agence PXS IDF</h5>
+                       <div class="flex flex-wrap gap-4 mt-3">
+                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
+                               <p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p>
+                               <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Template : <code class="font-semibold">Support & Correction</code></li>
+                                   <li>Périmètre : <code class="font-semibold">Agence PXS IDF</code></li>
+                                   <li>Type : <code class="font-semibold">Bug</code></li>
+                               </ul>
+                           </div>
+                            <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
+                               <p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Proposer une Évolution</code></p>
+                               <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Template : <code class="font-semibold">Story & GAP</code></li>
+                                   <li>Périmètre : <code class="font-semibold">Agence PXS IDF</code></li>
+                                   <li>Type : <code class="font-semibold">Story</code></li>
+                               </ul>
+                           </div>
+                       </div>
+                    </div>
+
+                    <!-- Agence PXS Nord -->
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                       <h5 class="font-bold text-slate-800 dark:text-slate-200">Agence PXS Nord</h5>
+                       <div class="flex flex-wrap gap-4 mt-3">
+                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
+                               <p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p>
+                               <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Template : <code class="font-semibold">Support & Correction</code></li>
+                                   <li>Périmètre : <code class="font-semibold">Agence PXS Nord</code></li>
+                                   <li>Type : <code class="font-semibold">Bug</code></li>
+                               </ul>
+                           </div>
+                            <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
+                               <p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Proposer une Évolution</code></p>
+                               <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Template : <code class="font-semibold">Story & GAP</code></li>
+                                   <li>Périmètre : <code class="font-semibold">Agence PXS Nord</code></li>
+                                   <li>Type : <code class="font-semibold">Story</code></li>
+                               </ul>
+                           </div>
+                       </div>
+                    </div>
+
+                    <!-- Agence PXS Ouest -->
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                       <h5 class="font-bold text-slate-800 dark:text-slate-200">Agence PXS Ouest</h5>
+                       <div class="flex flex-wrap gap-4 mt-3">
+                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
+                               <p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p>
+                               <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Template : <code class="font-semibold">Support & Correction</code></li>
+                                   <li>Périmètre : <code class="font-semibold">Agence PXS Ouest</code></li>
+                                   <li>Type : <code class="font-semibold">Bug</code></li>
+                               </ul>
+                           </div>
+                            <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
+                               <p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Proposer une Évolution</code></p>
+                               <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Template : <code class="font-semibold">Story & GAP</code></li>
+                                   <li>Périmètre : <code class="font-semibold">Agence PXS Ouest</code></li>
+                                   <li>Type : <code class="font-semibold">Story</code></li>
+                               </ul>
+                           </div>
+                       </div>
+                    </div>
+
+                    <!-- Agence PXS Centre-Est -->
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                       <h5 class="font-bold text-slate-800 dark:text-slate-200">Agence PXS Centre-Est</h5>
+                       <div class="flex flex-wrap gap-4 mt-3">
+                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
+                               <p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p>
+                               <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Template : <code class="font-semibold">Support & Correction</code></li>
+                                   <li>Périmètre : <code class="font-semibold">Agence PXS Centre-Est</code></li>
+                                   <li>Type : <code class="font-semibold">Bug</code></li>
+                               </ul>
+                           </div>
+                            <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
+                               <p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Proposer une Évolution</code></p>
+                               <ul class="text-xs list-disc list-inside mt-1 text-slate-500">
+                                   <li>Template : <code class="font-semibold">Story & GAP</code></li>
+                                   <li>Périmètre : <code class="font-semibold">Agence PXS Centre-Est</code></li>
+                                   <li>Type : <code class="font-semibold">Story</code></li>
+                               </ul>
+                           </div>
+                       </div>
                     </div>
                 </div>
             </div>
@@ -329,7 +492,7 @@
                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                            <h4 class="font-bold text-slate-800 dark:text-slate-100">Effort</h4>
                            <p class="text-xs font-mono mb-2 text-indigo-500">Propriété `Nombre`</p>
-                           <p class="text-sm">En jours-homme.</p>
+                           <p class="text-sm">En points de complexité.</p>
                         </div>
                         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                            <h4 class="font-bold text-slate-800 dark:text-slate-100">Score RICE</h4>
@@ -371,8 +534,8 @@
             </h2>
             <div class="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                  <div class="mb-6 p-4 bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-500 rounded-r-lg">
-                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200">Répondre au besoin de votre chef : "Bouger des blocs pour re-prioriser"</h4>
-                    <p class="text-sm mt-1">La solution est de créer une page dédiée "Backlog & Sprints" avec une vue Kanban. Cette vue permettra de visualiser et de modifier la priorité des demandes par un simple glisser-déposer.</p>
+                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200">L'objectif : une priorisation visuelle et flexible</h4>
+                    <p class="text-sm mt-1">Pour répondre au besoin de réorganiser facilement les priorités, la solution est de créer une page dédiée "Backlog & Sprints" avec une vue Kanban. Cette vue permettra de visualiser et de modifier la priorité des demandes par un simple glisser-déposer.</p>
                 </div>
                 <h4 class="text-lg font-semibold mb-4">Mise en Place de la Vue Kanban de Priorisation</h4>
                 <ol class="list-decimal list-inside space-y-4 text-sm">
@@ -389,7 +552,7 @@
                         <strong>Créer la vue Kanban :</strong> Sur cette page, créez une vue liée de votre base de données. Choisissez la disposition "Tableau" (Kanban) et groupez par la propriété `Sprint`.
                     </li>
                     <li>
-                        <strong>Prioriser par glisser-déposer :</strong> Vous pouvez maintenant "bouger les blocs" !
+                        <strong>Prioriser par glisser-déposer :</strong> 
                          <ul class="list-disc list-inside ml-6 mt-2">
                             <li><strong>Déplacer une carte d'une colonne à l'autre</strong> (ex: de "Backlog" à "Sprint Actuel") pour planifier le travail.</li>
                             <li><strong>Réorganiser les cartes verticalement</strong> dans la colonne "Sprint Actuel" pour définir l'ordre de priorité de développement.</li>
@@ -547,7 +710,7 @@
             </div>
         </section>
 
-        <!-- Section V: Vues Opérationnelles -->
+        <!-- MISE À JOUR Section: Vues de Pilotage -->
         <section id="vues-op" class="scroll-mt-20 mb-20 fade-in-up">
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
                  📊 Vues de Pilotage
@@ -579,39 +742,56 @@
         <!-- MISE À JOUR Section: Pilotage Stratégique -->
         <section id="pilotage-strategique" class="scroll-mt-20 mb-20 fade-in-up">
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                🎯 Pilotage Stratégique
+                🎯 Devenir Décisionnel : Le Guide de la Priorisation
             </h2>
              <div class="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 mb-8">
-                <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">Comment Construire vos Indicateurs de Priorisation</h3>
+                <p class="text-lg mb-6">Pour piloter efficacement, il faut pouvoir passer d'une simple liste de tâches à une roadmap stratégique. Cela passe par deux niveaux de priorisation : l'un pour le quotidien (opérationnel), l'autre pour la vision à long terme (stratégique).</p>
+                
+                <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">1. La Priorité Opérationnelle : Le Triage Rapide</h3>
+                <p class="text-sm mb-4">La propriété <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">Priorité</code> (Haute, Moyenne, Basse) est votre outil de tous les jours. Elle sert à :</p>
+                <ul class="list-disc list-inside text-sm space-y-2 mb-6">
+                    <li>Signaler un bug bloquant qui doit être regardé immédiatement (<code class="bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300 px-2 py-1 rounded">Haute</code>).</li>
+                    <li>Organiser votre travail de la semaine sur les tâches de fond (<code class="bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300 px-2 py-1 rounded">Moyenne</code>).</li>
+                </ul>
+
+                <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">2. La Priorisation Stratégique : La Méthode RICE</h3>
+                <p class="text-sm mb-4">Pour décider quelles "Stories" ou "GAP" développer le trimestre prochain, la priorité subjective ne suffit pas. La méthode RICE apporte une approche objective pour comparer des sujets qui n'ont rien à voir entre eux.</p>
+                <p class="text-sm mb-6"><strong>RICE</strong> est un acronyme pour <strong>R</strong>each (Portée), <strong>I</strong>mpact, <strong>C</strong>onfidence (Confiance), et <strong>E</strong>ffort. Le score est calculé par une formule qui maximise la valeur apportée (Reach, Impact) tout en minimisant les coûts (Effort).</p>
+
                 <div class="space-y-6">
-                    <!-- RICE Score details -->
                     <div>
-                        <h4 class="font-semibold text-lg mb-2">⭐ Mettre en place le Score RICE</h4>
-                        <p class="text-sm mb-4">Oui, il s'agit bien d'une propriété de type <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">'Formule'</code> dans Notion. Voici comment la configurer :</p>
-                        <ol class="list-decimal list-inside space-y-2 text-sm">
-                            <li>Assurez-vous d'avoir les 3 propriétés numériques : `Impact` (nombre de 1 à 5), `Confiance` (nombre de 0 à 100), `Effort` (nombre en jours-homme).</li>
-                            <li>Créez une nouvelle propriété `Score RICE` de type `Formule`.</li>
-                            <li>Cliquez sur "Modifier la formule" et collez la formule suivante :</li>
-                        </ol>
-                        <div class="p-4 bg-slate-100 dark:bg-slate-700 rounded-lg mt-4 font-mono text-sm">
-                            <code>(prop("Impact") * (prop("Confiance") / 100)) / prop("Effort")</code>
+                        <h4 class="font-semibold text-lg mb-2">Le Guide Pratique du RICE :</h4>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                                <p class="font-bold">R - Reach (Portée)</p>
+                                <p class="text-xs mt-1">Combien d'utilisateurs sont concernés ?</p>
+                                <p class="text-xs mt-2"><strong>Échelle (1-5) :</strong> 1 (très peu), 3 (une agence), 5 (tous les utilisateurs).</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                                <p class="font-bold">I - Impact</p>
+                                <p class="text-xs mt-1">Quel est le gain pour l'utilisateur ?</p>
+                                <p class="text-xs mt-2"><strong>Échelle (1-5) :</strong> 1 (confort mineur), 3 (gain de temps notable), 5 (débloque un nouveau processus).</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                                <p class="font-bold">C - Confidence (Confiance)</p>
+                                <p class="text-xs mt-1">À quel point sommes-nous sûrs de nos estimations ?</p>
+                                <p class="text-xs mt-2"><strong>Échelle (%) :</strong> 50% (hypothèse), 80% (assez confiant), 100% (basé sur des données).</p>
+                            </div>
+                             <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                                <p class="font-bold">E - Effort (Complexité)</p>
+                                <p class="text-xs mt-1">Quelle est la complexité de la réalisation ?</p>
+                                <p class="text-xs mt-2"><strong>Échelle (Points) :</strong> 1, 2, 3, 5, 8... (suite de Fibonacci). C'est plus simple que les "jours-homme" car cela mesure la complexité relative, pas le temps.</p>
+                            </div>
                         </div>
-                         <p class="text-xs mt-2 text-slate-500"><strong>Note :</strong> La formule divise la Confiance par 100 pour la transformer en multiplicateur (ex: 80% devient 0.8). Si l'Effort est 0, la formule renverra une erreur ; assurez-vous de toujours estimer l'effort (minimum 0.5 pour une petite tâche).</p>
                     </div>
 
-                     <!-- Time Analysis details -->
                      <div>
-                        <h4 class="font-semibold text-lg mb-2">⏱️ Mettre en place l'Analyse des Délais</h4>
-                         <p class="text-sm mb-4">Cet indicateur, aussi appelé "Lead Time", mesure le temps total entre la création d'une demande et sa résolution. Il se calcule aussi avec une formule.</p>
-                         <ol class="list-decimal list-inside space-y-2 text-sm">
-                             <li>Vous avez déjà les propriétés `Date de création` et `Date de résolution`.</li>
-                             <li>Créez une nouvelle propriété `Délai de Résolution (jours)` de type `Formule`.</li>
-                             <li>Cliquez sur "Modifier la formule" et collez la formule suivante :</li>
-                         </ol>
+                        <h4 class="font-semibold text-lg mb-2">La Formule Magique dans Notion</h4>
+                         <p class="text-sm mb-4">Créez une propriété `Score RICE` de type `Formule` et collez-y :</p>
                           <div class="p-4 bg-slate-100 dark:bg-slate-700 rounded-lg mt-4 font-mono text-sm">
-                             <code>if(prop("Statut") == "📦 Terminé", dateBetween(prop("Date de résolution"), prop("Date de création"), "days"), null)</code>
+                             <code>if(prop("Effort") > 0, round(prop("Impact") * (prop("Confiance") / 100) / prop("Effort") * 100) / 100, 0)</code>
                          </div>
-                         <p class="text-xs mt-2 text-slate-500"><strong>Note :</strong> Cette formule n'affichera un résultat que si le statut est "Terminé", ce qui garde votre base de données propre. Dans une vue de type "Tableau", vous pourrez ensuite cliquer en bas de cette colonne pour calculer automatiquement la moyenne des délais de résolution.</p>
+                         <p class="text-xs mt-2 text-slate-500"><strong>Note :</strong> Cette formule améliorée évite les erreurs si l'Effort est à 0 et arrondit le résultat pour une meilleure lisibilité.</p>
                     </div>
                 </div>
             </div>
@@ -636,7 +816,7 @@
                 <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700 border-t-4 border-red-500">
                     <h3 class="text-lg font-bold mb-2">⏱️ Analyse des Délais</h3>
                     <p class="text-sm text-slate-500 mb-4">Où notre processus est-il lent ?</p>
-                    <p class="text-xs"><strong>Calcul :</strong> `Lead Time` & `Cycle Time`</p>
+                    <p class="text-xs"><strong>Calcul :</strong> Voir la formule `Délai de Résolution`</p>
                 </div>
             </div>
         </section>
@@ -655,7 +835,7 @@
                 <!-- Phase 2 -->
                  <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md ring-1 ring-slate-200 dark:ring-slate-700 p-8">
                     <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-slate-100">Phase 2 : Création de l'Espace de Travail</h3>
-                    <p class="mb-6 text-sm">Construire la page d'accueil <a href="#hub" class="text-indigo-600 hover:underline">Hub Projet</a>, les <a href="#templates" class="text-indigo-600 hover:underline">templates</a> et les <a href="#qualite-automatisation" class="text-indigo-600 hover:underline">boutons</a>. Créer la page et la vue Kanban de <a href="#priorisation" class="text-indigo-600 hover:underline">Priorisation & Sprints</a>.</p>
+                    <p class="mb-6 text-sm">Construire la page d'accueil <a href="#hub" class="text-indigo-600 hover:underline">Hub Projet</a>, le <a href="#portail-agences" class="text-indigo-600 hover:underline">Portail Agences</a>, les <a href="#templates" class="text-indigo-600 hover:underline">templates</a> et les <a href="#qualite-automatisation" class="text-indigo-600 hover:underline">boutons</a>. Créer la page et la vue Kanban de <a href="#priorisation" class="text-indigo-600 hover:underline">Priorisation & Sprints</a>.</p>
                 </div>
                 <!-- Phase 3 -->
                  <div class="bg-white dark:bg-slate-800 rounded-xl shadow-md ring-1 ring-slate-200 dark:ring-slate-700 p-8">
