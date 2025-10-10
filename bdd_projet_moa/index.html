@@ -98,7 +98,7 @@
             background-color: #f8fafc;
             border-radius: 0.75rem;
             box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-            padding: 0; /* No padding on container, handled by header/body */
+            padding: 0;
             z-index: 50;
             width: 90%; max-width: 1000px;
             max-height: 90vh;
@@ -142,7 +142,7 @@
         }
         .modal-close-btn:hover {
             transform: scale(1.1) rotate(90deg);
-            background: #fca5a5; color: #b91c1c; /* red-300 / red-700 */
+            background: #fca5a5; color: #b91c1c;
         }
 
         /* SVG Interaction Styles */
@@ -184,15 +184,22 @@
         </div>
         <ul id="nav-menu" class="space-y-1.5 overflow-y-auto">
              <li><a href="#flux-visuel" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">⚡️</span>Flux Visuel</a></li>
+             <li class="px-4 pt-4 pb-2 text-xs font-semibold uppercase text-slate-400 dark:text-slate-500">Présentation</li>
              <li><a href="#hub" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏠</span>Hub Projet</a></li>
              <li><a href="#portail-agences" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏢</span>Portail Agences</a></li>
-             <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏷️</span>Base de Données</a></li>
-             <li><a href="#priorisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🚀</span>Priorisation & Sprints</a></li>
-             <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">📋</span>Templates d'Action</a></li>
+             <li class="px-4 pt-4 pb-2 text-xs font-semibold uppercase text-slate-400 dark:text-slate-500">Guides de Construction</li>
+             <li><a href="#build-hub" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏠</span>Page Hub Projet</a></li>
+             <li><a href="#build-portail" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏢</span>Page Portail Agences</a></li>
+             <li><a href="#build-pipeline" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🗃️</span>BDD Pipeline Global</a></li>
+             <li><a href="#build-connaissances" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">📚</span>BDD Connaissances</a></li>
+             <li class="px-4 pt-4 pb-2 text-xs font-semibold uppercase text-slate-400 dark:text-slate-500">Spécifications</li>
+             <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏷️</span>Taxonomie</a></li>
+             <li><a href="#priorisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🚀</span>Priorisation</a></li>
+             <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">📋</span>Templates</a></li>
              <li><a href="#qualite-automatisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🤖</span>Automatisation</a></li>
              <li><a href="#vues-op" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">📊</span>Vues de Pilotage</a></li>
              <li><a href="#migration-statuts" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🔄</span>Migration</a></li>
-             <li><a href="#mise-en-place" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🛠️</span>Plan de Déploiement</a></li>
+             <li><a href="#mise-en-place" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🛠️</span>Déploiement</a></li>
         </ul>
         <div class="mt-auto p-2">
             <button id="theme-toggle" class="w-full flex items-center justify-center gap-3 px-4 py-2 rounded-lg font-medium bg-slate-100/50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-600/50 transition-all">
@@ -228,20 +235,20 @@
                     <path d="M 750 100 L 890 100" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
                     <!-- Nodes -->
                     <g class="svg-node" data-tooltip="Nouvelles demandes entrantes, à qualifier rapidement." onclick="document.getElementById('vues-op').scrollIntoView({behavior: 'smooth'});">
-                        <circle class="svg-node-shape" cx="100" cy="100" r="50" fill="#fecaca"/>
-                        <text class="svg-node-text" x="100" y="105" text-anchor="middle" fill="#991b1b" font-size="16">À Trier</text>
+                        <circle class="svg-node-shape" cx="100" cy="100" r="50" fill="#fecaca" fill-opacity="0.8"/>
+                        <text class="svg-node-text" x="100" y="105" text-anchor="middle" fill="#991b1b" font-size="16" font-weight="600">À Trier</text>
                     </g>
                     <g class="svg-node" data-tooltip="Investigation fonctionnelle approfondie par l'équipe MOA." onclick="document.getElementById('priorisation').scrollIntoView({behavior: 'smooth'});">
-                        <rect class="svg-node-shape" x="300" y="60" width="140" height="80" rx="10" fill="#c7d2fe"/>
-                        <text class="svg-node-text" x="370" y="105" text-anchor="middle" fill="#3730a3" font-size="16">Analyse MOA</text>
+                        <rect class="svg-node-shape" x="300" y="60" width="140" height="80" rx="10" fill="#c7d2fe" fill-opacity="0.8"/>
+                        <text class="svg-node-text" x="370" y="105" text-anchor="middle" fill="#3730a3" font-size="16" font-weight="600">Analyse MOA</text>
                     </g>
                     <g class="svg-node" data-tooltip="Développement de la fonctionnalité par l'équipe technique." onclick="document.getElementById('priorisation').scrollIntoView({behavior: 'smooth'});">
-                        <rect class="svg-node-shape" x="600" y="60" width="140" height="80" rx="10" fill="#bae6fd"/>
-                        <text class="svg-node-text" x="670" y="105" text-anchor="middle" fill="#0369a1" font-size="16">Développement</text>
+                        <rect class="svg-node-shape" x="600" y="60" width="140" height="80" rx="10" fill="#bae6fd" fill-opacity="0.8"/>
+                        <text class="svg-node-text" x="670" y="105" text-anchor="middle" fill="#0369a1" font-size="16" font-weight="600">Développement</text>
                     </g>
                     <g class="svg-node" data-tooltip="Vérification de la conformité par la MOA avant le déploiement." onclick="document.getElementById('vues-op').scrollIntoView({behavior: 'smooth'});">
-                        <polygon class="svg-node-shape" points="950,50 1050,100 950,150" fill="#fef08a"/>
-                        <text class="svg-node-text" x="985" y="105" text-anchor="middle" fill="#854d0e" font-size="16">Recette</text>
+                        <polygon class="svg-node-shape" points="950,50 1050,100 950,150" fill="#fef08a" fill-opacity="0.8"/>
+                        <text class="svg-node-text" x="985" y="105" text-anchor="middle" fill="#854d0e" font-size="16" font-weight="600">Recette</text>
                     </g>
                  </svg>
             </div>
@@ -250,7 +257,7 @@
         <!-- Section: Hub Projet -->
         <section id="hub" class="scroll-mt-20 mb-20 fade-in-up">
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                🏠 Le Hub Projet : Votre Nouveau Point d'Entrée
+                Présentation : 🏠 Hub Projet
             </h2>
             <div class="section-card">
                 <p class="mb-6">Cette page remplacera les différents accueils existants. Elle doit être simple, orientée action et fournir une vue d'ensemble immédiate.</p>
@@ -265,16 +272,16 @@
                     <div>
                         <h4 class="font-semibold text-lg mb-4">Tableau de Bord d'Actions</h4>
                         <div class="space-y-3">
-                            <p class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">🔘 Bouton : <code class="font-semibold">🐞 Déclarer un Bug</code></p>
-                            <p class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">🔘 Bouton : <code class="font-semibold">✨ Proposer une Story</code></p>
-                            <p class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">🔘 Bouton : <code class="font-semibold">🔌 Identifier un GAP</code></p>
+                            <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔘 Bouton : <code class="font-semibold">🐞 Déclarer un Bug</code></p>
+                            <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔘 Bouton : <code class="font-semibold">✨ Proposer une Story</code></p>
+                            <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔘 Bouton : <code class="font-semibold">🔌 Identifier un GAP</code></p>
                         </div>
                     </div>
                     <div>
                         <h4 class="font-semibold text-lg mb-4">Vues Clés</h4>
                          <div class="space-y-3">
-                            <p class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">➡️ Vue liée : <code class="font-semibold">Mes Demandes en Cours</code></p>
-                            <p class="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">➡️ Vue liée : <code class="font-semibold">Recettes en Attente</code></p>
+                            <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">➡️ Vue liée : <code class="font-semibold">Mes Demandes en Cours</code></p>
+                            <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">➡️ Vue liée : <code class="font-semibold">Recettes en Attente</code></p>
                         </div>
                     </div>
                 </div>
@@ -284,60 +291,148 @@
         <!-- Section: Portail Agences -->
         <section id="portail-agences" class="scroll-mt-20 mb-20 fade-in-up">
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                🏢 Portail Agences : Simplifier la Saisie
+               Présentation : 🏢 Portail Agences
             </h2>
             <div class="section-card">
-                 <p class="mb-6">Pour faciliter l'adoption et garantir la qualité des données, il est essentiel de fournir aux agences un point d'entrée unique et ultra-simplifié. Cette page dédiée leur permettra de créer des tickets pré-configurés sans se perdre dans la base de données principale.</p>
+                 <p class="mb-6">Pour faciliter l'adoption et garantir la qualité des données, il est essentiel de fournir aux agences un point d'entrée unique et ultra-simplifié.</p>
                 <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Prox-Hydro -->
-                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                    <div class="p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg">
                        <h5 class="font-bold text-slate-800 dark:text-slate-200">Prox-Hydro</h5>
                        <div class="flex flex-wrap gap-4 mt-3">
-                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1 min-w-[200px]">
-                               <p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p>
-                           </div>
-                            <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1 min-w-[200px]">
-                               <p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Proposer une Évolution</code></p>
-                           </div>
+                           <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex-1 min-w-[200px]"><p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p></div>
+                            <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex-1 min-w-[200px]"><p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Évolution</code></p></div>
                        </div>
                     </div>
-                    <!-- Agence PXS Est -->
-                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                    <div class="p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg">
                        <h5 class="font-bold text-slate-800 dark:text-slate-200">Agence PXS Est</h5>
                        <div class="flex flex-wrap gap-4 mt-3">
-                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1 min-w-[200px]">
-                               <p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p>
-                           </div>
-                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1 min-w-[200px]">
-                               <p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Proposer une Évolution</code></p>
-                           </div>
-                       </div>
-                    </div>
-                    <!-- Agence PXS IDF -->
-                     <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
-                       <h5 class="font-bold text-slate-800 dark:text-slate-200">Agence PXS IDF</h5>
-                       <div class="flex flex-wrap gap-4 mt-3">
-                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1 min-w-[200px]">
-                               <p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p>
-                           </div>
-                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1 min-w-[200px]">
-                               <p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Proposer une Évolution</code></p>
-                           </div>
-                       </div>
-                    </div>
-                    <!-- Agence PXS Nord -->
-                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
-                       <h5 class="font-bold text-slate-800 dark:text-slate-200">Agence PXS Nord</h5>
-                       <div class="flex flex-wrap gap-4 mt-3">
-                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1 min-w-[200px]">
-                               <p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p>
-                           </div>
-                           <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1 min-w-[200px]">
-                               <p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Proposer une Évolution</code></p>
-                           </div>
+                           <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex-1 min-w-[200px]"><p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p></div>
+                           <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex-1 min-w-[200px]"><p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Évolution</code></p></div>
                        </div>
                     </div>
                  </div>
+            </div>
+        </section>
+
+        <!-- NOUVELLE SECTION: GUIDE HUB -->
+        <section id="build-hub" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
+                Guide de Construction : 🏠 Hub Projet
+            </h2>
+            <div class="section-card">
+                <blockquote class="border-l-4 border-indigo-500 pl-4 mb-6 text-slate-600 dark:text-slate-300">
+                    <p class="font-bold">Objectif de la page :</p>
+                    <p>Fournir à l'équipe MOA une tour de contrôle pour organiser sa journée. La page doit permettre de voir en un clin d'œil les priorités, les blocages et la santé du projet.</p>
+                </blockquote>
+                 <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg mb-8">
+                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200 mb-2">Message de bienvenue à intégrer :</h4>
+                    <div class="text-sm text-slate-600 dark:text-slate-300">
+                        "Bienvenue sur la tour de contrôle du projet. Cet espace a été conçu pour vous, l'équipe MOA, afin de vous offrir une vision claire et actionnable de l'ensemble des activités. Chaque matin, commencez votre journée ici pour identifier vos priorités. Contact en cas de problème : Aurélien DA COSTA."
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-1 space-y-4">
+                        <h4 class="font-semibold text-lg">Colonne 1 : Indicateurs Clés</h4>
+                        <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔢 Indicateur : <strong>Tickets à Trier</strong><br><span class="text-xs"> (Vue "Nombre" filtrée sur Statut = "À trier")</span></p>
+                        <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔢 Indicateur : <strong>Bugs Ouverts Urgents</strong><br><span class="text-xs">(Vue "Nombre" filtrée sur Type = "Bug" ET Priorité = "Haute")</span></p>
+                    </div>
+                     <div class="lg:col-span-1 space-y-4">
+                        <h4 class="font-semibold text-lg">Colonne 2 : Mes Actions</h4>
+                        <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">➡️ Vue Liée : <strong>🔥 Mon Triage</strong><br><span class="text-xs">(Filtre : Statut = "À trier" ET Responsable = "Moi")</span></p>
+                        <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">➡️ Vue Liée : <strong>🚧 Mes Blocages</strong><br><span class="text-xs">(Filtre : Statut = "Bloqué" ET Responsable = "Moi")</span></p>
+                    </div>
+                     <div class="lg:col-span-1 space-y-4">
+                        <h4 class="font-semibold text-lg">Colonne 3 : Raccourcis</h4>
+                        <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔘 Bouton Notion : <strong>🐞 Déclarer un Bug</strong><br><span class="text-xs">(Action : Créer page avec template "BUG")</span></p>
+                        <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔘 Bouton Notion : <strong>✨ Proposer une Story</strong><br><span class="text-xs">(Action : Créer page avec template "STORY")</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOUVELLE SECTION: GUIDE PORTAIL -->
+        <section id="build-portail" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
+                Guide de Construction : 🏢 Portail Agences
+            </h2>
+            <div class="section-card">
+                 <blockquote class="border-l-4 border-yellow-500 pl-4 mb-6 text-slate-600 dark:text-slate-300">
+                    <p class="font-bold">Objectif de la page :</p>
+                    <p>Simplifier radicalement la création de tickets pour les utilisateurs. Zéro friction, zéro question à se poser. L'utilisateur clique sur son périmètre, son besoin, et remplit le formulaire.</p>
+                </blockquote>
+                <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg mb-8">
+                    <h4 class="font-bold text-yellow-800 dark:text-yellow-200 mb-2">Message de bienvenue à intégrer :</h4>
+                    <div class="text-sm text-slate-600 dark:text-slate-300">
+                        "Une idée d'amélioration ? Un bug à nous remonter ? Vous êtes au bon endroit ! Cet espace a été spécialement conçu pour vous permettre de soumettre vos demandes simplement et efficacement. Choisissez votre périmètre ci-dessous et utilisez les boutons pour créer votre demande. Le bon formulaire s'ouvrira et les informations de base seront pré-remplies. Contact : Aurélien DA COSTA."
+                    </div>
+                </div>
+                 <h4 class="font-semibold text-lg mb-4">Structure de la Page</h4>
+                 <p class="mb-4 text-sm">La page doit être une succession de sections, une pour chaque `Périmètre`. Chaque section contiendra deux boutons Notion.</p>
+                 <div class="p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg">
+                    <h5 class="font-bold text-slate-800 dark:text-slate-200">Exemple pour le périmètre "Prox-Hydro"</h5>
+                    <div class="flex flex-wrap gap-4 mt-3">
+                        <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex-1">
+                           <p class="font-semibold">🔘 Bouton 1 : "🐞 Signaler un Bug sur Prox-Hydro"</p>
+                           <ul class="text-xs list-disc list-inside mt-1 text-slate-500 dark:text-slate-400">
+                               <li>Action : Créer une page dans `Pipeline Global`</li>
+                               <li>Template à appliquer : `[BUG] -`</li>
+                               <li>Propriété à pré-remplir : `Périmètre` = `Prox-Hydro`</li>
+                           </ul>
+                       </div>
+                       <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex-1">
+                           <p class="font-semibold">🔘 Bouton 2 : "✨ Proposer une Évolution pour Prox-Hydro"</p>
+                           <ul class="text-xs list-disc list-inside mt-1 text-slate-500 dark:text-slate-400">
+                               <li>Action : Créer une page dans `Pipeline Global`</li>
+                               <li>Template à appliquer : `[STORY] -`</li>
+                               <li>Propriété à pré-remplir : `Périmètre` = `Prox-Hydro`</li>
+                           </ul>
+                       </div>
+                    </div>
+                    <p class="text-xs italic mt-4 text-slate-500 dark:text-slate-400">Répéter cette structure pour tous les autres périmètres (Agence PXS Est, IDF, etc.).</p>
+                 </div>
+            </div>
+        </section>
+        
+        <!-- NOUVELLE SECTION: GUIDE PIPELINE -->
+        <section id="build-pipeline" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
+                Guide de Construction : 🗃️ BDD Pipeline Global
+            </h2>
+             <div class="section-card">
+                 <blockquote class="border-l-4 border-green-500 pl-4 mb-6 text-slate-600 dark:text-slate-300">
+                    <p class="font-bold">Objectif de la page :</p>
+                    <p>Créer une page dédiée pour visualiser et interagir avec la base de données `Pipeline Global` sous différents angles, afin de répondre à des besoins d'analyse variés.</p>
+                </blockquote>
+                 <p class="mb-6 text-sm">Créez une nouvelle page `Pipeline Global des Demandes`. Sur cette page, insérez une vue liée de la base de données du même nom, et configurez les onglets de vue suivants :</p>
+                 <div class="space-y-4">
+                    <div class="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg"><strong>➡️ Onglet 1 : "Tableau Complet" (par défaut)</strong><br><span class="text-xs"> (Type : Tableau. Aucuns filtres. Pour une vue brute de toutes les données.)</span></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg"><strong>➡️ Onglet 2 : "Kanban par Statut"</strong><br><span class="text-xs"> (Type : Tableau Kanban. Groupé par la propriété `Statut`. Pour le suivi du flux de travail.)</span></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg"><strong>➡️ Onglet 3 : "Calendrier des Résolutions"</strong><br><span class="text-xs"> (Type : Calendrier. Basé sur la propriété `Date de résolution`. Pour visualiser les livraisons.)</span></div>
+                 </div>
+            </div>
+        </section>
+
+        <!-- NOUVELLE SECTION: GUIDE CONNAISSANCES -->
+        <section id="build-connaissances" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
+                Guide de Construction : 📚 BDD Base de Connaissances
+            </h2>
+             <div class="section-card">
+                <blockquote class="border-l-4 border-purple-500 pl-4 mb-6 text-slate-600 dark:text-slate-300">
+                    <p class="font-bold">Objectif de la page :</p>
+                    <p>Centraliser toute la documentation du projet (spécifications, guides, décisions) dans un format facile à naviguer et à consulter, à la manière d'un Wiki interne.</p>
+                </blockquote>
+                <p class="mb-6 text-sm">Créez une nouvelle page `Base de Connaissances`. Sur cette page, insérez une vue liée de la base de données du même nom.</p>
+                <div class="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
+                    <h4 class="font-semibold">Vue Recommandée : "Galerie par Type d'Article"</h4>
+                    <ul class="text-sm list-disc list-inside mt-2 text-slate-600 dark:text-slate-400">
+                        <li><strong>Type de vue :</strong> Galerie</li>
+                        <li><strong>Groupé par :</strong> `Type d'Article`</li>
+                        <li><strong>Aperçu de la carte :</strong> Contenu de la page</li>
+                        <li><strong>Taille de la carte :</strong> Moyenne</li>
+                    </ul>
+                    <p class="text-xs italic mt-2">Cette vue permet de séparer visuellement les spécifications, des guides, des comptes-rendus, rendant la navigation très intuitive.</p>
+                </div>
             </div>
         </section>
 
@@ -359,31 +454,13 @@
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">🚀 Priorisation & Sprints</h2>
             <div class="section-card">
                 <div class="mb-6 p-4 bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-500 rounded-r-lg">
-                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200">L'objectif : une priorisation visuelle et flexible</h4>
-                    <p class="text-sm mt-1">Pour répondre au besoin de réorganiser facilement les priorités, la solution est de créer une page dédiée "Backlog & Sprints" avec une vue Kanban. Cette vue permettra de visualiser et de modifier la priorité des demandes par un simple glisser-déposer.</p>
+                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200">Devenir Décisionnel : Le Guide de la Priorisation</h4>
+                    <p class="text-sm mt-1">Pour piloter efficacement, il faut pouvoir passer d'une simple liste de tâches à une roadmap stratégique. Cela passe par la méthode RICE (Reach, Impact, Confidence, Effort).</p>
                 </div>
-                <h4 class="text-lg font-semibold mb-4">Mise en Place de la Vue Kanban de Priorisation</h4>
-                <ol class="list-decimal list-inside space-y-4 text-sm">
-                    <li>
-                        <strong>Ajouter une propriété `Sprint` :</strong> Dans votre base de données "Pipeline Global", ajoutez une propriété de type `Sélection` nommée "Sprint".
-                        <ul class="list-disc list-inside ml-6 mt-2">
-                            <li>Options : <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">🧊 Backlog</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">▶️ Sprint Actuel</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">⏭️ Sprint Suivant</code>.</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <strong>Créer une nouvelle page "Backlog & Sprints" :</strong> C'est ici que vous gérerez votre roadmap.
-                    </li>
-                     <li>
-                        <strong>Créer la vue Kanban :</strong> Sur cette page, créez une vue liée de votre base de données. Choisissez la disposition "Tableau" (Kanban) et groupez par la propriété `Sprint`.
-                    </li>
-                    <li>
-                        <strong>Prioriser par glisser-déposer :</strong> 
-                         <ul class="list-disc list-inside ml-6 mt-2">
-                            <li><strong>Déplacer une carte d'une colonne à l'autre</strong> (ex: de "Backlog" à "Sprint Actuel") pour planifier le travail.</li>
-                            <li><strong>Réorganiser les cartes verticalement</strong> dans la colonne "Sprint Actuel" pour définir l'ordre de priorité de développement.</li>
-                        </ul>
-                    </li>
-                </ol>
+                <h4 class="text-lg font-semibold mb-4">La Formule Magique dans Notion</h4>
+                <div class="p-4 bg-slate-100 dark:bg-slate-700 rounded-lg mt-4 font-mono text-sm">
+                    <code>if(prop("Effort") > 0, round(prop("Impact") * (prop("Confiance") / 100) / prop("Effort") * 100) / 100, 0)</code>
+                </div>
             </div>
         </section>
 
@@ -391,45 +468,31 @@
         <section id="templates" class="scroll-mt-20 mb-20 fade-in-up">
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">📋 Templates d'Action</h2>
             <div class="space-y-8">
-                 <!-- Template Unifié Support -->
                 <div class="section-card">
                     <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">🔧 Template : Support & Correction</h3>
-                    <p class="mb-6 text-sm">Template unique pour le support (Bug, Correction, Question...). Les sections sont dans des blocs dépliants (toggles) pour garder le ticket propre.</p>
-                    <div class="space-y-4 text-sm">
-                        <!-- Bloc Actions -->
+                    <div class="space-y-4 text-sm mt-4">
                         <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">🕹️ Actions Rapides</h4>
-                            <p class="text-slate-600 dark:text-slate-400">Placer ici les boutons : <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">❓ Demander Infos</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">📡 Escalader à la DSI</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">✅ Terminer le Ticket</code></p>
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200">📝 Résumé du Problème / Question</h4>
                         </div>
-                        <!-- Bloc Résumé -->
-                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">📝 Résumé du Problème / Question</h4>
-                            <p class="text-slate-600 dark:text-slate-400">Synthétiser ici la demande initiale de l'utilisateur.</p>
-                        </div>
-                        <!-- Bloc Dépliant Bug -->
                         <div class="border-l-4 border-red-500 bg-red-50 dark:bg-red-900/20 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-red-800 dark:text-red-300">▶️ Analyse du Bug (si applicable)</h4>
+                            <h4 class="font-bold text-red-800 dark:text-red-300">▶️ Analyse du Bug</h4>
+                        </div>
+                         <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200">📎 Pièces Jointes</h4>
                         </div>
                     </div>
                 </div>
-                <!-- Template Évolution / GAP -->
                 <div class="section-card">
                     <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">✨ Template : Story & GAP</h3>
-                    <p class="mb-6 text-sm">Template dédié aux nouvelles fonctionnalités et au rattrapage.</p>
-                    <div class="space-y-4 text-sm">
-                         <!-- Bloc Actions -->
-                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">🕹️ Actions Rapides</h4>
-                            <p class="text-slate-600 dark:text-slate-400">Placer ici les boutons : <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">📝 Prêt pour Dev</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">✅ Terminer</code></p>
-                        </div>
+                    <div class="space-y-4 text-sm mt-4">
                         <div class="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">1. Quel est le besoin métier ? (Le "Pourquoi")</h4>
+                            <h4 class="font-bold text-blue-800 dark:text-blue-300">1. Le "Pourquoi" (Besoin métier)</h4>
                         </div>
                          <div class="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">2. Description de la Cible Fonctionnelle (Le "Quoi")</h4>
+                            <h4 class="font-bold text-blue-800 dark:text-blue-300">2. Le "Quoi" (Cible fonctionnelle)</h4>
                         </div>
                         <div class="border-l-4 border-green-500 bg-green-50 dark:bg-green-900/20 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-green-800 dark:text-green-300 mb-2">3. Rédaction du Ticket de Développement (Jira)</h4>
+                            <h4 class="font-bold text-green-800 dark:text-green-300">4. Rédaction du Ticket Jira</h4>
                         </div>
                     </div>
                 </div>
@@ -442,25 +505,11 @@
             <div class="section-card">
                 <h3 class="text-xl font-bold mb-6 text-slate-800 dark:text-slate-100">Boutons d'Action Pertinents</h3>
                 <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Bouton Résoudre -->
                     <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
                         <h4 class="font-bold text-lg mb-2">✅ Terminer le Ticket</h4>
-                        <p class="text-sm mb-3">Finalise une demande, met à jour son statut et enregistre la date de clôture.</p>
                     </div>
-                    <!-- Bouton Escalader -->
                     <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
                         <h4 class="font-bold text-lg mb-2">📡 Escalader à la DSI</h4>
-                        <p class="text-sm mb-3">Transfère la responsabilité à l'équipe N3 et met le ticket en attente.</p>
-                    </div>
-                    <!-- Bouton Prêt pour Dev -->
-                     <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h4 class="font-bold text-lg mb-2">📝 Prêt pour Dev</h4>
-                        <p class="text-sm mb-3">Indique que l'analyse MOA est terminée.</p>
-                    </div>
-                     <!-- Bouton Demander Infos -->
-                    <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h4 class="font-bold text-lg mb-2">❓ Demander Infos</h4>
-                        <p class="text-sm mb-3">Met le ticket en pause en attendant un retour du demandeur.</p>
                     </div>
                 </div>
             </div>
@@ -473,19 +522,15 @@
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
                         <h3 class="text-lg font-bold mb-2">🔥 Mon Triage MOA</h3>
-                        <p class="text-xs"><strong>Filtre :</strong> `Statut` est <code class="bg-slate-200 dark:bg-slate-600 rounded px-1">À trier</code></p>
                     </div>
                     <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h3 class="text-lg font-bold mb-2">🏗️ Pipeline Dev Actif</h3>
-                        <p class="text-xs"><strong>Vue Kanban :</strong> Groupé par `Statut`</p>
+                        <h3 class="text-lg font-bold mb-2">🩺 Santé des Applications</h3>
                     </div>
                     <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h3 class="text-lg font-bold mb-2">🚧 Points de blocage</h3>
-                        <p class="text-xs"><strong>Filtre :</strong> `Statut` est <code class="bg-slate-200 dark:bg-slate-600 rounded px-1">Bloqué</code></p>
+                        <h3 class="text-lg font-bold mb-2">🔌 Suivi des GAPs</h3>
                     </div>
                     <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h3 class="text-lg font-bold mb-2">📡 Suivi Escalades N3</h3>
-                        <p class="text-xs"><strong>Filtre :</strong> `Équipe` est <code class="bg-slate-200 dark:bg-slate-600 rounded px-1">DSI (N3)</code></p>
+                        <h3 class="text-lg font-bold mb-2">⏱️ Analyse des Délais</h3>
                     </div>
                 </div>
             </div>
@@ -496,20 +541,15 @@
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">🔄 Migration des Statuts</h2>
              <div class="section-card overflow-x-auto">
                 <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">Guide de Correspondance des Statuts</h3>
-                 <p class="mb-6 text-sm">Utilisez ce tableau pour faire correspondre les statuts des anciens outils au nouveau workflow unifié lors de la migration.</p>
                 <table class="w-full text-sm text-left">
                     <thead class="text-xs text-slate-700 uppercase bg-slate-100/50 dark:bg-slate-800/50 dark:text-slate-300">
                         <tr>
-                            <th class="p-3">Ancien Statut</th>
-                            <th class="p-3">Outil d'Origine</th>
-                            <th class="p-3">Nouveau Statut Cible</th>
+                            <th class="p-3">Ancien Statut</th><th class="p-3">Outil d'Origine</th><th class="p-3">Nouveau Statut Cible</th>
                         </tr>
                     </thead>
                     <tbody class="text-slate-600 dark:text-slate-300">
                         <tr class="border-t dark:border-slate-700"><td class="p-3">Nouveau</td><td class="p-3">Licorne</td><td class="p-3 font-semibold text-red-600 dark:text-red-400">0. À Trier 🔴</td></tr>
                         <tr class="border-t dark:border-slate-700"><td class="p-3">En cours d'analyse</td><td class="p-3">GAP</td><td class="p-3 font-semibold text-blue-600 dark:text-blue-400">1. En analyse MOA 🔵</td></tr>
-                        <tr class="border-t dark:border-slate-700"><td class="p-3">À développer</td><td class="p-3">Hydroplan</td><td class="p-3 font-semibold text-slate-600 dark:text-slate-300">2. Prêt pour DEV 📝</td></tr>
-                        <tr class="border-t dark:border-slate-700"><td class="p-3">En recette</td><td class="p-3">Tous</td><td class="p-3 font-semibold text-pink-600 dark:text-pink-400">4. En recette MOA ✅</td></tr>
                         <tr class="border-t dark:border-slate-700"><td class="p-3">Résolu / Terminé</td><td class="p-3">Tous</td><td class="p-3 font-semibold text-green-600 dark:text-green-400">5. Terminé 📦</td></tr>
                     </tbody>
                 </table>
@@ -520,26 +560,10 @@
         <section id="mise-en-place" class="scroll-mt-20 mb-20 fade-in-up">
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">🛠️ Plan de Déploiement</h2>
             <div class="space-y-6">
-                <!-- Phase 1 -->
-                <div class="section-card">
-                    <h3 class="text-xl font-bold mb-2 text-slate-800 dark:text-slate-100">Phase 1 : Construction du Socle</h3>
-                    <p class="text-sm">Créer la base de données <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded">Pipeline Global</code> et configurer toutes les propriétés.</p>
-                </div>
-                <!-- Phase 2 -->
-                 <div class="section-card">
-                    <h3 class="text-xl font-bold mb-2 text-slate-800 dark:text-slate-100">Phase 2 : Création de l'Espace de Travail</h3>
-                    <p class="text-sm">Construire le Hub Projet, le Portail Agences, les templates et les boutons.</p>
-                </div>
-                <!-- Phase 3 -->
-                 <div class="section-card">
-                    <h3 class="text-xl font-bold mb-2 text-slate-800 dark:text-slate-100">Phase 3 : Migration & Formation</h3>
-                    <p class="text-sm">Migrer un petit lot de tickets existants et former le groupe pilote.</p>
-                </div>
-                 <!-- Phase 4 -->
-                <div class="section-card">
-                    <h3 class="text-xl font-bold mb-2 text-slate-800 dark:text-slate-100">Phase 4 : Déploiement Complet</h3>
-                    <p class="text-sm">Après validation, migrer l'ensemble des tickets et communiquer officiellement.</p>
-                </div>
+                <div class="section-card"><h3 class="text-xl font-bold text-slate-800 dark:text-slate-100">Phase 1 : Construction du Socle</h3></div>
+                 <div class="section-card"><h3 class="text-xl font-bold text-slate-800 dark:text-slate-100">Phase 2 : Création de l'Espace de Travail</h3></div>
+                 <div class="section-card"><h3 class="text-xl font-bold text-slate-800 dark:text-slate-100">Phase 3 : Migration & Formation</h3></div>
+                <div class="section-card"><h3 class="text-xl font-bold text-slate-800 dark:text-slate-100">Phase 4 : Déploiement Complet</h3></div>
             </div>
         </section>
 
@@ -561,8 +585,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="mb-4 sticky top-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm py-2">
-                    <input type="search" id="taxonomie-search" placeholder="Rechercher une propriété..." class="w-full px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                <div class="mb-4 sticky top-0 bg-fuchsia-50/80 dark:bg-slate-900/80 backdrop-blur-sm py-2 -mx-6 px-6">
+                    <input type="search" id="taxonomie-search" placeholder="Rechercher une propriété (ex: Statut, RICE, Jira...)" class="w-full px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
                 </div>
                 <div id="taxonomie-content-wrapper" class="space-y-10">
                     <!-- Catégorie: Qualification Initiale -->
@@ -582,9 +606,13 @@
                                 <h4 class="font-bold text-slate-800 dark:text-slate-100">Périmètre</h4>
                                 <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection Multiple`</p>
                                 <ul class="space-y-2 text-sm">
-                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Direction Technique</code></li>
                                     <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Prox-Hydro</code></li>
+                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Agence PXS Est</code></li>
                                 </ul>
+                            </div>
+                             <div class="md:col-span-2 bg-white dark:bg-slate-800/50 rounded-xl p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700" data-searchable-item>
+                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Domaine Fonctionnel</h4>
+                                 <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection Multiple`</p>
                             </div>
                         </div>
                     </div>
@@ -594,21 +622,9 @@
                         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
                              <div class="bg-white dark:bg-slate-800/50 rounded-xl p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700" data-searchable-item>
                                 <h4 class="font-bold text-slate-800 dark:text-slate-100">Statut</h4>
-                                <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection`</p>
-                                <div class="flex flex-col items-start gap-2 text-xs font-medium">
-                                    <span class="px-2.5 py-1 rounded-full bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300">🔴 0. À trier</span>
-                                    <span class="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">🔎 1. En analyse MOA</span>
-                                    <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300">📝 2. Prêt pour DEV</span>
-                                    <span class="px-2.5 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">📦 5. Terminé</span>
-                                </div>
                             </div>
                             <div class="bg-white dark:bg-slate-800/50 rounded-xl p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700" data-searchable-item>
-                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Équipe en charge</h4>
-                                 <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection`</p>
-                            </div>
-                            <div class="bg-white dark:bg-slate-800/50 rounded-xl p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700" data-searchable-item>
-                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Rapporteur</h4>
-                                 <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Personne`</p>
+                                <h4 class="font-bold text-slate-800 dark:text-slate-100">N° de Ticket</h4>
                             </div>
                         </div>
                     </div>
@@ -763,3 +779,4 @@
     </script>
 </body>
 </html>
+
