@@ -2,7 +2,7 @@
 <html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
     <title>v3.1 Final - Espace de Pilotage Applicatif Salesforce</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -190,7 +190,62 @@
         </section>
 
         <section id="specs-bdd" class="scroll-mt-20 mb-20 fade-in-up">
-             <!-- Content from v3.0, already complete -->
+             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🗃️ 4. Spécifications des Bases de Données & Domaines</h2>
+             <div class="space-y-8">
+                 <div class="section-card text-center">
+                     <p class="mb-6 text-slate-600 dark:text-slate-300">La structure des données est le cerveau du système. Pour alléger l'interface, les spécifications techniques détaillées sont accessibles via des modales interactives.</p>
+                     <div class="flex flex-col md:flex-row gap-4 justify-center">
+                         <button onclick="openModal('modal-pipeline')" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105">
+                            Spécifications `🗃️ Pipeline Global`
+                         </button>
+                          <button onclick="openModal('modal-connaissance')" class="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-transform transform hover:scale-105">
+                            Spécifications `📚 Base de Connaissance`
+                         </button>
+                     </div>
+                </div>
+                <div class="section-card">
+                    <h3 class="text-xl font-bold mb-6 text-slate-800 dark:text-slate-100 text-center">Domaines Fonctionnels (Sous-catégories)</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <h5 class="font-bold text-lg flex items-center gap-2 mb-3 text-slate-800 dark:text-slate-200"><span class="text-xl">📈</span> Commerce & Vente</h5>
+                            <ul class="space-y-2 list-disc list-inside text-sm text-slate-600 dark:text-slate-400">
+                                <li>Commerce & Prospection</li>
+                                <li>Contrat & Résiliation</li>
+                                <li>Facturation & Notifications</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <h5 class="font-bold text-lg flex items-center gap-2 mb-3 text-slate-800 dark:text-slate-200"><span class="text-xl">🚚</span> Opérations & Service</h5>
+                            <ul class="space-y-2 list-disc list-inside text-sm text-slate-600 dark:text-slate-400">
+                                <li>Chantiers & Workflow de Pose</li>
+                                <li>Planification & Tournées</li>
+                                <li>Mobilité</li>
+                                <li>Relevé & Planning</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <h5 class="font-bold text-lg flex items-center gap-2 mb-3 text-slate-800 dark:text-slate-200"><span class="text-xl">🏢</span> Gestion des Actifs</h5>
+                            <ul class="space-y-2 list-disc list-inside text-sm text-slate-600 dark:text-slate-400">
+                                <li>Patrimoine & Appareils</li>
+                                <li>Produits, Stock & Compteurs</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <h5 class="font-bold text-lg flex items-center gap-2 mb-3 text-slate-800 dark:text-slate-200"><span class="text-xl">⚙️</span> Transverse & Technique</h5>
+                            <ul class="space-y-2 list-disc list-inside text-sm text-slate-600 dark:text-slate-400">
+                                <li>Rapports & TDB</li>
+                                <li>Intégrations & EDI</li>
+                                <li>Droits & Accès</li>
+                                <li>Utilitaires</li>
+                                <li>Reprise de Données</li>
+                                <li>Éditique</li>
+                                <li>Ergonomie</li>
+                                <li>Autonomie des Agences</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+             </div>
         </section>
         
         <section id="specs-pages" class="scroll-mt-20 mb-20 fade-in-up">
