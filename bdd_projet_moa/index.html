@@ -15,13 +15,8 @@
             -moz-osx-font-smoothing: grayscale;
         }
         
-        /* Barre de défilement stylisée */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb {
             background-color: rgba(156, 163, 175, 0.5);
             border-radius: 20px;
@@ -31,41 +26,28 @@
         
         .nav-link {
             transition: all 0.2s ease-in-out;
-            border-left: 3px solid transparent; /* Bordure par défaut */
+            border-left: 3px solid transparent;
         }
         
-        /* État actif pour la navigation */
         .nav-link.active {
-            background-color: #eef2ff; /* bg-indigo-50 */
-            color: #4338ca; /* text-indigo-700 */
+            background-color: #eef2ff;
+            color: #4338ca;
             font-weight: 700;
-            border-left-color: #4f46e5; /* border-indigo-600 */
+            border-left-color: #4f46e5;
         }
         .dark .nav-link.active {
-            background-color: #3730a3; /* dark:bg-indigo-800 */
-            color: #c7d2fe; /* dark:text-indigo-200 */
-            border-left-color: #818cf8; /* dark:border-indigo-400 */
+            background-color: #3730a3;
+            color: #c7d2fe;
+            border-left-color: #818cf8;
         }
         
-        /* Animation d'apparition */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .fade-in-up {
-            opacity: 0; /* État initial pour l'observer JS */
-        }
-        .is-visible {
-            animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
+        .fade-in-up { opacity: 0; }
+        .is-visible { animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
 
-        /* Ligne de connexion pour le pipeline visuel */
         .pipeline-step:not(:last-child)::after {
             content: '';
             position: absolute;
@@ -74,25 +56,13 @@
             transform: translateX(2.5rem);
             width: 6rem;
             height: 2px;
-            background-color: #cbd5e1; /* slate-300 */
+            background-color: #cbd5e1;
         }
-        .dark .pipeline-step:not(:last-child)::after {
-            background-color: #475569; /* dark:slate-600 */
-        }
-        @media (max-width: 1280px) {
-           .pipeline-step:not(:last-child)::after {
-                width: 4rem;
-                transform: translateX(2.5rem);
-           }
-        }
+        .dark .pipeline-step:not(:last-child)::after { background-color: #475569; }
+        @media (max-width: 1280px) { .pipeline-step:not(:last-child)::after { width: 4rem; transform: translateX(2.5rem); } }
         @media (max-width: 1024px) {
-            .pipeline-step {
-                min-width: 120px;
-            }
-           .pipeline-step:not(:last-child)::after {
-                width: 3rem;
-                transform: translateX(2rem);
-           }
+            .pipeline-step { min-width: 120px; }
+            .pipeline-step:not(:last-child)::after { width: 3rem; transform: translateX(2rem); }
         }
 
         .section-card {
@@ -117,7 +87,7 @@
 
     <nav class="fixed top-0 left-0 h-full w-64 bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg border-r border-slate-200 dark:border-slate-700 p-4 z-20 hidden lg:flex flex-col">
         <div class="flex items-center gap-3 mb-10 p-2">
-            <div class="text-3xl">🛠️</div>
+            <div class="text-3xl">🗺️</div>
             <div>
                 <h1 class="text-base font-bold text-slate-900 dark:text-white">Pilotage Projet Salesforce</h1>
                 <p class="text-xs text-slate-500 dark:text-slate-400">Le Guide Ultime sur Notion</p>
@@ -181,20 +151,36 @@
                         <p class="font-semibold">En cas de question sur l'utilisation de cet outil, votre contact MOA est <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded text-slate-800 dark:text-slate-200">Aurélien DA COSTA (adacosta@proxiserve.fr)</code>.</p>
                     </div>
                 </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-1">
-                        <h4 class="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-100">Mes Actions</h4>
-                        <p class="text-sm mb-3 text-slate-600 dark:text-slate-400">Vue filtrée : `Assigné à` = `Moi` ET `Statut` n'est pas `Terminé`.</p>
-                        <div class="space-y-3"><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🔘 Bouton : ➕ Créer un Bug</p><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🔘 Bouton : ➕ Créer une Story</p></div>
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-100">Tableau de Bord d'Actions</h4>
+                        <div class="space-y-4">
+                            <div class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">
+                                <p class="font-bold">🔘 Bouton : Déclarer un Bug 🐞</p>
+                                <p class="text-xs mt-1 text-slate-500 dark:text-slate-400">Pour signaler un dysfonctionnement ou une anomalie sur l'application.</p>
+                            </div>
+                            <div class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">
+                                <p class="font-bold">🔘 Bouton : Proposer une Story ✨</p>
+                                <p class="text-xs mt-1 text-slate-500 dark:text-slate-400">Pour proposer une nouvelle fonctionnalité ou une amélioration créant de la valeur.</p>
+                            </div>
+                            <div class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">
+                                <p class="font-bold">🔘 Bouton : Identifier un GAP 🔌</p>
+                                <p class="text-xs mt-1 text-slate-500 dark:text-slate-400">Pour signaler une fonctionnalité manquante par rapport à un ancien outil.</p>
+                            </div>
+                            <div class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">
+                                <p class="font-bold">🔘 Bouton : Demander une Correction 🦴</p>
+                                <p class="text-xs mt-1 text-slate-500 dark:text-slate-400">Pour une demande de modification de données en base.</p>
+                            </div>
+                            <div class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">
+                                <p class="font-bold">🔘 Bouton : Poser une Question 💬</p>
+                                <p class="text-xs mt-1 text-slate-500 dark:text-slate-400">Pour toute demande d'information ou d'assistance sur l'utilisation de l'outil.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="lg:col-span-1">
-                        <h4 class="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-100">Santé du Projet (KPIs)</h4>
-                        <p class="text-sm mb-3 text-slate-600 dark:text-slate-400">Vues galerie avec `Rollups` pour un suivi visuel des indicateurs.</p>
-                        <div class="space-y-3"><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🐞 Bugs ouverts</p><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">✨ Stories en attente</p><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🔌 % de GAPs complétés</p></div>
-                    </div>
-                    <div class="lg:col-span-1">
-                        <h4 class="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-100">Accès Rapides</h4>
-                        <p class="text-sm mb-3 text-slate-600 dark:text-slate-400">Un "Bloc synchronisé" contenant le menu de l'espace pour une navigation cohérente.</p>
+                    <div>
+                        <h4 class="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-100">Vues Clés & Indicateurs</h4>
+                        <p class="text-sm mb-3 text-slate-600 dark:text-slate-400">Vues filtrées pour un accès rapide aux informations pertinentes.</p>
+                        <div class="space-y-3"><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">➡️ Mes Demandes en Cours</p><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🐞 Bugs ouverts</p><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">✅ Recettes en attente</p></div>
                     </div>
                 </div>
             </div>
@@ -224,18 +210,28 @@
         </section>
 
         <section id="taxonomie" class="scroll-mt-20 mb-20 fade-in-up">
-             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🏷️ La Base de Données : Taxonomie Détaillée</h2>
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🏷️ La Base de Données : Taxonomie Détaillée</h2>
             <p class="mb-8 text-slate-600 dark:text-slate-400 max-w-3xl">Le cerveau du système : la base de données <code class="bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-slate-200 px-1.5 py-0.5 rounded font-semibold">"Pipeline Global des Demandes"</code>. Voici la configuration détaillée de toutes ses propriétés.</p>
             <div class="section-card">
-                <div class="grid lg:grid-cols-2 gap-8">
+                 <div class="grid lg:grid-cols-2 gap-x-8 gap-y-12">
                     <div>
                         <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Propriétés de Suivi & Qualification</h3>
                         <div class="space-y-4 text-sm text-slate-600 dark:text-slate-300">
                             <p><strong>Nom du Ticket (Titre) :</strong> Le titre clair et concis de la demande.</p>
-                            <p><strong>Statut (État) :</strong> Le statut du ticket dans le workflow. Voir la liste complète dans le flux visuel.</p>
-                            <p><strong>Rapporteur (MOA) (Personne) :</strong> Le membre de l'équipe MOA assigné au traitement du ticket.</p>
+                            <p><strong>Statut (État) :</strong> Le statut du ticket dans le workflow (ex: `0. À Trier 🔴`).</p>
+                            <p><strong>Rapporteur (MOA) (Personne) :</strong> Le membre de l'équipe MOA assigné au traitement.</p>
                             <p><strong>Créé par (Créé par) :</strong> La personne qui a soumis la demande (automatique).</p>
-                            <p><strong>Type (Sélection) :</strong> `🐞 Bug`, `✨ Story`, `🔌 GAP`</p>
+                             <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
+                                <h4 class="font-semibold text-slate-800 dark:text-slate-200">Type de Demande (Sélection)</h4>
+                                <ul class="flex flex-wrap gap-2 text-sm mt-2">
+                                    <li class="bg-white dark:bg-slate-600 px-2 py-1 rounded-full">🐞 Bug</li>
+                                    <li class="bg-white dark:bg-slate-600 px-2 py-1 rounded-full">✨ Story</li>
+                                    <li class="bg-white dark:bg-slate-600 px-2 py-1 rounded-full">🔌 GAP</li>
+                                    <li class="bg-white dark:bg-slate-600 px-2 py-1 rounded-full">🦴 Correction</li>
+                                    <li class="bg-white dark:bg-slate-600 px-2 py-1 rounded-full">🎓 Formation</li>
+                                    <li class="bg-white dark:bg-slate-600 px-2 py-1 rounded-full">💬 Question</li>
+                                </ul>
+                            </div>
                             <p><strong>Périmètre (Sélection) :</strong> Inclut TOUTES les agences (`💧 Prox-Hydro`, `☀️ Agence PXS Est`, etc.).</p>
                         </div>
                     </div>
@@ -246,6 +242,7 @@
                              <p><strong>N° Ticket Jira (URL) :</strong> 🟢 **Obligatoire pour passer en `Prêt pour DEV`**. Lien vers le ticket de développement.</p>
                              <p><strong>Priorité (Sélection) :</strong> `Haute 🔥`, `Moyenne 🟠`, `Basse 🔵`.</p>
                              <p><strong>Sprint (Sélection) :</strong> `🧊 Backlog`, `▶️ Sprint Actuel`, `⏭️ Sprint Suivant`.</p>
+                             <p><strong>Effort, Impact, Confiance (Nombre) & Score RICE (Formule)</strong></p>
                          </div>
                     </div>
                 </div>
@@ -261,6 +258,36 @@
             </div>
         </section>
 
+        <section id="templates" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">📋 Modèles d'Action Détaillés</h2>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="section-card">
+                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">🔧 Modèle Unifié : Support</h3>
+                    <p class="mb-6 text-sm text-slate-600 dark:text-slate-400">Pour `Bug`, `Correction`, `Question`.</p>
+                    <div class="space-y-4 text-sm">
+                        <div class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg"><h4 class="font-bold text-slate-800 dark:text-slate-200">🕹️ Actions Rapides</h4><div class="flex gap-2 mt-2"><code class="text-xs bg-white dark:bg-slate-600 p-1 rounded">❓ Demander Infos</code> <code class="text-xs bg-white dark:bg-slate-600 p-1 rounded">📡 Escalader à la DSI</code> <code class="text-xs bg-white dark:bg-slate-600 p-1 rounded">✅ Terminer le Ticket</code></div></div>
+                        <div class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg"><h4 class="font-bold text-slate-800 dark:text-slate-200">📝 Résumé du Problème / Question</h4><p class="text-xs mt-1 text-slate-500 dark:text-slate-400">Synthétiser ou copier/coller ici la demande initiale.</p></div>
+                        <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg"><h4 class="font-bold text-red-800 dark:text-red-300">🔻 Analyse du Bug 🐞</h4><ul class="list-disc list-inside text-xs mt-1 text-red-700 dark:text-red-200"><li>Étapes de reproduction :</li><li>Comportement attendu :</li><li>Comportement observé :</li></ul></div>
+                        <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg"><h4 class="font-bold text-blue-800 dark:text-blue-300">🔻 Analyse de la Correction 🦴</h4><ul class="list-disc list-inside text-xs mt-1 text-blue-700 dark:text-blue-200"><li>Données à corriger :</li><li>Valeur attendue :</li></ul></div>
+                        <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg"><h4 class="font-bold text-yellow-800 dark:text-yellow-300">🔻 Analyse de la Question 💬</h4><ul class="list-disc list-inside text-xs mt-1 text-yellow-700 dark:text-yellow-200"><li>Question détaillée de l'utilisateur :</li><li>Réponse apportée / Action à mener :</li></ul></div>
+                        <div class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg"><h4 class="font-bold text-slate-800 dark:text-slate-200">📎 Pièces Jointes</h4><p class="text-xs mt-1 text-slate-500 dark:text-slate-400">Ajouter captures d'écran, vidéos, logs.</p></div>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">✨ Modèle Évolution : Story & GAP</h3>
+                    <p class="mb-6 text-sm text-slate-600 dark:text-slate-400">Structure la demande comme une spécification fonctionnelle.</p>
+                     <div class="space-y-4 text-sm">
+                        <div class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg"><h4 class="font-bold text-slate-800 dark:text-slate-200">🕹️ Actions Rapides</h4><div class="flex gap-2 mt-2"><code class="text-xs bg-white dark:bg-slate-600 p-1 rounded">📝 Prêt pour Dev</code> <code class="text-xs bg-white dark:bg-slate-600 p-1 rounded">❓ Demander Infos</code></div></div>
+                        <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg"><h4 class="font-bold text-green-800 dark:text-green-300">🔻 Rédaction du Ticket Jira 🔗</h4><p class="text-xs mt-1 text-green-700 dark:text-green-200">Ce ticket doit être rédigé dans Jira avant de passer en `Prêt pour DEV`.</p></div>
+                        <div class="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg"><h4 class="font-bold text-indigo-800 dark:text-indigo-300">🔻 Le "Pourquoi" (User Story)</h4><p class="text-xs mt-1 text-indigo-700 dark:text-indigo-200"><strong>En tant que</strong> [Persona], <strong>je veux</strong> [Objectif] <strong>afin de</strong> [Bénéfice].</p></div>
+                        <div class="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg"><h4 class="font-bold text-indigo-800 dark:text-indigo-300">🔻 Le "Quoi" (Critères d'acceptance)</h4><ul class="list-disc list-inside text-xs mt-1 text-indigo-700 dark:text-indigo-200"><li>Étant donné que..., quand je..., alors...</li></ul></div>
+                        <div class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg"><h4 class="font-bold text-slate-800 dark:text-slate-200">🔻 Hors-Périmètre & Maquettes</h4><p class="text-xs mt-1 text-slate-500 dark:text-slate-400">Lister ce que la fonctionnalité ne fera pas. Ajouter les maquettes ici.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOUVELLES SECTIONS COMPLÉTÉES -->
         <section id="priorisation" class="scroll-mt-20 mb-20 fade-in-up">
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🚀 Sprints & Roadmap : Devenir Décisionnel</h2>
             <div class="section-card">
@@ -295,38 +322,51 @@
             </div>
         </section>
 
-        <section id="templates" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">📋 Modèles d'Action</h2>
-            <div class="grid lg:grid-cols-2 gap-8">
-                <div class="section-card">
-                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">🔧 Modèle Unifié : Support</h3>
-                    <p class="mb-6 text-sm text-slate-600 dark:text-slate-400">Pour `Bug`, `Correction`, `Assistance`.</p>
-                    <div class="space-y-4 text-sm">
-                        <div class="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
-                            <h4 class="font-bold text-red-800 dark:text-red-300">N° Ticket Freshservice 🔗</h4>
-                            <p class="text-red-700 dark:text-red-200">Ce champ est **obligatoire** pour un bug.</p>
+        <section id="processus-cles" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🔑 Processus Clés de Qualification</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="section-card"><h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">🔴 Triage vs. Analyse 🔵</h3><p class="text-slate-600 dark:text-slate-300">Le <strong>Triage</strong> est un filtre rapide (1-5 min) pour valider la clarté et l'unicité de la demande. L'<strong>Analyse</strong> est une investigation fonctionnelle approfondie pour définir la solution.</p></div>
+                <div class="section-card"><h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">🔌 GAP vs. Story ✨</h3><p class="text-slate-600 dark:text-slate-300">Un <strong>GAP</strong> est un rattrapage par rapport à une fonctionnalité d'un ancien outil. Une <strong>Story</strong> est une pure nouvelle fonctionnalité qui n'a jamais existé.</p></div>
+            </div>
+        </section>
+
+        <section id="qualite-automatisation" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🤖 Automatisation via les Boutons & Déclencheurs</h2>
+            <div class="section-card">
+                <p class="mb-6 text-slate-600 dark:text-slate-300">Utilisez les outils de Notion pour standardiser les actions répétitives, garantir la qualité des données et accélérer le workflow.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Les Boutons (Actions Manuelles)</h3>
+                        <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">
+                            <h4 class="font-semibold text-lg mb-2 text-slate-800 dark:text-slate-100">Tutoriel : Créer le bouton `📡 Escalader à la DSI`</h4>
+                            <ol class="list-decimal list-inside space-y-2 text-sm">
+                                <li>Dans un modèle de page (ex: `🐞 Modèle de Bug`), tapez `/bouton`.</li>
+                                <li>Nommez-le "📡 Escalader à la DSI".</li>
+                                <li>Ajoutez une étape : "Modifier les pages dans..." → "Pipeline Global".</li>
+                                <li>Choisissez "Cette page" comme page à modifier.</li>
+                                <li>Modifiez `Statut` → `🚧 Bloqué`.</li>
+                                <li>Ajoutez une 2ème étape pour modifier `Équipe` → `DSI (N3)`.</li>
+                                <li>(Optionnel) Ajoutez une 3ème étape "Ajouter un bloc" → "Commentaire" et mentionnez `@DSI`.</li>
+                            </ol>
                         </div>
-                        <div class="border-l-4 border-slate-400 dark:border-slate-600 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 1 : Description du Problème</h4></div>
-                        <div class="border-l-4 border-slate-400 dark:border-slate-600 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 2 : Reproduction du Bug</h4><p class="text-xs text-slate-500 dark:text-slate-400">Étapes, attendu vs. observé</p></div>
-                        <div class="border-l-4 border-slate-400 dark:border-slate-600 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 3 : Contexte & Pièces Jointes</h4></div>
                     </div>
-                </div>
-                <div class="section-card">
-                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">✨ Modèle Évolution : Story & GAP</h3>
-                    <p class="mb-6 text-sm text-slate-600 dark:text-slate-400">Structure la demande comme une spécification fonctionnelle.</p>
-                     <div class="space-y-4 text-sm">
-                        <div class="p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
-                            <h4 class="font-bold text-green-800 dark:text-green-300">N° Ticket Jira 🔗</h4>
-                            <p class="text-green-700 dark:text-green-200">Ce ticket doit être rédigé dans Jira avant de passer en `Prêt pour DEV`.</p>
+                     <div>
+                        <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Les Automatisations (Déclencheurs)</h3>
+                        <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">
+                            <h4 class="font-semibold text-lg mb-2 text-slate-800 dark:text-slate-100">Tutoriel : Statut par défaut `À Trier`</h4>
+                            <ol class="list-decimal list-inside space-y-2 text-sm">
+                                <li>Cliquez sur l'éclair ⚡ en haut de votre BDD "Pipeline Global".</li>
+                                <li>Créez une "Nouvelle automatisation".</li>
+                                <li>Le déclencheur (Trigger) est "Page ajoutée".</li>
+                                <li>L'action est "Modifier la propriété `Statut`".</li>
+                                <li>Choisissez `0. À trier 🔴` comme nouvelle valeur.</li>
+                            </ol>
                         </div>
-                        <div class="border-l-4 border-blue-500 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 1 : Le "Pourquoi" (User Story)</h4></div>
-                        <div class="border-l-4 border-blue-500 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 2 : Le "Quoi" (Critères d'acceptance)</h4></div>
-                        <div class="border-l-4 border-slate-400 dark:border-slate-600 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 3 : Hors-Périmètre & Maquettes</h4></div>
                     </div>
                 </div>
             </div>
         </section>
-
+        
         <section id="vues-op" class="scroll-mt-20 mb-20 fade-in-up">
             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">📊 Page : Dashboards de Pilotage</h2>
             <div class="space-y-8">
@@ -348,12 +388,41 @@
                 </div>
             </div>
         </section>
+        
+        <section id="migration" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🔄 Guide de Migration</h2>
+            <div class="section-card">
+                 <p class="mb-6 text-slate-600 dark:text-slate-300">Pour assurer une transition fluide, il est crucial de mapper les anciens statuts des différents outils (Licorne, Hydroplan, GAP) vers la nouvelle taxonomie unifiée.</p>
+                 <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 rounded-l-lg">Ancien Statut (Exemple)</th>
+                                <th scope="col" class="px-6 py-3">Ancien Outil</th>
+                                <th scope="col" class="px-6 py-3 rounded-r-lg">Nouveau Statut Cible</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-white dark:bg-slate-800 border-b dark:border-slate-700 text-slate-600 dark:text-slate-300"><td class="px-6 py-4">Nouveau</td><td class="px-6 py-4">Licorne</td><td class="px-6 py-4 font-semibold text-red-600 dark:text-red-400">0. À Trier 🔴</td></tr>
+                            <tr class="bg-white dark:bg-slate-800 border-b dark:border-slate-700 text-slate-600 dark:text-slate-300"><td class="px-6 py-4">En cours d'analyse</td><td class="px-6 py-4">GAP</td><td class="px-6 py-4 font-semibold text-blue-600 dark:text-blue-400">1. En analyse MOA 🔵</td></tr>
+                            <tr class="bg-white dark:bg-slate-800 border-b dark:border-slate-700 text-slate-600 dark:text-slate-300"><td class="px-6 py-4">À développer</td><td class="px-6 py-4">Hydroplan</td><td class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-300">2. Prêt pour DEV 📝</td></tr>
+                            <tr class="bg-white dark:bg-slate-800 border-b dark:border-slate-700 text-slate-600 dark:text-slate-300"><td class="px-6 py-4">En développement</td><td class="px-6 py-4">Jira</td><td class="px-6 py-4 font-semibold text-sky-600 dark:text-sky-400">3. En cours de DEV 🧑‍💻</td></tr>
+                            <tr class="bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300"><td class="px-6 py-4">Résolu</td><td class="px-6 py-4">Licorne</td><td class="px-6 py-4 font-semibold text-green-600 dark:text-green-400">7. Terminé 📦</td></tr>
+                        </tbody>
+                    </table>
+                 </div>
+            </div>
+        </section>
 
-        <!-- Autres sections (inchangées pour la concision) -->
-        <section id="processus-cles" class="scroll-mt-20 mb-20 fade-in-up"></section>
-        <section id="qualite-automatisation" class="scroll-mt-20 mb-20 fade-in-up"></section>
-        <section id="migration" class="scroll-mt-20 mb-20 fade-in-up"></section>
-        <section id="mise-en-place" class="scroll-mt-20 mb-20 fade-in-up"></section>
+        <section id="mise-en-place" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🛠️ Plan de Déploiement</h2>
+            <div class="space-y-8">
+                <div class="section-card"><h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">Phase 1 : Construction du Socle 🧱</h3><p class="text-sm text-slate-600 dark:text-slate-300">Créer la base <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">Pipeline Global</code> et configurer toutes les propriétés de la section <a href="#taxonomie" class="text-indigo-600 hover:underline">Taxonomie</a>.</p></div>
+                <div class="section-card"><h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">Phase 2 : Création de l'Espace de Travail 🎨</h3><p class="text-sm text-slate-600 dark:text-slate-300">Construire le <a href="#hub" class="text-indigo-600 hover:underline">Hub Projet</a>, le <a href="#portail-agences" class="text-indigo-600 hover:underline">Portail Agences</a>, les <a href="#templates" class="text-indigo-600 hover:underline">modèles</a> et les <a href="#qualite-automatisation" class="text-indigo-600 hover:underline">boutons</a>.</p></div>
+                <div class="section-card"><h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">Phase 3 : Migration & Formation 🧑‍🏫</h3><p class="text-sm mb-4 text-slate-600 dark:text-slate-300">Migrer un petit lot de tickets existants en utilisant le <a href="#migration" class="text-indigo-600 hover:underline">guide de migration</a>. Former le groupe pilote sur le nouveau processus.</p><blockquote class="border-l-4 border-indigo-500 pl-4 text-sm italic text-slate-500 dark:text-slate-400"><strong>Conseil d'Expert :</strong> Le retour du groupe pilote est crucial. Ajustez le système après leurs retours AVANT de tout migrer.</blockquote></div>
+                <div class="section-card"><h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">Phase 4 : Déploiement Complet 🎉</h3><p class="text-sm text-slate-600 dark:text-slate-300">Après validation, migrer l'ensemble des tickets restants. Communiquer le lancement à toutes les parties prenantes et archiver les anciens espaces.</p></div>
+            </div>
+        </section>
 
         <footer class="text-center mt-24 py-8 border-t border-slate-200 dark:border-slate-700 fade-in-up">
             <p class="text-sm text-slate-500 dark:text-slate-400">&copy; 2025 - Conçu par cosmofilou. Tous droits réservés.</p>
@@ -451,5 +520,4 @@
     </script>
 </body>
 </html>
-
 
