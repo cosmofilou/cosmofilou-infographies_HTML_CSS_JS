@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Système de Pilotage MOA</title>
+    <title>Cahier des Charges : Système de Pilotage de Projet MOA Salesforce</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,696 +12,396 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-        .view {
+        .tab-content {
             display: none;
         }
-        .view.active {
+        .tab-content.active {
             display: block;
         }
-        /* Custom scrollbar for Kanban */
-        .kanban-container::-webkit-scrollbar {
-            height: 8px;
+        .tab-button.active {
+            border-color: #3b82f6;
+            background-color: #1e3a8a;
+            color: #eff6ff;
         }
-        .kanban-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        .kanban-container::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-        }
-        .kanban-container::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-        .kanban-column {
-            min-width: 300px;
-        }
-        .dragging {
-            opacity: 0.5;
-            transform: rotate(3deg);
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800">
+<body class="bg-slate-900 text-slate-300 antialiased">
 
-    <div id="app-container" class="min-h-screen">
-        <!-- Header & Navigation -->
-        <header class="bg-white shadow-md sticky top-0 z-40">
-            <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-cogs text-2xl text-slate-700"></i>
-                    <h1 class="text-xl font-bold text-slate-800">Pilotage MOA</h1>
-                </div>
-                <div class="hidden md:flex items-center space-x-2">
-                    <button data-view="portail-view" class="nav-btn px-4 py-2 rounded-md text-sm font-semibold bg-slate-200 text-slate-800 ring-2 ring-slate-700">🏢 Portail de Saisie</button>
-                    <button data-view="hub-view" class="nav-btn px-4 py-2 rounded-md text-sm font-semibold text-slate-600 hover:bg-slate-200">🏠 Hub Projet</button>
-                    <button data-view="roadmap-view" class="nav-btn px-4 py-2 rounded-md text-sm font-semibold text-slate-600 hover:bg-slate-200">🚀 Roadmap</button>
-                </div>
-                <div class="flex items-center space-x-4">
-                     <div id="user-info" class="text-xs text-slate-500 text-right hidden">
-                        <p id="user-id-display">Not authenticated</p>
-                    </div>
-                </div>
-            </nav>
-            <!-- Mobile Navigation -->
-            <div class="md:hidden p-2 border-t border-slate-200 flex justify-around">
-                 <button data-view="portail-view" class="nav-btn flex-1 p-2 text-xs rounded-md font-semibold bg-slate-200 text-slate-800">🏢 Portail</button>
-                 <button data-view="hub-view" class="nav-btn flex-1 p-2 text-xs rounded-md font-semibold text-slate-600">🏠 Hub</button>
-                 <button data-view="roadmap-view" class="nav-btn flex-1 p-2 text-xs rounded-md font-semibold text-slate-600">🚀 Roadmap</button>
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 sm:p-6 lg:p-12">
+
+        <!-- Header -->
+        <header class="mb-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Système de Pilotage de Projet MOA Salesforce</h1>
+            <p class="text-xl text-blue-400">Cahier des Charges Complet</p>
+            <div class="mt-4 flex justify-center items-center space-x-6 text-sm">
+                <span class="bg-green-500/20 text-green-300 px-3 py-1 rounded-full">Version : 5.0 (Référence)</span>
+                <span class="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full">Statut : Approuvé</span>
+                <span class="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full">Auteur : Gemini</span>
             </div>
         </header>
 
-        <main class="container mx-auto p-4 md:p-6">
-            <!-- Loading Indicator -->
-            <div id="loading-indicator" class="text-center py-10">
-                <i class="fas fa-spinner fa-spin text-3xl text-slate-500"></i>
-                <p class="mt-2 text-slate-600">Chargement des données...</p>
+        <!-- Preamble -->
+        <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-12 text-center italic text-slate-400">
+            <p>Ce document est la source de vérité unique pour le projet. Il annule et remplace toutes les versions précédentes. Toutes les futures décisions devront se référer à ce cahier des charges.</p>
+        </div>
+
+        <!-- Section 1: Vision Stratégique -->
+        <section id="vision" class="mb-12">
+            <h2 class="text-3xl font-bold text-white mb-6 border-b-2 border-blue-500 pb-2">1. Vision Stratégique (Le "Pourquoi")</h2>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-6">
+                    <article>
+                        <h3 class="text-xl font-semibold text-blue-300 mb-2">1.1. Le Constat : La Fragmentation</h3>
+                        <p>Le suivi actuel est réparti sur plusieurs outils non connectés, engendrant un manque de vision globale, des processus incohérents et une difficulté de priorisation stratégique.</p>
+                    </article>
+                    <article>
+                        <h3 class="text-xl font-semibold text-blue-300 mb-2">1.2. La Vision Cible : Le Système Nerveux Centralisé</h3>
+                        <p>Nous construisons le <strong class="text-white">Système Nerveux Centralisé</strong> du pilotage projet MOA pour passer d'un pilotage réactif à un pilotage proactif, intelligent et décisionnel.</p>
+                    </article>
+                </div>
+                <div>
+                     <img src="https://placehold.co/600x400/0f172a/38bdf8?text=Syst%C3%A8me+Nerveux+Centralis%C3%A9" alt="Cerveau numérique avec des nœuds connectés" class="rounded-xl shadow-2xl shadow-blue-500/10">
+                </div>
+            </div>
+             <article class="mt-8">
+                <h3 class="text-xl font-semibold text-blue-300 mb-4">1.3. Les Piliers Fondamentaux</h3>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700"><strong>Clarté Radicale :</strong> Design intuitif, complexité combattue.</div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700"><strong>Friction Zéro à la Saisie :</strong> Plus simple qu'un email.</div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700"><strong>Pilotage à Double Vitesse :</strong> Gérer le Run et le Build.</div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700"><strong>La Connaissance comme Actif :</strong> Savoir capitalisé et lié.</div>
+                </div>
+            </article>
+        </section>
+        
+        <!-- Section 2: Architecture des Données -->
+        <section id="data-architecture" class="mb-12">
+            <h2 class="text-3xl font-bold text-white mb-6 border-b-2 border-blue-500 pb-2">2. Architecture des Données (Le "Cerveau")</h2>
+            <article class="mb-8">
+                <h3 class="text-xl font-semibold text-blue-300 mb-4">2.1. Les 7 Bases de Données Maîtresses</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 text-center">
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">🌍<br>Épiques</div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">🎯<br>User Stories</div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">🗃️<br>Pipeline Global</div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">🗓️<br>Sprints</div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">✅<br>Recette (UAT)</div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">⚖️<br>Journal Décisions</div>
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">📚<br>Connaissances</div>
+                </div>
+            </article>
+
+            <article>
+                <h3 class="text-xl font-semibold text-blue-300 mb-4">2.2. Structure Détaillée de la Base : 🗃️ Pipeline Global des Demandes</h3>
+                <div class="overflow-x-auto bg-slate-800/50 rounded-lg border border-slate-700">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-slate-700/50 text-xs text-slate-300 uppercase">
+                            <tr>
+                                <th class="p-3">Catégorie</th>
+                                <th class="p-3">Icône</th>
+                                <th class="p-3">Nom de la Propriété</th>
+                                <th class="p-3">Type</th>
+                                <th class="p-3">Description / Options</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700">
+                            <tr class="hover:bg-slate-800">
+                                <td class="p-3 font-semibold" rowspan="2">Identification</td>
+                                <td class="p-3 text-center">🏷️</td>
+                                <td class="p-3">Nom de la Demande</td>
+                                <td class="p-3">Titre</td>
+                                <td class="p-3">Titre clair et concis du ticket.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800">
+                                <td class="p-3 text-center">🔢</td>
+                                <td class="p-3">ID Ticket</td>
+                                <td class="p-3">ID</td>
+                                <td class="p-3">Préfixe : LIC-</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800">
+                                <td class="p-3 font-semibold" rowspan="4">Qualification</td>
+                                <td class="p-3 text-center">🚦</td>
+                                <td class="p-3">Statut</td>
+                                <td class="p-3">Statut</td>
+                                <td class="p-3 text-xs space-x-1">
+                                    <span class="status-badge" style="background-color: #ef4444; color: white;">🔴 0. À trier</span>
+                                    <span class="status-badge" style="background-color: #f97316; color: white;">❓ 0a. En attente</span>
+                                    <span class="status-badge" style="background-color: #3b82f6; color: white;">🔵 1. En analyse</span>
+                                    <span class="status-badge" style="background-color: #a855f7; color: white;">📝 2. Prêt DEV</span>
+                                    <span class="status-badge" style="background-color: #eab308; color: black;">🏗️ 3. En DEV</span>
+                                    <span class="status-badge" style="background-color: #f43f5e; color: white;">🚧 3a. Bloqué</span>
+                                    <span class="status-badge" style="background-color: #22c55e; color: white;">✅ 4. En recette</span>
+                                    <span class="status-badge" style="background-color: #64748b; color: white;">📦 5. Terminé</span>
+                                    <span class="status-badge" style="background-color: #111827; color: white;">❌ 6. Annulé</span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-800">
+                                <td class="p-3 text-center">📌</td>
+                                <td class="p-3">Type</td>
+                                <td class="p-3">Sélection</td>
+                                <td class="p-3">🐞 Bug, ✨ Story, 🔌 GAP, 🔧 Correction...</td>
+                            </tr>
+                             <tr class="hover:bg-slate-800">
+                                <td class="p-3 text-center">🌍</td>
+                                <td class="p-3">Périmètre</td>
+                                <td class="p-3">Sélection</td>
+                                <td class="p-3">Direction Technique, Prox-Hydro, Agence PXS Est...</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800">
+                                <td class="p-3 text-center">🧩</td>
+                                <td class="p-3">Domaine Fonctionnel</td>
+                                <td class="p-3">Sélection Multiple</td>
+                                <td class="p-3">Prospection, Facturation, Recouvrement...</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800">
+                                <td class="p-3 font-semibold" rowspan="5">Priorisation RICE</td>
+                                <td class="p-3 text-center">🎯</td>
+                                <td class="p-3">Reach (Portée)</td>
+                                <td class="p-3">Nombre</td>
+                                <td class="p-3">Note de 1 à 5.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800">
+                                <td class="p-3 text-center">💥</td>
+                                <td class="p-3">Impact</td>
+                                <td class="p-3">Nombre</td>
+                                <td class="p-3">Note de 1 à 5.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800">
+                                <td class="p-3 text-center">🤔</td>
+                                <td class="p-3">Confiance (%)</td>
+                                <td class="p-3">Nombre</td>
+                                <td class="p-3">Pourcentage (ex: 80).</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800">
+                                <td class="p-3 text-center">💪</td>
+                                <td class="p-3">Effort (pts)</td>
+                                <td class="p-3">Nombre</td>
+                                <td class="p-3">Points de complexité (Suite de Fibonacci).</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800">
+                                <td class="p-3 text-center">🧪</td>
+                                <td class="p-3">Score RICE</td>
+                                <td class="p-3">Formule</td>
+                                <td class="p-3 text-slate-400 text-xs">(Impact * Reach * (Confiance/100)) / Effort</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        </section>
+
+        <!-- Section 3: Workflows & Automatisations -->
+        <section id="workflows" class="mb-12">
+            <h2 class="text-3xl font-bold text-white mb-6 border-b-2 border-blue-500 pb-2">3. Workflows & Automatisations (L'Intelligence Opérationnelle)</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <article>
+                    <h3 class="text-xl font-semibold text-blue-300 mb-4">3.1. Templates de Saisie</h3>
+                    <div class="space-y-4">
+                        <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                            <h4 class="font-bold text-white">Template [BUG] 🐞</h4>
+                            <p class="text-sm mt-2"><strong>Propriétés pré-remplies :</strong> Type = Bug, Priorité = Haute.</p>
+                            <p class="text-sm mt-1"><strong>Contenu :</strong> Sections "Description", "Étapes de reproduction", "Comportement attendu/observé".</p>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                            <h4 class="font-bold text-white">Template [STORY] ✨</h4>
+                            <p class="text-sm mt-2"><strong>Propriétés pré-remplies :</strong> Type = Story.</p>
+                            <p class="text-sm mt-1"><strong>Contenu :</strong> Sections "Le 'Pourquoi' (User Story)" et "Le 'Quoi' (Critères d'Acceptance)".</p>
+                        </div>
+                    </div>
+                </article>
+                <article>
+                    <h3 class="text-xl font-semibold text-blue-300 mb-4">3.2. Automatisations</h3>
+                    <ul class="space-y-4 list-inside">
+                        <li class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                            <strong class="text-white">1. Initialisation du Ticket :</strong>
+                            <p class="text-sm mt-1"><strong class="text-slate-400">Déclencheur :</strong> Création de page. <br><strong class="text-slate-400">Action :</strong> Statut ➔ 🔴 0. À trier.</p>
+                        </li>
+                        <li class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                             <strong class="text-white">2. Clôture du Ticket :</strong>
+                             <p class="text-sm mt-1"><strong class="text-slate-400">Déclencheur :</strong> Statut ➔ 📦 5. Terminé. <br><strong class="text-slate-400">Action :</strong> Date de résolution ➔ "Aujourd'hui".</p>
+                        </li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <!-- Section 4: Interfaces Utilisateur -->
+        <section id="ui" class="mb-12">
+            <h2 class="text-3xl font-bold text-white mb-6 border-b-2 border-blue-500 pb-2">4. Interfaces Utilisateur (Les Cockpits)</h2>
+            
+            <!-- Tabs Navigation -->
+            <div class="mb-6 flex space-x-2 border-b border-slate-700">
+                <button class="tab-button active text-sm font-medium py-2 px-4 border-b-2 border-transparent hover:bg-slate-800 hover:text-white transition" data-tab="portail">🏢 Portail de Saisie</button>
+                <button class="tab-button text-sm font-medium py-2 px-4 border-b-2 border-transparent hover:bg-slate-800 hover:text-white transition" data-tab="hub">🏠 Hub Projet</button>
+                <button class="tab-button text-sm font-medium py-2 px-4 border-b-2 border-transparent hover:bg-slate-800 hover:text-white transition" data-tab="roadmap">🚀 Roadmap & Priorisation</button>
             </div>
 
-            <!-- Views Container -->
-            <div id="views-container" class="hidden">
-                <!-- VIEW 1: Portail de Saisie Simplifié -->
-                <div id="portail-view" class="view active">
-                    <div class="text-center mb-8">
-                        <h2 class="text-3xl font-bold text-slate-800">Portail de Déclaration</h2>
-                        <p class="mt-2 text-slate-600">Signalez un bug ou proposez une évolution en un clic.</p>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Périmètre Cards will be dynamically inserted here -->
-                    </div>
-                </div>
-
-                <!-- VIEW 2: Hub Projet Salesforce -->
-                <div id="hub-view" class="view">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Column 1: Le Run -->
-                        <div class="bg-white p-6 rounded-lg shadow-sm">
-                            <h3 class="text-2xl font-bold mb-4 border-b pb-2">Le Run (Opérationnel)</h3>
-                            <div class="grid grid-cols-2 gap-4 mb-6">
-                                <div class="bg-red-100 text-red-800 p-4 rounded-lg text-center">
-                                    <p class="text-3xl font-bold" id="kpi-trier">0</p>
-                                    <p class="text-sm font-semibold">Tickets à trier</p>
-                                </div>
-                                <div class="bg-orange-100 text-orange-800 p-4 rounded-lg text-center">
-                                    <p class="text-3xl font-bold" id="kpi-bugs">0</p>
-                                    <p class="text-sm font-semibold">Bugs Urgents</p>
-                                </div>
-                            </div>
-                            <h4 class="font-bold text-lg mb-3">Mes Actions</h4>
-                            <div id="hub-actions-list" class="space-y-3 h-96 overflow-y-auto pr-2">
-                                <!-- Actions list will be dynamically inserted -->
-                            </div>
+            <!-- Tab Content -->
+            <div id="tab-portail" class="tab-content active p-4 bg-slate-800/50 rounded-lg">
+                <h3 class="text-lg font-semibold text-white mb-4">Guichet unique pour toutes les déclarations</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Example card for a department -->
+                    <div class="bg-slate-800 border border-slate-700 rounded-lg p-6 text-center">
+                        <h4 class="text-xl font-bold text-white mb-4">🌍 Prox-Hydro</h4>
+                        <div class="flex flex-col space-y-3">
+                             <button class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition">🐞 Signaler un Bug</button>
+                             <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition">✨ Proposer une Évolution</button>
                         </div>
-                        <!-- Column 2: Le Build -->
-                        <div class="bg-white p-6 rounded-lg shadow-sm">
-                            <h3 class="text-2xl font-bold mb-4 border-b pb-2">Le Build (Stratégique)</h3>
-                            <div class="grid grid-cols-1 gap-4 mb-6">
-                                <div class="bg-blue-100 text-blue-800 p-4 rounded-lg text-center">
-                                    <p class="text-3xl font-bold" id="kpi-spec">0</p>
-                                    <p class="text-sm font-semibold">Tickets pour spécification</p>
-                                </div>
-                            </div>
-                             <h4 class="font-bold text-lg mb-3">Mon Portefeuille de Spécification</h4>
-                            <div id="hub-build-list" class="space-y-3 h-96 overflow-y-auto pr-2">
-                                <!-- Build list will be dynamically inserted -->
-                            </div>
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700 rounded-lg p-6 text-center">
+                        <h4 class="text-xl font-bold text-white mb-4">🏢 Agence PXS Est</h4>
+                         <div class="flex flex-col space-y-3">
+                             <button class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition">🐞 Signaler un Bug</button>
+                             <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition">✨ Proposer une Évolution</button>
+                        </div>
+                    </div>
+                     <div class="bg-slate-800 border border-slate-700 rounded-lg p-6 text-center opacity-50">
+                        <h4 class="text-xl font-bold text-white mb-4">🏢 Siège</h4>
+                         <div class="flex flex-col space-y-3">
+                             <button class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg cursor-not-allowed">🐞 Signaler un Bug</button>
+                             <button class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg cursor-not-allowed">✨ Proposer une Évolution</button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- VIEW 3: Roadmap & Priorisation -->
-                <div id="roadmap-view" class="view">
-                    <!-- Roadmap Tabs -->
-                    <div class="mb-4 border-b border-gray-200">
-                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="roadmap-tabs">
-                            <li class="mr-2">
-                                <button class="roadmap-tab inline-block p-4 border-b-2 border-slate-700 rounded-t-lg text-slate-700 font-bold" data-tab="rice-tab">Backlog (RICE)</button>
-                            </li>
-                            <li class="mr-2">
-                                <button class="roadmap-tab inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="kanban-tab">Kanban des Sprints</button>
-                            </li>
+            <div id="tab-hub" class="tab-content p-4 bg-slate-800/50 rounded-lg">
+                 <h3 class="text-lg font-semibold text-white mb-4">Point d'entrée quotidien pour le pilotage opérationnel</h3>
+                 <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Left Column: Le Run -->
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                        <h4 class="text-xl font-bold text-white mb-4">🏃 Le Run</h4>
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="bg-slate-700/50 p-4 rounded-lg text-center">
+                                <span class="text-4xl font-bold text-red-400">12</span>
+                                <p class="text-sm">Tickets à trier</p>
+                            </div>
+                             <div class="bg-slate-700/50 p-4 rounded-lg text-center">
+                                <span class="text-4xl font-bold text-orange-400">3</span>
+                                <p class="text-sm">Bugs Urgents</p>
+                            </div>
+                        </div>
+                        <h5 class="font-semibold mb-2 text-white">Actions prioritaires</h5>
+                        <ul class="space-y-2 text-sm">
+                            <li class="bg-slate-900/50 p-3 rounded">Mes tickets à trier</li>
+                            <li class="bg-slate-900/50 p-3 rounded">Mes tickets bloqués</li>
                         </ul>
                     </div>
-                    <!-- Roadmap Tab Content -->
-                    <div id="roadmap-tab-content">
-                        <!-- RICE Tab -->
-                        <div id="rice-tab" class="roadmap-tab-pane active">
-                            <div class="bg-white p-4 rounded-lg shadow-sm overflow-x-auto">
-                                <table class="w-full text-sm text-left text-gray-500">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3">Nom</th>
-                                            <th scope="col" class="px-3 py-3">Périmètre</th>
-                                            <th scope="col" class="px-3 py-3 w-24">Reach</th>
-                                            <th scope="col" class="px-3 py-3 w-24">Impact</th>
-                                            <th scope="col" class="px-3 py-3 w-24">Confiance</th>
-                                            <th scope="col" class="px-3 py-3 w-24">Effort</th>
-                                            <th scope="col" class="px-3 py-3 font-bold">Score RICE</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="rice-table-body">
-                                        <!-- RICE table rows will be inserted here -->
-                                    </tbody>
-                                </table>
+                     <!-- Right Column: Le Build -->
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                        <h4 class="text-xl font-bold text-white mb-4">🛠️ Le Build</h4>
+                        <div class="grid grid-cols-1 gap-4 mb-6">
+                            <div class="bg-slate-700/50 p-4 rounded-lg text-center">
+                                <span class="text-4xl font-bold text-blue-400">8</span>
+                                <p class="text-sm">Tickets prêts pour spécification</p>
                             </div>
                         </div>
-                        <!-- Kanban Tab -->
-                        <div id="kanban-tab" class="roadmap-tab-pane hidden">
-                            <div class="mb-4">
-                                <label for="sprint-filter" class="text-sm font-medium">Filtrer par Sprint:</label>
-                                <select id="sprint-filter" class="ml-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                    <!-- Sprint options will be inserted here -->
-                                </select>
-                            </div>
-                            <div id="kanban-board" class="kanban-container flex space-x-4 overflow-x-auto pb-4">
-                                <!-- Kanban columns will be inserted here -->
-                            </div>
+                        <h5 class="font-semibold mb-2 text-white">To-do list du spécificateur</h5>
+                        <ul class="space-y-2 text-sm">
+                            <li class="bg-slate-900/50 p-3 rounded">LIC-125: Améliorer export facture</li>
+                            <li class="bg-slate-900/50 p-3 rounded">LIC-134: Créer un nouveau rapport</li>
+                        </ul>
+                    </div>
+                 </div>
+            </div>
+            
+            <div id="tab-roadmap" class="tab-content p-4 bg-slate-800/50 rounded-lg">
+                <h3 class="text-lg font-semibold text-white mb-4">Vue Kanban des Sprints - Suivi visuel de l'avancement</h3>
+                <div class="flex space-x-4 overflow-x-auto p-2">
+                    <!-- Kanban Columns -->
+                    <div class="flex-shrink-0 w-72 bg-slate-800 p-3 rounded-lg">
+                        <h4 class="font-bold mb-3 text-white">📝 Prêt pour DEV (3)</h4>
+                        <div class="space-y-3">
+                           <div class="bg-slate-700 p-3 rounded-md shadow">
+                                <p class="font-semibold text-sm">LIC-145: Interface admin</p>
+                                <span class="status-badge mt-2" style="background-color: #f87171; color: white;">Haute</span>
+                           </div>
+                           <div class="bg-slate-700 p-3 rounded-md shadow">
+                                <p class="font-semibold text-sm">LIC-148: Optimisation BDD</p>
+                                <span class="status-badge mt-2" style="background-color: #fbbf24; color: black;">Moyenne</span>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0 w-72 bg-slate-800 p-3 rounded-lg">
+                        <h4 class="font-bold mb-3 text-white">🏗️ En cours de DEV (2)</h4>
+                        <div class="space-y-3">
+                           <div class="bg-slate-700 p-3 rounded-md shadow">
+                                <p class="font-semibold text-sm">LIC-121: Connexion SSO</p>
+                                <span class="status-badge mt-2" style="background-color: #f87171; color: white;">Haute</span>
+                           </div>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0 w-72 bg-slate-800 p-3 rounded-lg">
+                        <h4 class="font-bold mb-3 text-white">✅ En recette MOA (1)</h4>
+                        <div class="space-y-3">
+                            <div class="bg-slate-700 p-3 rounded-md shadow">
+                                <p class="font-semibold text-sm">LIC-119: Module de facturation</p>
+                                <span class="status-badge mt-2" style="background-color: #f87171; color: white;">Haute</span>
+                           </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </section>
 
-    <!-- Modal for Ticket Creation -->
-    <div id="creation-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
-        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
-            <h2 id="modal-title" class="text-xl font-bold mb-4">Créer un ticket</h2>
-            <form id="creation-form">
-                <input type="hidden" id="form-perimetre">
-                <input type="hidden" id="form-type">
-                <div class="mb-4">
-                    <label for="form-nomDemande" class="block text-sm font-medium text-gray-700">Titre du ticket <span class="text-red-500">*</span></label>
-                    <input type="text" id="form-nomDemande" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">Domaine Fonctionnel</label>
-                    <div id="form-domaineFonctionnel" class="mt-2 grid grid-cols-2 gap-2">
-                        <!-- Checkboxes will be inserted here -->
-                    </div>
-                </div>
-                 <div class="mb-4">
-                    <label for="form-description" class="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea id="form-description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
-                </div>
-                <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" id="modal-cancel-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Annuler</button>
-                    <button type="submit" class="px-4 py-2 bg-slate-700 text-white rounded-md hover:bg-slate-800">Soumettre</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Modal for Ticket Details/Edition -->
-    <div id="detail-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-full overflow-y-auto">
-             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold">Détails du Ticket</h2>
-                <button id="detail-modal-close" class="text-gray-500 hover:text-gray-800">&times;</button>
+        <!-- Section 5: Plan de Déploiement -->
+        <section id="deployment">
+            <h2 class="text-3xl font-bold text-white mb-6 border-b-2 border-blue-500 pb-2">5. Plan de Déploiement et Transition Technique</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <article>
+                    <h3 class="text-xl font-semibold text-blue-300 mb-4">5.1. Plan de Déploiement en 4 Phases</h3>
+                    <ol class="list-decimal list-inside space-y-3">
+                        <li class="bg-slate-800 p-3 rounded-lg"><strong class="text-white">Phase 1 :</strong> Construction du Socle (BDD, propriétés, relations).</li>
+                        <li class="bg-slate-800 p-3 rounded-lg"><strong class="text-white">Phase 2 :</strong> Création des Espaces de Travail (Hub, Portail, Roadmap).</li>
+                        <li class="bg-slate-800 p-3 rounded-lg"><strong class="text-white">Phase 3 :</strong> Migration & Pilote (Formation et ajustements).</li>
+                        <li class="bg-slate-800 p-3 rounded-lg"><strong class="text-white">Phase 4 :</strong> Déploiement Général (Migration complète et communication).</li>
+                    </ol>
+                </article>
+                <article>
+                    <h3 class="text-xl font-semibold text-blue-300 mb-4">5.2. Spécifications pour la Transition vers une Application Web</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><strong class="text-slate-300">Backend :</strong> Chaque BDD ➔ Table PostgreSQL. Relations ➔ Clés étrangères.</li>
+                        <li><strong class="text-slate-300">API :</strong> REST ou GraphQL exposant les opérations CRUD.</li>
+                        <li><strong class="text-slate-300">Frontend :</strong> Pages de pilotage ➔ Composants React, Angular ou Vue.js.</li>
+                    </ul>
+                </article>
             </div>
-            <form id="detail-form">
-                <input type="hidden" id="detail-id">
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <div>
-                        <label for="detail-nomDemande" class="block text-sm font-medium">Titre</label>
-                        <input type="text" id="detail-nomDemande" class="mt-1 w-full rounded-md border-gray-300 shadow-sm">
-                     </div>
-                     <div>
-                        <label for="detail-statut" class="block text-sm font-medium">Statut</label>
-                        <select id="detail-statut" class="mt-1 w-full rounded-md border-gray-300 shadow-sm"></select>
-                    </div>
-                    <div>
-                        <label for="detail-type" class="block text-sm font-medium">Type</label>
-                        <select id="detail-type" class="mt-1 w-full rounded-md border-gray-300 shadow-sm"></select>
-                    </div>
-                    <div>
-                        <label for="detail-perimetre" class="block text-sm font-medium">Périmètre</label>
-                        <select id="detail-perimetre" class="mt-1 w-full rounded-md border-gray-300 shadow-sm"></select>
-                    </div>
-                    <div>
-                        <label for="detail-responsableMOA" class="block text-sm font-medium">Responsable MOA</label>
-                        <select id="detail-responsableMOA" class="mt-1 w-full rounded-md border-gray-300 shadow-sm"></select>
-                    </div>
-                     <div>
-                        <label for="detail-priorite" class="block text-sm font-medium">Priorité</label>
-                        <select id="detail-priorite" class="mt-1 w-full rounded-md border-gray-300 shadow-sm"></select>
-                    </div>
-                 </div>
-                 <div class="mt-4">
-                    <label class="block text-sm font-medium">Domaine Fonctionnel</label>
-                    <div id="detail-domaineFonctionnel" class="mt-2 grid grid-cols-2 md:grid-cols-3 gap-2"></div>
-                 </div>
-                <div class="mt-4 flex items-center space-x-2">
-                     <input type="checkbox" id="detail-goDev" class="h-4 w-4 rounded border-gray-300 text-slate-600">
-                     <label for="detail-goDev" class="text-sm font-medium">Go Dev</label>
-                </div>
-                <div class="flex justify-end space-x-3 mt-6">
-                    <button type="button" id="detail-delete-btn" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Supprimer</button>
-                    <button type="submit" class="px-4 py-2 bg-slate-700 text-white rounded-md hover:bg-slate-800">Enregistrer</button>
-                </div>
-            </form>
-        </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center mt-16 pt-8 border-t border-slate-700">
+            <p class="text-sm text-slate-500">Fin du document. Version 5.0.</p>
+        </footer>
+
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, serverTimestamp, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
 
-        // --- CONFIGURATION & CONSTANTS ---
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "AIza...", authDomain: "...", projectId: "..." };
+                    // Deactivate all buttons and hide all content
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
 
-        const PERIMETRES = ["Direction Technique", "Prox-Hydro", "Agence PXS Est", "Agence PXS Ouest", "Siège", "Autre"];
-        const DOMAINES_FONCTIONNELS = ["Prospection", "Facturation", "Recouvrement", "Mobilité", "Reporting", "Administration"];
-        const STATUTS = ["🔴 0. À trier", "❓ 0a. En attente d'infos", "🔵 1. En analyse MOA", "📝 2. Prêt pour DEV", "🏗️ 3. En cours de DEV", "🚧 3a. Bloqué", "✅ 4. En recette MOA", "📦 5. Terminé", "❌ 6. Annulé"];
-        const KANBAN_STATUTS = ["📝 2. Prêt pour DEV", "🏗️ 3. En cours de DEV", "🚧 3a. Bloqué", "✅ 4. En recette MOA", "📦 5. Terminé"];
-        const TYPES = ["🐞 Bug", "✨ Story", "🔌 GAP", "🔧 Correction", "🎓 Formation", "💬 Question"];
-        const PRIORITES = ["Haute", "Moyenne", "Basse"];
-        const USERS = [ // Mock data for assignees
-            { uid: 'user1_uid', name: 'Alice' },
-            { uid: 'user2_uid', name: 'Bob' },
-            { uid: 'user3_uid', name: 'Charlie' },
-        ];
-        
-        // --- APPLICATION STATE ---
-        let db, auth, currentUser;
-        let allTickets = [];
-
-        // --- DOM ELEMENTS ---
-        const loadingIndicator = document.getElementById('loading-indicator');
-        const viewsContainer = document.getElementById('views-container');
-        const creationModal = document.getElementById('creation-modal');
-        const detailModal = document.getElementById('detail-modal');
-
-        // --- INITIALIZATION ---
-        async function initialize() {
-            try {
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                setupAuthListener();
-                setupUI();
-            } catch (error) {
-                console.error("Firebase initialization failed:", error);
-                loadingIndicator.innerHTML = '<p class="text-red-500">Erreur de connexion à la base de données.</p>';
-            }
-        }
-        
-        function setupAuthListener() {
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    currentUser = user;
-                    document.getElementById('user-id-display').textContent = `UID: ${currentUser.uid.substring(0,8)}...`;
-                    document.getElementById('user-info').classList.remove('hidden');
-                    startDataListeners();
-                } else {
-                    try {
-                         if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                            await signInWithCustomToken(auth, __initial_auth_token);
-                        } else {
-                            await signInAnonymously(auth);
-                        }
-                    } catch(error) {
-                        console.error("Authentication failed:", error);
-                    }
-                }
-            });
-        }
-
-        function startDataListeners() {
-            const ticketsCollection = collection(db, 'pipelineGlobal');
-            onSnapshot(ticketsCollection, (snapshot) => {
-                allTickets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderAll();
-                loadingIndicator.style.display = 'none';
-                viewsContainer.style.display = 'block';
-            }, error => {
-                console.error("Error fetching tickets: ", error);
-            });
-        }
-        
-        // --- UI SETUP & RENDERING ---
-        function setupUI() {
-            // Navigation
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const targetView = e.currentTarget.dataset.view;
-                    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                    document.getElementById(targetView).classList.add('active');
-                    
-                    document.querySelectorAll('.nav-btn').forEach(b => {
-                        b.classList.remove('bg-slate-200', 'text-slate-800', 'ring-2', 'ring-slate-700');
-                         b.classList.add('text-slate-600', 'hover:bg-slate-200');
-                    });
-                    document.querySelectorAll(`.nav-btn[data-view="${targetView}"]`).forEach(b => {
-                        b.classList.add('bg-slate-200', 'text-slate-800', 'ring-2', 'ring-slate-700');
-                        b.classList.remove('text-slate-600', 'hover:bg-slate-200');
-                    });
+                    // Activate clicked button and show corresponding content
+                    button.classList.add('active');
+                    document.getElementById(`tab-${tabId}`).classList.add('active');
                 });
             });
-
-            // Roadmap Tabs
-            document.querySelectorAll('.roadmap-tab').forEach(tab => {
-                tab.addEventListener('click', (e) => {
-                    const targetPane = e.currentTarget.dataset.tab;
-                    document.querySelectorAll('.roadmap-tab-pane').forEach(p => p.classList.add('hidden'));
-                    document.getElementById(targetPane).classList.remove('hidden');
-
-                    document.querySelectorAll('.roadmap-tab').forEach(t => {
-                        t.classList.remove('border-slate-700', 'text-slate-700', 'font-bold');
-                        t.classList.add('border-transparent');
-                    });
-                    e.currentTarget.classList.add('border-slate-700', 'text-slate-700', 'font-bold');
-                });
-            });
-            
-            // Render static parts
-            renderPortailSaisie();
-            renderCreationFormOptions();
-            renderDetailFormOptions();
-            renderKanbanColumns();
-        }
-
-        function renderAll() {
-            renderHub();
-            renderRiceTable();
-            renderKanbanBoard();
-        }
-
-        // --- Portail de Saisie ---
-        function renderPortailSaisie() {
-            const container = document.querySelector('#portail-view .grid');
-            container.innerHTML = PERIMETRES.map(p => `
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <h3 class="font-bold text-lg mb-4 text-center">${p}</h3>
-                    <div class="flex flex-col space-y-3">
-                        <button class="create-ticket-btn w-full px-4 py-3 bg-red-500 text-white rounded-md font-semibold hover:bg-red-600 transition-colors" data-perimetre="${p}" data-type="🐞 Bug">🐞 Signaler un Bug</button>
-                        <button class="create-ticket-btn w-full px-4 py-3 bg-blue-500 text-white rounded-md font-semibold hover:bg-blue-600 transition-colors" data-perimetre="${p}" data-type="✨ Story">✨ Proposer une Évolution</button>
-                    </div>
-                </div>
-            `).join('');
-            
-            document.querySelectorAll('.create-ticket-btn').forEach(btn => {
-                btn.addEventListener('click', handleOpenCreationModal);
-            });
-        }
-        
-        // --- Hub Projet ---
-        function renderHub() {
-            if (!currentUser) return;
-            const myUid = currentUser.uid;
-
-            // KPIs
-            const toTriage = allTickets.filter(t => t.statut === "🔴 0. À trier").length;
-            const urgentBugs = allTickets.filter(t => t.type === "🐞 Bug" && t.priorite === "Haute" && t.statut !== "📦 5. Terminé" && t.statut !== "❌ 6. Annulé").length;
-            const toSpec = allTickets.filter(t => t.goDev && t.statut === "🔵 1. En analyse MOA").length;
-            
-            document.getElementById('kpi-trier').textContent = toTriage;
-            document.getElementById('kpi-bugs').textContent = urgentBugs;
-            document.getElementById('kpi-spec').textContent = toSpec;
-
-            // Lists
-            // Note: In a real app, myUid would be compared to a real UID field. Here we use mock data logic.
-            const myActions = allTickets.filter(t => ["🔴 0. À trier", "❓ 0a. En attente d'infos", "🚧 3a. Bloqué"].includes(t.statut));
-            const myBuild = allTickets.filter(t => t.goDev && t.statut === "🔵 1. En analyse MOA");
-            
-            const renderTicketCard = t => `
-                 <div class="bg-slate-50 p-3 rounded-md border border-slate-200 cursor-pointer hover:bg-slate-100" data-id="${t.id}">
-                    <div class="flex justify-between items-start">
-                        <p class="font-semibold text-sm">${t.nomDemande}</p>
-                        <span class="text-xs font-mono text-slate-400">#${t.id.substring(0,5)}</span>
-                    </div>
-                    <div class="flex items-center space-x-2 mt-2 text-xs">
-                        <span class="px-2 py-1 rounded-full bg-gray-200">${t.statut}</span>
-                        <span class="px-2 py-1 rounded-full bg-blue-100 text-blue-800">${t.perimetre}</span>
-                    </div>
-                 </div>
-            `;
-            document.getElementById('hub-actions-list').innerHTML = myActions.map(renderTicketCard).join('') || '<p class="text-center text-slate-500 text-sm">Aucune action requise.</p>';
-            document.getElementById('hub-build-list').innerHTML = myBuild.map(renderTicketCard).join('') || '<p class="text-center text-slate-500 text-sm">Aucun ticket à spécifier.</p>';
-            
-            document.querySelectorAll('#hub-view [data-id]').forEach(card => {
-                card.addEventListener('click', (e) => handleOpenDetailModal(e.currentTarget.dataset.id));
-            });
-        }
-        
-        // --- Roadmap ---
-        function renderRiceTable() {
-            const riceTickets = allTickets
-                .filter(t => ["✨ Story", "🔌 GAP"].includes(t.type))
-                .map(t => ({
-                    ...t,
-                    rice_score: calculateRiceScore(t.rice_reach, t.rice_impact, t.rice_confidence, t.rice_effort)
-                }))
-                .sort((a, b) => b.rice_score - a.rice_score);
-
-            const tableBody = document.getElementById('rice-table-body');
-            tableBody.innerHTML = riceTickets.map(t => `
-                <tr class="bg-white border-b hover:bg-gray-50">
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">${t.nomDemande}</td>
-                    <td class="px-3 py-4">${t.perimetre}</td>
-                    <td class="px-3 py-4"><input type="number" class="w-20 p-1 border rounded rice-input" data-id="${t.id}" data-field="rice_reach" value="${t.rice_reach || ''}"></td>
-                    <td class="px-3 py-4"><input type="number" class="w-20 p-1 border rounded rice-input" data-id="${t.id}" data-field="rice_impact" value="${t.rice_impact || ''}"></td>
-                    <td class="px-3 py-4"><input type="number" class="w-20 p-1 border rounded rice-input" data-id="${t.id}" data-field="rice_confidence" value="${t.rice_confidence || ''}"></td>
-                    <td class="px-3 py-4"><input type="number" class="w-20 p-1 border rounded rice-input" data-id="${t.id}" data-field="rice_effort" value="${t.rice_effort || ''}"></td>
-                    <td class="px-3 py-4 font-bold text-lg text-slate-800" id="rice-score-${t.id}">${t.rice_score.toFixed(2)}</td>
-                </tr>
-            `).join('');
-
-            document.querySelectorAll('.rice-input').forEach(input => {
-                input.addEventListener('change', handleRiceUpdate);
-            });
-        }
-        
-        function renderKanbanColumns() {
-             document.getElementById('kanban-board').innerHTML = KANBAN_STATUTS.map(status => `
-                <div class="kanban-column bg-slate-200 rounded-lg p-3 flex-shrink-0" data-status="${status}">
-                    <h4 class="font-semibold text-sm mb-3 px-1">${status}</h4>
-                    <div class="kanban-cards space-y-3 h-[60vh] overflow-y-auto">
-                        <!-- Cards will be inserted here -->
-                    </div>
-                </div>
-            `).join('');
-
-             document.querySelectorAll('.kanban-column').forEach(col => {
-                col.addEventListener('dragover', e => {
-                    e.preventDefault();
-                    col.classList.add('bg-slate-300');
-                });
-                col.addEventListener('dragleave', e => col.classList.remove('bg-slate-300'));
-                col.addEventListener('drop', handleKanbanDrop);
-            });
-        }
-
-        function renderKanbanBoard() {
-            // Clear existing cards
-            document.querySelectorAll('.kanban-cards').forEach(col => col.innerHTML = '');
-            
-            allTickets.forEach(ticket => {
-                if (KANBAN_STATUTS.includes(ticket.statut)) {
-                    const column = document.querySelector(`.kanban-column[data-status="${ticket.statut}"] .kanban-cards`);
-                    if (column) {
-                        const card = document.createElement('div');
-                        card.className = "bg-white p-3 rounded-md shadow-sm border cursor-grab";
-                        card.setAttribute('draggable', true);
-                        card.dataset.id = ticket.id;
-                        card.innerHTML = `
-                             <p class="font-semibold text-sm">${ticket.nomDemande}</p>
-                             <div class="flex items-center space-x-2 mt-2 text-xs">
-                                <span class="px-2 py-1 rounded-full bg-blue-100 text-blue-800">${ticket.perimetre}</span>
-                                <span class="px-2 py-1 rounded-full ${ticket.priorite === 'Haute' ? 'bg-red-100 text-red-800' : 'bg-gray-200'}">${ticket.priorite}</span>
-                             </div>`;
-                        card.addEventListener('dragstart', handleKanbanDragStart);
-                        card.addEventListener('click', () => handleOpenDetailModal(ticket.id));
-                        column.appendChild(card);
-                    }
-                }
-            });
-        }
-
-        // --- MODALS & FORMS ---
-        function renderCreationFormOptions() {
-            document.getElementById('form-domaineFonctionnel').innerHTML = DOMAINES_FONCTIONNELS.map(d => `
-                <label class="flex items-center space-x-2 text-sm">
-                    <input type="checkbox" name="domaine" value="${d}" class="rounded border-gray-300 text-slate-600 shadow-sm">
-                    <span>${d}</span>
-                </label>
-            `).join('');
-        }
-
-        function renderDetailFormOptions() {
-            const populateSelect = (id, options) => {
-                document.getElementById(id).innerHTML = options.map(o => `<option value="${o}">${o}</option>`).join('');
-            };
-            populateSelect('detail-statut', STATUTS);
-            populateSelect('detail-type', TYPES);
-            populateSelect('detail-perimetre', PERIMETRES);
-            populateSelect('detail-priorite', PRIORITES);
-            document.getElementById('detail-responsableMOA').innerHTML = USERS.map(u => `<option value="${u.uid}">${u.name}</option>`).join('');
-            
-            document.getElementById('detail-domaineFonctionnel').innerHTML = DOMAINES_FONCTIONNELS.map(d => `
-                <label class="flex items-center space-x-2 text-sm">
-                    <input type="checkbox" name="detail-domaine" value="${d}" class="rounded border-gray-300 text-slate-600 shadow-sm">
-                    <span>${d}</span>
-                </label>
-            `).join('');
-        }
-
-        // --- EVENT HANDLERS ---
-        function handleOpenCreationModal(e) {
-            const { perimetre, type } = e.currentTarget.dataset;
-            document.getElementById('creation-form').reset();
-            document.getElementById('form-perimetre').value = perimetre;
-            document.getElementById('form-type').value = type;
-            document.getElementById('modal-title').textContent = `${type} pour ${perimetre}`;
-            creationModal.style.display = 'flex';
-        }
-
-        document.getElementById('modal-cancel-btn').addEventListener('click', () => creationModal.style.display = 'none');
-        
-        document.getElementById('creation-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const selectedDomaines = Array.from(document.querySelectorAll('#form-domaineFonctionnel input:checked')).map(cb => cb.value);
-            const newTicket = {
-                nomDemande: document.getElementById('form-nomDemande').value,
-                perimetre: document.getElementById('form-perimetre').value,
-                type: document.getElementById('form-type').value,
-                domaineFonctionnel: selectedDomaines,
-                description: document.getElementById('form-description').value,
-                statut: "🔴 0. À trier",
-                priorite: "Moyenne",
-                goDev: false,
-                dateCreation: serverTimestamp(),
-                rapporteur: currentUser?.email || 'anonymous',
-            };
-            try {
-                await addDoc(collection(db, 'pipelineGlobal'), newTicket);
-                creationModal.style.display = 'none';
-            } catch (error) {
-                console.error("Error adding document: ", error);
-                alert("Erreur lors de la création du ticket.");
-            }
         });
-
-        function handleOpenDetailModal(ticketId) {
-            const ticket = allTickets.find(t => t.id === ticketId);
-            if (!ticket) return;
-
-            document.getElementById('detail-id').value = ticket.id;
-            document.getElementById('detail-nomDemande').value = ticket.nomDemande || '';
-            document.getElementById('detail-statut').value = ticket.statut || '';
-            document.getElementById('detail-type').value = ticket.type || '';
-            document.getElementById('detail-perimetre').value = ticket.perimetre || '';
-            document.getElementById('detail-priorite').value = ticket.priorite || '';
-            document.getElementById('detail-responsableMOA').value = ticket.responsableMOA_uid || '';
-            document.getElementById('detail-goDev').checked = ticket.goDev || false;
-            
-            document.querySelectorAll('#detail-domaineFonctionnel input').forEach(cb => {
-                cb.checked = (ticket.domaineFonctionnel || []).includes(cb.value);
-            });
-            
-            detailModal.style.display = 'flex';
-        }
-
-        document.getElementById('detail-modal-close').addEventListener('click', () => detailModal.style.display = 'none');
-
-        document.getElementById('detail-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const ticketId = document.getElementById('detail-id').value;
-            const selectedDomaines = Array.from(document.querySelectorAll('#detail-domaineFonctionnel input:checked')).map(cb => cb.value);
-            
-            const updatedData = {
-                nomDemande: document.getElementById('detail-nomDemande').value,
-                statut: document.getElementById('detail-statut').value,
-                type: document.getElementById('detail-type').value,
-                perimetre: document.getElementById('detail-perimetre').value,
-                priorite: document.getElementById('detail-priorite').value,
-                responsableMOA_uid: document.getElementById('detail-responsableMOA').value,
-                goDev: document.getElementById('detail-goDev').checked,
-                domaineFonctionnel: selectedDomaines,
-            };
-             if (updatedData.statut === "📦 5. Terminé" && !allTickets.find(t=>t.id === ticketId).dateResolution) {
-                updatedData.dateResolution = serverTimestamp();
-            }
-
-            try {
-                await updateDoc(doc(db, 'pipelineGlobal', ticketId), updatedData);
-                detailModal.style.display = 'none';
-            } catch (error) {
-                console.error("Error updating document: ", error);
-                alert("Erreur lors de la mise à jour.");
-            }
-        });
-        
-        document.getElementById('detail-delete-btn').addEventListener('click', async () => {
-             const ticketId = document.getElementById('detail-id').value;
-             if (confirm("Êtes-vous sûr de vouloir supprimer ce ticket ?")) {
-                 try {
-                    await deleteDoc(doc(db, 'pipelineGlobal', ticketId));
-                    detailModal.style.display = 'none';
-                } catch (error) {
-                    console.error("Error deleting document: ", error);
-                    alert("Erreur lors de la suppression.");
-                }
-             }
-        });
-        
-        async function handleRiceUpdate(e) {
-            const { id, field } = e.target.dataset;
-            const value = Number(e.target.value);
-            try {
-                await updateDoc(doc(db, 'pipelineGlobal', id), { [field]: value });
-                 // Update local score for immediate feedback
-                const row = e.target.closest('tr');
-                const reach = Number(row.querySelector('[data-field="rice_reach"]').value);
-                const impact = Number(row.querySelector('[data-field="rice_impact"]').value);
-                const confidence = Number(row.querySelector('[data-field="rice_confidence"]').value);
-                const effort = Number(row.querySelector('[data-field="rice_effort"]').value);
-                const score = calculateRiceScore(reach, impact, confidence, effort);
-                document.getElementById(`rice-score-${id}`).textContent = score.toFixed(2);
-            } catch (error) {
-                console.error("Error updating RICE field:", error);
-            }
-        }
-        
-        let draggedTicketId = null;
-        function handleKanbanDragStart(e) {
-            draggedTicketId = e.currentTarget.dataset.id;
-            e.currentTarget.classList.add('dragging');
-        }
-
-        async function handleKanbanDrop(e) {
-            e.preventDefault();
-            const column = e.currentTarget;
-            column.classList.remove('bg-slate-300');
-            const newStatus = column.dataset.status;
-
-            const draggedCard = document.querySelector(`[data-id="${draggedTicketId}"]`);
-            if (draggedCard) draggedCard.classList.remove('dragging');
-
-            if (draggedTicketId && newStatus) {
-                try {
-                    await updateDoc(doc(db, 'pipelineGlobal', draggedTicketId), { statut: newStatus });
-                    draggedTicketId = null;
-                } catch (error) {
-                    console.error("Error updating status:", error);
-                }
-            }
-        }
-        
-        // --- UTILITY FUNCTIONS ---
-        function calculateRiceScore(reach, impact, confidence, effort) {
-            if (!reach || !impact || !confidence || !effort || effort === 0) {
-                return 0;
-            }
-            return (reach * impact * (confidence / 100)) / effort;
-        }
-
-        // --- START THE APP ---
-        document.addEventListener('DOMContentLoaded', initialize);
     </script>
 </body>
 </html>
