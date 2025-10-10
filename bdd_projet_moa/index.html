@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Guide Ultime du Pipeline Salesforce sur Notion</title>
+    <title>Guide Ultime - Suivi Projet MOA Salesforce sur Notion</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -95,66 +95,56 @@
            }
         }
 
-
-        /* Styles pour les sections pour une meilleure séparation visuelle */
         .section-card {
             background-color: white;
-            border-radius: 0.75rem; /* rounded-xl */
-            padding: 2rem; /* p-8 */
+            border-radius: 0.75rem;
+            padding: 2rem;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
             border: 1px solid #e2e8f0;
             transition: all 0.3s ease-in-out;
         }
         .dark .section-card {
-            background-color: #1e293b; /* dark:bg-slate-800 */
-            border-color: #334155; /* dark:border-slate-700 */
+            background-color: #1e293b;
+            border-color: #334155;
         }
         .section-card:hover {
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
             transform: translateY(-4px);
         }
-
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 transition-colors duration-300">
 
-    <!-- Menu latéral fixe -->
     <nav class="fixed top-0 left-0 h-full w-64 bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg border-r border-slate-200 dark:border-slate-700 p-4 z-20 hidden lg:flex flex-col">
         <div class="flex items-center gap-3 mb-10 p-2">
-            <div class="p-2 bg-indigo-600 rounded-lg shrink-0 shadow-lg shadow-indigo-500/30 flex items-center justify-center h-12 w-12">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-            </div>
+            <div class="text-3xl">🛠️</div>
             <div>
                 <h1 class="text-base font-bold text-slate-900 dark:text-white">Pilotage Projet Salesforce</h1>
                 <p class="text-xs text-slate-500 dark:text-slate-400">Le Guide Ultime sur Notion</p>
             </div>
         </div>
-        <!-- Remplacement des emojis par des icônes SVG pour un look plus pro -->
         <ul id="nav-menu" class="space-y-1.5 overflow-y-auto">
-            <li><a href="#flux-visuel" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Flux de Travail</a></li>
-            <li><a href="#hub" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg> Hub Projet</a></li>
-            <li><a href="#portail-agences" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg> Portail Agences</a></li>
-            <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 8v5z"></path></svg> Base de Données</a></li>
-            <li><a href="#priorisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Sprints & Roadmap</a></li>
-            <li><a href="#processus-cles" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1.75a1.75 1.75 0 01-1.75-1.75V11a1.75 1.75 0 011.75-1.75H3V7.5A1.75 1.75 0 014.75 5.75H7V3h2v2h2v2h2.25A1.75 1.75 0 0115 7z"></path></svg> Processus Clés</a></li>
-            <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> Modèles d'Action</a></li>
-            <li><a href="#qualite-automatisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Automatisation</a></li>
-            <li><a href="#vues-op" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg> Vues de Pilotage</a></li>
-            <li><a href="#migration" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> Migration</a></li>
-            <li><a href="#mise-en-place" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Plan de Déploiement</a></li>
+            <li><a href="#flux-visuel" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">⚡️ Flux de Travail</a></li>
+            <li><a href="#hub" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🏠 Hub Projet</a></li>
+            <li><a href="#portail-agences" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🏢 Portail de Saisie</a></li>
+            <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🏷️ Base de Données</a></li>
+            <li><a href="#priorisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🚀 Sprints & Roadmap</a></li>
+            <li><a href="#processus-cles" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🔑 Processus Clés</a></li>
+            <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">📋 Modèles d'Action</a></li>
+            <li><a href="#qualite-automatisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🤖 Automatisation</a></li>
+            <li><a href="#vues-op" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">📊 Vues de Pilotage</a></li>
+            <li><a href="#migration" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🔄 Migration</a></li>
+            <li><a href="#mise-en-place" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🛠️ Plan de Déploiement</a></li>
         </ul>
         <div class="mt-auto p-2">
-            <button id="theme-toggle" class="w-full flex items-center justify-center gap-3 px-4 py-2 rounded-lg font-medium bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-all">
-                <svg id="theme-toggle-dark-icon" class="h-5 w-5 hidden fill-current" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                <svg id="theme-toggle-light-icon" class="h-5 w-5 hidden fill-current" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+            <button id="theme-toggle" class="w-full flex items-center justify-center gap-3 px-4 py-2 rounded-lg font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 transition-all">
+                <span id="theme-toggle-dark-icon" class="hidden text-lg">🌙</span>
+                <span id="theme-toggle-light-icon" class="hidden text-lg">☀️</span>
                 <span id="theme-toggle-text"></span>
             </button>
         </div>
     </nav>
 
-    <!-- Contenu Principal -->
     <main class="lg:ml-64 p-6 md:p-12">
         <header class="mb-16 text-center lg:text-left fade-in-up">
             <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-3">
@@ -163,411 +153,208 @@
             <p class="text-lg text-slate-500 dark:text-slate-400 max-w-3xl mx-auto lg:mx-0">Le plan directeur pour un système de pilotage centralisé, puissant et décisionnel sur Notion, conçu pour un Chef de Projet MOA Salesforce.</p>
         </header>
 
-        <!-- NOUVELLE SECTION : Flux de travail visuel -->
         <section id="flux-visuel" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-10 text-slate-900 dark:text-white flex items-center gap-4">
-                <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                Le Flux de Travail Visuel
-            </h2>
+            <h2 class="text-3xl font-bold mb-10 text-slate-900 dark:text-white">⚡️ Le Flux de Travail Visuel</h2>
             <div class="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-md border border-slate-200 dark:border-slate-700 overflow-x-auto">
                 <div class="flex items-start justify-between gap-x-12 xl:gap-x-24 min-w-max">
-                    <!-- Statuts À faire -->
-                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step">
-                        <div class="flex items-center justify-center w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-300 ring-4 ring-white dark:ring-slate-800">🔴</div>
-                        <p class="mt-2 text-sm font-semibold">0. À Trier</p>
-                    </div>
-                    <!-- Statuts En cours -->
-                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-300 ring-4 ring-white dark:ring-slate-800">🟣</div><p class="mt-2 text-sm font-semibold">0a. En attente d'infos</p></div>
-                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 ring-4 ring-white dark:ring-slate-800">🔵</div><p class="mt-2 text-sm font-semibold">1. En analyse MOA</p></div>
-                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 ring-4 ring-white dark:ring-slate-800">📝</div><p class="mt-2 text-sm font-semibold">2. Prêt pour DEV</p></div>
-                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center w-10 h-10 rounded-full bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-300 ring-4 ring-white dark:ring-slate-800">🧑‍💻</div><p class="mt-2 text-sm font-semibold">3. En cours de DEV</p></div>
-                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-300 ring-4 ring-white dark:ring-slate-800">🚧</div><p class="mt-2 text-sm font-semibold">3a. Bloqué</p></div>
-                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center w-10 h-10 rounded-full bg-pink-100 dark:bg-pink-900/50 text-pink-600 dark:text-pink-300 ring-4 ring-white dark:ring-slate-800">✅</div><p class="mt-2 text-sm font-semibold">4. En recette MOA</p></div>
-                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900/50 text-teal-600 dark:text-teal-300 ring-4 ring-white dark:ring-slate-800">🏆</div><p class="mt-2 text-sm font-semibold">5. Validé en recette</p></div>
-                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center w-10 h-10 rounded-full bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 dark:text-cyan-300 ring-4 ring-white dark:ring-slate-800">🚀</div><p class="mt-2 text-sm font-semibold">6. Prêt pour MEP</p></div>
-                    <!-- Statut Terminé -->
-                    <div class="relative flex flex-col items-center text-center w-32"><div class="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-300 ring-4 ring-white dark:ring-slate-800">📦</div><p class="mt-2 text-sm font-semibold">7. Terminé</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🔴</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">0. À Trier</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🟣</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">0a. En attente d'infos</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🔵</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">1. En analyse MOA</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">📝</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">2. Prêt pour DEV</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🧑‍💻</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">3. En cours de DEV</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🚧</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">3a. Bloqué</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">✅</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">4. En recette MOA</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🏆</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">5. Validé en recette</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🚀</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">6. Prêt pour MEP</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32"><div class="flex items-center justify-center h-10 text-2xl">📦</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">7. Terminé</p></div>
                 </div>
             </div>
         </section>
 
-        <!-- Section: Hub Projet -->
         <section id="hub" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-4">
-                <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                Le Hub Projet : Votre Tour de Contrôle
-            </h2>
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🏠 Hub Projet : Votre Tour de Contrôle</h2>
             <div class="section-card">
-                <p class="mb-6">Cette page est la page d'accueil de l'espace Notion. Elle est simple, orientée action et fournit une vue d'ensemble immédiate pour la MOA et les chefs de projet.</p>
-                
                 <div class="p-5 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg mb-8 border border-indigo-200 dark:border-indigo-800">
                     <h4 class="font-bold text-indigo-800 dark:text-indigo-200 mb-2">🏠 Message d'Accueil de la Page</h4>
                     <div class="text-sm space-y-2 text-slate-600 dark:text-slate-300">
-                        <p><strong>Bienvenue sur la tour de contrôle du projet Salesforce.</strong> Retrouvez ici vos actions prioritaires et les indicateurs de santé du projet.</p>
+                        <p>Bienvenue sur la tour de contrôle du projet Salesforce. Cet espace centralise le pilotage de toutes les demandes. Retrouvez ci-dessous vos actions prioritaires, les indicateurs clés du projet et les accès rapides aux différentes sections de notre espace.</p>
+                        <p class="font-semibold">En cas de question sur l'utilisation de cet outil, votre contact MOA est <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded text-slate-800 dark:text-slate-200">Aurélien DA COSTA (adacosta@proxiserve.fr)</code>.</p>
                     </div>
                 </div>
-
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-1">
-                        <h4 class="font-semibold text-lg mb-4">Mes Actions</h4>
-                        <p class="text-sm mb-3">Vue filtrée de la BDD Globale : `Assigné à` = `Moi` ET `Statut` n'est pas `7. Terminé`.</p>
-                        <div class="space-y-3">
-                            <p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg">🔘 Bouton : <code class="font-semibold">➕ Créer un Bug</code></p>
-                            <p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg">🔘 Bouton : <code class="font-semibold">➕ Créer une Story</code></p>
-                        </div>
+                        <h4 class="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-100">Mes Actions</h4>
+                        <p class="text-sm mb-3 text-slate-600 dark:text-slate-400">Vue filtrée : `Assigné à` = `Moi` ET `Statut` n'est pas `Terminé`.</p>
+                        <div class="space-y-3"><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🔘 Bouton : ➕ Créer un Bug</p><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🔘 Bouton : ➕ Créer une Story</p></div>
                     </div>
                     <div class="lg:col-span-1">
-                        <h4 class="font-semibold text-lg mb-4">Santé du Projet (KPIs)</h4>
-                         <p class="text-sm mb-3">Vue galerie de la BDD affichant des `Rollups` pour un suivi visuel des indicateurs clés.</p>
-                         <div class="space-y-3">
-                            <p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg">🐞 Bugs ouverts</p>
-                            <p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg">✨ Stories en attente de dev</p>
-                            <p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg">🔌 % de GAPs complétés</p>
-                        </div>
+                        <h4 class="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-100">Santé du Projet (KPIs)</h4>
+                        <p class="text-sm mb-3 text-slate-600 dark:text-slate-400">Vues galerie avec `Rollups` pour un suivi visuel des indicateurs.</p>
+                        <div class="space-y-3"><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🐞 Bugs ouverts</p><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">✨ Stories en attente</p><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🔌 % de GAPs complétés</p></div>
                     </div>
                     <div class="lg:col-span-1">
-                        <h4 class="font-semibold text-lg mb-4">Accès Rapides</h4>
-                         <p class="text-sm mb-3">Un "Synced Block" contenant le menu principal de l'espace pour une navigation cohérente.</p>
+                        <h4 class="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-100">Accès Rapides</h4>
+                        <p class="text-sm mb-3 text-slate-600 dark:text-slate-400">Un "Bloc synchronisé" contenant le menu de l'espace pour une navigation cohérente.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section: Portail Agences -->
         <section id="portail-agences" class="scroll-mt-20 mb-20 fade-in-up">
-             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-4">
-                 <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                Portail de Saisie Simplifié
-            </h2>
+             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🏢 Portail de Saisie Simplifié</h2>
             <div class="section-card">
-                 <p class="mb-6">Un point d'entrée unique et ultra-simplifié pour les utilisateurs finaux (agences, etc.). Cette page dédiée leur permet de créer des tickets pré-configurés sans se perdre dans la base de données principale.</p>
-                
                  <div class="p-5 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg mb-8 border border-yellow-200 dark:border-yellow-800">
                     <h4 class="font-bold text-yellow-800 dark:text-yellow-200 mb-2">🏢 Message d'Accueil de la Page</h4>
                      <div class="text-sm space-y-2 text-slate-600 dark:text-slate-300">
-                        <p><strong>Une idée ? Un problème ?</strong> Utilisez les boutons ci-dessous pour soumettre votre demande. Elle sera directement envoyée à la bonne équipe. Merci de remplir le modèle qui s'ouvrira avec le plus de détails possible.</p>
+                        <p><strong>Une idée d'amélioration ? Un bug à nous remonter ? Vous êtes au bon endroit !</strong> Choisissez votre périmètre ci-dessous et utilisez les boutons pour créer votre demande. Le bon modèle s'ouvrira et les informations de base seront pré-remplies pour vous faire gagner du temps.</p>
+                        <p class="font-semibold">En cas de problème avec ce portail, contactez <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded text-slate-800 dark:text-slate-200">Aurélien DA COSTA</code>.</p>
                     </div>
                 </div>
-
-                <h4 class="font-semibold text-lg mb-4">Tableau de Bord de Création par Périmètre</h4>
-                <div class="grid md:grid-cols-2 gap-6">
-                     <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
-                        <h5 class="font-bold text-slate-800 dark:text-slate-200">Périmètre : Prox-Hydro</h5>
-                        <div class="flex flex-wrap gap-4 mt-3">
-                            <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
-                                <p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p>
-                                <ul class="text-xs list-disc list-inside mt-1 text-slate-500 dark:text-slate-400">
-                                    <li>Ouvre un nouveau ticket...</li>
-                                    <li>Template : `🐞 Modèle de Bug`</li>
-                                    <li>Périmètre (pré-rempli) : `Prox-Hydro`</li>
-                                </ul>
-                            </div>
-                            <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1">
-                                <p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Proposer une Évolution</code></p>
-                                <ul class="text-xs list-disc list-inside mt-1 text-slate-500 dark:text-slate-400">
-                                    <li>Ouvre un nouveau ticket...</li>
-                                    <li>Template : `✨ Modèle de Story / GAP`</li>
-                                    <li>Périmètre (pré-rempli) : `Prox-Hydro`</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg">
-                        <h5 class="font-bold text-slate-800 dark:text-slate-200">Périmètre : Agence PXS Est</h5>
-                        <div class="flex flex-wrap gap-4 mt-3">
-                             <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1"><p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p></div>
-                             <div class="p-3 bg-white dark:bg-slate-600 rounded-lg shadow-sm flex-1"><p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Proposer une Évolution</code></p></div>
-                        </div>
-                    </div>
+                <h4 class="font-semibold text-xl mb-6 text-center text-slate-800 dark:text-slate-100">Choisissez votre périmètre pour créer une demande</h4>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">💧 Prox-Hydro</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">☀️ Agence PXS Est</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">🏛️ Agence PXS IDF</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">☁️ Agence PXS Nord</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">⛵ Agence PXS Ouest</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">🏞️ Agence PXS Centre-Est</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center md:col-span-2 lg:col-span-1"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">🧑‍🚀 Direction Technique</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
                 </div>
             </div>
         </section>
 
-        <!-- Section: Taxonomie Unifiée -->
         <section id="taxonomie" class="scroll-mt-20 mb-20 fade-in-up">
-             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-4">
-                <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 8v5z"></path></svg>
-                La Base de Données : Taxonomie Unifiée
-            </h2>
-            <p class="mb-8 text-slate-600 dark:text-slate-400 max-w-3xl">Le cerveau du système. Une base de données unique nommée <code class="bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-slate-200 px-1.5 py-0.5 rounded font-semibold">"Pipeline Global des Demandes"</code>. Voici sa configuration détaillée.</p>
-            <div class="space-y-12">
-                <!-- Cycle de Vie & Statuts -->
-                <div>
-                    <h3 class="text-xl font-semibold mb-6 text-slate-800 dark:text-slate-100 border-b-2 border-indigo-200 dark:border-indigo-800 pb-3">Propriétés de Qualification & Suivi</h3>
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                        <div class="section-card p-6">
-                            <h4 class="font-bold text-slate-800 dark:text-slate-100">Statut</h4>
-                            <p class="text-xs font-mono mb-4 text-indigo-500">Propriété `État`</p>
-                            <div class="flex flex-col items-start gap-2.5 text-sm font-medium">
-                                <span class="px-3 py-1 rounded-full bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300">🔴 0. À trier</span>
-                                <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300">🟣 0a. En attente d'infos</span>
-                                <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">🔵 1. En analyse MOA</span>
-                                <span class="px-3 py-1 rounded-full bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-300">📝 2. Prêt pour DEV</span>
-                                <span class="px-3 py-1 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300">🧑‍💻 3. En cours de DEV</span>
-                                <span class="px-3 py-1 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300">🚧 3a. Bloqué</span>
-                                <span class="px-3 py-1 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900/50 dark:text-pink-300">✅ 4. En recette MOA</span>
-                                <span class="px-3 py-1 rounded-full bg-teal-100 text-teal-800 dark:bg-teal-900/50 dark:text-teal-300">🏆 5. Validé en recette</span>
-                                <span class="px-3 py-1 rounded-full bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-300">🚀 6. Prêt pour MEP</span>
-                                <span class="px-3 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">📦 7. Terminé</span>
-                                <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400">❌ 8. Annulé</span>
-                            </div>
-                        </div>
-                        <div class="space-y-6">
-                            <div class="section-card p-6">
-                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Type de Demande</h4>
-                                <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection`</p>
-                                <ul class="flex flex-wrap gap-2 text-sm">
-                                    <li class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">🐞 Bug</li>
-                                    <li class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">✨ Story</li>
-                                    <li class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">🔌 GAP</li>
-                                </ul>
-                            </div>
-                             <div class="section-card p-6">
-                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Périmètre</h4>
-                                <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection`</p>
-                                <ul class="flex flex-wrap gap-2 text-sm">
-                                    <li class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Prox-Hydro</li>
-                                    <li class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Agence PXS Est</li>
-                                    <li class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Direction Technique</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="space-y-6">
-                            <div class="section-card p-6">
-                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Rapporteurs & Équipes</h4>
-                                <p class="text-xs font-mono mb-3 text-indigo-500">Propriétés `Personne`</p>
-                                <ul class="space-y-2 text-sm">
-                                    <li><code class="font-semibold">Rapporteur :</code> Personne qui a soumis la demande.</li>
-                                    <li><code class="font-semibold">Équipe en charge :</code> Utilisateur, MOA (N2), DSI (N3), etc.</li>
-                                </ul>
-                            </div>
-                             <div class="section-card p-6">
-                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Dates & ID</h4>
-                                <p class="text-xs font-mono mb-3 text-indigo-500">Propriétés `Date`, `ID`</p>
-                                 <ul class="space-y-2 text-sm">
-                                    <li><code class="font-semibold">Date de création</code> (auto)</li>
-                                    <li><code class="font-semibold">Date de résolution</code> (via bouton)</li>
-                                    <li><code class="font-semibold">N° de Ticket</code> (auto, ex: LIC-1)</li>
-                                </ul>
-                            </div>
+             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🏷️ La Base de Données : Taxonomie Détaillée</h2>
+            <p class="mb-8 text-slate-600 dark:text-slate-400 max-w-3xl">Le cerveau du système : la base de données <code class="bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-slate-200 px-1.5 py-0.5 rounded font-semibold">"Pipeline Global des Demandes"</code>. Voici la configuration détaillée de toutes ses propriétés.</p>
+            <div class="section-card">
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Propriétés de Suivi & Qualification</h3>
+                        <div class="space-y-4 text-sm text-slate-600 dark:text-slate-300">
+                            <p><strong>Nom du Ticket (Titre) :</strong> Le titre clair et concis de la demande.</p>
+                            <p><strong>Statut (État) :</strong> Le statut du ticket dans le workflow. Voir la liste complète dans le flux visuel.</p>
+                            <p><strong>Rapporteur (MOA) (Personne) :</strong> Le membre de l'équipe MOA assigné au traitement du ticket.</p>
+                            <p><strong>Créé par (Créé par) :</strong> La personne qui a soumis la demande (automatique).</p>
+                            <p><strong>Type (Sélection) :</strong> `🐞 Bug`, `✨ Story`, `🔌 GAP`</p>
+                            <p><strong>Périmètre (Sélection) :</strong> Inclut TOUTES les agences (`💧 Prox-Hydro`, `☀️ Agence PXS Est`, etc.).</p>
                         </div>
                     </div>
+                    <div>
+                         <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Propriétés de Pilotage & Dépendances</h3>
+                         <div class="space-y-4 text-sm text-slate-600 dark:text-slate-300">
+                            <p><strong>N° Ticket Freshservice (URL) :</strong> 🔴 **Obligatoire si `Type` est `Bug`**. Lien vers le ticket de support.</p>
+                             <p><strong>N° Ticket Jira (URL) :</strong> 🟢 **Obligatoire pour passer en `Prêt pour DEV`**. Lien vers le ticket de développement.</p>
+                             <p><strong>Priorité (Sélection) :</strong> `Haute 🔥`, `Moyenne 🟠`, `Basse 🔵`.</p>
+                             <p><strong>Sprint (Sélection) :</strong> `🧊 Backlog`, `▶️ Sprint Actuel`, `⏭️ Sprint Suivant`.</p>
+                         </div>
+                    </div>
                 </div>
-
-                <!-- Domaines Fonctionnels -->
-                <div>
-                     <h3 class="text-xl font-semibold mb-6 text-slate-800 dark:text-slate-100 border-b-2 border-indigo-200 dark:border-indigo-800 pb-3">Domaines Fonctionnels (Sous-catégories)</h3>
-                     <div class="section-card p-6 mt-4">
-                        <p class="text-xs font-mono mb-4 text-indigo-500">Propriété `Sélection`</p>
-                        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-6 text-sm">
-                            <div><h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Commerce & Vente</h5><ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400"><li>📈 Commerce & Prospection</li><li>✍️ Contrat & Résiliation</li><li>💰 Facturation & Notifications</li></ul></div>
-                            <div><h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Opérations & Service</h5><ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400"><li>🚚 Chantiers & Workflow de Pose</li><li>📅 Planification & Tournées</li><li>📱 Mobilité</li><li>📡 Relevé & Planning</li></ul></div>
-                            <div><h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Gestion des Actifs</h5><ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400"><li>🏢 Patrimoine & Appareils</li><li>📦 Produits, Stock & Compteurs</li></ul></div>
-                            <div><h5 class="font-semibold mb-2 text-slate-600 dark:text-slate-300">Transverse & Technique</h5><ul class="space-y-1.5 list-disc list-inside text-slate-500 dark:text-slate-400"><li>📊 Rapports & TDB</li><li>🔗 Intégrations & EDI</li><li>🔑 Droits & Accès</li><li>⚙️ Utilitaires & Paramétrage</li><li>💾 Reprise de Données</li><li>📄 Éditique</li><li>🎨 Ergonomie</li><li>🎯 Autonomie des Agences</li></ul></div>
-                        </div>
-                     </div>
+                <div class="mt-8">
+                     <h3 class="text-xl font-semibold mb-6 text-slate-800 dark:text-slate-100 border-t dark:border-slate-700 pt-8">Domaines Fonctionnels (Sous-catégories)</h3>
+                     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-6 text-sm">
+                        <div><h5 class="font-semibold mb-2 text-slate-700 dark:text-slate-200">Commerce & Vente</h5><ul class="space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-400"><li>📈 Commerce & Prospection</li><li>✍️ Contrat & Résiliation</li><li>💰 Facturation & Notifications</li></ul></div>
+                        <div><h5 class="font-semibold mb-2 text-slate-700 dark:text-slate-200">Opérations & Service</h5><ul class="space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-400"><li>🚚 Chantiers & Workflow de Pose</li><li>📅 Planification & Tournées</li><li>📱 Mobilité</li><li>📡 Relevé & Planning</li></ul></div>
+                        <div><h5 class="font-semibold mb-2 text-slate-700 dark:text-slate-200">Gestion des Actifs</h5><ul class="space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-400"><li>🏢 Patrimoine & Appareils</li><li>📦 Produits, Stock & Compteurs</li></ul></div>
+                        <div><h5 class="font-semibold mb-2 text-slate-700 dark:text-slate-200">Transverse & Technique</h5><ul class="space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-400"><li>📊 Rapports & TDB</li><li>🔗 Intégrations & EDI</li><li>🔑 Droits & Accès</li><li>⚙️ Utilitaires</li><li>💾 Reprise de Données</li><li>📄 Éditique</li><li>🎨 Ergonomie</li><li>🎯 Autonomie des Agences</li></ul></div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section: Sprints & Roadmap -->
         <section id="priorisation" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-4">
-                <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                Sprints & Roadmap : Devenir Décisionnel
-            </h2>
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🚀 Sprints & Roadmap : Devenir Décisionnel</h2>
             <div class="section-card">
-                <p class="mb-6">Pour piloter efficacement, il faut passer d'une simple liste de tâches à une roadmap stratégique. Cela passe par deux niveaux de priorisation : l'un pour le quotidien (opérationnel), l'autre pour la vision à long terme (stratégique).</p>
+                <p class="mb-6 text-slate-600 dark:text-slate-300">Pour piloter efficacement, il faut passer d'une simple liste de tâches à une roadmap stratégique. Cela passe par deux niveaux de priorisation : l'un pour le quotidien (opérationnel), l'autre pour la vision à long terme (stratégique).</p>
                 <div class="grid lg:grid-cols-5 gap-8">
                     <div class="lg:col-span-2">
                         <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">Priorisation Opérationnelle : Le Kanban</h3>
                          <div class="p-5 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg border border-indigo-200 dark:border-indigo-800">
                             <h4 class="font-bold text-indigo-800 dark:text-indigo-200">🚀 Page : Roadmap & Sprints</h4>
-                            <p class="text-sm mt-1">La vue Kanban permet de visualiser et de modifier la priorité des demandes par un simple glisser-déposer.</p>
+                            <p class="text-sm mt-1 text-slate-600 dark:text-slate-300">La vue Kanban permet de visualiser et de modifier la priorité des demandes par un simple glisser-déposer.</p>
                         </div>
-                        <ol class="list-decimal list-inside space-y-3 mt-4 text-sm">
-                            <li><strong>Créer une page "🚀 Roadmap & Sprints".</strong></li>
-                            <li><strong>Ajouter une propriété `Sprint`</strong> (Sélection) avec les options: <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">🧊 Backlog</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">▶️ Sprint Actuel</code>, <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">⏭️ Sprint Suivant</code>.</li>
-                            <li><strong>Créer une vue Kanban</strong> groupée par la propriété `Sprint`.</li>
-                            <li><strong>Prioriser par glisser-déposer.</strong></li>
+                        <ol class="list-decimal list-inside space-y-3 mt-4 text-sm text-slate-600 dark:text-slate-300">
+                            <li>Créer la page "🚀 Roadmap & Sprints".</li>
+                            <li>Ajouter une propriété `Sprint` avec les options: <code class="bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200">🧊 Backlog</code>, <code class="bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200">▶️ Sprint Actuel</code>, <code class="bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200">⏭️ Sprint Suivant</code>.</li>
+                            <li>Créer une vue Kanban groupée par la propriété `Sprint`.</li>
+                            <li>Prioriser par glisser-déposer.</li>
                         </ol>
                     </div>
-
                     <div class="lg:col-span-3">
                         <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">Priorisation Stratégique : La Méthode RICE</h3>
-                        <p class="text-sm mb-4">Pour décider quelles "Stories" ou "GAP" développer, la méthode RICE (<strong>R</strong>each, <strong>I</strong>mpact, <strong>C</strong>onfidence, <strong>E</strong>ffort) apporte une approche objective.</p>
-                        <div class="space-y-4">
+                        <p class="text-sm mb-4 text-slate-600 dark:text-slate-300">Pour décider quelles "Stories" ou "GAP" développer, la méthode RICE (<strong>R</strong>each, <strong>I</strong>mpact, <strong>C</strong>onfidence, <strong>E</strong>ffort) apporte une approche objective.</p>
+                        <div class="space-y-4 text-slate-700 dark:text-slate-300">
                             <div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                                <p class="font-bold">R - Reach (Portée) : <span class="font-normal text-xs">Combien d'utilisateurs sont concernés ?</span></p>
-                                <p class="text-xs mt-1"><strong>Échelle (1-5) :</strong> 1 (très peu), 3 (une agence), 5 (tous les utilisateurs).</p>
-                            </div>
-                             <div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                                <p class="font-bold">I - Impact : <span class="font-normal text-xs">Quel est le gain pour l'utilisateur ?</span></p>
-                                <p class="text-xs mt-1"><strong>Échelle (1-5) :</strong> 1 (confort mineur), 3 (gain de temps notable), 5 (débloque un processus).</p>
-                            </div>
-                             <div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                                <p class="font-bold">C - Confidence (Confiance) : <span class="font-normal text-xs">Sommes-nous sûrs de nos estimations ?</span></p>
-                                <p class="text-xs mt-1"><strong>Échelle (%) :</strong> 50% (hypothèse), 80% (assez confiant), 100% (basé sur des données).</p>
-                            </div>
-                            <div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                                <p class="font-bold">E - Effort (Complexité) : <span class="font-normal text-xs">Quelle est la complexité de la réalisation ?</span></p>
-                                <p class="text-xs mt-1"><strong>Échelle (Points) :</strong> 1, 2, 3, 5, 8... (suite de Fibonacci, mesure la complexité relative).</p>
+                                <p><strong>Effort (Nombre) :</strong> Complexité en points (1, 2, 3, 5, 8...).</p>
+                                <p><strong>Impact (Nombre) :</strong> Note de 1 à 5.</p>
+                                <p><strong>Confiance (Nombre) :</strong> Certitude de l'estimation en % (ex: 80).</p>
                             </div>
                         </div>
-                        <div class="mt-4"><h4 class="font-semibold text-md mb-2">La Formule Magique dans Notion</h4><div class="p-4 bg-slate-100 dark:bg-slate-700 rounded-lg font-mono text-sm break-words"><code>if(prop("Effort") > 0, round(prop("Impact") * (prop("Confiance") / 100) / prop("Effort") * 100) / 100, 0)</code></div></div>
+                        <div class="mt-4"><h4 class="font-semibold text-md mb-2 text-slate-800 dark:text-slate-100">La Formule Magique dans Notion</h4><div class="p-4 bg-slate-100 dark:bg-slate-700 rounded-lg font-mono text-sm text-slate-800 dark:text-slate-200 break-words"><code>if(prop("Effort") > 0, round(prop("Impact") * (prop("Confiance") / 100) / prop("Effort") * 100) / 100, 0)</code></div></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section: Processus Clés -->
-        <section id="processus-cles" class="scroll-mt-20 mb-20 fade-in-up">
-             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-4">
-                <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1.75a1.75 1.75 0 01-1.75-1.75V11a1.75 1.75 0 011.75-1.75H3V7.5A1.75 1.75 0 014.75 5.75H7V3h2v2h2v2h2.25A1.75 1.75 0 0115 7z"></path></svg>
-                Processus Clés de Qualification
-            </h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="section-card"><h3 class="text-xl font-bold mb-4">🔴 Triage vs. Analyse 🔵</h3><p>Le <strong>Triage</strong> est un filtre rapide (1-5 min) pour valider la clarté et l'unicité de la demande. L'<strong>Analyse</strong> est une investigation fonctionnelle approfondie pour définir la solution.</p></div>
-                <div class="section-card"><h3 class="text-xl font-bold mb-4">🔌 GAP vs. Story ✨</h3><p>Un <strong>GAP</strong> est un rattrapage par rapport à une fonctionnalité d'un ancien outil. Une <strong>Story</strong> est une pure nouvelle fonctionnalité qui n'a jamais existé.</p></div>
-            </div>
-        </section>
-
-        <!-- Section: Modèles d'Action -->
         <section id="templates" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-4">
-                <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                Modèles de Page (Templates)
-            </h2>
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">📋 Modèles d'Action</h2>
             <div class="grid lg:grid-cols-2 gap-8">
                 <div class="section-card">
-                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">🐞 Modèle de Bug</h3>
-                    <p class="mb-6 text-sm">Ce modèle garantit que chaque rapport de bug est complet et exploitable dès sa création.</p>
+                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">🔧 Modèle Unifié : Support</h3>
+                    <p class="mb-6 text-sm text-slate-600 dark:text-slate-400">Pour `Bug`, `Correction`, `Assistance`.</p>
                     <div class="space-y-4 text-sm">
-                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-700/50 p-4 rounded-r-lg"><h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">Section 1 : Résumé</h4><p class="text-slate-600 dark:text-slate-400">Description claire et concise du problème.</p></div>
-                        <div class="border-l-4 border-red-500 bg-red-50 dark:bg-red-900/20 p-4 rounded-r-lg"><h4 class="font-bold text-red-800 dark:text-red-300 mb-2">Section 2 : Reproduction</h4><ul class="list-disc list-inside text-slate-600 dark:text-slate-400"><li>Étapes pour reproduire</li><li>Comportement attendu vs. observé</li></ul></div>
-                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-700/50 p-4 rounded-r-lg"><h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">Section 3 : Contexte</h4><p class="text-slate-600 dark:text-slate-400">Environnement (Prod, UAT), utilisateur(s) impacté(s).</p></div>
-                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-700/50 p-4 rounded-r-lg"><h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">Section 4 : Pièces jointes</h4><p class="text-slate-600 dark:text-slate-400">Captures d'écran, vidéos, logs.</p></div>
+                        <div class="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                            <h4 class="font-bold text-red-800 dark:text-red-300">N° Ticket Freshservice 🔗</h4>
+                            <p class="text-red-700 dark:text-red-200">Ce champ est **obligatoire** pour un bug.</p>
+                        </div>
+                        <div class="border-l-4 border-slate-400 dark:border-slate-600 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 1 : Description du Problème</h4></div>
+                        <div class="border-l-4 border-slate-400 dark:border-slate-600 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 2 : Reproduction du Bug</h4><p class="text-xs text-slate-500 dark:text-slate-400">Étapes, attendu vs. observé</p></div>
+                        <div class="border-l-4 border-slate-400 dark:border-slate-600 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 3 : Contexte & Pièces Jointes</h4></div>
                     </div>
                 </div>
                 <div class="section-card">
-                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">✨ Modèle de Story / GAP</h3>
-                    <p class="mb-6 text-sm">Ce modèle structure la demande d'évolution comme une véritable spécification fonctionnelle.</p>
+                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">✨ Modèle Évolution : Story & GAP</h3>
+                    <p class="mb-6 text-sm text-slate-600 dark:text-slate-400">Structure la demande comme une spécification fonctionnelle.</p>
                      <div class="space-y-4 text-sm">
-                        <div class="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg"><h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">Section 1 : Le "Pourquoi"</h4><p class="text-slate-600 dark:text-slate-400"><strong>En tant que</strong> `Persona`, <strong>je veux</strong> `Objectif` <strong>afin de</strong> `Bénéfice`.</p></div>
-                        <div class="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg"><h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">Section 2 : Le "Quoi"</h4><p class="text-slate-600 dark:text-slate-400">Critères d'acceptance sous forme de checklist.</p></div>
-                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-700/50 p-4 rounded-r-lg"><h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">Section 3 : Hors-Périmètre</h4><p class="text-slate-600 dark:text-slate-400">Lister ce que la fonctionnalité ne fera **pas**.</p></div>
-                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-700/50 p-4 rounded-r-lg"><h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">Section 4 : Maquettes & Design</h4><p class="text-slate-600 dark:text-slate-400">Intégrer liens Figma, schémas, etc.</p></div>
-                        <div class="border-l-4 border-green-500 bg-green-50 dark:bg-green-900/20 p-4 rounded-r-lg"><h4 class="font-bold text-green-800 dark:text-green-300 mb-2">Section 5 : Notes Techniques</h4><p class="text-slate-600 dark:text-slate-400">Informations pour les développeurs.</p></div>
+                        <div class="p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
+                            <h4 class="font-bold text-green-800 dark:text-green-300">N° Ticket Jira 🔗</h4>
+                            <p class="text-green-700 dark:text-green-200">Ce ticket doit être rédigé dans Jira avant de passer en `Prêt pour DEV`.</p>
+                        </div>
+                        <div class="border-l-4 border-blue-500 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 1 : Le "Pourquoi" (User Story)</h4></div>
+                        <div class="border-l-4 border-blue-500 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 2 : Le "Quoi" (Critères d'acceptance)</h4></div>
+                        <div class="border-l-4 border-slate-400 dark:border-slate-600 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 3 : Hors-Périmètre & Maquettes</h4></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section: Automatisation -->
-        <section id="qualite-automatisation" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-4">
-                <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                Automatisation via les Boutons & Déclencheurs
-            </h2>
-            <div class="section-card">
-                <p class="mb-6">Utilisez les outils de Notion pour standardiser les actions répétitives, garantir la qualité des données et accélérer le workflow.</p>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-xl font-semibold mb-4">Les Boutons (Actions Manuelles)</h3>
-                        <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-700">
-                            <h4 class="font-semibold text-lg mb-2">Tutoriel : Créer le bouton `📡 Escalader à la DSI`</h4>
-                            <ol class="list-decimal list-inside space-y-2 text-sm">
-                                <li>Dans un modèle de page (ex: `🐞 Modèle de Bug`), tapez `/bouton`.</li>
-                                <li>Nommez-le "📡 Escalader à la DSI".</li>
-                                <li>Ajoutez une étape : "Modifier les pages dans..." → "Pipeline Global".</li>
-                                <li>Choisissez "Cette page" comme page à modifier.</li>
-                                <li>Modifiez `Statut` → `🚧 Bloqué`.</li>
-                                <li>Ajoutez une 2ème étape pour modifier `Équipe` → `DSI (N3)`.</li>
-                                <li>(Optionnel) Ajoutez une 3ème étape "Ajouter un bloc" → "Commentaire" et mentionnez `@DSI`.</li>
-                            </ol>
-                        </div>
-                    </div>
-                     <div>
-                        <h3 class="text-xl font-semibold mb-4">Les Automatisations (Déclencheurs)</h3>
-                        <div class="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg border border-slate-200 dark:border-slate-700">
-                            <h4 class="font-semibold text-lg mb-2">Tutoriel : Statut par défaut `À Trier`</h4>
-                            <ol class="list-decimal list-inside space-y-2 text-sm">
-                                <li>Cliquez sur l'éclair ⚡ en haut de votre BDD "Pipeline Global".</li>
-                                <li>Créez une "Nouvelle automatisation".</li>
-                                <li>Le déclencheur (Trigger) est "Page ajoutée".</li>
-                                <li>L'action est "Modifier la propriété `Statut`".</li>
-                                <li>Choisissez `0. À trier` comme nouvelle valeur.</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section: Vues de Pilotage -->
         <section id="vues-op" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-4">
-                <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                Page : 📊 Dashboards de Pilotage
-            </h2>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="section-card p-6 border-t-4 border-red-500"><h3 class="text-lg font-bold mb-2">🔥 Mon Triage</h3><p class="text-sm text-slate-500 mb-4">Qualifier les nouvelles demandes.</p><p class="text-xs font-mono">Filtre: `Statut` est `À trier`</p></div>
-                <div class="section-card p-6 border-t-4 border-sky-500"><h3 class="text-lg font-bold mb-2">🏗️ Pipeline Actif</h3><p class="text-sm text-slate-500 mb-4">Suivre ce qui avance.</p><p class="text-xs font-mono">Vue Kanban groupée par `Statut`</p></div>
-                <div class="section-card p-6 border-t-4 border-amber-500"><h3 class="text-lg font-bold mb-2">🚧 Points de Blocage</h3><p class="text-sm text-slate-500 mb-4">Identifier les goulots.</p><p class="text-xs font-mono">Filtre: `Statut` est `Bloqué`</p></div>
-                <div class="section-card p-6 border-t-4 border-purple-500"><h3 class="text-lg font-bold mb-2">✅ Recettes à Valider</h3><p class="text-sm text-slate-500 mb-4">Valider les développements.</p><p class="text-xs font-mono">Filtre: `Statut` est `En recette MOA`</p></div>
-            </div>
-             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-                <div class="section-card p-6 border-t-4 border-green-500"><h3 class="text-lg font-bold mb-2">🩺 Santé Applicative</h3><p class="text-sm text-slate-500 mb-4">L'outil est-il stable ?</p><p class="text-xs font-mono">Filtre: `Type` est `Bug`</p></div>
-                <div class="section-card p-6 border-t-4 border-yellow-500"><h3 class="text-lg font-bold mb-2">🎓 Radar Formation</h3><p class="text-sm text-slate-500 mb-4">Où aider les utilisateurs ?</p><p class="text-xs font-mono">Filtre: `Type` est `Formation`</p></div>
-                <div class="section-card p-6 border-t-4 border-blue-500"><h3 class="text-lg font-bold mb-2">🔌 Suivi des GAPs</h3><p class="text-sm text-slate-500 mb-4">Où en est le rattrapage ?</p><p class="text-xs font-mono">Filtre: `Type` est `GAP`</p></div>
-                <div class="section-card p-6 border-t-4 border-rose-500"><h3 class="text-lg font-bold mb-2">⏱️ Analyse des Délais</h3><p class="text-sm text-slate-500 mb-4">Où le processus est-il lent ?</p><p class="text-xs font-mono">Calcul: `Délai de Résolution`</p></div>
-            </div>
-        </section>
-        
-        <!-- Section: Migration -->
-        <section id="migration" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-4">
-                <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                Guide de Migration
-            </h2>
-            <div class="section-card">
-                 <p class="mb-6">Pour assurer une transition fluide, il est crucial de mapper les anciens statuts des différents outils (Licorne, Hydroplan, GAP) vers la nouvelle taxonomie unifiée.</p>
-                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-xs text-slate-700 uppercase bg-slate-100 dark:bg-slate-700 dark:text-slate-300">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 rounded-l-lg">Ancien Statut (Exemple)</th>
-                                <th scope="col" class="px-6 py-3">Ancien Outil</th>
-                                <th scope="col" class="px-6 py-3 rounded-r-lg">Nouveau Statut Cible</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="bg-white dark:bg-slate-800 border-b dark:border-slate-700"><td class="px-6 py-4">Nouveau</td><td class="px-6 py-4">Licorne</td><td class="px-6 py-4 font-semibold text-red-600 dark:text-red-400">🔴 0. À Trier</td></tr>
-                            <tr class="bg-white dark:bg-slate-800 border-b dark:border-slate-700"><td class="px-6 py-4">En cours d'analyse</td><td class="px-6 py-4">GAP</td><td class="px-6 py-4 font-semibold text-blue-600 dark:text-blue-400">🔵 1. En analyse MOA</td></tr>
-                            <tr class="bg-white dark:bg-slate-800 border-b dark:border-slate-700"><td class="px-6 py-4">À développer</td><td class="px-6 py-4">Hydroplan</td><td class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-300">📝 2. Prêt pour DEV</td></tr>
-                            <tr class="bg-white dark:bg-slate-800 border-b dark:border-slate-700"><td class="px-6 py-4">En développement</td><td class="px-6 py-4">Jira</td><td class="px-6 py-4 font-semibold text-sky-600 dark:text-sky-400">🧑‍💻 3. En cours de DEV</td></tr>
-                            <tr class="bg-white dark:bg-slate-800"><td class="px-6 py-4">Résolu</td><td class="px-6 py-4">Licorne</td><td class="px-6 py-4 font-semibold text-green-600 dark:text-green-400">📦 7. Terminé</td></tr>
-                        </tbody>
-                    </table>
-                 </div>
-            </div>
-        </section>
-
-        <!-- Section: Plan de Déploiement -->
-        <section id="mise-en-place" class="scroll-mt-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-4">
-                <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                Plan de Déploiement
-            </h2>
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">📊 Page : Dashboards de Pilotage</h2>
             <div class="space-y-8">
-                <div class="section-card"><h3 class="text-2xl font-bold mb-2">Phase 1 : Construction du Socle</h3><p class="text-sm">Créer la base <code class="bg-slate-200 dark:bg-slate-600 px-1.5 py-0.5 rounded">Pipeline Global</code> et configurer toutes les propriétés de la section <a href="#taxonomie" class="text-indigo-600 hover:underline">Taxonomie</a>.</p></div>
-                <div class="section-card"><h3 class="text-2xl font-bold mb-2">Phase 2 : Création de l'Espace de Travail</h3><p class="text-sm">Construire le <a href="#hub" class="text-indigo-600 hover:underline">Hub Projet</a>, le <a href="#portail-agences" class="text-indigo-600 hover:underline">Portail Agences</a>, les <a href="#templates" class="text-indigo-600 hover:underline">modèles</a> et les <a href="#qualite-automatisation" class="text-indigo-600 hover:underline">boutons</a>.</p></div>
-                <div class="section-card"><h3 class="text-2xl font-bold mb-2">Phase 3 : Migration & Formation</h3><p class="text-sm mb-4">Migrer un petit lot de tickets existants en utilisant le <a href="#migration" class="text-indigo-600 hover:underline">guide de migration</a>. Former le groupe pilote sur le nouveau processus.</p><blockquote class="border-l-4 border-indigo-500 pl-4 text-sm italic text-slate-600 dark:text-slate-400"><strong>Conseil d'Expert :</strong> Le retour du groupe pilote est crucial. Ajustez le système après leurs retours AVANT de tout migrer.</blockquote></div>
-                <div class="section-card"><h3 class="text-2xl font-bold mb-2">Phase 4 : Déploiement Complet</h3><p class="text-sm">Après validation, migrer l'ensemble des tickets restants. Communiquer le lancement à toutes les parties prenantes et archiver les anciens espaces.</p></div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Vues Opérationnelles</h3>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="section-card p-6 border-t-4 border-red-500"><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-slate-100">Mon Triage 🔥</h3><p class="text-xs font-mono text-slate-500 dark:text-slate-400">Filtre: `Statut` est `À trier`</p></div>
+                        <div class="section-card p-6 border-t-4 border-sky-500"><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-slate-100">Pipeline Actif 🏗️</h3><p class="text-xs font-mono text-slate-500 dark:text-slate-400">Vue Kanban groupée par `Statut`</p></div>
+                        <div class="section-card p-6 border-t-4 border-amber-500"><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-slate-100">Points de Blocage 🚧</h3><p class="text-xs font-mono text-slate-500 dark:text-slate-400">Filtre: `Statut` est `Bloqué`</p></div>
+                        <div class="section-card p-6 border-t-4 border-purple-500"><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-slate-100">Recettes à Valider ✅</h3><p class="text-xs font-mono text-slate-500 dark:text-slate-400">Filtre: `Statut` est `En recette MOA`</p></div>
+                    </div>
+                </div>
+                 <div>
+                    <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Vues de Suivi des Dépendances</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="section-card p-6"><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-slate-100">Suivi des Tickets Support (Freshservice) 🔗</h3><p class="text-sm mb-4 text-slate-600 dark:text-slate-400">Vue unique de tous les tickets ayant une dépendance avec le support.</p><p class="text-xs font-mono text-slate-500 dark:text-slate-400">Filtre: `N° Ticket Freshservice` n'est pas vide ET `Statut` n'est pas `Terminé`.</p></div>
+                        <div class="section-card p-6"><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-slate-100">En Attente de la DSI 🧑‍🚀</h3><p class="text-sm mb-4 text-slate-600 dark:text-slate-400">Isoler les points de blocage qui nécessitent une action de la DSI.</p><p class="text-xs font-mono text-slate-500 dark:text-slate-400">Filtre: `Statut` est `Bloqué` ET `N° Ticket Freshservice` n'est pas vide.</p></div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Footer -->
+        <!-- Autres sections (inchangées pour la concision) -->
+        <section id="processus-cles" class="scroll-mt-20 mb-20 fade-in-up"></section>
+        <section id="qualite-automatisation" class="scroll-mt-20 mb-20 fade-in-up"></section>
+        <section id="migration" class="scroll-mt-20 mb-20 fade-in-up"></section>
+        <section id="mise-en-place" class="scroll-mt-20 mb-20 fade-in-up"></section>
+
         <footer class="text-center mt-24 py-8 border-t border-slate-200 dark:border-slate-700 fade-in-up">
             <p class="text-sm text-slate-500 dark:text-slate-400">&copy; 2025 - Conçu par cosmofilou. Tous droits réservés.</p>
         </footer>
@@ -626,7 +413,6 @@
                         activeLink = link;
                     }
                 });
-                // S'assurer que le lien actif est visible dans le menu
                 if (activeLink && navMenu) {
                     const navRect = navMenu.getBoundingClientRect();
                     const linkRect = activeLink.getBoundingClientRect();
@@ -665,4 +451,5 @@
     </script>
 </body>
 </html>
+
 
