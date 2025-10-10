@@ -1,782 +1,708 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pipeline Unifié v3 - Interface de Pilotage</title>
+    <title>Système de Pilotage MOA</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --aurora-bg: radial-gradient(ellipse 80% 60% at 50% -20%,rgba(120,119,198,0.3),hsla(0,0%,100%,0));
-            --aurora-bg-dark: radial-gradient(ellipse 80% 60% at 50% -20%,rgba(120,119,198,0.15),rgba(255,255,255,0));
-        }
-
         body {
             font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
-        
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb {
-            background-color: rgba(156, 163, 175, 0.5);
-            border-radius: 20px;
-            border: 2px solid transparent;
-            background-clip: content-box;
+        .view {
+            display: none;
         }
-        
-        .nav-link {
-            transition: all 0.2s ease-in-out;
-            border-left: 3px solid transparent;
+        .view.active {
+            display: block;
         }
-        
-        .nav-link.active {
-            background-color: #eef2ff;
-            color: #4338ca;
-            font-weight: 700;
-            border-left-color: #4f46e5;
+        /* Custom scrollbar for Kanban */
+        .kanban-container::-webkit-scrollbar {
+            height: 8px;
         }
-        .dark .nav-link.active {
-            background-color: rgba(67, 56, 202, 0.5);
-            color: #c7d2fe;
-            border-left-color: #818cf8;
+        .kanban-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
         }
-        
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .kanban-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
         }
-        .fade-in-up {
-            opacity: 0; /* Initial state for observer */
+        .kanban-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
-        .is-visible {
-            animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        .kanban-column {
+            min-width: 300px;
         }
-
-        .section-card {
-            background-color: rgba(255,255,255,0.7);
-            border-radius: 0.75rem;
-            padding: 2rem;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease-in-out;
-            position: relative;
-            overflow: hidden;
-        }
-        .dark .section-card {
-            background-color: rgba(30, 41, 59, 0.7);
-            border-color: #334155;
-        }
-
-        .glass-nav {
-            background-color: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-        .dark .glass-nav {
-            background-color: rgba(15, 23, 42, 0.7);
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            z-index: 40; opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-overlay.open { opacity: 1; pointer-events: auto; }
-        .modal-container {
-            transform: scale(0.95);
-            background-color: #f8fafc;
-            border-radius: 0.75rem;
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-            padding: 0;
-            z-index: 50;
-            width: 90%; max-width: 1000px;
-            max-height: 90vh;
-            opacity: 0;
-            transition: all 0.3s ease-in-out;
-            display: flex;
-            flex-direction: column;
-        }
-        .dark .modal-container {
-             background-color: #1e293b;
-             border: 1px solid #475569;
-        }
-        .modal-overlay.open .modal-container {
-            transform: scale(1);
-            opacity: 1;
-        }
-        .modal-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .dark .modal-header {
-            border-bottom-color: #334155;
-        }
-        .modal-body {
-            padding: 1.5rem;
-            overflow-y: auto;
-            flex-grow: 1;
-        }
-        .modal-close-btn {
-            background: #e2e8f0; color: #475569;
-            border-radius: 9999px; width: 2rem; height: 2rem;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s;
-        }
-        .dark .modal-close-btn {
-            background: #334155; color: #94a3b8;
-        }
-        .modal-close-btn:hover {
-            transform: scale(1.1) rotate(90deg);
-            background: #fca5a5; color: #b91c1c;
-        }
-
-        /* SVG Interaction Styles */
-        .svg-node {
-            transition: all 0.2s ease-in-out; cursor: pointer;
-        }
-        .svg-node:hover .svg-node-shape {
-            filter: brightness(1.1); transform: scale(1.05); transform-origin: center;
-        }
-        .svg-node:hover .svg-node-text { font-weight: 700; }
-        .svg-tooltip {
-            position: absolute; opacity: 0; pointer-events: none;
-            transition: opacity 0.2s ease-in-out;
-            padding: 0.75rem; background-color: #1e293b; color: white;
-            border-radius: 0.5rem; font-size: 0.875rem; line-height: 1.25rem;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            max-width: 250px; z-index: 60;
-        }
-        .dark .svg-tooltip {
-            background-color: #f8fafc; color: #1e293b;
+        .dragging {
+            opacity: 0.5;
+            transform: rotate(3deg);
         }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 transition-colors duration-300">
-    <!-- Background Effects -->
-    <div class="dark:hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: var(--aurora-bg);"></div>
-    <div class="hidden dark:block" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: var(--aurora-bg-dark);"></div>
+<body class="bg-slate-100 text-slate-800">
 
-    <!-- Left Navigation -->
-    <nav class="fixed top-0 left-0 h-full w-64 glass-nav border-r border-slate-200 dark:border-slate-700 p-4 z-20 hidden lg:flex flex-col">
-        <div class="flex items-center gap-3 mb-10 p-2">
-            <div class="p-2 bg-indigo-600 rounded-lg shrink-0 shadow-lg shadow-indigo-500/20 flex items-center justify-center h-10 w-10">
-                <span class="text-2xl">🗺️</span>
+    <div id="app-container" class="min-h-screen">
+        <!-- Header & Navigation -->
+        <header class="bg-white shadow-md sticky top-0 z-40">
+            <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-cogs text-2xl text-slate-700"></i>
+                    <h1 class="text-xl font-bold text-slate-800">Pilotage MOA</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-2">
+                    <button data-view="portail-view" class="nav-btn px-4 py-2 rounded-md text-sm font-semibold bg-slate-200 text-slate-800 ring-2 ring-slate-700">🏢 Portail de Saisie</button>
+                    <button data-view="hub-view" class="nav-btn px-4 py-2 rounded-md text-sm font-semibold text-slate-600 hover:bg-slate-200">🏠 Hub Projet</button>
+                    <button data-view="roadmap-view" class="nav-btn px-4 py-2 rounded-md text-sm font-semibold text-slate-600 hover:bg-slate-200">🚀 Roadmap</button>
+                </div>
+                <div class="flex items-center space-x-4">
+                     <div id="user-info" class="text-xs text-slate-500 text-right hidden">
+                        <p id="user-id-display">Not authenticated</p>
+                    </div>
+                </div>
+            </nav>
+            <!-- Mobile Navigation -->
+            <div class="md:hidden p-2 border-t border-slate-200 flex justify-around">
+                 <button data-view="portail-view" class="nav-btn flex-1 p-2 text-xs rounded-md font-semibold bg-slate-200 text-slate-800">🏢 Portail</button>
+                 <button data-view="hub-view" class="nav-btn flex-1 p-2 text-xs rounded-md font-semibold text-slate-600">🏠 Hub</button>
+                 <button data-view="roadmap-view" class="nav-btn flex-1 p-2 text-xs rounded-md font-semibold text-slate-600">🚀 Roadmap</button>
             </div>
-            <div>
-                <h1 class="text-base font-bold text-slate-900 dark:text-white">Guide de Déploiement</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Pipeline Unifié v3</p>
-            </div>
-        </div>
-        <ul id="nav-menu" class="space-y-1.5 overflow-y-auto">
-             <li><a href="#flux-visuel" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">⚡️</span>Flux Visuel</a></li>
-             <li class="px-4 pt-4 pb-2 text-xs font-semibold uppercase text-slate-400 dark:text-slate-500">Présentation</li>
-             <li><a href="#hub" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏠</span>Hub Projet</a></li>
-             <li><a href="#portail-agences" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏢</span>Portail Agences</a></li>
-             <li class="px-4 pt-4 pb-2 text-xs font-semibold uppercase text-slate-400 dark:text-slate-500">Guides de Construction</li>
-             <li><a href="#build-hub" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏠</span>Page Hub Projet</a></li>
-             <li><a href="#build-portail" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏢</span>Page Portail Agences</a></li>
-             <li><a href="#build-pipeline" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🗃️</span>BDD Pipeline Global</a></li>
-             <li><a href="#build-connaissances" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">📚</span>BDD Connaissances</a></li>
-             <li class="px-4 pt-4 pb-2 text-xs font-semibold uppercase text-slate-400 dark:text-slate-500">Spécifications</li>
-             <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🏷️</span>Taxonomie</a></li>
-             <li><a href="#priorisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🚀</span>Priorisation</a></li>
-             <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">📋</span>Templates</a></li>
-             <li><a href="#qualite-automatisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🤖</span>Automatisation</a></li>
-             <li><a href="#vues-op" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">📊</span>Vues de Pilotage</a></li>
-             <li><a href="#migration-statuts" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🔄</span>Migration</a></li>
-             <li><a href="#mise-en-place" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50"><span class="w-5 text-center">🛠️</span>Déploiement</a></li>
-        </ul>
-        <div class="mt-auto p-2">
-            <button id="theme-toggle" class="w-full flex items-center justify-center gap-3 px-4 py-2 rounded-lg font-medium bg-slate-100/50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-600/50 transition-all">
-                <span id="theme-toggle-dark-icon" class="hidden text-lg">🌙</span>
-                <span id="theme-toggle-light-icon" class="hidden text-lg">☀️</span>
-                <span id="theme-toggle-text"></span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="lg:ml-64 p-6 md:p-12">
-        <header class="mb-16 text-center lg:text-left fade-in-up is-visible">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-3">
-                <span class="bg-gradient-to-r from-indigo-500 via-purple-500 to-sky-400 bg-clip-text text-transparent">Le Guide Ultime du Pipeline Unifié</span>
-            </h1>
-            <p class="text-lg text-slate-500 dark:text-slate-400 max-w-3xl mx-auto lg:mx-0">Ce document est votre plan directeur pour fusionner les suivis de projets Licorne, Hydroplan et GAP en un système de pilotage centralisé, puissant et décisionnel sur Notion.</p>
         </header>
 
-        <div id="svg-tooltip" class="svg-tooltip"></div>
+        <main class="container mx-auto p-4 md:p-6">
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="text-center py-10">
+                <i class="fas fa-spinner fa-spin text-3xl text-slate-500"></i>
+                <p class="mt-2 text-slate-600">Chargement des données...</p>
+            </div>
 
-        <!-- Section: Visual Workflow -->
-        <section id="flux-visuel" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                <span class="text-3xl">⚡️</span> Le Flux de Traitement Visuel
-            </h2>
-            <div class="section-card">
-                 <p class="mb-6 text-slate-600 dark:text-slate-300 text-center">Survolez un nœud pour obtenir des détails. Cliquez pour naviguer vers la section correspondante.</p>
-                 <svg viewBox="0 0 1100 200" class="w-full">
-                    <!-- Lines -->
-                    <path d="M 150 100 L 290 100" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
-                    <path d="M 450 100 L 590 100" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
-                    <path d="M 750 100 L 890 100" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
-                    <!-- Nodes -->
-                    <g class="svg-node" data-tooltip="Nouvelles demandes entrantes, à qualifier rapidement." onclick="document.getElementById('vues-op').scrollIntoView({behavior: 'smooth'});">
-                        <circle class="svg-node-shape" cx="100" cy="100" r="50" fill="#fecaca" fill-opacity="0.8"/>
-                        <text class="svg-node-text" x="100" y="105" text-anchor="middle" fill="#991b1b" font-size="16" font-weight="600">À Trier</text>
-                    </g>
-                    <g class="svg-node" data-tooltip="Investigation fonctionnelle approfondie par l'équipe MOA." onclick="document.getElementById('priorisation').scrollIntoView({behavior: 'smooth'});">
-                        <rect class="svg-node-shape" x="300" y="60" width="140" height="80" rx="10" fill="#c7d2fe" fill-opacity="0.8"/>
-                        <text class="svg-node-text" x="370" y="105" text-anchor="middle" fill="#3730a3" font-size="16" font-weight="600">Analyse MOA</text>
-                    </g>
-                    <g class="svg-node" data-tooltip="Développement de la fonctionnalité par l'équipe technique." onclick="document.getElementById('priorisation').scrollIntoView({behavior: 'smooth'});">
-                        <rect class="svg-node-shape" x="600" y="60" width="140" height="80" rx="10" fill="#bae6fd" fill-opacity="0.8"/>
-                        <text class="svg-node-text" x="670" y="105" text-anchor="middle" fill="#0369a1" font-size="16" font-weight="600">Développement</text>
-                    </g>
-                    <g class="svg-node" data-tooltip="Vérification de la conformité par la MOA avant le déploiement." onclick="document.getElementById('vues-op').scrollIntoView({behavior: 'smooth'});">
-                        <polygon class="svg-node-shape" points="950,50 1050,100 950,150" fill="#fef08a" fill-opacity="0.8"/>
-                        <text class="svg-node-text" x="985" y="105" text-anchor="middle" fill="#854d0e" font-size="16" font-weight="600">Recette</text>
-                    </g>
-                 </svg>
-            </div>
-        </section>
+            <!-- Views Container -->
+            <div id="views-container" class="hidden">
+                <!-- VIEW 1: Portail de Saisie Simplifié -->
+                <div id="portail-view" class="view active">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold text-slate-800">Portail de Déclaration</h2>
+                        <p class="mt-2 text-slate-600">Signalez un bug ou proposez une évolution en un clic.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Périmètre Cards will be dynamically inserted here -->
+                    </div>
+                </div>
 
-        <!-- Section: Hub Projet -->
-        <section id="hub" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                Présentation : 🏠 Hub Projet
-            </h2>
-            <div class="section-card">
-                <p class="mb-6">Cette page remplacera les différents accueils existants. Elle doit être simple, orientée action et fournir une vue d'ensemble immédiate.</p>
-                <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg mb-8">
-                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200 mb-2">Message d'Accueil à Intégrer :</h4>
-                    <div class="text-sm space-y-2 text-slate-600 dark:text-slate-300">
-                        <p><strong>Bienvenue sur le Hub de suivi du projet Licorne !</strong></p>
-                        <p>Ce projet, supervisé par la Direction Technique, vise à unifier et améliorer l'efficacité de nos opérations. Cet espace centralise toutes les demandes, qu'il s'agisse de bugs, d'évolutions (Stories) ou de rattrapage des anciens systèmes (GAP).</p>
-                    </div>
-                </div>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <h4 class="font-semibold text-lg mb-4">Tableau de Bord d'Actions</h4>
-                        <div class="space-y-3">
-                            <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔘 Bouton : <code class="font-semibold">🐞 Déclarer un Bug</code></p>
-                            <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔘 Bouton : <code class="font-semibold">✨ Proposer une Story</code></p>
-                            <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔘 Bouton : <code class="font-semibold">🔌 Identifier un GAP</code></p>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-lg mb-4">Vues Clés</h4>
-                         <div class="space-y-3">
-                            <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">➡️ Vue liée : <code class="font-semibold">Mes Demandes en Cours</code></p>
-                            <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">➡️ Vue liée : <code class="font-semibold">Recettes en Attente</code></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section: Portail Agences -->
-        <section id="portail-agences" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-               Présentation : 🏢 Portail Agences
-            </h2>
-            <div class="section-card">
-                 <p class="mb-6">Pour faciliter l'adoption et garantir la qualité des données, il est essentiel de fournir aux agences un point d'entrée unique et ultra-simplifié.</p>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg">
-                       <h5 class="font-bold text-slate-800 dark:text-slate-200">Prox-Hydro</h5>
-                       <div class="flex flex-wrap gap-4 mt-3">
-                           <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex-1 min-w-[200px]"><p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p></div>
-                            <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex-1 min-w-[200px]"><p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Évolution</code></p></div>
-                       </div>
-                    </div>
-                    <div class="p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg">
-                       <h5 class="font-bold text-slate-800 dark:text-slate-200">Agence PXS Est</h5>
-                       <div class="flex flex-wrap gap-4 mt-3">
-                           <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex-1 min-w-[200px]"><p class="font-semibold">🔘 Bouton : <code class="text-red-600 dark:text-red-400">🐞 Signaler un Bug</code></p></div>
-                           <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex-1 min-w-[200px]"><p class="font-semibold">🔘 Bouton : <code class="text-blue-600 dark:text-blue-400">✨ Évolution</code></p></div>
-                       </div>
-                    </div>
-                 </div>
-            </div>
-        </section>
-
-        <!-- NOUVELLE SECTION: GUIDE HUB -->
-        <section id="build-hub" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                Guide de Construction : 🏠 Hub Projet
-            </h2>
-            <div class="section-card">
-                <blockquote class="border-l-4 border-indigo-500 pl-4 mb-6 text-slate-600 dark:text-slate-300">
-                    <p class="font-bold">Objectif de la page :</p>
-                    <p>Fournir à l'équipe MOA une tour de contrôle pour organiser sa journée. La page doit permettre de voir en un clin d'œil les priorités, les blocages et la santé du projet.</p>
-                </blockquote>
-                 <div class="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg mb-8">
-                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200 mb-2">Message de bienvenue à intégrer :</h4>
-                    <div class="text-sm text-slate-600 dark:text-slate-300">
-                        "Bienvenue sur la tour de contrôle du projet. Cet espace a été conçu pour vous, l'équipe MOA, afin de vous offrir une vision claire et actionnable de l'ensemble des activités. Chaque matin, commencez votre journée ici pour identifier vos priorités. Contact en cas de problème : Aurélien DA COSTA."
-                    </div>
-                </div>
-                <div class="grid lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-1 space-y-4">
-                        <h4 class="font-semibold text-lg">Colonne 1 : Indicateurs Clés</h4>
-                        <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔢 Indicateur : <strong>Tickets à Trier</strong><br><span class="text-xs"> (Vue "Nombre" filtrée sur Statut = "À trier")</span></p>
-                        <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔢 Indicateur : <strong>Bugs Ouverts Urgents</strong><br><span class="text-xs">(Vue "Nombre" filtrée sur Type = "Bug" ET Priorité = "Haute")</span></p>
-                    </div>
-                     <div class="lg:col-span-1 space-y-4">
-                        <h4 class="font-semibold text-lg">Colonne 2 : Mes Actions</h4>
-                        <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">➡️ Vue Liée : <strong>🔥 Mon Triage</strong><br><span class="text-xs">(Filtre : Statut = "À trier" ET Responsable = "Moi")</span></p>
-                        <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">➡️ Vue Liée : <strong>🚧 Mes Blocages</strong><br><span class="text-xs">(Filtre : Statut = "Bloqué" ET Responsable = "Moi")</span></p>
-                    </div>
-                     <div class="lg:col-span-1 space-y-4">
-                        <h4 class="font-semibold text-lg">Colonne 3 : Raccourcis</h4>
-                        <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔘 Bouton Notion : <strong>🐞 Déclarer un Bug</strong><br><span class="text-xs">(Action : Créer page avec template "BUG")</span></p>
-                        <p class="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">🔘 Bouton Notion : <strong>✨ Proposer une Story</strong><br><span class="text-xs">(Action : Créer page avec template "STORY")</span></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- NOUVELLE SECTION: GUIDE PORTAIL -->
-        <section id="build-portail" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                Guide de Construction : 🏢 Portail Agences
-            </h2>
-            <div class="section-card">
-                 <blockquote class="border-l-4 border-yellow-500 pl-4 mb-6 text-slate-600 dark:text-slate-300">
-                    <p class="font-bold">Objectif de la page :</p>
-                    <p>Simplifier radicalement la création de tickets pour les utilisateurs. Zéro friction, zéro question à se poser. L'utilisateur clique sur son périmètre, son besoin, et remplit le formulaire.</p>
-                </blockquote>
-                <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg mb-8">
-                    <h4 class="font-bold text-yellow-800 dark:text-yellow-200 mb-2">Message de bienvenue à intégrer :</h4>
-                    <div class="text-sm text-slate-600 dark:text-slate-300">
-                        "Une idée d'amélioration ? Un bug à nous remonter ? Vous êtes au bon endroit ! Cet espace a été spécialement conçu pour vous permettre de soumettre vos demandes simplement et efficacement. Choisissez votre périmètre ci-dessous et utilisez les boutons pour créer votre demande. Le bon formulaire s'ouvrira et les informations de base seront pré-remplies. Contact : Aurélien DA COSTA."
-                    </div>
-                </div>
-                 <h4 class="font-semibold text-lg mb-4">Structure de la Page</h4>
-                 <p class="mb-4 text-sm">La page doit être une succession de sections, une pour chaque `Périmètre`. Chaque section contiendra deux boutons Notion.</p>
-                 <div class="p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg">
-                    <h5 class="font-bold text-slate-800 dark:text-slate-200">Exemple pour le périmètre "Prox-Hydro"</h5>
-                    <div class="flex flex-wrap gap-4 mt-3">
-                        <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex-1">
-                           <p class="font-semibold">🔘 Bouton 1 : "🐞 Signaler un Bug sur Prox-Hydro"</p>
-                           <ul class="text-xs list-disc list-inside mt-1 text-slate-500 dark:text-slate-400">
-                               <li>Action : Créer une page dans `Pipeline Global`</li>
-                               <li>Template à appliquer : `[BUG] -`</li>
-                               <li>Propriété à pré-remplir : `Périmètre` = `Prox-Hydro`</li>
-                           </ul>
-                       </div>
-                       <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm flex-1">
-                           <p class="font-semibold">🔘 Bouton 2 : "✨ Proposer une Évolution pour Prox-Hydro"</p>
-                           <ul class="text-xs list-disc list-inside mt-1 text-slate-500 dark:text-slate-400">
-                               <li>Action : Créer une page dans `Pipeline Global`</li>
-                               <li>Template à appliquer : `[STORY] -`</li>
-                               <li>Propriété à pré-remplir : `Périmètre` = `Prox-Hydro`</li>
-                           </ul>
-                       </div>
-                    </div>
-                    <p class="text-xs italic mt-4 text-slate-500 dark:text-slate-400">Répéter cette structure pour tous les autres périmètres (Agence PXS Est, IDF, etc.).</p>
-                 </div>
-            </div>
-        </section>
-        
-        <!-- NOUVELLE SECTION: GUIDE PIPELINE -->
-        <section id="build-pipeline" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                Guide de Construction : 🗃️ BDD Pipeline Global
-            </h2>
-             <div class="section-card">
-                 <blockquote class="border-l-4 border-green-500 pl-4 mb-6 text-slate-600 dark:text-slate-300">
-                    <p class="font-bold">Objectif de la page :</p>
-                    <p>Créer une page dédiée pour visualiser et interagir avec la base de données `Pipeline Global` sous différents angles, afin de répondre à des besoins d'analyse variés.</p>
-                </blockquote>
-                 <p class="mb-6 text-sm">Créez une nouvelle page `Pipeline Global des Demandes`. Sur cette page, insérez une vue liée de la base de données du même nom, et configurez les onglets de vue suivants :</p>
-                 <div class="space-y-4">
-                    <div class="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg"><strong>➡️ Onglet 1 : "Tableau Complet" (par défaut)</strong><br><span class="text-xs"> (Type : Tableau. Aucuns filtres. Pour une vue brute de toutes les données.)</span></div>
-                    <div class="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg"><strong>➡️ Onglet 2 : "Kanban par Statut"</strong><br><span class="text-xs"> (Type : Tableau Kanban. Groupé par la propriété `Statut`. Pour le suivi du flux de travail.)</span></div>
-                    <div class="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg"><strong>➡️ Onglet 3 : "Calendrier des Résolutions"</strong><br><span class="text-xs"> (Type : Calendrier. Basé sur la propriété `Date de résolution`. Pour visualiser les livraisons.)</span></div>
-                 </div>
-            </div>
-        </section>
-
-        <!-- NOUVELLE SECTION: GUIDE CONNAISSANCES -->
-        <section id="build-connaissances" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                Guide de Construction : 📚 BDD Base de Connaissances
-            </h2>
-             <div class="section-card">
-                <blockquote class="border-l-4 border-purple-500 pl-4 mb-6 text-slate-600 dark:text-slate-300">
-                    <p class="font-bold">Objectif de la page :</p>
-                    <p>Centraliser toute la documentation du projet (spécifications, guides, décisions) dans un format facile à naviguer et à consulter, à la manière d'un Wiki interne.</p>
-                </blockquote>
-                <p class="mb-6 text-sm">Créez une nouvelle page `Base de Connaissances`. Sur cette page, insérez une vue liée de la base de données du même nom.</p>
-                <div class="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
-                    <h4 class="font-semibold">Vue Recommandée : "Galerie par Type d'Article"</h4>
-                    <ul class="text-sm list-disc list-inside mt-2 text-slate-600 dark:text-slate-400">
-                        <li><strong>Type de vue :</strong> Galerie</li>
-                        <li><strong>Groupé par :</strong> `Type d'Article`</li>
-                        <li><strong>Aperçu de la carte :</strong> Contenu de la page</li>
-                        <li><strong>Taille de la carte :</strong> Moyenne</li>
-                    </ul>
-                    <p class="text-xs italic mt-2">Cette vue permet de séparer visuellement les spécifications, des guides, des comptes-rendus, rendant la navigation très intuitive.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section: Taxonomie (NOW A MODAL) -->
-        <section id="taxonomie" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">
-                🏷️ La Base de Données : Taxonomie Unifiée
-            </h2>
-            <div class="section-card text-center">
-                 <p class="mb-6 text-slate-600 dark:text-slate-300">Le cœur du système. Une base de données unique avec une structure de propriétés solide. Pour alléger l'interface, les spécifications techniques détaillées sont accessibles via le bouton ci-dessous.</p>
-                 <button onclick="openModal('modal-taxonomie')" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105">
-                    Ouvrir les Spécifications Détaillées
-                 </button>
-            </div>
-        </section>
-        
-        <!-- Section: Priorisation & Sprints -->
-        <section id="priorisation" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">🚀 Priorisation & Sprints</h2>
-            <div class="section-card">
-                <div class="mb-6 p-4 bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-500 rounded-r-lg">
-                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200">Devenir Décisionnel : Le Guide de la Priorisation</h4>
-                    <p class="text-sm mt-1">Pour piloter efficacement, il faut pouvoir passer d'une simple liste de tâches à une roadmap stratégique. Cela passe par la méthode RICE (Reach, Impact, Confidence, Effort).</p>
-                </div>
-                <h4 class="text-lg font-semibold mb-4">La Formule Magique dans Notion</h4>
-                <div class="p-4 bg-slate-100 dark:bg-slate-700 rounded-lg mt-4 font-mono text-sm">
-                    <code>if(prop("Effort") > 0, round(prop("Impact") * (prop("Confiance") / 100) / prop("Effort") * 100) / 100, 0)</code>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section: Templates -->
-        <section id="templates" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">📋 Templates d'Action</h2>
-            <div class="space-y-8">
-                <div class="section-card">
-                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">🔧 Template : Support & Correction</h3>
-                    <div class="space-y-4 text-sm mt-4">
-                        <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-slate-800 dark:text-slate-200">📝 Résumé du Problème / Question</h4>
-                        </div>
-                        <div class="border-l-4 border-red-500 bg-red-50 dark:bg-red-900/20 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-red-800 dark:text-red-300">▶️ Analyse du Bug</h4>
-                        </div>
-                         <div class="border-l-4 border-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-slate-800 dark:text-slate-200">📎 Pièces Jointes</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="section-card">
-                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">✨ Template : Story & GAP</h3>
-                    <div class="space-y-4 text-sm mt-4">
-                        <div class="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-blue-800 dark:text-blue-300">1. Le "Pourquoi" (Besoin métier)</h4>
-                        </div>
-                         <div class="border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-blue-800 dark:text-blue-300">2. Le "Quoi" (Cible fonctionnelle)</h4>
-                        </div>
-                        <div class="border-l-4 border-green-500 bg-green-50 dark:bg-green-900/20 p-4 rounded-r-lg">
-                            <h4 class="font-bold text-green-800 dark:text-green-300">4. Rédaction du Ticket Jira</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section: Qualité & Automatisation -->
-        <section id="qualite-automatisation" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">🤖 Qualité & Automatisation par Boutons</h2>
-            <div class="section-card">
-                <h3 class="text-xl font-bold mb-6 text-slate-800 dark:text-slate-100">Boutons d'Action Pertinents</h3>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h4 class="font-bold text-lg mb-2">✅ Terminer le Ticket</h4>
-                    </div>
-                    <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h4 class="font-bold text-lg mb-2">📡 Escalader à la DSI</h4>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section: Vues de Pilotage -->
-        <section id="vues-op" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">📊 Vues de Pilotage</h2>
-            <div class="section-card">
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h3 class="text-lg font-bold mb-2">🔥 Mon Triage MOA</h3>
-                    </div>
-                    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h3 class="text-lg font-bold mb-2">🩺 Santé des Applications</h3>
-                    </div>
-                    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h3 class="text-lg font-bold mb-2">🔌 Suivi des GAPs</h3>
-                    </div>
-                    <div class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-md ring-1 ring-slate-200 dark:ring-slate-700">
-                        <h3 class="text-lg font-bold mb-2">⏱️ Analyse des Délais</h3>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Section: Migration -->
-        <section id="migration-statuts" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">🔄 Migration des Statuts</h2>
-             <div class="section-card overflow-x-auto">
-                <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">Guide de Correspondance des Statuts</h3>
-                <table class="w-full text-sm text-left">
-                    <thead class="text-xs text-slate-700 uppercase bg-slate-100/50 dark:bg-slate-800/50 dark:text-slate-300">
-                        <tr>
-                            <th class="p-3">Ancien Statut</th><th class="p-3">Outil d'Origine</th><th class="p-3">Nouveau Statut Cible</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-slate-600 dark:text-slate-300">
-                        <tr class="border-t dark:border-slate-700"><td class="p-3">Nouveau</td><td class="p-3">Licorne</td><td class="p-3 font-semibold text-red-600 dark:text-red-400">0. À Trier 🔴</td></tr>
-                        <tr class="border-t dark:border-slate-700"><td class="p-3">En cours d'analyse</td><td class="p-3">GAP</td><td class="p-3 font-semibold text-blue-600 dark:text-blue-400">1. En analyse MOA 🔵</td></tr>
-                        <tr class="border-t dark:border-slate-700"><td class="p-3">Résolu / Terminé</td><td class="p-3">Tous</td><td class="p-3 font-semibold text-green-600 dark:text-green-400">5. Terminé 📦</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-        
-        <!-- Section: Déploiement -->
-        <section id="mise-en-place" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white flex items-center gap-3">🛠️ Plan de Déploiement</h2>
-            <div class="space-y-6">
-                <div class="section-card"><h3 class="text-xl font-bold text-slate-800 dark:text-slate-100">Phase 1 : Construction du Socle</h3></div>
-                 <div class="section-card"><h3 class="text-xl font-bold text-slate-800 dark:text-slate-100">Phase 2 : Création de l'Espace de Travail</h3></div>
-                 <div class="section-card"><h3 class="text-xl font-bold text-slate-800 dark:text-slate-100">Phase 3 : Migration & Formation</h3></div>
-                <div class="section-card"><h3 class="text-xl font-bold text-slate-800 dark:text-slate-100">Phase 4 : Déploiement Complet</h3></div>
-            </div>
-        </section>
-
-        <footer class="text-center mt-16 py-8 border-t border-slate-200 dark:border-slate-700 fade-in-up">
-            <p class="text-sm text-slate-500 dark:text-slate-400">&copy; 2025 - Conçu par cosmofilou & Gemini. Tous droits réservés.</p>
-        </footer>
-    </main>
-
-    <!-- MODAL for Taxonomie -->
-    <div id="modal-taxonomie" class="modal-overlay" onclick="closeModal('modal-taxonomie')">
-        <div class="modal-container" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <div>
-                    <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100">🏷️ Taxonomie Détaillée</h3>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Structure complète de la base de données `Pipeline Global`.</p>
-                </div>
-                 <button class="modal-close-btn" onclick="closeModal('modal-taxonomie')">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-4 sticky top-0 bg-fuchsia-50/80 dark:bg-slate-900/80 backdrop-blur-sm py-2 -mx-6 px-6">
-                    <input type="search" id="taxonomie-search" placeholder="Rechercher une propriété (ex: Statut, RICE, Jira...)" class="w-full px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
-                </div>
-                <div id="taxonomie-content-wrapper" class="space-y-10">
-                    <!-- Catégorie: Qualification Initiale -->
-                    <div data-searchable-section>
-                        <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100 border-b pb-2">Qualification Initiale</h3>
-                        <div class="grid md:grid-cols-2 gap-6 mt-4">
-                            <div class="bg-white dark:bg-slate-800/50 rounded-xl p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700" data-searchable-item>
-                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Type de Demande</h4>
-                                <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection`</p>
-                                <ul class="space-y-2 text-sm">
-                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">🐞 Bug</code></li>
-                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">✨ Story</code></li>
-                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">🔌 GAP</code></li>
-                                </ul>
+                <!-- VIEW 2: Hub Projet Salesforce -->
+                <div id="hub-view" class="view">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Column 1: Le Run -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <h3 class="text-2xl font-bold mb-4 border-b pb-2">Le Run (Opérationnel)</h3>
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="bg-red-100 text-red-800 p-4 rounded-lg text-center">
+                                    <p class="text-3xl font-bold" id="kpi-trier">0</p>
+                                    <p class="text-sm font-semibold">Tickets à trier</p>
+                                </div>
+                                <div class="bg-orange-100 text-orange-800 p-4 rounded-lg text-center">
+                                    <p class="text-3xl font-bold" id="kpi-bugs">0</p>
+                                    <p class="text-sm font-semibold">Bugs Urgents</p>
+                                </div>
                             </div>
-                            <div class="bg-white dark:bg-slate-800/50 rounded-xl p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700" data-searchable-item>
-                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Périmètre</h4>
-                                <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection Multiple`</p>
-                                <ul class="space-y-2 text-sm">
-                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Prox-Hydro</code></li>
-                                    <li><code class="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">Agence PXS Est</code></li>
-                                </ul>
+                            <h4 class="font-bold text-lg mb-3">Mes Actions</h4>
+                            <div id="hub-actions-list" class="space-y-3 h-96 overflow-y-auto pr-2">
+                                <!-- Actions list will be dynamically inserted -->
                             </div>
-                             <div class="md:col-span-2 bg-white dark:bg-slate-800/50 rounded-xl p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700" data-searchable-item>
-                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Domaine Fonctionnel</h4>
-                                 <p class="text-xs font-mono mb-3 text-indigo-500">Propriété `Sélection Multiple`</p>
+                        </div>
+                        <!-- Column 2: Le Build -->
+                        <div class="bg-white p-6 rounded-lg shadow-sm">
+                            <h3 class="text-2xl font-bold mb-4 border-b pb-2">Le Build (Stratégique)</h3>
+                            <div class="grid grid-cols-1 gap-4 mb-6">
+                                <div class="bg-blue-100 text-blue-800 p-4 rounded-lg text-center">
+                                    <p class="text-3xl font-bold" id="kpi-spec">0</p>
+                                    <p class="text-sm font-semibold">Tickets pour spécification</p>
+                                </div>
+                            </div>
+                             <h4 class="font-bold text-lg mb-3">Mon Portefeuille de Spécification</h4>
+                            <div id="hub-build-list" class="space-y-3 h-96 overflow-y-auto pr-2">
+                                <!-- Build list will be dynamically inserted -->
                             </div>
                         </div>
                     </div>
-                     <!-- Catégorie: Cycle de Vie -->
-                    <div data-searchable-section>
-                        <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100 border-b pb-2">Cycle de Vie & Suivi</h3>
-                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                             <div class="bg-white dark:bg-slate-800/50 rounded-xl p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700" data-searchable-item>
-                                <h4 class="font-bold text-slate-800 dark:text-slate-100">Statut</h4>
+                </div>
+
+                <!-- VIEW 3: Roadmap & Priorisation -->
+                <div id="roadmap-view" class="view">
+                    <!-- Roadmap Tabs -->
+                    <div class="mb-4 border-b border-gray-200">
+                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="roadmap-tabs">
+                            <li class="mr-2">
+                                <button class="roadmap-tab inline-block p-4 border-b-2 border-slate-700 rounded-t-lg text-slate-700 font-bold" data-tab="rice-tab">Backlog (RICE)</button>
+                            </li>
+                            <li class="mr-2">
+                                <button class="roadmap-tab inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" data-tab="kanban-tab">Kanban des Sprints</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Roadmap Tab Content -->
+                    <div id="roadmap-tab-content">
+                        <!-- RICE Tab -->
+                        <div id="rice-tab" class="roadmap-tab-pane active">
+                            <div class="bg-white p-4 rounded-lg shadow-sm overflow-x-auto">
+                                <table class="w-full text-sm text-left text-gray-500">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3">Nom</th>
+                                            <th scope="col" class="px-3 py-3">Périmètre</th>
+                                            <th scope="col" class="px-3 py-3 w-24">Reach</th>
+                                            <th scope="col" class="px-3 py-3 w-24">Impact</th>
+                                            <th scope="col" class="px-3 py-3 w-24">Confiance</th>
+                                            <th scope="col" class="px-3 py-3 w-24">Effort</th>
+                                            <th scope="col" class="px-3 py-3 font-bold">Score RICE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rice-table-body">
+                                        <!-- RICE table rows will be inserted here -->
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="bg-white dark:bg-slate-800/50 rounded-xl p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700" data-searchable-item>
-                                <h4 class="font-bold text-slate-800 dark:text-slate-100">N° de Ticket</h4>
+                        </div>
+                        <!-- Kanban Tab -->
+                        <div id="kanban-tab" class="roadmap-tab-pane hidden">
+                            <div class="mb-4">
+                                <label for="sprint-filter" class="text-sm font-medium">Filtrer par Sprint:</label>
+                                <select id="sprint-filter" class="ml-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                    <!-- Sprint options will be inserted here -->
+                                </select>
+                            </div>
+                            <div id="kanban-board" class="kanban-container flex space-x-4 overflow-x-auto pb-4">
+                                <!-- Kanban columns will be inserted here -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </main>
+    </div>
+
+    <!-- Modal for Ticket Creation -->
+    <div id="creation-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+            <h2 id="modal-title" class="text-xl font-bold mb-4">Créer un ticket</h2>
+            <form id="creation-form">
+                <input type="hidden" id="form-perimetre">
+                <input type="hidden" id="form-type">
+                <div class="mb-4">
+                    <label for="form-nomDemande" class="block text-sm font-medium text-gray-700">Titre du ticket <span class="text-red-500">*</span></label>
+                    <input type="text" id="form-nomDemande" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Domaine Fonctionnel</label>
+                    <div id="form-domaineFonctionnel" class="mt-2 grid grid-cols-2 gap-2">
+                        <!-- Checkboxes will be inserted here -->
+                    </div>
+                </div>
+                 <div class="mb-4">
+                    <label for="form-description" class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea id="form-description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" id="modal-cancel-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Annuler</button>
+                    <button type="submit" class="px-4 py-2 bg-slate-700 text-white rounded-md hover:bg-slate-800">Soumettre</button>
+                </div>
+            </form>
         </div>
     </div>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Theme Toggle ---
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-            const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-            const themeToggleText = document.getElementById('theme-toggle-text');
+    <!-- Modal for Ticket Details/Edition -->
+    <div id="detail-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-full overflow-y-auto">
+             <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Détails du Ticket</h2>
+                <button id="detail-modal-close" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <form id="detail-form">
+                <input type="hidden" id="detail-id">
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div>
+                        <label for="detail-nomDemande" class="block text-sm font-medium">Titre</label>
+                        <input type="text" id="detail-nomDemande" class="mt-1 w-full rounded-md border-gray-300 shadow-sm">
+                     </div>
+                     <div>
+                        <label for="detail-statut" class="block text-sm font-medium">Statut</label>
+                        <select id="detail-statut" class="mt-1 w-full rounded-md border-gray-300 shadow-sm"></select>
+                    </div>
+                    <div>
+                        <label for="detail-type" class="block text-sm font-medium">Type</label>
+                        <select id="detail-type" class="mt-1 w-full rounded-md border-gray-300 shadow-sm"></select>
+                    </div>
+                    <div>
+                        <label for="detail-perimetre" class="block text-sm font-medium">Périmètre</label>
+                        <select id="detail-perimetre" class="mt-1 w-full rounded-md border-gray-300 shadow-sm"></select>
+                    </div>
+                    <div>
+                        <label for="detail-responsableMOA" class="block text-sm font-medium">Responsable MOA</label>
+                        <select id="detail-responsableMOA" class="mt-1 w-full rounded-md border-gray-300 shadow-sm"></select>
+                    </div>
+                     <div>
+                        <label for="detail-priorite" class="block text-sm font-medium">Priorité</label>
+                        <select id="detail-priorite" class="mt-1 w-full rounded-md border-gray-300 shadow-sm"></select>
+                    </div>
+                 </div>
+                 <div class="mt-4">
+                    <label class="block text-sm font-medium">Domaine Fonctionnel</label>
+                    <div id="detail-domaineFonctionnel" class="mt-2 grid grid-cols-2 md:grid-cols-3 gap-2"></div>
+                 </div>
+                <div class="mt-4 flex items-center space-x-2">
+                     <input type="checkbox" id="detail-goDev" class="h-4 w-4 rounded border-gray-300 text-slate-600">
+                     <label for="detail-goDev" class="text-sm font-medium">Go Dev</label>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" id="detail-delete-btn" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Supprimer</button>
+                    <button type="submit" class="px-4 py-2 bg-slate-700 text-white rounded-md hover:bg-slate-800">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-            const updateButtonUI = (isDark) => {
-                themeToggleLightIcon.classList.toggle('hidden', !isDark);
-                themeToggleDarkIcon.classList.toggle('hidden', isDark);
-                themeToggleText.textContent = isDark ? 'Mode Clair' : 'Mode Sombre';
-            };
 
-            const applyTheme = (isDark) => {
-                document.documentElement.classList.toggle('dark', isDark);
-            };
-            
-            const initialIsDark = localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            applyTheme(initialIsDark);
-            updateButtonUI(initialIsDark);
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, serverTimestamp, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-            themeToggleBtn.addEventListener('click', () => {
-                const newIsDark = !document.documentElement.classList.contains('dark');
-                applyTheme(newIsDark);
-                updateButtonUI(newIsDark);
-                localStorage.setItem('color-theme', newIsDark ? 'dark' : 'light');
-            });
+        // --- CONFIGURATION & CONSTANTS ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "AIza...", authDomain: "...", projectId: "..." };
 
-            // --- Active Nav Link on Scroll (Scroll-spy) ---
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-link');
-            const navMenu = document.getElementById('nav-menu');
+        const PERIMETRES = ["Direction Technique", "Prox-Hydro", "Agence PXS Est", "Agence PXS Ouest", "Siège", "Autre"];
+        const DOMAINES_FONCTIONNELS = ["Prospection", "Facturation", "Recouvrement", "Mobilité", "Reporting", "Administration"];
+        const STATUTS = ["🔴 0. À trier", "❓ 0a. En attente d'infos", "🔵 1. En analyse MOA", "📝 2. Prêt pour DEV", "🏗️ 3. En cours de DEV", "🚧 3a. Bloqué", "✅ 4. En recette MOA", "📦 5. Terminé", "❌ 6. Annulé"];
+        const KANBAN_STATUTS = ["📝 2. Prêt pour DEV", "🏗️ 3. En cours de DEV", "🚧 3a. Bloqué", "✅ 4. En recette MOA", "📦 5. Terminé"];
+        const TYPES = ["🐞 Bug", "✨ Story", "🔌 GAP", "🔧 Correction", "🎓 Formation", "💬 Question"];
+        const PRIORITES = ["Haute", "Moyenne", "Basse"];
+        const USERS = [ // Mock data for assignees
+            { uid: 'user1_uid', name: 'Alice' },
+            { uid: 'user2_uid', name: 'Bob' },
+            { uid: 'user3_uid', name: 'Charlie' },
+        ];
+        
+        // --- APPLICATION STATE ---
+        let db, auth, currentUser;
+        let allTickets = [];
 
-            const activateNavLink = (id) => {
-                let activeLink = null;
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if(link.getAttribute('href') === `#${id}`) {
-                        link.classList.add('active');
-                        activeLink = link;
-                    }
-                });
-                 if (activeLink && navMenu) {
-                     const navRect = navMenu.getBoundingClientRect();
-                     const linkRect = activeLink.getBoundingClientRect();
-                     if (linkRect.bottom > navRect.bottom || linkRect.top < navRect.top) {
-                         activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                     }
-                 }
-            };
+        // --- DOM ELEMENTS ---
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const viewsContainer = document.getElementById('views-container');
+        const creationModal = document.getElementById('creation-modal');
+        const detailModal = document.getElementById('detail-modal');
 
-            const scrollObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        activateNavLink(entry.target.id);
-                    }
-                });
-            }, { rootMargin: '-20% 0px -75% 0px' });
-            sections.forEach(section => scrollObserver.observe(section));
-
-            // --- Animation on Scroll ---
-            const animatedElements = document.querySelectorAll('.fade-in-up');
-            const animationObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-            animatedElements.forEach(el => animationObserver.observe(el));
-
-            // --- SVG Interactivity ---
-            const tooltip = document.getElementById('svg-tooltip');
-            document.querySelectorAll('.svg-node').forEach(node => {
-                node.addEventListener('mouseenter', (e) => {
-                    tooltip.textContent = node.dataset.tooltip;
-                    tooltip.style.opacity = 1;
-                });
-                node.addEventListener('mousemove', (e) => {
-                    tooltip.style.left = `${e.pageX + 15}px`;
-                    tooltip.style.top = `${e.pageY + 15}px`;
-                });
-                node.addEventListener('mouseleave', () => {
-                    tooltip.style.opacity = 0;
-                });
-            });
-
-            // --- Modal Search ---
-            const taxonomieSearch = document.getElementById('taxonomie-search');
-            if(taxonomieSearch) {
-                taxonomieSearch.addEventListener('keyup', () => {
-                    const filter = taxonomieSearch.value.toLowerCase();
-                    const wrapper = document.getElementById('taxonomie-content-wrapper');
-                    const items = wrapper.querySelectorAll('[data-searchable-item]');
-                    const sections = wrapper.querySelectorAll('[data-searchable-section]');
-
-                    items.forEach(item => {
-                        const text = item.textContent.toLowerCase();
-                        item.style.display = text.includes(filter) ? '' : 'none';
-                    });
-                    
-                     sections.forEach(section => {
-                        const visibleItems = section.querySelectorAll('[data-searchable-item]:not([style*="display: none"])');
-                        section.style.display = visibleItems.length > 0 ? '' : 'none';
-                    });
-                });
-            }
-        });
-
-        // --- Modal Controls (Global scope for onclick) ---
-        function openModal(modalId) {
-            document.getElementById(modalId)?.classList.add('open');
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                const container = modal.querySelector('.modal-container');
-                if (container) {
-                    container.style.transform = 'scale(0.95)';
-                    container.style.opacity = '0';
-                }
-                setTimeout(() => {
-                    modal.classList.remove('open');
-                    if (container) {
-                        container.style.transform = '';
-                        container.style.opacity = '';
-                    }
-                }, 300);
+        // --- INITIALIZATION ---
+        async function initialize() {
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                setupAuthListener();
+                setupUI();
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                loadingIndicator.innerHTML = '<p class="text-red-500">Erreur de connexion à la base de données.</p>';
             }
         }
         
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                const openModal = document.querySelector('.modal-overlay.open');
-                if (openModal) {
-                    closeModal(openModal.id);
+        function setupAuthListener() {
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    currentUser = user;
+                    document.getElementById('user-id-display').textContent = `UID: ${currentUser.uid.substring(0,8)}...`;
+                    document.getElementById('user-info').classList.remove('hidden');
+                    startDataListeners();
+                } else {
+                    try {
+                         if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            await signInWithCustomToken(auth, __initial_auth_token);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch(error) {
+                        console.error("Authentication failed:", error);
+                    }
                 }
+            });
+        }
+
+        function startDataListeners() {
+            const ticketsCollection = collection(db, 'pipelineGlobal');
+            onSnapshot(ticketsCollection, (snapshot) => {
+                allTickets = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderAll();
+                loadingIndicator.style.display = 'none';
+                viewsContainer.style.display = 'block';
+            }, error => {
+                console.error("Error fetching tickets: ", error);
+            });
+        }
+        
+        // --- UI SETUP & RENDERING ---
+        function setupUI() {
+            // Navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const targetView = e.currentTarget.dataset.view;
+                    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                    document.getElementById(targetView).classList.add('active');
+                    
+                    document.querySelectorAll('.nav-btn').forEach(b => {
+                        b.classList.remove('bg-slate-200', 'text-slate-800', 'ring-2', 'ring-slate-700');
+                         b.classList.add('text-slate-600', 'hover:bg-slate-200');
+                    });
+                    document.querySelectorAll(`.nav-btn[data-view="${targetView}"]`).forEach(b => {
+                        b.classList.add('bg-slate-200', 'text-slate-800', 'ring-2', 'ring-slate-700');
+                        b.classList.remove('text-slate-600', 'hover:bg-slate-200');
+                    });
+                });
+            });
+
+            // Roadmap Tabs
+            document.querySelectorAll('.roadmap-tab').forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    const targetPane = e.currentTarget.dataset.tab;
+                    document.querySelectorAll('.roadmap-tab-pane').forEach(p => p.classList.add('hidden'));
+                    document.getElementById(targetPane).classList.remove('hidden');
+
+                    document.querySelectorAll('.roadmap-tab').forEach(t => {
+                        t.classList.remove('border-slate-700', 'text-slate-700', 'font-bold');
+                        t.classList.add('border-transparent');
+                    });
+                    e.currentTarget.classList.add('border-slate-700', 'text-slate-700', 'font-bold');
+                });
+            });
+            
+            // Render static parts
+            renderPortailSaisie();
+            renderCreationFormOptions();
+            renderDetailFormOptions();
+            renderKanbanColumns();
+        }
+
+        function renderAll() {
+            renderHub();
+            renderRiceTable();
+            renderKanbanBoard();
+        }
+
+        // --- Portail de Saisie ---
+        function renderPortailSaisie() {
+            const container = document.querySelector('#portail-view .grid');
+            container.innerHTML = PERIMETRES.map(p => `
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="font-bold text-lg mb-4 text-center">${p}</h3>
+                    <div class="flex flex-col space-y-3">
+                        <button class="create-ticket-btn w-full px-4 py-3 bg-red-500 text-white rounded-md font-semibold hover:bg-red-600 transition-colors" data-perimetre="${p}" data-type="🐞 Bug">🐞 Signaler un Bug</button>
+                        <button class="create-ticket-btn w-full px-4 py-3 bg-blue-500 text-white rounded-md font-semibold hover:bg-blue-600 transition-colors" data-perimetre="${p}" data-type="✨ Story">✨ Proposer une Évolution</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.querySelectorAll('.create-ticket-btn').forEach(btn => {
+                btn.addEventListener('click', handleOpenCreationModal);
+            });
+        }
+        
+        // --- Hub Projet ---
+        function renderHub() {
+            if (!currentUser) return;
+            const myUid = currentUser.uid;
+
+            // KPIs
+            const toTriage = allTickets.filter(t => t.statut === "🔴 0. À trier").length;
+            const urgentBugs = allTickets.filter(t => t.type === "🐞 Bug" && t.priorite === "Haute" && t.statut !== "📦 5. Terminé" && t.statut !== "❌ 6. Annulé").length;
+            const toSpec = allTickets.filter(t => t.goDev && t.statut === "🔵 1. En analyse MOA").length;
+            
+            document.getElementById('kpi-trier').textContent = toTriage;
+            document.getElementById('kpi-bugs').textContent = urgentBugs;
+            document.getElementById('kpi-spec').textContent = toSpec;
+
+            // Lists
+            // Note: In a real app, myUid would be compared to a real UID field. Here we use mock data logic.
+            const myActions = allTickets.filter(t => ["🔴 0. À trier", "❓ 0a. En attente d'infos", "🚧 3a. Bloqué"].includes(t.statut));
+            const myBuild = allTickets.filter(t => t.goDev && t.statut === "🔵 1. En analyse MOA");
+            
+            const renderTicketCard = t => `
+                 <div class="bg-slate-50 p-3 rounded-md border border-slate-200 cursor-pointer hover:bg-slate-100" data-id="${t.id}">
+                    <div class="flex justify-between items-start">
+                        <p class="font-semibold text-sm">${t.nomDemande}</p>
+                        <span class="text-xs font-mono text-slate-400">#${t.id.substring(0,5)}</span>
+                    </div>
+                    <div class="flex items-center space-x-2 mt-2 text-xs">
+                        <span class="px-2 py-1 rounded-full bg-gray-200">${t.statut}</span>
+                        <span class="px-2 py-1 rounded-full bg-blue-100 text-blue-800">${t.perimetre}</span>
+                    </div>
+                 </div>
+            `;
+            document.getElementById('hub-actions-list').innerHTML = myActions.map(renderTicketCard).join('') || '<p class="text-center text-slate-500 text-sm">Aucune action requise.</p>';
+            document.getElementById('hub-build-list').innerHTML = myBuild.map(renderTicketCard).join('') || '<p class="text-center text-slate-500 text-sm">Aucun ticket à spécifier.</p>';
+            
+            document.querySelectorAll('#hub-view [data-id]').forEach(card => {
+                card.addEventListener('click', (e) => handleOpenDetailModal(e.currentTarget.dataset.id));
+            });
+        }
+        
+        // --- Roadmap ---
+        function renderRiceTable() {
+            const riceTickets = allTickets
+                .filter(t => ["✨ Story", "🔌 GAP"].includes(t.type))
+                .map(t => ({
+                    ...t,
+                    rice_score: calculateRiceScore(t.rice_reach, t.rice_impact, t.rice_confidence, t.rice_effort)
+                }))
+                .sort((a, b) => b.rice_score - a.rice_score);
+
+            const tableBody = document.getElementById('rice-table-body');
+            tableBody.innerHTML = riceTickets.map(t => `
+                <tr class="bg-white border-b hover:bg-gray-50">
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">${t.nomDemande}</td>
+                    <td class="px-3 py-4">${t.perimetre}</td>
+                    <td class="px-3 py-4"><input type="number" class="w-20 p-1 border rounded rice-input" data-id="${t.id}" data-field="rice_reach" value="${t.rice_reach || ''}"></td>
+                    <td class="px-3 py-4"><input type="number" class="w-20 p-1 border rounded rice-input" data-id="${t.id}" data-field="rice_impact" value="${t.rice_impact || ''}"></td>
+                    <td class="px-3 py-4"><input type="number" class="w-20 p-1 border rounded rice-input" data-id="${t.id}" data-field="rice_confidence" value="${t.rice_confidence || ''}"></td>
+                    <td class="px-3 py-4"><input type="number" class="w-20 p-1 border rounded rice-input" data-id="${t.id}" data-field="rice_effort" value="${t.rice_effort || ''}"></td>
+                    <td class="px-3 py-4 font-bold text-lg text-slate-800" id="rice-score-${t.id}">${t.rice_score.toFixed(2)}</td>
+                </tr>
+            `).join('');
+
+            document.querySelectorAll('.rice-input').forEach(input => {
+                input.addEventListener('change', handleRiceUpdate);
+            });
+        }
+        
+        function renderKanbanColumns() {
+             document.getElementById('kanban-board').innerHTML = KANBAN_STATUTS.map(status => `
+                <div class="kanban-column bg-slate-200 rounded-lg p-3 flex-shrink-0" data-status="${status}">
+                    <h4 class="font-semibold text-sm mb-3 px-1">${status}</h4>
+                    <div class="kanban-cards space-y-3 h-[60vh] overflow-y-auto">
+                        <!-- Cards will be inserted here -->
+                    </div>
+                </div>
+            `).join('');
+
+             document.querySelectorAll('.kanban-column').forEach(col => {
+                col.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    col.classList.add('bg-slate-300');
+                });
+                col.addEventListener('dragleave', e => col.classList.remove('bg-slate-300'));
+                col.addEventListener('drop', handleKanbanDrop);
+            });
+        }
+
+        function renderKanbanBoard() {
+            // Clear existing cards
+            document.querySelectorAll('.kanban-cards').forEach(col => col.innerHTML = '');
+            
+            allTickets.forEach(ticket => {
+                if (KANBAN_STATUTS.includes(ticket.statut)) {
+                    const column = document.querySelector(`.kanban-column[data-status="${ticket.statut}"] .kanban-cards`);
+                    if (column) {
+                        const card = document.createElement('div');
+                        card.className = "bg-white p-3 rounded-md shadow-sm border cursor-grab";
+                        card.setAttribute('draggable', true);
+                        card.dataset.id = ticket.id;
+                        card.innerHTML = `
+                             <p class="font-semibold text-sm">${ticket.nomDemande}</p>
+                             <div class="flex items-center space-x-2 mt-2 text-xs">
+                                <span class="px-2 py-1 rounded-full bg-blue-100 text-blue-800">${ticket.perimetre}</span>
+                                <span class="px-2 py-1 rounded-full ${ticket.priorite === 'Haute' ? 'bg-red-100 text-red-800' : 'bg-gray-200'}">${ticket.priorite}</span>
+                             </div>`;
+                        card.addEventListener('dragstart', handleKanbanDragStart);
+                        card.addEventListener('click', () => handleOpenDetailModal(ticket.id));
+                        column.appendChild(card);
+                    }
+                }
+            });
+        }
+
+        // --- MODALS & FORMS ---
+        function renderCreationFormOptions() {
+            document.getElementById('form-domaineFonctionnel').innerHTML = DOMAINES_FONCTIONNELS.map(d => `
+                <label class="flex items-center space-x-2 text-sm">
+                    <input type="checkbox" name="domaine" value="${d}" class="rounded border-gray-300 text-slate-600 shadow-sm">
+                    <span>${d}</span>
+                </label>
+            `).join('');
+        }
+
+        function renderDetailFormOptions() {
+            const populateSelect = (id, options) => {
+                document.getElementById(id).innerHTML = options.map(o => `<option value="${o}">${o}</option>`).join('');
+            };
+            populateSelect('detail-statut', STATUTS);
+            populateSelect('detail-type', TYPES);
+            populateSelect('detail-perimetre', PERIMETRES);
+            populateSelect('detail-priorite', PRIORITES);
+            document.getElementById('detail-responsableMOA').innerHTML = USERS.map(u => `<option value="${u.uid}">${u.name}</option>`).join('');
+            
+            document.getElementById('detail-domaineFonctionnel').innerHTML = DOMAINES_FONCTIONNELS.map(d => `
+                <label class="flex items-center space-x-2 text-sm">
+                    <input type="checkbox" name="detail-domaine" value="${d}" class="rounded border-gray-300 text-slate-600 shadow-sm">
+                    <span>${d}</span>
+                </label>
+            `).join('');
+        }
+
+        // --- EVENT HANDLERS ---
+        function handleOpenCreationModal(e) {
+            const { perimetre, type } = e.currentTarget.dataset;
+            document.getElementById('creation-form').reset();
+            document.getElementById('form-perimetre').value = perimetre;
+            document.getElementById('form-type').value = type;
+            document.getElementById('modal-title').textContent = `${type} pour ${perimetre}`;
+            creationModal.style.display = 'flex';
+        }
+
+        document.getElementById('modal-cancel-btn').addEventListener('click', () => creationModal.style.display = 'none');
+        
+        document.getElementById('creation-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const selectedDomaines = Array.from(document.querySelectorAll('#form-domaineFonctionnel input:checked')).map(cb => cb.value);
+            const newTicket = {
+                nomDemande: document.getElementById('form-nomDemande').value,
+                perimetre: document.getElementById('form-perimetre').value,
+                type: document.getElementById('form-type').value,
+                domaineFonctionnel: selectedDomaines,
+                description: document.getElementById('form-description').value,
+                statut: "🔴 0. À trier",
+                priorite: "Moyenne",
+                goDev: false,
+                dateCreation: serverTimestamp(),
+                rapporteur: currentUser?.email || 'anonymous',
+            };
+            try {
+                await addDoc(collection(db, 'pipelineGlobal'), newTicket);
+                creationModal.style.display = 'none';
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("Erreur lors de la création du ticket.");
             }
         });
 
+        function handleOpenDetailModal(ticketId) {
+            const ticket = allTickets.find(t => t.id === ticketId);
+            if (!ticket) return;
+
+            document.getElementById('detail-id').value = ticket.id;
+            document.getElementById('detail-nomDemande').value = ticket.nomDemande || '';
+            document.getElementById('detail-statut').value = ticket.statut || '';
+            document.getElementById('detail-type').value = ticket.type || '';
+            document.getElementById('detail-perimetre').value = ticket.perimetre || '';
+            document.getElementById('detail-priorite').value = ticket.priorite || '';
+            document.getElementById('detail-responsableMOA').value = ticket.responsableMOA_uid || '';
+            document.getElementById('detail-goDev').checked = ticket.goDev || false;
+            
+            document.querySelectorAll('#detail-domaineFonctionnel input').forEach(cb => {
+                cb.checked = (ticket.domaineFonctionnel || []).includes(cb.value);
+            });
+            
+            detailModal.style.display = 'flex';
+        }
+
+        document.getElementById('detail-modal-close').addEventListener('click', () => detailModal.style.display = 'none');
+
+        document.getElementById('detail-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const ticketId = document.getElementById('detail-id').value;
+            const selectedDomaines = Array.from(document.querySelectorAll('#detail-domaineFonctionnel input:checked')).map(cb => cb.value);
+            
+            const updatedData = {
+                nomDemande: document.getElementById('detail-nomDemande').value,
+                statut: document.getElementById('detail-statut').value,
+                type: document.getElementById('detail-type').value,
+                perimetre: document.getElementById('detail-perimetre').value,
+                priorite: document.getElementById('detail-priorite').value,
+                responsableMOA_uid: document.getElementById('detail-responsableMOA').value,
+                goDev: document.getElementById('detail-goDev').checked,
+                domaineFonctionnel: selectedDomaines,
+            };
+             if (updatedData.statut === "📦 5. Terminé" && !allTickets.find(t=>t.id === ticketId).dateResolution) {
+                updatedData.dateResolution = serverTimestamp();
+            }
+
+            try {
+                await updateDoc(doc(db, 'pipelineGlobal', ticketId), updatedData);
+                detailModal.style.display = 'none';
+            } catch (error) {
+                console.error("Error updating document: ", error);
+                alert("Erreur lors de la mise à jour.");
+            }
+        });
+        
+        document.getElementById('detail-delete-btn').addEventListener('click', async () => {
+             const ticketId = document.getElementById('detail-id').value;
+             if (confirm("Êtes-vous sûr de vouloir supprimer ce ticket ?")) {
+                 try {
+                    await deleteDoc(doc(db, 'pipelineGlobal', ticketId));
+                    detailModal.style.display = 'none';
+                } catch (error) {
+                    console.error("Error deleting document: ", error);
+                    alert("Erreur lors de la suppression.");
+                }
+             }
+        });
+        
+        async function handleRiceUpdate(e) {
+            const { id, field } = e.target.dataset;
+            const value = Number(e.target.value);
+            try {
+                await updateDoc(doc(db, 'pipelineGlobal', id), { [field]: value });
+                 // Update local score for immediate feedback
+                const row = e.target.closest('tr');
+                const reach = Number(row.querySelector('[data-field="rice_reach"]').value);
+                const impact = Number(row.querySelector('[data-field="rice_impact"]').value);
+                const confidence = Number(row.querySelector('[data-field="rice_confidence"]').value);
+                const effort = Number(row.querySelector('[data-field="rice_effort"]').value);
+                const score = calculateRiceScore(reach, impact, confidence, effort);
+                document.getElementById(`rice-score-${id}`).textContent = score.toFixed(2);
+            } catch (error) {
+                console.error("Error updating RICE field:", error);
+            }
+        }
+        
+        let draggedTicketId = null;
+        function handleKanbanDragStart(e) {
+            draggedTicketId = e.currentTarget.dataset.id;
+            e.currentTarget.classList.add('dragging');
+        }
+
+        async function handleKanbanDrop(e) {
+            e.preventDefault();
+            const column = e.currentTarget;
+            column.classList.remove('bg-slate-300');
+            const newStatus = column.dataset.status;
+
+            const draggedCard = document.querySelector(`[data-id="${draggedTicketId}"]`);
+            if (draggedCard) draggedCard.classList.remove('dragging');
+
+            if (draggedTicketId && newStatus) {
+                try {
+                    await updateDoc(doc(db, 'pipelineGlobal', draggedTicketId), { statut: newStatus });
+                    draggedTicketId = null;
+                } catch (error) {
+                    console.error("Error updating status:", error);
+                }
+            }
+        }
+        
+        // --- UTILITY FUNCTIONS ---
+        function calculateRiceScore(reach, impact, confidence, effort) {
+            if (!reach || !impact || !confidence || !effort || effort === 0) {
+                return 0;
+            }
+            return (reach * impact * (confidence / 100)) / effort;
+        }
+
+        // --- START THE APP ---
+        document.addEventListener('DOMContentLoaded', initialize);
     </script>
 </body>
 </html>
-
