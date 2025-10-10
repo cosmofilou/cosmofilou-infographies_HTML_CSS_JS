@@ -3,26 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vision v3.0 - Espace de Pilotage Applicatif Salesforce</title>
+    <title>Guide Ultime - Suivi Projet MOA Salesforce sur Notion</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --aurora-bg: radial-gradient(ellipse 80% 60% at 50% -20%,rgba(120,119,198,0.3),hsla(0,0%,100%,0));
-            --aurora-bg-dark: radial-gradient(ellipse 80% 60% at 50% -20%,rgba(120,119,198,0.15),rgba(255,255,255,0));
-            --gradient-border: conic-gradient(from 180deg at 50% 50%, #2a8af6 0deg, #a855f7 72.19deg, #f97316 140.62deg, #84cc16 215.62deg, #10b981 288.13deg, #2a8af6 360deg);
-        }
-
         body {
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
         
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
+        /* Barre de défilement stylisée */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
         ::-webkit-scrollbar-thumb {
             background-color: rgba(156, 163, 175, 0.5);
             border-radius: 20px;
@@ -32,182 +31,113 @@
         
         .nav-link {
             transition: all 0.2s ease-in-out;
-            border-left: 3px solid transparent;
+            border-left: 3px solid transparent; /* Bordure par défaut */
         }
         
+        /* État actif pour la navigation */
         .nav-link.active {
-            background-color: #eef2ff;
-            color: #4338ca;
+            background-color: #eef2ff; /* bg-indigo-50 */
+            color: #4338ca; /* text-indigo-700 */
             font-weight: 700;
-            border-left-color: #4f46e5;
+            border-left-color: #4f46e5; /* border-indigo-600 */
         }
         .dark .nav-link.active {
-            background-color: #3730a3;
-            color: #c7d2fe;
-            border-left-color: #818cf8;
+            background-color: #3730a3; /* dark:bg-indigo-800 */
+            color: #c7d2fe; /* dark:text-indigo-200 */
+            border-left-color: #818cf8; /* dark:border-indigo-400 */
         }
         
+        /* Animation d'apparition */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        .fade-in-up { animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        .fade-in-up {
+            opacity: 0; /* État initial pour l'observer JS */
+        }
+        .is-visible {
+            animation: fadeInUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
 
-        .section-card {
-            background-color: rgba(255,255,255,0.7);
-            border-radius: 0.75rem;
-            padding: 2rem;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease-in-out;
-            position: relative;
-            overflow: hidden;
-        }
-        .dark .section-card {
-            background-color: rgba(30, 41, 59, 0.7);
-            border-color: #334155;
-        }
-        .section-card::before {
+        /* Ligne de connexion pour le pipeline visuel */
+        .pipeline-step:not(:last-child)::after {
             content: '';
             position: absolute;
-            inset: -2px;
-            background: var(--gradient-border);
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            animation: spin 4s linear infinite;
-        }
-        .section-card:hover::before {
-            opacity: 1;
-        }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .glass-nav {
-            background-color: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-        }
-        .dark .glass-nav {
-            background-color: rgba(30, 41, 59, 0.7);
-        }
-
-        .sticky-header {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            transition: all 0.3s ease-in-out;
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            z-index: 40;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            pointer-events: none;
-        }
-        .modal-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .modal-container {
-            position: fixed;
-            top: 50%;
+            top: 20px;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
+            transform: translateX(2.5rem);
+            width: 6rem;
+            height: 2px;
+            background-color: #cbd5e1; /* slate-300 */
+        }
+        .dark .pipeline-step:not(:last-child)::after {
+            background-color: #475569; /* dark:slate-600 */
+        }
+        @media (max-width: 1280px) {
+           .pipeline-step:not(:last-child)::after {
+                width: 4rem;
+                transform: translateX(2.5rem);
+           }
+        }
+        @media (max-width: 1024px) {
+            .pipeline-step {
+                min-width: 120px;
+            }
+           .pipeline-step:not(:last-child)::after {
+                width: 3rem;
+                transform: translateX(2rem);
+           }
+        }
+
+        .section-card {
+            background-color: white;
             border-radius: 0.75rem;
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
             padding: 2rem;
-            z-index: 50;
-            width: 90%;
-            max-width: 1200px;
-            max-height: 90vh;
-            overflow-y: auto;
-            opacity: 0;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            border: 1px solid #e2e8f0;
             transition: all 0.3s ease-in-out;
         }
-        .dark .modal-container {
-             background-color: rgba(30, 41, 59, 0.85);
-             border: 1px solid #475569;
-        }
-        .modal-overlay.open .modal-container {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-
-        /* SVG Interaction Styles */
-        .svg-node {
-            transition: all 0.2s ease-in-out;
-            cursor: pointer;
-        }
-        .svg-node:hover .svg-node-shape {
-            filter: brightness(1.1);
-            transform: scale(1.05);
-            transform-origin: center;
-        }
-        .svg-node:hover .svg-node-text {
-            font-weight: 700;
-        }
-        .svg-tooltip {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease-in-out;
-            padding: 0.75rem;
+        .dark .section-card {
             background-color: #1e293b;
-            color: white;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            max-width: 250px;
-            z-index: 30;
+            border-color: #334155;
         }
-        .dark .svg-tooltip {
-            background-color: #f8fafc;
-            color: #1e293b;
+        .section-card:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+            transform: translateY(-4px);
         }
-
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 transition-colors duration-300">
-    <div class="bg-white dark:bg-slate-900" style="background-image: var(--aurora-bg);">
-        <div class="dark:hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: var(--aurora-bg);"></div>
-        <div class="hidden dark:block" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: var(--aurora-bg-dark);"></div>
-    </div>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 transition-colors duration-300">
 
-    <!-- Left Navigation -->
-    <nav class="fixed top-0 left-0 h-full w-64 glass-nav border-r border-slate-200 dark:border-slate-700 p-4 z-20 hidden lg:flex flex-col">
+    <nav class="fixed top-0 left-0 h-full w-64 bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg border-r border-slate-200 dark:border-slate-700 p-4 z-20 hidden lg:flex flex-col">
         <div class="flex items-center gap-3 mb-10 p-2">
-            <div class="text-3xl">🚀</div>
+            <div class="text-3xl">🛠️</div>
             <div>
-                <h1 class="text-base font-bold text-slate-900 dark:text-white">Pilotage Applicatif v3.0</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Projet Salesforce</p>
+                <h1 class="text-base font-bold text-slate-900 dark:text-white">Pilotage Projet Salesforce</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Le Guide Ultime sur Notion</p>
             </div>
         </div>
         <ul id="nav-menu" class="space-y-1.5 overflow-y-auto">
-             <li><a href="#flux-visuel" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">⚡️ 1. Flux de Traitement</a></li>
-            <li><a href="#introduction" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🎯 2. Introduction & Vision</a></li>
-            <li><a href="#architecture" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🏗️ 3. Architecture Interactive</a></li>
-            <li><a href="#specs-bdd" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🗃️ 4. Spécifications BDD</a></li>
-            <li><a href="#specs-pages" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">📄 5. Spécifications Pages</a></li>
-            <li><a href="#specs-templates" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">📋 6. Modèles d'Action</a></li>
-            <li><a href="#specs-vues" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">📊 7. Vues de Pilotage</a></li>
-            <li><a href="#specs-automations" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🤖 8. Automatisations</a></li>
-            <li><a href="#gouvernance" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">📜 9. Gouvernance</a></li>
-            <li><a href="#deploiement" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🛠️ 10. Plan de Déploiement</a></li>
+            <li><a href="#flux-visuel" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">⚡️ Flux de Travail</a></li>
+            <li><a href="#hub" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🏠 Hub Projet</a></li>
+            <li><a href="#portail-agences" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🏢 Portail de Saisie</a></li>
+            <li><a href="#taxonomie" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🏷️ Base de Données</a></li>
+            <li><a href="#priorisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🚀 Sprints & Roadmap</a></li>
+            <li><a href="#processus-cles" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🔑 Processus Clés</a></li>
+            <li><a href="#templates" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">📋 Modèles d'Action</a></li>
+            <li><a href="#qualite-automatisation" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🤖 Automatisation</a></li>
+            <li><a href="#vues-op" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">📊 Vues de Pilotage</a></li>
+            <li><a href="#migration" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🔄 Migration</a></li>
+            <li><a href="#mise-en-place" class="nav-link flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium text-slate-600 dark:text-slate-300">🛠️ Plan de Déploiement</a></li>
         </ul>
         <div class="mt-auto p-2">
-            <button id="theme-toggle" class="w-full flex items-center justify-center gap-3 px-4 py-2 rounded-lg font-medium bg-slate-100/50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-600/50 transition-all">
+            <button id="theme-toggle" class="w-full flex items-center justify-center gap-3 px-4 py-2 rounded-lg font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 transition-all">
                 <span id="theme-toggle-dark-icon" class="hidden text-lg">🌙</span>
                 <span id="theme-toggle-light-icon" class="hidden text-lg">☀️</span>
                 <span id="theme-toggle-text"></span>
@@ -215,218 +145,251 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="lg:ml-64 p-6 md:p-12">
         <header class="mb-16 text-center lg:text-left fade-in-up">
             <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-3">
-                <span class="bg-gradient-to-r from-indigo-500 via-purple-500 to-sky-400 bg-clip-text text-transparent">Vision v3.0 : L'Application de Pilotage</span>
+                <span class="bg-gradient-to-r from-indigo-500 via-purple-500 to-sky-400 bg-clip-text text-transparent">Le Guide Ultime du Pipeline Salesforce</span>
             </h1>
-            <p class="text-lg text-slate-500 dark:text-slate-400 max-w-3xl mx-auto lg:mx-0">De la spécification statique à l'outil de pilotage dynamique et interactif pour la MOA Salesforce.</p>
+            <p class="text-lg text-slate-500 dark:text-slate-400 max-w-3xl mx-auto lg:mx-0">Le plan directeur pour un système de pilotage centralisé, puissant et décisionnel sur Notion, conçu pour un Chef de Projet MOA Salesforce.</p>
         </header>
 
-        <!-- Dynamic sticky header -->
-        <div id="sticky-header-container" class="sticky-header"></div>
-        
-        <div id="svg-tooltip" class="svg-tooltip"></div>
-
         <section id="flux-visuel" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="section-title text-3xl font-bold mb-10 text-slate-900 dark:text-white">⚡️ 1. Le Flux de Traitement Global</h2>
-            <div class="section-card p-4">
-                 <p class="mb-6 text-slate-600 dark:text-slate-300">Survolez les différentes étapes pour découvrir les détails de chaque phase du cycle de vie d'une demande, de sa création à sa résolution.</p>
-                 <div class="bg-slate-50/50 dark:bg-slate-800/50 p-6 rounded-lg flex justify-center">
-                    <!-- Interactive SVG Diagram -->
-                    <svg id="workflow-svg" viewBox="0 0 800 400" class="w-full max-w-4xl">
-                        <!-- Définitions pour les marqueurs de flèche -->
-                        <defs>
-                            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                <path d="M 0 0 L 10 5 L 0 10 z" class="fill-slate-400 dark:fill-slate-500" />
-                            </marker>
-                        </defs>
-                        <!-- Lignes de connexion -->
-                        <path d="M 150 70 L 250 70" stroke-width="2" marker-end="url(#arrow)" class="stroke-slate-400 dark:stroke-slate-500"></path>
-                        <path d="M 350 70 C 370 70, 370 100, 390 100 L 410 100" stroke-width="2" marker-end="url(#arrow)" class="stroke-slate-400 dark:stroke-slate-500" fill="none"></path>
-                        <path d="M 450 100 L 510 100" stroke-width="2" marker-end="url(#arrow)" class="stroke-slate-400 dark:stroke-slate-500" fill="none"></path>
-                        <path d="M 450 250 L 510 250" stroke-width="2" marker-end="url(#arrow)" class="stroke-slate-400 dark:stroke-slate-500" fill="none"></path>
-                        <path d="M 610 100 L 670 100" stroke-width="2" marker-end="url(#arrow)" class="stroke-slate-400 dark:stroke-slate-500" fill="none"></path>
-                        <path d="M 610 250 L 670 250" stroke-width="2" marker-end="url(#arrow)" class="stroke-slate-400 dark:stroke-slate-500" fill="none"></path>
-                        
-                        <!-- Noeuds SVG interactifs -->
-                        <g id="node-portail" class="svg-node" data-tooltip="Les utilisateurs finaux (agences, etc.) soumettent leurs demandes via une interface simplifiée qui pré-qualifie le besoin.">
-                            <rect x="20" y="40" width="130" height="60" rx="10" class="svg-node-shape fill-yellow-200 dark:fill-yellow-800/50 stroke-yellow-400 dark:stroke-yellow-600"></rect>
-                            <text x="85" y="65" text-anchor="middle" class="svg-node-text font-semibold text-sm fill-slate-800 dark:fill-slate-100">🏢 Portail de Saisie</text>
-                            <text x="85" y="85" text-anchor="middle" class="text-xs fill-slate-500 dark:fill-slate-400">Utilisateurs</text>
-                        </g>
-                        <g id="node-triage" class="svg-node" data-tooltip="La MOA reçoit la nouvelle demande. Un premier filtre rapide (5-10 min) est appliqué pour vérifier la clarté, l'unicité et le caractère exploitable de la demande.">
-                            <rect x="250" y="40" width="100" height="60" rx="10" class="svg-node-shape fill-red-200 dark:fill-red-800/50 stroke-red-400 dark:stroke-red-600"></rect>
-                            <text x="300" y="65" text-anchor="middle" class="svg-node-text font-semibold text-sm fill-slate-800 dark:fill-slate-100">À Trier 🔴</text>
-                            <text x="300" y="85" text-anchor="middle" class="text-xs fill-slate-500 dark:fill-slate-400">MOA</text>
-                        </g>
-                        
-                        <text x="470" y="50" class="font-bold text-lg fill-slate-800 dark:fill-slate-100">Branche Support 🐞</text>
-                        <text x="470" y="200" class="font-bold text-lg fill-slate-800 dark:fill-slate-100">Branche Évolution ✨</text>
-                        
-                        <g id="node-support-analyse" class="svg-node" data-tooltip="Analyse du bug ou de la demande de correction. Liaison avec un ticket Freshservice si nécessaire.">
-                            <rect x="390" y="100" width="120" height="50" rx="8" class="svg-node-shape fill-slate-200 dark:fill-slate-700/50 stroke-slate-400 dark:stroke-slate-600"></rect>
-                            <text x="450" y="130" text-anchor="middle" class="svg-node-text text-xs fill-slate-800 dark:fill-slate-100">Lien Freshservice</text>
-                        </g>
-                        <g id="node-support-resolution" class="svg-node" data-tooltip="Le problème est résolu, soit par une action de la MOA, soit par une intervention de la DSI.">
-                            <rect x="510" y="100" width="100" height="50" rx="8" class="svg-node-shape fill-green-200 dark:fill-green-800/50 stroke-green-400 dark:stroke-green-600"></rect>
-                            <text x="560" y="130" text-anchor="middle" class="svg-node-text text-xs fill-slate-800 dark:fill-slate-100">Résolution</text>
-                        </g>
-                        <g id="node-evo-analyse" class="svg-node" data-tooltip="Analyse fonctionnelle approfondie par la MOA. Priorisation via la méthode RICE et le 'Go Dev'.">
-                            <rect x="390" y="250" width="120" height="50" rx="8" class="svg-node-shape fill-slate-200 dark:fill-slate-700/50 stroke-slate-400 dark:stroke-slate-600"></rect>
-                            <text x="450" y="280" text-anchor="middle" class="svg-node-text text-xs fill-slate-800 dark:fill-slate-100">Analyse & Prio MOA</text>
-                        </g>
-                        <g id="node-evo-dev" class="svg-node" data-tooltip="Rédaction des spécifications dans Jira, développement par la DSI, puis phase de recette par la MOA.">
-                             <rect x="510" y="250" width="100" height="50" rx="8" class="svg-node-shape fill-slate-200 dark:fill-slate-700/50 stroke-slate-400 dark:stroke-slate-600"></rect>
-                            <text x="560" y="280" text-anchor="middle" class="svg-node-text text-xs fill-slate-800 dark:fill-slate-100">Dev & Recette</text>
-                        </g>
-                         <g id="node-evo-mep" class="svg-node" data-tooltip="La fonctionnalité est validée et prête à être déployée en production.">
-                             <rect x="670" y="250" width="100" height="50" rx="8" class="svg-node-shape fill-green-200 dark:fill-green-800/50 stroke-green-400 dark:stroke-green-600"></rect>
-                            <text x="720" y="280" text-anchor="middle" class="svg-node-text text-xs fill-slate-800 dark:fill-slate-100">MEP</text>
-                        </g>
-                    </svg>
-                 </div>
-            </div>
-        </section>
-
-        <section id="introduction" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="section-title text-3xl font-bold mb-8 text-slate-900 dark:text-white">🎯 2. Introduction et Vision v3.0</h2>
-            <div class="section-card space-y-6">
-                <p class="text-slate-600 dark:text-slate-300">Ce document constitue le cahier des spécifications v3.0. Il marque une transition majeure : d'un document de référence statique à une <strong>application de pilotage dynamique</strong>. Il intègre les exigences stratégiques de la v2.0 tout en y ajoutant une couche d'interaction et d'ergonomie avancée pour transformer l'expérience de l'équipe MOA.</p>
-                <div>
-                    <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Principes Directeurs de la v3.0 :</h3>
-                    <ul class="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-300">
-                        <li><strong>De l'Information à l'Interaction :</strong> Chaque élément complexe (schéma, tableau) devient un outil interactif qui révèle l'information progressivement.</li>
-                        <li><strong>Clarté par la Hiérarchie Visuelle :</strong> L'interface guide l'utilisateur vers l'essentiel et permet d'accéder au détail à la demande, sans jamais se sentir submergé.</li>
-                        <li><strong>Engagement par le Mouvement et l'Esthétique :</strong> Des micro-interactions et une esthétique soignée renforcent la perception de qualité et favorisent l'adoption de l'outil.</li>
-                    </ul>
+            <h2 class="text-3xl font-bold mb-10 text-slate-900 dark:text-white">⚡️ Le Flux de Travail Visuel</h2>
+            <div class="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-md border border-slate-200 dark:border-slate-700 overflow-x-auto">
+                <div class="flex items-start justify-between gap-x-12 xl:gap-x-24 min-w-max">
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🔴</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">0. À Trier</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🟣</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">0a. En attente d'infos</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🔵</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">1. En analyse MOA</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">📝</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">2. Prêt pour DEV</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🧑‍💻</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">3. En cours de DEV</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🚧</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">3a. Bloqué</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">✅</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">4. En recette MOA</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🏆</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">5. Validé en recette</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32 pipeline-step"><div class="flex items-center justify-center h-10 text-2xl">🚀</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">6. Prêt pour MEP</p></div>
+                    <div class="relative flex flex-col items-center text-center w-32"><div class="flex items-center justify-center h-10 text-2xl">📦</div><p class="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">7. Terminé</p></div>
                 </div>
             </div>
         </section>
-        
-        <section id="architecture" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="section-title text-3xl font-bold mb-8 text-slate-900 dark:text-white">🏗️ 3. Architecture Interactive de l'Espace de Travail</h2>
+
+        <section id="hub" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🏠 Hub Projet : Votre Tour de Contrôle</h2>
             <div class="section-card">
-                 <p class="mb-6 text-slate-600 dark:text-slate-300">L'architecture v3.0 repose sur un flux de données simple et robuste, enrichi d'une nouvelle base de données `📚 Base de Connaissance`. Survolez les composants pour comprendre leurs rôles et interactions.</p>
-                 <div class="p-4 bg-slate-100/50 dark:bg-slate-700/50 rounded-lg flex justify-center">
-                    <svg id="architecture-svg" viewBox="0 0 800 250" class="w-full max-w-5xl">
-                         <defs><marker id="arrow2" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" class="fill-slate-400 dark:fill-slate-500" /></marker></defs>
-                         <!-- Lignes de connexion -->
-                        <path d="M 140 125 L 230 125" stroke-width="2" marker-end="url(#arrow2)" class="stroke-slate-400 dark:stroke-slate-500"></path>
-                        <path d="M 390 125 L 480 125" stroke-width="2" marker-end="url(#arrow2)" marker-start="url(#arrow2)" class="stroke-slate-400 dark:stroke-slate-500"></path>
-                        <path d="M 640 125 L 730 125" stroke-width="2" marker-start="url(#arrow2)" class="stroke-slate-400 dark:stroke-slate-500"></path>
-
-                         <g id="node-arch-portail" class="svg-node" data-tooltip="Point d'entrée unique pour tous les utilisateurs. L'interface est conçue pour être simple et guidée, assurant la qualité des données à la source.">
-                            <rect x="20" y="95" width="120" height="60" rx="10" class="svg-node-shape fill-yellow-200 dark:fill-yellow-800/50 stroke-yellow-400 dark:stroke-yellow-600"></rect>
-                            <text x="80" y="120" text-anchor="middle" class="svg-node-text font-semibold text-sm fill-slate-800 dark:fill-slate-100">🏢 Portail Saisie</text>
-                            <text x="80" y="140" text-anchor="middle" class="text-xs fill-slate-500 dark:fill-slate-400">Utilisateurs Finaux</text>
-                        </g>
-                        <g id="node-arch-pipeline" class="svg-node" data-tooltip="Le cœur du système. Cette base de données centralise TOUTES les demandes (bugs, stories, GAPs...) et leurs propriétés. C'est la source de vérité unique.">
-                            <rect x="230" y="85" width="160" height="80" rx="10" class="svg-node-shape fill-indigo-200 dark:fill-indigo-800/50 stroke-2 stroke-indigo-500"></rect>
-                            <text x="310" y="120" text-anchor="middle" class="svg-node-text font-bold text-base fill-slate-800 dark:fill-slate-100">🗃️ Pipeline Global</text>
-                            <text x="310" y="140" text-anchor="middle" class="text-sm fill-slate-500 dark:fill-slate-400">BDD Centrale</text>
-                        </g>
-                        <g id="node-arch-knowledge" class="svg-node" data-tooltip="Base de données satellite pour gérer la documentation (procédures Helpjuice). Elle est liée au Pipeline pour savoir quelles demandes ont un impact sur la documentation.">
-                             <rect x="480" y="85" width="160" height="80" rx="10" class="svg-node-shape fill-purple-200 dark:fill-purple-800/50 stroke-2 stroke-purple-500"></rect>
-                            <text x="560" y="120" text-anchor="middle" class="svg-node-text font-bold text-base fill-slate-800 dark:fill-slate-100">📚 Base Connaissance</text>
-                            <text x="560" y="140" text-anchor="middle" class="text-sm fill-slate-500 dark:fill-slate-400">BDD Documentation</text>
-                        </g>
-                         <g id="node-arch-hubs" class="svg-node" data-tooltip="Ensemble de pages de pilotage (Hub Projet, Dashboard GAPs...) qui sont des vues filtrées et intelligentes des BDD. C'est ici que l'équipe MOA travaille.">
-                            <rect x="680" y="30" width="100" height="50" rx="10" class="svg-node-shape fill-green-200 dark:fill-green-800/50 stroke-green-400 dark:stroke-green-600"></rect>
-                            <text x="730" y="55" text-anchor="middle" class="svg-node-text font-semibold text-sm fill-slate-800 dark:fill-slate-100">🏠 Hub Projet</text>
-                            
-                            <rect x="680" y="100" width="100" height="50" rx="10" class="svg-node-shape fill-green-200 dark:fill-green-800/50 stroke-green-400 dark:stroke-green-600"></rect>
-                            <text x="730" y="125" text-anchor="middle" class="svg-node-text font-semibold text-sm fill-slate-800 dark:fill-slate-100">🎯 Pilotage GAPs</text>
-                            
-                             <rect x="680" y="170" width="100" height="50" rx="10" class="svg-node-shape fill-green-200 dark:fill-green-800/50 stroke-green-400 dark:stroke-green-600"></rect>
-                            <text x="730" y="195" text-anchor="middle" class="svg-node-text font-semibold text-sm fill-slate-800 dark:fill-slate-100">📊 Dashboards</text>
-                        </g>
-                    </svg>
-                 </div>
+                <div class="p-5 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg mb-8 border border-indigo-200 dark:border-indigo-800">
+                    <h4 class="font-bold text-indigo-800 dark:text-indigo-200 mb-2">🏠 Message d'Accueil de la Page</h4>
+                    <div class="text-sm space-y-2 text-slate-600 dark:text-slate-300">
+                        <p>Bienvenue sur la tour de contrôle du projet Salesforce. Cet espace centralise le pilotage de toutes les demandes. Retrouvez ci-dessous vos actions prioritaires, les indicateurs clés du projet et les accès rapides aux différentes sections de notre espace.</p>
+                        <p class="font-semibold">En cas de question sur l'utilisation de cet outil, votre contact MOA est <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded text-slate-800 dark:text-slate-200">Aurélien DA COSTA (adacosta@proxiserve.fr)</code>.</p>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-1">
+                        <h4 class="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-100">Mes Actions</h4>
+                        <p class="text-sm mb-3 text-slate-600 dark:text-slate-400">Vue filtrée : `Assigné à` = `Moi` ET `Statut` n'est pas `Terminé`.</p>
+                        <div class="space-y-3"><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🔘 Bouton : ➕ Créer un Bug</p><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🔘 Bouton : ➕ Créer une Story</p></div>
+                    </div>
+                    <div class="lg:col-span-1">
+                        <h4 class="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-100">Santé du Projet (KPIs)</h4>
+                        <p class="text-sm mb-3 text-slate-600 dark:text-slate-400">Vues galerie avec `Rollups` pour un suivi visuel des indicateurs.</p>
+                        <div class="space-y-3"><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🐞 Bugs ouverts</p><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">✨ Stories en attente</p><p class="p-3 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-slate-800 dark:text-slate-200">🔌 % de GAPs complétés</p></div>
+                    </div>
+                    <div class="lg:col-span-1">
+                        <h4 class="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-100">Accès Rapides</h4>
+                        <p class="text-sm mb-3 text-slate-600 dark:text-slate-400">Un "Bloc synchronisé" contenant le menu de l'espace pour une navigation cohérente.</p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="specs-bdd" class="scroll-mt-20 mb-20 fade-in-up">
-            <h2 class="section-title text-3xl font-bold mb-8 text-slate-900 dark:text-white">🗃️ 4. Spécifications Techniques des Bases de Données</h2>
-            <div class="section-card text-center">
-                 <p class="mb-6 text-slate-600 dark:text-slate-300">La structure des données est le cerveau du système. Pour alléger l'interface, les spécifications techniques détaillées sont accessibles via des modales interactives.</p>
-                 <div class="flex flex-col md:flex-row gap-4 justify-center">
-                     <button onclick="openModal('modal-pipeline')" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105">
-                        Spécifications `🗃️ Pipeline Global`
-                     </button>
-                      <button onclick="openModal('modal-connaissance')" class="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-transform transform hover:scale-105">
-                        Spécifications `📚 Base de Connaissance`
-                     </button>
-                 </div>
+        <section id="portail-agences" class="scroll-mt-20 mb-20 fade-in-up">
+             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🏢 Portail de Saisie Simplifié</h2>
+            <div class="section-card">
+                 <div class="p-5 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg mb-8 border border-yellow-200 dark:border-yellow-800">
+                    <h4 class="font-bold text-yellow-800 dark:text-yellow-200 mb-2">🏢 Message d'Accueil de la Page</h4>
+                     <div class="text-sm space-y-2 text-slate-600 dark:text-slate-300">
+                        <p><strong>Une idée d'amélioration ? Un bug à nous remonter ? Vous êtes au bon endroit !</strong> Choisissez votre périmètre ci-dessous et utilisez les boutons pour créer votre demande. Le bon modèle s'ouvrira et les informations de base seront pré-remplies pour vous faire gagner du temps.</p>
+                        <p class="font-semibold">En cas de problème avec ce portail, contactez <code class="bg-slate-200 dark:bg-slate-600 px-1 py-0.5 rounded text-slate-800 dark:text-slate-200">Aurélien DA COSTA</code>.</p>
+                    </div>
+                </div>
+                <h4 class="font-semibold text-xl mb-6 text-center text-slate-800 dark:text-slate-100">Choisissez votre périmètre pour créer une demande</h4>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">💧 Prox-Hydro</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">☀️ Agence PXS Est</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">🏛️ Agence PXS IDF</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">☁️ Agence PXS Nord</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">⛵ Agence PXS Ouest</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">🏞️ Agence PXS Centre-Est</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700/50 rounded-lg text-center md:col-span-2 lg:col-span-1"><h5 class="font-bold text-lg text-slate-800 dark:text-slate-200">🧑‍🚀 Direction Technique</h5><div class="flex gap-4 mt-3"><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">🐞 Signaler un Bug</button><button class="w-full p-2 bg-white dark:bg-slate-600 rounded-lg shadow-sm font-semibold text-slate-800 dark:text-slate-100">✨ Proposer une Évolution</button></div></div>
+                </div>
             </div>
         </section>
 
-        <!-- ... Other sections will follow the same pattern ... -->
-        
+        <section id="taxonomie" class="scroll-mt-20 mb-20 fade-in-up">
+             <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🏷️ La Base de Données : Taxonomie Détaillée</h2>
+            <p class="mb-8 text-slate-600 dark:text-slate-400 max-w-3xl">Le cerveau du système : la base de données <code class="bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-slate-200 px-1.5 py-0.5 rounded font-semibold">"Pipeline Global des Demandes"</code>. Voici la configuration détaillée de toutes ses propriétés.</p>
+            <div class="section-card">
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Propriétés de Suivi & Qualification</h3>
+                        <div class="space-y-4 text-sm text-slate-600 dark:text-slate-300">
+                            <p><strong>Nom du Ticket (Titre) :</strong> Le titre clair et concis de la demande.</p>
+                            <p><strong>Statut (État) :</strong> Le statut du ticket dans le workflow. Voir la liste complète dans le flux visuel.</p>
+                            <p><strong>Rapporteur (MOA) (Personne) :</strong> Le membre de l'équipe MOA assigné au traitement du ticket.</p>
+                            <p><strong>Créé par (Créé par) :</strong> La personne qui a soumis la demande (automatique).</p>
+                            <p><strong>Type (Sélection) :</strong> `🐞 Bug`, `✨ Story`, `🔌 GAP`</p>
+                            <p><strong>Périmètre (Sélection) :</strong> Inclut TOUTES les agences (`💧 Prox-Hydro`, `☀️ Agence PXS Est`, etc.).</p>
+                        </div>
+                    </div>
+                    <div>
+                         <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Propriétés de Pilotage & Dépendances</h3>
+                         <div class="space-y-4 text-sm text-slate-600 dark:text-slate-300">
+                            <p><strong>N° Ticket Freshservice (URL) :</strong> 🔴 **Obligatoire si `Type` est `Bug`**. Lien vers le ticket de support.</p>
+                             <p><strong>N° Ticket Jira (URL) :</strong> 🟢 **Obligatoire pour passer en `Prêt pour DEV`**. Lien vers le ticket de développement.</p>
+                             <p><strong>Priorité (Sélection) :</strong> `Haute 🔥`, `Moyenne 🟠`, `Basse 🔵`.</p>
+                             <p><strong>Sprint (Sélection) :</strong> `🧊 Backlog`, `▶️ Sprint Actuel`, `⏭️ Sprint Suivant`.</p>
+                         </div>
+                    </div>
+                </div>
+                <div class="mt-8">
+                     <h3 class="text-xl font-semibold mb-6 text-slate-800 dark:text-slate-100 border-t dark:border-slate-700 pt-8">Domaines Fonctionnels (Sous-catégories)</h3>
+                     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-6 text-sm">
+                        <div><h5 class="font-semibold mb-2 text-slate-700 dark:text-slate-200">Commerce & Vente</h5><ul class="space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-400"><li>📈 Commerce & Prospection</li><li>✍️ Contrat & Résiliation</li><li>💰 Facturation & Notifications</li></ul></div>
+                        <div><h5 class="font-semibold mb-2 text-slate-700 dark:text-slate-200">Opérations & Service</h5><ul class="space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-400"><li>🚚 Chantiers & Workflow de Pose</li><li>📅 Planification & Tournées</li><li>📱 Mobilité</li><li>📡 Relevé & Planning</li></ul></div>
+                        <div><h5 class="font-semibold mb-2 text-slate-700 dark:text-slate-200">Gestion des Actifs</h5><ul class="space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-400"><li>🏢 Patrimoine & Appareils</li><li>📦 Produits, Stock & Compteurs</li></ul></div>
+                        <div><h5 class="font-semibold mb-2 text-slate-700 dark:text-slate-200">Transverse & Technique</h5><ul class="space-y-1.5 list-disc list-inside text-slate-600 dark:text-slate-400"><li>📊 Rapports & TDB</li><li>🔗 Intégrations & EDI</li><li>🔑 Droits & Accès</li><li>⚙️ Utilitaires</li><li>💾 Reprise de Données</li><li>📄 Éditique</li><li>🎨 Ergonomie</li><li>🎯 Autonomie des Agences</li></ul></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="priorisation" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">🚀 Sprints & Roadmap : Devenir Décisionnel</h2>
+            <div class="section-card">
+                <p class="mb-6 text-slate-600 dark:text-slate-300">Pour piloter efficacement, il faut passer d'une simple liste de tâches à une roadmap stratégique. Cela passe par deux niveaux de priorisation : l'un pour le quotidien (opérationnel), l'autre pour la vision à long terme (stratégique).</p>
+                <div class="grid lg:grid-cols-5 gap-8">
+                    <div class="lg:col-span-2">
+                        <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">Priorisation Opérationnelle : Le Kanban</h3>
+                         <div class="p-5 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg border border-indigo-200 dark:border-indigo-800">
+                            <h4 class="font-bold text-indigo-800 dark:text-indigo-200">🚀 Page : Roadmap & Sprints</h4>
+                            <p class="text-sm mt-1 text-slate-600 dark:text-slate-300">La vue Kanban permet de visualiser et de modifier la priorité des demandes par un simple glisser-déposer.</p>
+                        </div>
+                        <ol class="list-decimal list-inside space-y-3 mt-4 text-sm text-slate-600 dark:text-slate-300">
+                            <li>Créer la page "🚀 Roadmap & Sprints".</li>
+                            <li>Ajouter une propriété `Sprint` avec les options: <code class="bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200">🧊 Backlog</code>, <code class="bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200">▶️ Sprint Actuel</code>, <code class="bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200">⏭️ Sprint Suivant</code>.</li>
+                            <li>Créer une vue Kanban groupée par la propriété `Sprint`.</li>
+                            <li>Prioriser par glisser-déposer.</li>
+                        </ol>
+                    </div>
+                    <div class="lg:col-span-3">
+                        <h3 class="text-xl font-bold mb-4 text-slate-800 dark:text-slate-100">Priorisation Stratégique : La Méthode RICE</h3>
+                        <p class="text-sm mb-4 text-slate-600 dark:text-slate-300">Pour décider quelles "Stories" ou "GAP" développer, la méthode RICE (<strong>R</strong>each, <strong>I</strong>mpact, <strong>C</strong>onfidence, <strong>E</strong>ffort) apporte une approche objective.</p>
+                        <div class="space-y-4 text-slate-700 dark:text-slate-300">
+                            <div class="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                                <p><strong>Effort (Nombre) :</strong> Complexité en points (1, 2, 3, 5, 8...).</p>
+                                <p><strong>Impact (Nombre) :</strong> Note de 1 à 5.</p>
+                                <p><strong>Confiance (Nombre) :</strong> Certitude de l'estimation en % (ex: 80).</p>
+                            </div>
+                        </div>
+                        <div class="mt-4"><h4 class="font-semibold text-md mb-2 text-slate-800 dark:text-slate-100">La Formule Magique dans Notion</h4><div class="p-4 bg-slate-100 dark:bg-slate-700 rounded-lg font-mono text-sm text-slate-800 dark:text-slate-200 break-words"><code>if(prop("Effort") > 0, round(prop("Impact") * (prop("Confiance") / 100) / prop("Effort") * 100) / 100, 0)</code></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="templates" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">📋 Modèles d'Action</h2>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="section-card">
+                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">🔧 Modèle Unifié : Support</h3>
+                    <p class="mb-6 text-sm text-slate-600 dark:text-slate-400">Pour `Bug`, `Correction`, `Assistance`.</p>
+                    <div class="space-y-4 text-sm">
+                        <div class="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                            <h4 class="font-bold text-red-800 dark:text-red-300">N° Ticket Freshservice 🔗</h4>
+                            <p class="text-red-700 dark:text-red-200">Ce champ est **obligatoire** pour un bug.</p>
+                        </div>
+                        <div class="border-l-4 border-slate-400 dark:border-slate-600 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 1 : Description du Problème</h4></div>
+                        <div class="border-l-4 border-slate-400 dark:border-slate-600 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 2 : Reproduction du Bug</h4><p class="text-xs text-slate-500 dark:text-slate-400">Étapes, attendu vs. observé</p></div>
+                        <div class="border-l-4 border-slate-400 dark:border-slate-600 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 3 : Contexte & Pièces Jointes</h4></div>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <h3 class="text-2xl font-bold mb-2 text-slate-800 dark:text-slate-100">✨ Modèle Évolution : Story & GAP</h3>
+                    <p class="mb-6 text-sm text-slate-600 dark:text-slate-400">Structure la demande comme une spécification fonctionnelle.</p>
+                     <div class="space-y-4 text-sm">
+                        <div class="p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
+                            <h4 class="font-bold text-green-800 dark:text-green-300">N° Ticket Jira 🔗</h4>
+                            <p class="text-green-700 dark:text-green-200">Ce ticket doit être rédigé dans Jira avant de passer en `Prêt pour DEV`.</p>
+                        </div>
+                        <div class="border-l-4 border-blue-500 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 1 : Le "Pourquoi" (User Story)</h4></div>
+                        <div class="border-l-4 border-blue-500 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 2 : Le "Quoi" (Critères d'acceptance)</h4></div>
+                        <div class="border-l-4 border-slate-400 dark:border-slate-600 pl-4"><h4 class="font-semibold text-slate-800 dark:text-slate-200">Section 3 : Hors-Périmètre & Maquettes</h4></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vues-op" class="scroll-mt-20 mb-20 fade-in-up">
+            <h2 class="text-3xl font-bold mb-8 text-slate-900 dark:text-white">📊 Page : Dashboards de Pilotage</h2>
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Vues Opérationnelles</h3>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="section-card p-6 border-t-4 border-red-500"><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-slate-100">Mon Triage 🔥</h3><p class="text-xs font-mono text-slate-500 dark:text-slate-400">Filtre: `Statut` est `À trier`</p></div>
+                        <div class="section-card p-6 border-t-4 border-sky-500"><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-slate-100">Pipeline Actif 🏗️</h3><p class="text-xs font-mono text-slate-500 dark:text-slate-400">Vue Kanban groupée par `Statut`</p></div>
+                        <div class="section-card p-6 border-t-4 border-amber-500"><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-slate-100">Points de Blocage 🚧</h3><p class="text-xs font-mono text-slate-500 dark:text-slate-400">Filtre: `Statut` est `Bloqué`</p></div>
+                        <div class="section-card p-6 border-t-4 border-purple-500"><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-slate-100">Recettes à Valider ✅</h3><p class="text-xs font-mono text-slate-500 dark:text-slate-400">Filtre: `Statut` est `En recette MOA`</p></div>
+                    </div>
+                </div>
+                 <div>
+                    <h3 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Vues de Suivi des Dépendances</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="section-card p-6"><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-slate-100">Suivi des Tickets Support (Freshservice) 🔗</h3><p class="text-sm mb-4 text-slate-600 dark:text-slate-400">Vue unique de tous les tickets ayant une dépendance avec le support.</p><p class="text-xs font-mono text-slate-500 dark:text-slate-400">Filtre: `N° Ticket Freshservice` n'est pas vide ET `Statut` n'est pas `Terminé`.</p></div>
+                        <div class="section-card p-6"><h3 class="text-lg font-bold mb-2 text-slate-800 dark:text-slate-100">En Attente de la DSI 🧑‍🚀</h3><p class="text-sm mb-4 text-slate-600 dark:text-slate-400">Isoler les points de blocage qui nécessitent une action de la DSI.</p><p class="text-xs font-mono text-slate-500 dark:text-slate-400">Filtre: `Statut` est `Bloqué` ET `N° Ticket Freshservice` n'est pas vide.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Autres sections (inchangées pour la concision) -->
+        <section id="processus-cles" class="scroll-mt-20 mb-20 fade-in-up"></section>
+        <section id="qualite-automatisation" class="scroll-mt-20 mb-20 fade-in-up"></section>
+        <section id="migration" class="scroll-mt-20 mb-20 fade-in-up"></section>
+        <section id="mise-en-place" class="scroll-mt-20 mb-20 fade-in-up"></section>
+
         <footer class="text-center mt-24 py-8 border-t border-slate-200 dark:border-slate-700 fade-in-up">
-            <p class="text-sm text-slate-500 dark:text-slate-400">&copy; 2025 - Conçu et développé par cosmofilou & Gemini. Tous droits réservés.</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400">&copy; 2025 - Conçu par cosmofilou. Tous droits réservés.</p>
         </footer>
-
     </main>
-    
-    <!-- Modals -->
-    <div id="modal-pipeline" class="modal-overlay" onclick="closeModal('modal-pipeline')">
-        <div class="modal-container" onclick="event.stopPropagation()">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Spécifications : `🗃️ Pipeline Global`</h3>
-                <button onclick="closeModal('modal-pipeline')" class="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">&times;</button>
-            </div>
-            <div class="mb-4">
-                <input type="text" id="pipeline-search" placeholder="Rechercher une propriété..." class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white/50 dark:bg-slate-700/50">
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm" id="pipeline-table">
-                     <thead class="text-xs text-slate-700 uppercase bg-slate-100/50 dark:bg-slate-700/50 dark:text-slate-300">
-                        <tr><th class="px-6 py-3 rounded-l-lg">Propriété</th><th class="px-6 py-3">Type</th><th class="px-6 py-3 rounded-r-lg">Configuration & Règles de Gestion</th></tr>
-                    </thead>
-                    <tbody class="text-slate-600 dark:text-slate-300">
-                        <!-- Table content goes here -->
-                        <tr><td class="border-b dark:border-slate-700 p-4"><strong>Nom du Ticket</strong></td><td class="border-b dark:border-slate-700 p-4">`Titre`</td><td class="border-b dark:border-slate-700 p-4"><strong class="text-slate-800 dark:text-slate-100">Règle :</strong> Doit être concis et explicite. Ex: "Bug - Le champ 'Total' du devis ne se met pas à jour."</td></tr>
-                        <tr><td class="border-b dark:border-slate-700 p-4"><strong>Statut</strong></td><td class="border-b dark:border-slate-700 p-4">`État`</td><td class="border-b dark:border-slate-700 p-4"><strong class="text-slate-800 dark:text-slate-100">Configuration :</strong> <div class="flex flex-wrap gap-1 mt-1"><span class="px-2 py-1 bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-200 rounded-full text-xs">0. À Trier 🔴</span> <span class="px-2 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-200 rounded-full text-xs">0a. En attente d'infos 🟣</span> <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-200 rounded-full text-xs">1. En analyse MOA 🔵</span> <span class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded-full text-xs">2. Prêt pour DEV 📝</span> <span class="px-2 py-1 bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-200 rounded-full text-xs">3. En cours de DEV 🧑‍💻</span> <span class="px-2 py-1 bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-200 rounded-full text-xs">3a. Bloqué 🚧</span> <span class="px-2 py-1 bg-pink-100 dark:bg-pink-900/50 text-pink-700 dark:text-pink-200 rounded-full text-xs">4. En recette MOA ✅</span> <span class="px-2 py-1 bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-200 rounded-full text-xs">5. Validé en recette 🏆</span> <span class="px-2 py-1 bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-200 rounded-full text-xs">6. Prêt pour MEP 🚀</span> <span class="px-2 py-1 bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-200 rounded-full text-xs">7. Terminé 📦</span> <span class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded-full text-xs">8. Annulé ❌</span></div></td></tr>
-                        <tr><td class="border-b dark:border-slate-700 p-4"><strong>Type</strong></td><td class="border-b dark:border-slate-700 p-4">`Sélection`</td><td class="border-b dark:border-slate-700 p-4"><strong class="text-slate-800 dark:text-slate-100">Options :</strong> <div class="flex flex-wrap gap-2 mt-1"><span class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded-full text-xs">🐞 Bug</span><span class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded-full text-xs">✨ Story</span><span class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded-full text-xs">🔌 GAP</span><span class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded-full text-xs">🦴 Correction</span><span class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded-full text-xs">🎓 Formation</span><span class="px-2 py-1 bg-slate-200 dark:bg-slate-700 rounded-full text-xs">💬 Question</span></div></td></tr>
-                        <tr><td class="border-b dark:border-slate-700 p-4"><strong>N° Ticket Jira</strong></td><td class="border-b dark:border-slate-700 p-4">`URL`</td><td class="border-b dark:border-slate-700 p-4"><strong class="text-slate-800 dark:text-slate-100">Règle :</strong> Ne doit PAS être vide pour que le `Statut` puisse passer à `2. Prêt pour DEV 📝`.</td></tr>
-                        <tr><td class="border-b dark:border-slate-700 p-4"><strong>Go Dev ✅</strong></td><td class="border-b dark:border-slate-700 p-4">`Checkbox`</td><td class="border-b dark:border-slate-700 p-4"><strong class="text-slate-800 dark:text-slate-100">Règle :</strong> Cochée par la MOA pour marquer une décision de développement. Acte d'engagement.</td></tr>
-                        <tr><td class="p-4"><strong>Procédure Associée 📚</strong></td><td class="p-4">`Relation`</td><td class="p-4"><strong class="text-slate-800 dark:text-slate-100">Règle :</strong> Relation bidirectionnelle vers la BDD `Base de Connaissance`.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div id="modal-connaissance" class="modal-overlay" onclick="closeModal('modal-connaissance')">
-         <div class="modal-container" onclick="event.stopPropagation()">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100">Spécifications : `📚 Base de Connaissance`</h3>
-                <button onclick="closeModal('modal-connaissance')" class="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">&times;</button>
-            </div>
-            <!-- Content for the second modal -->
-         </div>
-    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Theme Toggle ---
             const themeToggleBtn = document.getElementById('theme-toggle');
             const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
             const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
             const themeToggleText = document.getElementById('theme-toggle-text');
 
             const updateButtonUI = (isDark) => {
-                themeToggleLightIcon.classList.toggle('hidden', !isDark);
-                themeToggleDarkIcon.classList.toggle('hidden', isDark);
-                themeToggleText.textContent = isDark ? 'Mode Clair' : 'Mode Sombre';
+                if (isDark) {
+                    themeToggleLightIcon.classList.remove('hidden');
+                    themeToggleDarkIcon.classList.add('hidden');
+                    themeToggleText.textContent = 'Mode Clair';
+                } else {
+                    themeToggleLightIcon.classList.add('hidden');
+                    themeToggleDarkIcon.classList.remove('hidden');
+                    themeToggleText.textContent = 'Mode Sombre';
+                }
             };
 
             const applyTheme = (isDark) => {
-                document.documentElement.classList.toggle('dark', isDark);
+                if (isDark) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
             };
             
-            const initialIsDark = localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            const initialIsDark = localStorage.getItem('color-theme') === 'dark' ||
+                                  (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
             applyTheme(initialIsDark);
             updateButtonUI(initialIsDark);
 
@@ -437,13 +400,12 @@
                 localStorage.setItem('color-theme', newIsDark ? 'dark' : 'light');
             });
 
-            // --- Active Nav Link on Scroll (Scroll-spy) ---
-            const sections = document.querySelectorAll('section[id]');
+            const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('.nav-link');
             const navMenu = document.getElementById('nav-menu');
 
             const activateNavLink = (id) => {
-                let activeLink = null;
+                 let activeLink = null;
                 navLinks.forEach(link => {
                     link.classList.remove('active');
                     if(link.getAttribute('href') === `#${id}`) {
@@ -451,7 +413,7 @@
                         activeLink = link;
                     }
                 });
-                 if (activeLink && navMenu) {
+                if (activeLink && navMenu) {
                     const navRect = navMenu.getBoundingClientRect();
                     const linkRect = activeLink.getBoundingClientRect();
                      if (linkRect.bottom > navRect.bottom || linkRect.top < navRect.top) {
@@ -466,56 +428,26 @@
                         activateNavLink(entry.target.id);
                     }
                 });
-            }, { rootMargin: '-40% 0px -55% 0px' });
+            }, { rootMargin: '-40% 0px -55% 0px' }); 
 
-            sections.forEach(section => scrollObserver.observe(section));
-
-            // --- SVG Interactivity ---
-            const tooltip = document.getElementById('svg-tooltip');
-            document.querySelectorAll('.svg-node').forEach(node => {
-                node.addEventListener('mouseenter', (e) => {
-                    tooltip.textContent = node.dataset.tooltip;
-                    tooltip.style.opacity = 1;
-                });
-                node.addEventListener('mousemove', (e) => {
-                    tooltip.style.left = `${e.pageX + 15}px`;
-                    tooltip.style.top = `${e.pageY + 15}px`;
-                });
-                node.addEventListener('mouseleave', () => {
-                    tooltip.style.opacity = 0;
-                });
+            sections.forEach(section => {
+                scrollObserver.observe(section);
             });
-
-            // --- Table Search Functionality ---
-            const pipelineSearch = document.getElementById('pipeline-search');
-            pipelineSearch.addEventListener('keyup', () => {
-                const filter = pipelineSearch.value.toLowerCase();
-                const table = document.getElementById('pipeline-table');
-                const rows = table.getElementsByTagName('tr');
-
-                for (let i = 1; i < rows.length; i++) { // Start from 1 to skip header
-                    let cells = rows[i].getElementsByTagName('td');
-                    let found = false;
-                    for (let j = 0; j < cells.length; j++) {
-                        if (cells[j].textContent.toLowerCase().indexOf(filter) > -1) {
-                            found = true;
-                            break;
-                        }
+            
+            const animatedElements = document.querySelectorAll('.fade-in-up');
+            const animationObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
                     }
-                    rows[i].style.display = found ? '' : 'none';
-                }
+                });
+            }, { threshold: 0.1 });
+
+            animatedElements.forEach(el => {
+                animationObserver.observe(el);
             });
         });
-
-        // --- Modal Controls (Global scope for onclick) ---
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('open');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('open');
-        }
-
     </script>
 </body>
 </html>
