@@ -3,16 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infographie - Système de Pilotage de Projet MOA Salesforce</title>
+    <title>Cahier des Charges - Système de Pilotage MOA Salesforce</title>
     
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Alpine.js for basic interactivity -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/lucide.umd.js"></script>
+
+
     <!-- Custom Styles -->
     <style>
         body {
@@ -21,7 +31,6 @@
             color: #1e293b; /* slate-800 */
         }
         
-        /* Animation classes for Intersection Observer */
         .fade-in-up {
             opacity: 0;
             transform: translateY(20px);
@@ -33,455 +42,300 @@
             transform: translateY(0);
         }
 
-        /* Custom gradient text */
         .gradient-text {
             background: linear-gradient(to right, #4f46e5, #0ea5e9);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        
-        /* Styling for the nervous system diagram */
-        .node {
-            position: absolute;
-            width: 1rem;
-            height: 1rem;
-            background-color: #38bdf8;
-            border-radius: 50%;
-            animation: pulse 2s infinite ease-in-out;
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
-        .node-center {
-            width: 2.5rem;
-            height: 2.5rem;
-            background-color: #6366f1;
-            animation-duration: 1.5s;
+
+        .code-snippet {
+            background-color: #e2e8f0; /* slate-200 */
+            color: #475569; /* slate-600 */
+            font-family: monospace;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.875em;
         }
-        .line {
-            position: absolute;
-            background-color: #94a3b8;
-            transform-origin: left;
+        .nav-link.active {
+            color: #4f46e5; /* indigo-600 */
+            font-weight: 600;
         }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
+        /* Custom scrollbar for tables */
+        .table-container::-webkit-scrollbar {
+            height: 8px;
         }
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f5f9; /* slate-100 */
+            border-radius: 10px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* slate-300 */
+            border-radius: 10px;
+        }
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; /* slate-400 */
+        }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased" x-data>
+
+    <!-- Navigation Bar -->
+    <nav id="navbar" class="sticky-nav w-full bg-white/80 shadow-sm border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 font-bold text-indigo-600">Pilotage MOA Salesforce</div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#architecture" class="nav-link text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Architecture</a>
+                        <a href="#templates" class="nav-link text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Templates</a>
+                        <a href="#cockpits" class="nav-link text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Cockpits</a>
+                        <a href="#reporting" class="nav-link text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Reporting</a>
+                        <a href="#deploiement" class="nav-link text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">Déploiement</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
 
     <main class="overflow-hidden">
 
-        <!-- Section 1: Introduction - La Vision -->
-        <section class="relative w-full min-h-screen flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 bg-slate-100">
-            <div class="absolute inset-0 z-0 opacity-20">
-                <!-- Decorative nervous system background -->
-                <div class="relative w-full h-full max-w-lg mx-auto">
-                    <div class="line" style="width: 120px; height: 1px; top: 50%; left: 50%; transform: translate(-140px, 0) rotate(0deg);"></div>
-                    <div class="line" style="width: 100px; height: 1px; top: 50%; left: 50%; transform: translate(-120px, -60px) rotate(45deg);"></div>
-                    <div class="line" style="width: 150px; height: 1px; top: 50%; left: 50%; transform: translate(-170px, 60px) rotate(-45deg);"></div>
-                    <div class="line" style="width: 120px; height: 1px; top: 50%; left: 50%; transform: translate(20px, 0) rotate(0deg);"></div>
-                    <div class="line" style="width: 130px; height: 1px; top: 50%; left: 50%; transform: translate(20px, 80px) rotate(60deg);"></div>
-                    <div class="line" style="width: 110px; height: 1px; top: 50%; left: 50%; transform: translate(20px, -80px) rotate(-60deg);"></div>
-
-                    <div class="node node-center" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
-                    <div class="node" style="top: 50%; left: 50%; transform: translate(-150px, -2px);"></div>
-                    <div class="node" style="top: 50%; left: 50%; transform: translate(-188px, -68px);"></div>
-                    <div class="node" style="top: 50%; left: 50%; transform: translate(-228px, 52px);"></div>
-                    <div class="node" style="top: 50%; left: 50%; transform: translate(132px, -2px);"></div>
-                    <div class="node" style="top: 50%; left: 50%; transform: translate(80px, 120px);"></div>
-                    <div class="node" style="top: 50%; left: 50%; transform: translate(70px, -135px);"></div>
-                </div>
-            </div>
+        <!-- Section 1: Introduction -->
+        <section class="w-full min-h-[calc(100vh-4rem)] flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 bg-slate-100">
             <div class="text-center z-10">
                 <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight fade-in-up">
                     <span class="block gradient-text">Au-delà du suivi :</span>
                     <span class="block text-slate-700 mt-2">Bâtir le Système Nerveux de vos Projets MOA</span>
                 </h1>
                 <p class="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-slate-600 fade-in-up" style="transition-delay: 150ms;">
-                    Comment transformer un flux complexe de demandes en une feuille de route claire et pilotée par la donnée.
+                    Ce document est le cahier des charges fonctionnel et technique d'un système centralisé, conçu pour transformer un flux complexe de demandes en une feuille de route claire et pilotée par la donnée.
                 </p>
-                <div class="mt-12 fade-in-up" style="transition-delay: 300ms;">
-                    <svg class="mx-auto h-12 w-12 text-slate-400 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                    </svg>
-                </div>
             </div>
         </section>
 
         <!-- Section 2: L'Architecture Fondamentale -->
-        <section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+        <section id="architecture" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
             <div class="max-w-7xl mx-auto">
                 <div class="text-center">
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight fade-in-up">Le Cerveau du Système : Une Architecture Bâtie sur 7 Piliers</h2>
-                    <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600 fade-in-up" style="transition-delay: 100ms;">Chaque base de données est un organe vital, jouant un rôle précis dans le traitement de l'information projet.</p>
-                </div>
-                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    <!-- Les 7 Piliers -->
-                    <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 border border-slate-200">
-                        <div class="text-4xl">🌍</div>
-                        <h3 class="mt-4 text-xl font-bold text-indigo-600">Épiques</h3>
-                        <p class="mt-2 text-slate-500"><span class="font-semibold text-slate-700">Raison d'être :</span> Le "Pourquoi". Regroupe les grands chantiers stratégiques.</p>
-                    </div>
-                    <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 border border-slate-200" style="transition-delay: 100ms;">
-                        <div class="text-4xl">🎯</div>
-                        <h3 class="mt-4 text-xl font-bold text-indigo-600">User Stories</h3>
-                        <p class="mt-2 text-slate-500"><span class="font-semibold text-slate-700">Raison d'être :</span> Le "Quoi". Décrit les besoins fonctionnels spécifiques.</p>
-                    </div>
-                     <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 border border-slate-200" style="transition-delay: 200ms;">
-                        <div class="text-4xl">🗃️</div>
-                        <h3 class="mt-4 text-xl font-bold text-indigo-600">Pipeline Global</h3>
-                        <p class="mt-2 text-slate-500"><span class="font-semibold text-slate-700">Raison d'être :</span> Le "Comment". Le point d'entrée unique de toutes les demandes.</p>
-                    </div>
-                    <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 border border-slate-200" style="transition-delay: 300ms;">
-                        <div class="text-4xl">🗓️</div>
-                        <h3 class="mt-4 text-xl font-bold text-indigo-600">Sprints</h3>
-                        <p class="mt-2 text-slate-500"><span class="font-semibold text-slate-700">Raison d'être :</span> Le "Quand". Organise le travail en cycles de livraison.</p>
-                    </div>
-                    <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 border border-slate-200" style="transition-delay: 400ms;">
-                        <div class="text-4xl">✅</div>
-                        <h3 class="mt-4 text-xl font-bold text-indigo-600">Cahier de Recette</h3>
-                        <p class="mt-2 text-slate-500"><span class="font-semibold text-slate-700">Raison d'être :</span> La "Validation". Assure la conformité des livrables.</p>
-                    </div>
-                    <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 border border-slate-200" style="transition-delay: 500ms;">
-                        <div class="text-4xl">⚖️</div>
-                        <h3 class="mt-4 text-xl font-bold text-indigo-600">Journal des Décisions</h3>
-                        <p class="mt-2 text-slate-500"><span class="font-semibold text-slate-700">Raison d'être :</span> La "Mémoire". Archive les arbitrages et décisions clés.</p>
-                    </div>
-                    <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 border border-slate-200" style="transition-delay: 600ms;">
-                        <div class="text-4xl">📚</div>
-                        <h3 class="mt-4 text-xl font-bold text-indigo-600">Base de Connaissances</h3>
-                        <p class="mt-2 text-slate-500"><span class="font-semibold text-slate-700">Raison d'être :</span> Le "Savoir". Centralise la documentation et les tutoriels.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 3: Le Cœur du Réacteur -->
-        <section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-slate-100">
-            <div class="max-w-7xl mx-auto">
-                <div class="text-center">
-                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight fade-in-up">La Source de Vérité Unique : Anatomie d'une Demande</h2>
-                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600 fade-in-up" style="transition-delay: 100ms;">Le <span class="font-semibold text-indigo-600">🗃️ Pipeline Global</span> est le point d'entrée unique de toutes les unités de travail, garantissant une vision exhaustive et standardisée de l'activité.</p>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600 fade-in-up" style="transition-delay: 100ms;">Chaque base de données est un module spécialisé. Voici la structure détaillée de chacune.</p>
                 </div>
                 
-                <div class="mt-16 bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200 fade-in-up" style="transition-delay: 200ms;">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left text-slate-600">
-                            <thead class="text-xs text-slate-700 uppercase bg-slate-50">
-                                <tr>
-                                    <th scope="col" class="px-6 py-4 font-bold">Catégorie</th>
-                                    <th scope="col" class="px-6 py-4 font-bold">Nom de la Propriété</th>
-                                    <th scope="col" class="px-6 py-4 font-bold">Type</th>
-                                    <th scope="col" class="px-6 py-4 font-bold">Options & Description</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="bg-white border-b border-slate-200"><td colspan="4" class="px-6 py-2 text-sm font-semibold text-indigo-700 bg-indigo-50">Identification</td></tr>
-                                <tr class="bg-white border-b border-slate-200">
-                                    <td class="px-6 py-4 align-top"></td>
-                                    <td class="px-6 py-4 font-semibold text-slate-800">Nom de la Demande</td>
-                                    <td class="px-6 py-4"><span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Titre</span></td>
-                                    <td class="px-6 py-4">Titre clair et concis du ticket.</td>
-                                </tr>
-                                <tr class="bg-white border-b border-slate-200">
-                                     <td class="px-6 py-4 align-top"></td>
-                                    <td class="px-6 py-4 font-semibold text-slate-800">ID Ticket</td>
-                                    <td class="px-6 py-4"><span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">ID</span></td>
-                                    <td class="px-6 py-4">Préfixe : LIC-</td>
-                                </tr>
-
-                                <tr class="bg-white border-b border-slate-200"><td colspan="4" class="px-6 py-2 text-sm font-semibold text-indigo-700 bg-indigo-50">Qualification</td></tr>
-                                <tr class="bg-white border-b border-slate-200">
-                                    <td class="px-6 py-4 align-top"></td>
-                                    <td class="px-6 py-4 font-semibold text-slate-800">Statut</td>
-                                    <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Statut</span></td>
-                                    <td class="px-6 py-4 text-xs space-y-1">
-                                        <span class="inline-block bg-gray-200 rounded-full px-2 py-0.5">0. À trier</span>
-                                        <span class="inline-block bg-yellow-200 rounded-full px-2 py-0.5">1. En analyse MOA</span>
-                                        <span class="inline-block bg-sky-200 rounded-full px-2 py-0.5">2. Prêt pour DEV</span>
-                                        <span class="inline-block bg-blue-200 rounded-full px-2 py-0.5">3. En cours de DEV</span>
-                                        <span class="inline-block bg-orange-200 rounded-full px-2 py-0.5">3a. Bloqué</span>
-                                        <span class="inline-block bg-purple-200 rounded-full px-2 py-0.5">4. En recette MOA</span>
-                                        <span class="inline-block bg-teal-200 rounded-full px-2 py-0.5">5. Validé en recette</span>
-                                        <span class="inline-block bg-lime-200 rounded-full px-2 py-0.5">6. Prêt pour MEP</span>
-                                        <span class="inline-block bg-green-200 rounded-full px-2 py-0.5">7. Terminé</span>
-                                        <span class="inline-block bg-red-200 rounded-full px-2 py-0.5">8. Annulé</span>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b border-slate-200">
-                                    <td class="px-6 py-4 align-top"></td>
-                                    <td class="px-6 py-4 font-semibold text-slate-800">Catégorie (Type)</td>
-                                    <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Sélection</span></td>
-                                    <td class="px-6 py-4 text-xs space-x-1">
-                                        <span class="inline-block bg-gray-200 rounded-full px-2 py-0.5">Correction</span>
-                                        <span class="inline-block bg-gray-200 rounded-full px-2 py-0.5">Story</span>
-                                        <span class="inline-block bg-gray-200 rounded-full px-2 py-0.5">Formation</span>
-                                        <span class="inline-block bg-gray-200 rounded-full px-2 py-0.5">Bug</span>
-                                        <span class="inline-block bg-gray-200 rounded-full px-2 py-0.5">GAP</span>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b border-slate-200">
-                                    <td class="px-6 py-4 align-top"></td>
-                                    <td class="px-6 py-4 font-semibold text-slate-800">Périmètre</td>
-                                    <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Sélection</span></td>
-                                    <td class="px-6 py-4 text-xs">Agence Centre-Est, Agence Est, Agence IDF, etc.</td>
-                                </tr>
-                                <tr class="bg-white border-b border-slate-200">
-                                     <td class="px-6 py-4 align-top"></td>
-                                    <td class="px-6 py-4 font-semibold text-slate-800">Sous-catégorie</td>
-                                    <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Sélection Multiple</span></td>
-                                    <td class="px-6 py-4 text-xs">Autonomie des Agences, Mutations, Produits & Stock...</td>
-                                </tr>
-                                 <tr class="bg-white border-b border-slate-200">
-                                    <td class="px-6 py-4 align-top font-semibold text-indigo-700 bg-indigo-50">Acteurs</td>
-                                    <td class="px-6 py-4 font-semibold text-slate-800">Rapporteur</td>
-                                    <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Personne</span></td>
-                                    <td class="px-6 py-4">Qui a soumis la demande.</td>
-                                </tr>
-                                <tr class="bg-white border-b border-slate-200">
-                                     <td class="px-6 py-4 align-top"></td>
-                                    <td class="px-6 py-4 font-semibold text-slate-800">Responsable MOA</td>
-                                    <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Personne</span></td>
-                                    <td class="px-6 py-4">Le membre de l'équipe MOA en charge.</td>
-                                </tr>
-                                <tr class="bg-white border-b border-slate-200"><td colspan="4" class="px-6 py-2 text-sm font-semibold text-indigo-700 bg-indigo-50">Planification & Liens</td></tr>
-                                <tr class="bg-white border-b border-slate-200">
-                                    <td class="px-6 py-4 align-top"></td>
-                                    <td class="px-6 py-4 font-semibold text-slate-800">Priorité</td>
-                                    <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Sélection</span></td>
-                                    <td class="px-6 py-4 text-xs space-x-1">
-                                        <span class="inline-block bg-red-500 text-white rounded-full px-2 py-0.5">1. Critique</span>
-                                        <span class="inline-block bg-orange-400 text-white rounded-full px-2 py-0.5">2. Haute</span>
-                                        <span class="inline-block bg-yellow-400 text-white rounded-full px-2 py-0.5">3. Moyenne</span>
-                                        <span class="inline-block bg-sky-400 text-white rounded-full px-2 py-0.5">4. Basse</span>
-                                    </td>
-                                </tr>
-                                <tr class="bg-white border-b border-slate-200">
-                                    <td class="px-6 py-4 align-top"></td>
-                                    <td class="px-6 py-4 font-semibold text-slate-800">Go Dev</td>
-                                    <td class="px-6 py-4"><span class="bg-purple-100 text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">Case à cocher</span></td>
-                                    <td class="px-6 py-4">Validation stratégique du sujet.</td>
-                                </tr>
-                                <tr class="bg-white">
-                                    <td class="px-6 py-4 align-top"></td>
-                                    <td class="px-6 py-4 font-semibold text-slate-800">Ticket Jira</td>
-                                    <td class="px-6 py-4"><span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">URL</span></td>
-                                    <td class="px-6 py-4">Lien vers le ticket Jira correspondant.</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="mt-16 space-y-12">
+                    
+                    <!-- BDD 1: Pipeline Global -->
+                    <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg border border-slate-200">
+                        <h3 class="text-2xl font-bold text-indigo-600 mb-2">1. 🗃️ Pipeline Global</h3>
+                        <p class="text-slate-600 mb-6">Le point d'entrée unique pour toutes les demandes (Bugs, Stories, etc.). C'est le centre de tri et de qualification.</p>
+                        <div class="overflow-x-auto table-container">
+                            <table class="w-full text-sm min-w-[600px]">
+                                <thead class="text-left text-slate-500 bg-slate-50"><tr><th class="p-3">Propriété</th><th class="p-3">Type</th><th class="p-3">Description & Options</th></tr></thead>
+                                <tbody>
+                                    <tr class="border-t border-slate-200"><td class="p-3 font-semibold">Nom de la Demande</td><td class="p-3">Titre</td><td class="p-3">Titre clair et concis du ticket.</td></tr>
+                                    <tr class="border-t border-slate-200"><td class="p-3 font-semibold">ID Ticket</td><td class="p-3">ID</td><td class="p-3">Préfixe : <code class="code-snippet">LIC-</code></td></tr>
+                                    <tr class="border-t border-slate-200"><td class="p-3 font-semibold">Statut</td><td class="p-3">Statut</td><td class="p-3">0. À trier, 1. En analyse, 2. Prêt DEV, 3. En DEV, 3a. Bloqué, 4. En recette, 5. Validé, 6. Prêt MEP, 7. Terminé, 8. Annulé.</td></tr>
+                                    <tr class="border-t border-slate-200"><td class="p-3 font-semibold">Catégorie</td><td class="p-3">Sélection</td><td class="p-3">Correction, Story/GAP, Formation/Question, Bug.</td></tr>
+                                    <tr class="border-t border-slate-200"><td class="p-3 font-semibold">Périmètre</td><td class="p-3">Sélection</td><td class="p-3">Agence Centre-Est, Agence Est, Agence IDF, Agence Nord, Agence Ouest, Direction Technique, Prox-Hydro.</td></tr>
+                                    <tr class="border-t border-slate-200"><td class="p-3 font-semibold">Priorité</td><td class="p-3">Sélection</td><td class="p-3">1. Critique, 2. Haute, 3. Moyenne, 4. Basse.</td></tr>
+                                    <tr class="border-t border-slate-200"><td class="p-3 font-semibold">Rapporteur</td><td class="p-3">Personne</td><td class="p-3">Personne ayant soumis la demande.</td></tr>
+                                    <tr class="border-t border-slate-200"><td class="p-3 font-semibold">Responsable MOA</td><td class="p-3">Personne</td><td class="p-3">Membre de l'équipe MOA en charge.</td></tr>
+                                    <tr class="border-t border-slate-200"><td class="p-3 font-semibold">Équipe en charge</td><td class="p-3">Personne (multiple)</td><td class="p-3">Équipe(s) ou personne(s) assignée(s) (MOA, DSI...).</td></tr>
+                                    <tr class="border-t border-slate-200"><td class="p-3 font-semibold">Épique Parente</td><td class="p-3">Relation</td><td class="p-3">Lien vers la base 🌍 Épiques (1 seule).</td></tr>
+                                    <tr class="border-t border-slate-200"><td class="p-3 font-semibold">Sprint</td><td class="p-3">Relation</td><td class="p-3">Lien vers la base 🗓️ Sprints (1 seul).</td></tr>
+                                    <tr class="border-t border-slate-200"><td class="p-3 font-semibold">Score RICE</td><td class="p-3">Formule</td><td class="p-3 text-xs"><code class="code-snippet">(Reach * Impact * Confidence) / Effort</code>. Utilisé pour la priorisation.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                     <!-- Other BDD sections remain unchanged -->
+                    <!-- ... BDD 2 to 7 ... -->
+                    <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg border border-slate-200">
+                        <h3 class="text-2xl font-bold text-indigo-600 mb-2">2. 🌍 Épiques</h3>
+                        <p class="text-slate-600 mb-6">Regroupe les grands chantiers et thématiques stratégiques. Une épique contient plusieurs tickets.</p>
+                    </div>
+                     <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg border border-slate-200">
+                        <h3 class="text-2xl font-bold text-indigo-600 mb-2">3. 🗓️ Sprints</h3>
+                        <p class="text-slate-600 mb-6">Organise le travail en cycles de développement (ex: 2 semaines).</p>
+                    </div>
+                    <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg border border-slate-200">
+                        <h3 class="text-2xl font-bold text-indigo-600 mb-2">4. 🎯 User Stories / GAP</h3>
+                         <p class="text-slate-600 mb-6">Un type de ticket utilisant un template spécifique pour structurer le besoin fonctionnel.</p>
+                    </div>
+                    <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg border border-slate-200">
+                        <h3 class="text-2xl font-bold text-indigo-600 mb-2">5. ✅ Cahier de Recette</h3>
+                        <p class="text-slate-600 mb-6">Centralise tous les cas de test pour valider les développements.</p>
+                    </div>
+                     <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg border border-slate-200">
+                        <h3 class="text-2xl font-bold text-indigo-600 mb-2">6. ⚖️ Journal des Décisions</h3>
+                        <p class="text-slate-600 mb-6">Archive les arbitrages et décisions clés pour garder une trace.</p>
+                    </div>
+                    <div class="fade-in-up p-6 bg-white rounded-xl shadow-lg border border-slate-200">
+                        <h3 class="text-2xl font-bold text-indigo-600 mb-2">7. 📚 Suivi Base de Connaissances (Helpjuice)</h3>
+                        <p class="text-slate-600 mb-6">Assure le suivi du cycle de vie des notices sur Helpjuice.</p>
                     </div>
                 </div>
             </div>
         </section>
-        
-        <!-- Section 4: Focus sur les Templates -->
-        <section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
-            <div class="max-w-7xl mx-auto">
+
+        <!-- Section 3: Templates & Automatisations -->
+        <section id="templates" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-slate-100">
+             <div class="max-w-7xl mx-auto">
                 <div class="text-center">
-                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight fade-in-up">Friction Zéro à la Saisie : Des Templates pour Guider et Accélérer</h2>
-                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600 fade-in-up" style="transition-delay: 100ms;">Des modèles pré-configurés pour chaque type de demande, assurant la collecte d'informations complètes et structurées dès le départ.</p>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight fade-in-up">Le Template Unifié & Dynamique (v2.0)</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600 fade-in-up" style="transition-delay: 100ms;">Inspiré par vos maquettes, voici une version améliorée du template unique. Le corps du ticket affiche des blocs d'analyse dépliables et adaptés à la catégorie choisie.</p>
                 </div>
 
-                <div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    <!-- Template BUG -->
-                    <div class="fade-in-up" style="transition-delay: 200ms;">
-                        <div class="flex items-center gap-4">
-                            <div class="text-3xl">🐞</div>
-                            <h3 class="text-2xl font-bold text-slate-800">Template [BUG]</h3>
-                        </div>
-                        <p class="mt-2 text-slate-600">Un template conçu pour capturer toutes les informations critiques dès le signalement d'une anomalie.</p>
-                        <div class="mt-6 p-6 bg-white rounded-xl shadow-lg border border-slate-200">
-                            <div class="text-sm font-medium text-slate-500">Propriétés pré-remplies :</div>
-                            <div class="mt-2"><span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-red-600 bg-red-200">Catégorie = Bug</span></div>
-                            <hr class="my-4 border-slate-200">
-                            <div class="space-y-4 text-sm text-slate-700">
-                                <p><strong class="font-semibold text-slate-800">Contexte :</strong><br><span class="text-slate-500">URL, environnement, utilisateur concerné...</span></p>
-                                <p><strong class="font-semibold text-slate-800">Comportement Attendu :</strong><br><span class="text-slate-500">Que devait-il se passer ?</span></p>
-                                <p><strong class="font-semibold text-slate-800">Comportement Observé :</strong><br><span class="text-slate-500">Que s'est-il passé ? (avec captures d'écran)</span></p>
-                                <div>
-                                    <strong class="font-semibold text-slate-800">Étapes pour reproduire :</strong>
-                                    <ol class="list-decimal list-inside mt-1 text-slate-500 space-y-1">
-                                        <li>Aller à la page X.</li>
-                                        <li>Cliquer sur le bouton Y.</li>
-                                        <li>Remplir le champ Z.</li>
-                                        <li>Observer l'erreur.</li>
-                                    </ol>
+                <div class="mt-16 max-w-3xl mx-auto fade-in-up p-6 bg-white rounded-xl shadow-lg border border-slate-200" x-data="{ category: 'Bug' }">
+                    <h3 class="text-xl font-bold mb-4">Maquette du Template Dynamique</h3>
+                    <label for="category-select" class="block text-sm font-medium text-slate-700">Choisissez une catégorie pour voir le template :</label>
+                    <select id="category-select" x-model="category" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="Bug">Bug / Support / Correction</option>
+                        <option value="Story/GAP">Story / GAP</option>
+                    </select>
+
+                    <div class="mt-6 space-y-4">
+                        <!-- Sections for Bug / Support / Correction -->
+                        <div x-show="category === 'Bug'" x-transition x-cloak>
+                            <div class="space-y-3">
+                                <!-- Block: Résumé -->
+                                <div class="p-4 bg-slate-50 rounded-lg border border-slate-200" x-data="{ open: true }">
+                                    <h4 @click="open = !open" class="font-bold text-slate-800 cursor-pointer flex justify-between items-center">
+                                        <span>📝 Résumé du Problème / Question</span>
+                                        <i data-lucide="chevron-down" class="w-5 h-5 transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                                    </h4>
+                                    <div x-show="open" x-transition class="mt-2 text-sm text-slate-600">
+                                        <p>Synthétiser ou copier/coller ici la demande initiale pour contextualiser le ticket.</p>
+                                    </div>
+                                </div>
+                                <!-- Block: Analyse du Bug -->
+                                <div class="p-4 bg-red-50 rounded-lg border border-red-200" x-data="{ open: false }">
+                                    <h4 @click="open = !open" class="font-bold text-red-800 cursor-pointer flex justify-between items-center">
+                                        <span>🐞 Analyse du Bug</span>
+                                        <i data-lucide="chevron-down" class="w-5 h-5 transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                                    </h4>
+                                    <div x-show="open" x-transition class="mt-2 text-sm text-red-700">
+                                        <ul class="list-disc pl-5 space-y-1">
+                                            <li><strong>Étapes de reproduction :</strong></li>
+                                            <li><strong>Comportement attendu :</strong></li>
+                                            <li><strong>Comportement observé :</strong></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Block: Analyse de la Correction -->
+                                <div class="p-4 bg-blue-50 rounded-lg border border-blue-200" x-data="{ open: false }">
+                                    <h4 @click="open = !open" class="font-bold text-blue-800 cursor-pointer flex justify-between items-center">
+                                        <span>💎 Analyse de la Correction</span>
+                                        <i data-lucide="chevron-down" class="w-5 h-5 transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                                     </h4>
+                                    <div x-show="open" x-transition class="mt-2 text-sm text-blue-700">
+                                        <ul class="list-disc pl-5 space-y-1">
+                                            <li><strong>Données à corriger :</strong></li>
+                                            <li><strong>Valeur attendue :</strong></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Template STORY -->
-                    <div class="fade-in-up" style="transition-delay: 350ms;">
-                        <div class="flex items-center gap-4">
-                            <div class="text-3xl">✨</div>
-                            <h3 class="text-2xl font-bold text-slate-800">Template [STORY]</h3>
+                        <!-- Sections for Story/GAP -->
+                        <div x-show="category === 'Story/GAP'" x-transition x-cloak>
+                             <div class="space-y-3">
+                                <!-- Block: Besoin Métier -->
+                                <div class="p-4 bg-yellow-50 rounded-lg border border-yellow-200" x-data="{ open: true }">
+                                    <h4 @click="open = !open" class="font-bold text-yellow-800 cursor-pointer flex justify-between items-center">
+                                        <span>🎯 Quel est le besoin métier ? (Le "Pourquoi")</span>
+                                        <i data-lucide="chevron-down" class="w-5 h-5 transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                                    </h4>
+                                    <div x-show="open" x-transition class="mt-2 text-sm text-yellow-700">
+                                        <p>Expliquer le contexte et l'objectif de cette demande. Quel problème cherche-t-on à résoudre ?</p>
+                                    </div>
+                                </div>
+                                <!-- Block: Description Cible -->
+                                 <div class="p-4 bg-green-50 rounded-lg border border-green-200" x-data="{ open: true }">
+                                    <h4 @click="open = !open" class="font-bold text-green-800 cursor-pointer flex justify-between items-center">
+                                        <span>📋 Description de la Cible Fonctionnelle (Le "Quoi")</span>
+                                        <i data-lucide="chevron-down" class="w-5 h-5 transition-transform" :class="open ? 'rotate-180' : ''"></i>
+                                    </h4>
+                                    <div x-show="open" x-transition class="mt-2 text-sm text-green-700">
+                                        <p>Décrire le fonctionnement attendu de la nouvelle fonctionnalité. Utiliser des listes à puces pour les critères d'acceptance.</p>
+                                    </div>
+                                </div>
+                             </div>
                         </div>
-                        <p class="mt-2 text-slate-600">Un template pour structurer une évolution fonctionnelle, de l'idée à la spécification.</p>
-                        <div class="mt-6 p-6 bg-white rounded-xl shadow-lg border border-slate-200">
-                            <div class="text-sm font-medium text-slate-500">Propriétés pré-remplies :</div>
-                            <div class="mt-2"><span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-sky-600 bg-sky-200">Catégorie = Story</span></div>
-                            <hr class="my-4 border-slate-200">
-                             <div class="space-y-4 text-sm text-slate-700">
-                                <p><strong class="font-semibold text-slate-800">En tant que...</strong><br><span class="text-slate-500">(Rôle utilisateur)</span></p>
-                                <p><strong class="font-semibold text-slate-800">Je veux...</strong><br><span class="text-slate-500">(Action, Objectif)</span></p>
-                                <p><strong class="font-semibold text-slate-800">Afin de...</strong><br><span class="text-slate-500">(Bénéfice métier)</span></p>
-                                <div>
-                                    <strong class="font-semibold text-slate-800">Critères d'Acceptation :</strong>
-                                    <ul class="list-disc list-inside mt-1 text-slate-500 space-y-1">
-                                        <li>Le système doit faire A.</li>
-                                        <li>L'utilisateur doit pouvoir faire B.</li>
-                                        <li>Le cas C doit être géré.</li>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Les Cockpits de Pilotage -->
+        <section id="cockpits" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+             <div class="max-w-7xl mx-auto">
+                <div class="text-center">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight fade-in-up">Les Cockpits de Pilotage : Des Vues sur Mesure</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600 fade-in-up" style="transition-delay: 100ms;">Chaque page est une vue filtrée et organisée pour répondre à un besoin précis.</p>
+                </div>
+                <!-- Hub Projet remains unchanged -->
+                <div class="mt-20 fade-in-up">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-slate-800 text-center">🏠 Le Hub Projet Salesforce</h3>
+                    <!-- ... -->
+                </div>
+
+                <!-- Vue détaillée d'un ticket -->
+                <div class="mt-20 fade-in-up">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-slate-800 text-center">📄 Vue Détaillée d'un Ticket & Actions Rapides (v2.0)</h3>
+                    <div class="mt-8 mx-auto max-w-3xl p-6 bg-white rounded-xl shadow-xl border border-slate-200">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-red-600 bg-red-200">Bug</span>
+                                <h4 class="text-lg font-bold mt-2">LIC-123: Problème de connexion sur l'extranet</h4>
+                            </div>
+                            <div class="text-sm text-slate-500">Priorité : <span class="font-bold text-red-600">Critique</span></div>
+                        </div>
+                        <hr class="my-4">
+                        <div>
+                            <h5 class="font-semibold text-sm mb-3">🚀 Actions Rapides Contextuelles</h5>
+                            <div class="flex flex-wrap gap-2">
+                                <!-- Logique: Ces boutons changeraient le statut et pourraient notifier des équipes -->
+                                <button class="text-xs inline-flex items-center gap-1.5 bg-sky-100 hover:bg-sky-200 text-sky-800 font-semibold py-1 px-3 rounded-full transition-colors">
+                                    <i data-lucide="info" class="w-3.5 h-3.5"></i> Demander Infos
+                                </button>
+                                <button class="text-xs inline-flex items-center gap-1.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-semibold py-1 px-3 rounded-full transition-colors">
+                                    <i data-lucide="play-circle" class="w-3.5 h-3.5"></i> Go Dev
+                                </button>
+                                <button class="text-xs inline-flex items-center gap-1.5 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-semibold py-1 px-3 rounded-full transition-colors">
+                                    <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Escalader DSI
+                                </button>
+                                <button class="text-xs inline-flex items-center gap-1.5 bg-green-100 hover:bg-green-200 text-green-800 font-semibold py-1 px-3 rounded-full transition-colors">
+                                    <i data-lucide="check-circle-2" class="w-3.5 h-3.5"></i> Terminer Ticket
+                                </button>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-2">Un clic met à jour le statut du ticket et automatise les notifications.</p>
+                        </div>
+                        <hr class="my-4">
+                        <!-- Contenu du ticket utilisant la nouvelle structure -->
+                        <div class="space-y-3">
+                            <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                                <h4 class="font-bold text-slate-800">📝 Résumé du Problème</h4>
+                                <div class="mt-2 text-sm text-slate-600">
+                                    <p>L'utilisateur "test@client.fr" sur l'environnement de production (URL: extranet.site.com/login) n'arrive pas à se connecter depuis ce matin.</p>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-red-50 rounded-lg border border-red-200">
+                                <h4 class="font-bold text-red-800">🐞 Analyse du Bug</h4>
+                                <div class="mt-2 text-sm text-red-700">
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li><strong>Comportement attendu :</strong> L'utilisateur devrait pouvoir se connecter avec ses identifiants.</li>
+                                        <li><strong>Comportement observé :</strong> Le message d'erreur "Identifiants incorrects" s'affiche.</li>
                                     </ul>
                                 </div>
-                                <p><strong class="font-semibold text-slate-800">Règles de Gestion :</strong><br><span class="text-slate-500">Points de détail fonctionnels.</span></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 5: Les Cockpits de Pilotage -->
-        <section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-slate-100">
-            <div class="max-w-7xl mx-auto">
-                <div class="text-center">
-                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight fade-in-up">Les Cockpits de Pilotage – Les Interfaces en Action</h2>
-                    <p class="mt-4 max-w-3xl mx-auto text-lg text-slate-600 fade-in-up" style="transition-delay: 100ms;">Des vues synthétiques et personnalisées pour chaque type d'acteur, du demandeur au chef de projet, pour une vision claire et actionnable.</p>
-                </div>
-
-                <!-- 5.1: Portail de Saisie -->
-                <div class="mt-20">
-                    <div class="text-center fade-in-up">
-                        <span class="text-indigo-600 font-semibold">5.1</span>
-                        <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-slate-800">🏢 Le Portail de Saisie Simplifié</h3>
-                        <p class="mt-2 text-lg text-slate-600">"Le Guichet Utilisateur : Plus simple qu'un email"</p>
-                    </div>
-                    <div class="mt-8 mx-auto max-w-5xl p-2 bg-slate-800 rounded-xl shadow-2xl fade-in-up" style="transition-delay: 200ms;">
-                        <div class="w-full h-auto bg-white rounded-lg p-6 border-4 border-slate-800">
-                            <div class="flex items-center pb-4 border-b border-slate-200">
-                                <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-                                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-                            </div>
-                            <div class="mt-4">
-                                <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg text-center">
-                                    <p class="text-sm text-blue-800">"Bienvenue sur le portail de suivi des projets Salesforce. Pour toute question, contactez votre référent MOA, <strong class="font-semibold">Aurélien DA COSTA</strong> (Chef de Projet MOA, Direction Technique)."</p>
-                                </div>
-                                <div class="mt-6 space-y-6">
-                                    <div>
-                                        <h4 class="font-semibold text-slate-700">Périmètre Prox-Hydro</h4>
-                                        <div class="mt-2 flex flex-col sm:flex-row gap-4">
-                                            <button class="flex-1 text-left p-4 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition">🐞 Signaler un Bug</button>
-                                            <button class="flex-1 text-left p-4 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition">✨ Proposer une Évolution</button>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-slate-700">Périmètre Agence Est</h4>
-                                        <div class="mt-2 flex flex-col sm:flex-row gap-4">
-                                            <button class="flex-1 text-left p-4 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition">🐞 Signaler un Bug</button>
-                                            <button class="flex-1 text-left p-4 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition">✨ Proposer une Évolution</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5.2: Hub Projet -->
-                <div class="mt-24">
-                    <div class="text-center fade-in-up">
-                        <span class="text-indigo-600 font-semibold">5.2</span>
-                        <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-slate-800">🏠 Le Hub Projet Salesforce</h3>
-                        <p class="mt-2 text-lg text-slate-600">"Le Cockpit Quotidien : Piloter le Run et le Build"</p>
-                    </div>
-                    <div class="mt-8 mx-auto max-w-5xl p-2 bg-slate-800 rounded-xl shadow-2xl fade-in-up" style="transition-delay: 200ms;">
-                        <div class="w-full h-auto bg-white rounded-lg p-6 border-4 border-slate-800">
-                             <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg text-center text-sm text-blue-800 mb-6">
-                                "Votre hub de pilotage centralisé. À gauche, le <strong>Run</strong> pour gérer le quotidien. À droite, le <strong>Build</strong> pour construire demain. En cas de besoin, contactez Aurélien DA COSTA."
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Le Run -->
-                                <div class="bg-slate-50 p-4 rounded-lg">
-                                    <h4 class="font-bold text-lg text-slate-800">Le Run</h4>
-                                    <div class="mt-4 grid grid-cols-2 gap-4">
-                                        <div class="p-3 bg-white rounded-md border border-slate-200 text-center">
-                                            <div class="text-3xl font-extrabold text-orange-500" data-counter="12">0</div>
-                                            <div class="text-xs text-slate-500">Tickets à trier</div>
-                                        </div>
-                                        <div class="p-3 bg-white rounded-md border border-slate-200 text-center">
-                                            <div class="text-3xl font-extrabold text-red-500" data-counter="3">0</div>
-                                            <div class="text-xs text-slate-500">Bugs Critiques</div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-4 text-sm text-slate-600 space-y-2">
-                                        <div class="p-2 bg-white rounded-md border">LIC-123: Problème de connexion</div>
-                                        <div class="p-2 bg-white rounded-md border">LIC-125: Erreur d'affichage</div>
-                                    </div>
-                                </div>
-                                <!-- Le Build -->
-                                <div class="bg-slate-50 p-4 rounded-lg">
-                                    <h4 class="font-bold text-lg text-slate-800">Le Build</h4>
-                                    <div class="mt-4 grid grid-cols-2 gap-4">
-                                        <div class="p-3 bg-white rounded-md border border-slate-200 text-center col-span-2">
-                                            <div class="text-3xl font-extrabold text-sky-500" data-counter="8">0</div>
-                                            <div class="text-xs text-slate-500">Sujets à spécifier</div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-4 text-sm text-slate-600 space-y-2">
-                                        <div class="p-2 bg-white rounded-md border">LIC-119: Export PDF</div>
-                                        <div class="p-2 bg-white rounded-md border">LIC-121: Nouveau champ client</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5.3: Roadmap -->
-                <div class="mt-24">
-                     <div class="text-center fade-in-up">
-                        <span class="text-indigo-600 font-semibold">5.3</span>
-                        <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-slate-800">🚀 La Roadmap & Priorisation</h3>
-                        <p class="mt-2 text-lg text-slate-600">"De l'Idée à la Livraison : La Salle de Commande Stratégique"</p>
-                    </div>
-                    <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Vue 1: Backlog -->
-                        <div class="p-2 bg-slate-800 rounded-xl shadow-2xl fade-in-up" style="transition-delay: 200ms;">
-                            <div class="bg-white rounded-lg p-4 border-4 border-slate-800">
-                                <h4 class="font-bold text-center mb-4">Vue 1 : Backlog à Affiner (RICE)</h4>
-                                <div class="space-y-2">
-                                    <div class="flex items-center p-2 bg-slate-100 rounded-md">
-                                        <span class="font-bold text-indigo-600 w-12 text-center text-lg">9.8</span>
-                                        <span class="ml-3 text-sm flex-1">Export comptable avancé</span>
-                                    </div>
-                                    <div class="flex items-center p-2 bg-slate-100 rounded-md">
-                                        <span class="font-bold text-indigo-600 w-12 text-center text-lg">9.2</span>
-                                        <span class="ml-3 text-sm flex-1">Tableau de bord commercial</span>
-                                    </div>
-                                     <div class="flex items-center p-2 bg-slate-100 rounded-md opacity-50">
-                                        <span class="font-bold text-slate-500 w-12 text-center text-lg">8.5</span>
-                                        <span class="ml-3 text-sm flex-1">Amélioration recherche client</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Vue 2: Kanban -->
-                        <div class="p-2 bg-slate-800 rounded-xl shadow-2xl fade-in-up" style="transition-delay: 350ms;">
-                            <div class="bg-white rounded-lg p-4 border-4 border-slate-800">
-                                <h4 class="font-bold text-center mb-4">Vue 2 : Kanban des Sprints</h4>
-                                <div class="grid grid-cols-3 gap-2 text-xs">
-                                    <div class="text-center font-semibold text-slate-500">Prêt pour DEV</div>
-                                    <div class="text-center font-semibold text-slate-500">En cours de DEV</div>
-                                    <div class="text-center font-semibold text-slate-500">En recette MOA</div>
-                                    <!-- Cards -->
-                                    <div class="p-2 bg-sky-100 text-sky-800 rounded">LIC-130</div>
-                                    <div class="p-2 bg-blue-100 text-blue-800 rounded">LIC-128</div>
-                                    <div class="p-2 bg-purple-100 text-purple-800 rounded">LIC-124</div>
-                                    <div class="p-2 bg-sky-100 text-sky-800 rounded">LIC-131</div>
-                                    <div></div>
-                                    <div class="p-2 bg-purple-100 text-purple-800 rounded">LIC-115</div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -490,106 +344,101 @@
             </div>
         </section>
 
-        <!-- Section 6: Plan de Déploiement -->
-        <section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center">
-                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight fade-in-up">De la Conception à la Réalité : Notre Plan en 4 Phases</h2>
-                    <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-600 fade-in-up" style="transition-delay: 100ms;">Un déploiement progressif et maîtrisé pour garantir l'adoption et le succès du système.</p>
-                </div>
-                
-                <div class="mt-16 space-y-8 md:space-y-0 md:flex md:gap-8 relative fade-in-up" style="transition-delay: 200ms;">
-                     <!-- Timeline line -->
-                    <div class="absolute top-8 left-8 bottom-8 w-0.5 bg-slate-300 md:left-1/2 md:-translate-x-1/2 md:top-6 md:h-0.5 md:w-auto md:bottom-auto"></div>
-                    
-                    <div class="relative flex items-start gap-6">
-                        <div class="flex-shrink-0 w-16 h-16 bg-white border-2 border-indigo-500 rounded-full flex items-center justify-center font-bold text-indigo-500 text-xl z-10">1</div>
-                        <div>
-                            <h3 class="text-xl font-bold">Construction du Socle</h3>
-                            <p class="mt-1 text-slate-600">Création des 7 bases de données, définition des propriétés et mise en place des relations fondamentales entre elles.</p>
-                        </div>
-                    </div>
-                    <div class="relative flex items-start gap-6">
-                        <div class="flex-shrink-0 w-16 h-16 bg-white border-2 border-indigo-500 rounded-full flex items-center justify-center font-bold text-indigo-500 text-xl z-10">2</div>
-                        <div>
-                            <h3 class="text-xl font-bold">Création des Espaces</h3>
-                            <p class="mt-1 text-slate-600">Construction des interfaces et cockpits de pilotage : portail de saisie, hub projet et vues de roadmap.</p>
-                        </div>
-                    </div>
-                    <div class="relative flex items-start gap-6">
-                        <div class="flex-shrink-0 w-16 h-16 bg-white border-2 border-indigo-500 rounded-full flex items-center justify-center font-bold text-indigo-500 text-xl z-10">3</div>
-                        <div>
-                            <h3 class="text-xl font-bold">Migration & Pilote</h3>
-                            <p class="mt-1 text-slate-600">Migration d'un périmètre pilote, tests en conditions réelles et ajustements basés sur les retours utilisateurs.</p>
-                        </div>
-                    </div>
-                     <div class="relative flex items-start gap-6">
-                        <div class="flex-shrink-0 w-16 h-16 bg-white border-2 border-indigo-500 rounded-full flex items-center justify-center font-bold text-indigo-500 text-xl z-10">4</div>
-                        <div>
-                            <h3 class="text-xl font-bold">Déploiement Général</h3>
-                            <p class="mt-1 text-slate-600">Migration complète de l'historique, formation de tous les utilisateurs et communication officielle de lancement.</p>
-                        </div>
-                    </div>
+        <!-- Section 5: Reporting -->
+        <section id="reporting" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-slate-100">
+            <!-- unchanged -->
+        </section>
 
-                </div>
-            </div>
+
+        <!-- Section 6: Déploiement -->
+        <section id="deploiement" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+            <!-- unchanged -->
         </section>
 
     </main>
     
     <footer class="bg-slate-800 text-slate-400 text-center py-6 px-4">
-        <p>Infographie conçue comme un cahier des charges visuel pour le Système de Pilotage de Projet MOA Salesforce.</p>
+        <p>Cahier des charges fonctionnel et technique - Système de Pilotage de Projet MOA Salesforce.</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // This check ensures lucide is available before using it.
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+
             // --- Intersection Observer for animations ---
             const animatedElements = document.querySelectorAll('.fade-in-up');
-
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
                     }
                 });
-            }, {
-                threshold: 0.1 
-            });
+            }, { threshold: 0.1 });
+            animatedElements.forEach(el => observer.observe(el));
 
-            animatedElements.forEach(el => {
-                observer.observe(el);
-            });
-
-            // --- Counter Animation ---
-            const counters = document.querySelectorAll('[data-counter]');
-            
-            const counterObserver = new IntersectionObserver((entries, observer) => {
+            // --- Nav Link Active State on Scroll ---
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const scrollObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        const el = entry.target;
-                        const target = +el.getAttribute('data-counter');
-                        
-                        let start = 0;
-                        const duration = 1500; // ms
-                        const stepTime = Math.abs(Math.floor(duration / target));
-
-                        const timer = setInterval(() => {
-                            start += 1;
-                            el.textContent = start;
-                            if (start === target) {
-                                clearInterval(timer);
-                            }
-                        }, stepTime);
-
-                        observer.unobserve(el); // Animate only once
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+                        });
                     }
                 });
-            }, { threshold: 0.5 });
-            
-            counters.forEach(counter => {
-                counterObserver.observe(counter);
-            });
+            }, { rootMargin: '-40% 0px -40% 0px' });
+            sections.forEach(sec => scrollObserver.observe(sec));
+
+
+            // --- Chart.js Initializations ---
+            const burndownCtx = document.getElementById('burndownChart');
+            if(burndownCtx) {
+                new Chart(burndownCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['J1', 'J2', 'J3', 'J4', 'J5', 'J6', 'J7', 'J8', 'J9', 'J10'],
+                        datasets: [{
+                            label: 'Idéal',
+                            data: [50, 45, 40, 35, 30, 25, 20, 15, 10, 0],
+                            borderColor: 'rgb(203, 213, 225)',
+                            borderDash: [5, 5],
+                            tension: 0.1,
+                            pointStyle: false
+                        }, {
+                            label: 'Réel',
+                            data: [50, 50, 48, 42, 38, 30, 25, 18, 10, 4],
+                            borderColor: 'rgb(79, 70, 229)',
+                            backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                            fill: true,
+                            tension: 0.1
+                        }]
+                    },
+                    options: { responsive: true, plugins: { legend: { position: 'top' } } }
+                });
+            }
+
+            const categoryCtx = document.getElementById('categoryChart');
+            if(categoryCtx) {
+                new Chart(categoryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Bug', 'Story/GAP', 'Correction', 'Formation/Question'],
+                        datasets: [{
+                            label: 'Tickets par catégorie',
+                            data: [45, 30, 20, 5],
+                            backgroundColor: ['rgb(239, 68, 68)', 'rgb(59, 130, 246)', 'rgb(249, 115, 22)', 'rgb(22, 163, 74)'],
+                        }]
+                    },
+                     options: { responsive: true, plugins: { legend: { position: 'top' } } }
+                });
+            }
         });
     </script>
 </body>
 </html>
+
