@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artemis : La Conquête de l'Ascenseur Lunaire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Bleu nuit très sombre */
+            color: #e2e8f0; /* Blanc cassé */
+        }
+        .accent-color {
+            color: #38bdf8; /* Bleu ciel vibrant */
+        }
+        .glow {
+            animation: glow-pulse 3s infinite ease-in-out;
+        }
+        @keyframes glow-pulse {
+            0%, 100% { filter: drop-shadow(0 0 5px #38bdf8); }
+            50% { filter: drop-shadow(0 0 15px #38bdf8); }
+        }
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: #334155;
+            transform: translateX(-50%);
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background-color: #38bdf8;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            border: 3px solid #0f172a;
+        }
+        .timeline-item {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fade-in-up 0.8s forwards;
+        }
+        .comparison-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        @keyframes fade-in-up {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Animation du plan de vol */
+        .mission-path {
+            position: relative;
+            height: 450px;
+        }
+        .orion-capsule, .hls-lander, .earth-icon, .moon-icon {
+            position: absolute;
+            transition: all 1s ease-in-out;
+        }
+        .orion-capsule { animation: orbit 20s linear infinite; }
+        .hls-lander { animation: orbit 20s linear infinite; }
+        
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(100px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
+        }
+
+        .mission-animation-container:hover .hls-lander {
+            animation-play-state: paused;
+            animation: land-on-moon 6s ease-in-out forwards;
+        }
+
+        .mission-animation-container:hover .orion-capsule {
+            animation: orion-departs 4s 6s ease-in-out forwards;
+        }
+
+        @keyframes land-on-moon {
+            0% { transform: rotate(0deg) translateX(100px) scale(1); opacity: 1; }
+            20% { transform: rotate(20deg) translateX(80px) scale(0.9); }
+            50% { transform: rotate(90deg) translateX(0px) translateY(100px) scale(0.8); }
+            70% { transform: translateY(180px) translateX(0px) scale(0.8) rotate(90deg); } /* Atterissage */
+            80% { transform: translateY(180px) translateX(0px) scale(0.8) rotate(90deg); } /* Pause à la surface */
+            90% { transform: rotate(0deg) translateX(80px) scale(0.9); opacity: 1; } /* Redécollage */
+            100% { transform: rotate(0deg) translateX(100px) scale(1); opacity: 0; } /* Rejoint l'orbite et disparaît */
+        }
+        @keyframes orion-departs {
+            from { transform: rotate(0deg) translateX(100px); }
+            to { transform: rotate(-45deg) translateX(400px) scale(0.5); opacity: 0;}
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 py-12 md:py-20">
+
+        <!-- 1. Titre Principal & Chapô -->
+        <header class="text-center mb-20 md:mb-32 relative overflow-hidden rounded-lg">
+            <div class="relative p-8 z-10">
+                <h1 class="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-4">
+                    RETOUR SUR LA LUNE : <span class="accent-color">QUI CONSTRUIT LE NOUVEL ASCENSEUR LUNAIRE ?</span>
+                </h1>
+                <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-300">
+                    La NASA est prête à retourner sur la Lune avec le programme Artemis. La méga-fusée (SLS) et la capsule des astronautes (Orion) sont au point. Mais il manque la pièce maîtresse : le Human Landing System (HLS), le véhicule qui doit se poser sur la surface lunaire et en redécoller. Pour le construire, l'agence spatiale a mis en compétition les géants du privé. Voici le plan.
+                </p>
+            </div>
+             <div class="absolute inset-0 z-0 opacity-20">
+                <!-- Visuel de fond: Lune et Orion -->
+                <svg viewBox="0 0 400 200" class="w-full h-full object-cover" preserveAspectRatio="xMidYMid slice">
+                   <defs>
+                        <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="60%" stop-color="#e2e8f0" />
+                            <stop offset="100%" stop-color="#0f172a" stop-opacity="0" />
+                        </radialGradient>
+                    </defs>
+                    <circle cx="200" cy="100" r="150" fill="url(#moonGlow)" />
+                    <path d="M 100 20 A 10 10 0 0 1 110 30 L 115 25 A 5 5 0 0 0 110 15 Z" fill="#94a3b8"/> <!-- Orion stylisé -->
+                </svg>
+            </div>
+            <div class="absolute bottom-1/4 left-1/2 -translate-x-1/2 text-8xl font-black text-sky-400 glow z-20">
+                ?
+            </div>
+             <svg class="absolute top-1/2 left-1/2 -translate-x-1/2 w-1/2 h-1/2 z-10" viewBox="0 0 100 50">
+                <path d="M 50 0 C 50 20, 20 30, 50 50" stroke="#38bdf8" stroke-width="1" fill="none" stroke-dasharray="2 2" />
+            </svg>
+        </header>
+
+        <!-- 2. Axe Central : La Frise Chronologique -->
+        <div class="relative max-w-4xl mx-auto">
+            <div class="timeline-line hidden sm:block"></div>
+            
+            <!-- ÉTAPE 1: LE DÉFI -->
+            <div class="mb-16 sm:flex items-center timeline-item">
+                <div class="sm:w-1/2 sm:pr-8">
+                    <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
+                        <h3 class="text-2xl font-bold accent-color mb-2">ÉTAPE 1 : LE DÉFI (2019)</h3>
+                        <p class="text-slate-300">"La NASA met au défi l'industrie privée : 'Nous n'achetons pas une fusée, nous achetons un service de taxi pour la Lune. Proposez-nous des solutions sûres, rapides et innovantes pour y emmener nos astronautes.'"</p>
+                    </div>
+                </div>
+                <div class="sm:w-1/2 sm:pl-8 mt-4 sm:mt-0 flex justify-center">
+                    <div class="timeline-dot hidden sm:block"></div>
+                    <div class="p-4 bg-slate-800 rounded-full border border-slate-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-sky-400"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ÉTAPE 2: LA COMPÉTITION -->
+             <div class="mb-16 sm:flex flex-row-reverse items-center timeline-item" style="animation-delay: 0.2s;">
+                <div class="sm:w-1/2 sm:pl-8">
+                     <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
+                        <h3 class="text-2xl font-bold accent-color mb-2">ÉTAPE 2 : LA COMPÉTITION</h3>
+                        <p class="text-slate-300">"Deux philosophies s'affrontent. La NASA étudie des concepts radicalement différents pour évaluer la meilleure approche technique et la plus durable."</p>
+                    </div>
+                </div>
+                <div class="sm:w-1/2 sm:pr-8 mt-4 sm:mt-0 flex justify-center">
+                     <div class="timeline-dot hidden sm:block"></div>
+                    <div class="p-4 bg-slate-800 rounded-full border border-slate-700 text-sky-400 text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        <p class="text-xs font-bold mt-1">v/s</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- 3. Bloc Comparatif -->
+        <section class="my-20 md:my-32 timeline-item" style="animation-delay: 0.4s;">
+            <h2 class="text-3xl md:text-4xl font-black text-center mb-10">DEUX STRATÉGIES POUR UN ALUNISSAGE</h2>
+            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- Colonne 1: SPACEX -->
+                <div class="comparison-card rounded-xl p-8">
+                    <h3 class="text-center font-bold text-2xl mb-4">SPACEX</h3>
+                    <div class="flex justify-center items-end h-48 mb-6">
+                        <!-- Illustration Starship HLS -->
+                        <svg viewBox="0 0 100 250" class="h-full" fill="#e2e8f0">
+                            <path d="M50 0 L65 50 L65 220 C65 240 35 240 35 220 L35 50 Z"/>
+                            <path d="M30 230 L70 230 L75 250 L25 250 Z" />
+                        </svg>
+                    </div>
+                    <p class="text-center font-bold text-lg accent-color">Starship HLS</p>
+                    <p class="text-center text-slate-400 text-sm mb-4">Le Titan Tout-en-Un</p>
+                    <div class="text-left">
+                        <h4 class="font-bold mb-1">Concept Clé :</h4>
+                        <p class="text-slate-300 text-sm mb-4">Un seul véhicule géant pour descendre ET remonter. Son plan est audacieux : il doit faire le plein de carburant (méthane et oxygène liquides) en orbite terrestre via des vols de ravitailleurs avant de partir pour la Lune. Une manœuvre jamais réalisée à cette échelle.</p>
+                        <h4 class="font-bold mb-1">Avantage :</h4>
+                        <p class="text-slate-300 text-sm mb-4">Très grand volume habitable, potentiel de transport cargo énorme.</p>
+                        <h4 class="font-bold mb-1">Défi :</h4>
+                        <p class="text-slate-300 text-sm">Prouver que le ravitaillement orbital est fiable.</p>
+                    </div>
+                </div>
+
+                <!-- Colonne 2: BLUE ORIGIN -->
+                <div class="comparison-card rounded-xl p-8">
+                    <h3 class="text-center font-bold text-2xl mb-4">BLUE ORIGIN</h3>
+                     <div class="flex justify-center items-end h-48 mb-6">
+                        <!-- Illustration Blue Moon MK2 -->
+                        <svg viewBox="0 0 100 100" class="h-2/3" fill="#e2e8f0">
+                            <path d="M20 30 H80 L90 50 L90 80 H10 L10 50 Z" />
+                            <rect x="40" y="10" width="20" height="20" rx="5" />
+                            <path d="M5 80 L30 80 L25 100 L10 100 Z" />
+                            <path d="M95 80 L70 80 L75 100 L90 100 Z" />
+                        </svg>
+                    </div>
+                    <p class="text-center font-bold text-lg accent-color">Blue Moon MK2</p>
+                    <p class="text-center text-slate-400 text-sm mb-4">Le Spécialiste du Fret Lourd</p>
+                     <div class="text-left">
+                        <h4 class="font-bold mb-1">Concept Clé :</h4>
+                        <p class="text-slate-300 text-sm mb-4">Un atterrisseur conçu pour maximiser la charge utile livrée à la surface. Propulsé à l'hydrogène et oxygène liquides, il est optimisé pour déposer le matériel nécessaire à la construction d'une base durable.</p>
+                        <h4 class="font-bold mb-1">Avantage :</h4>
+                        <p class="text-slate-300 text-sm mb-4">Conçu pour la durabilité et la livraison de charges lourdes.</p>
+                        <h4 class="font-bold mb-1">Défi :</h4>
+                        <p class="text-slate-300 text-sm">Mener à bien sa mission de démonstration avant le premier vol habité.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sous-bloc: MISE À L'ÉCHELLE -->
+            <div class="mt-16 text-center">
+                <h3 class="text-2xl font-bold mb-8">MISE À L'ÉCHELLE</h3>
+                <div class="flex justify-center items-end gap-8 md:gap-12 h-64 md:h-80">
+                    <!-- Module Lunaire Apollo -->
+                    <div class="text-center">
+                        <div class="flex items-end h-full">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#e2e8f0" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="h-[25px] mb-2 mr-1"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                            <svg viewBox="0 0 50 50" class="h-[50px]">
+                                <path d="M10 20 L40 20 L45 30 L45 40 H5 L5 30 Z" fill="#94a3b8"/>
+                                <path d="M20 10 L30 10 L25 20 Z" fill="#94a3b8"/>
+                                <path d="M0 40 L15 40 L10 50 L5 50 Z" fill="#94a3b8"/>
+                                <path d="M50 40 L35 40 L40 50 L45 50 Z" fill="#94a3b8"/>
+                            </svg>
+                        </div>
+                        <p class="text-xs mt-2">Apollo LM (7m)</p>
+                    </div>
+                    <!-- Blue Moon MK2 -->
+                    <div class="text-center">
+                        <svg viewBox="0 0 100 100" class="h-[114px]">
+                            <path d="M20 30 H80 L90 50 L90 80 H10 L10 50 Z" fill="#e2e8f0"/>
+                            <rect x="40" y="10" width="20" height="20" rx="5" fill="#e2e8f0"/>
+                            <path d="M5 80 L30 80 L25 100 L10 100 Z" fill="#e2e8f0"/>
+                            <path d="M95 80 L70 80 L75 100 L90 100 Z" fill="#e2e8f0"/>
+                        </svg>
+                        <p class="text-xs mt-2">Blue Moon (16m)</p>
+                    </div>
+                    <!-- Starship HLS -->
+                    <div class="text-center">
+                        <svg viewBox="0 0 100 250" class="h-full">
+                            <path d="M50 0 L65 50 L65 220 C65 240 35 240 35 220 L35 50 Z" fill="#e2e8f0"/>
+                            <path d="M30 230 L70 230 L75 250 L25 250 Z" fill="#e2e8f0"/>
+                        </svg>
+                        <p class="text-xs mt-2">Starship HLS (52m)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Suite de la frise chronologique -->
+         <div class="relative max-w-4xl mx-auto">
+            <div class="timeline-line hidden sm:block"></div>
+            
+            <!-- ÉTAPE 3: LE VERDICT -->
+            <div class="mb-16 sm:flex items-center timeline-item" style="animation-delay: 0.6s;">
+                <div class="sm:w-1/2 sm:pr-8">
+                    <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
+                        <h3 class="text-2xl font-bold accent-color mb-2">ÉTAPE 3 : LE VERDICT STRATÉGIQUE</h3>
+                        <p class="text-slate-300">Pour garantir le succès et ne pas mettre tous ses œufs dans le même panier, la NASA choisit une double stratégie : SpaceX pour les premières missions (Artemis III & IV), l'option la plus rapide. Blue Origin pour la suite (dès Artemis V), afin d'assurer une alternative et d'augmenter les capacités de transport.</p>
+                    </div>
+                </div>
+                <div class="sm:w-1/2 sm:pl-8 mt-4 sm:mt-0 flex justify-center">
+                    <div class="timeline-dot hidden sm:block"></div>
+                    <div class="flex gap-4">
+                        <div class="p-4 bg-green-500/20 text-green-400 rounded-full border border-green-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                        <div class="p-4 bg-green-500/20 text-green-400 rounded-full border border-green-500">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ÉTAPE 4: LE PLAN DE VOL -->
+             <div class="mb-16 sm:flex flex-row-reverse items-center timeline-item" style="animation-delay: 0.8s;">
+                <div class="sm:w-1/2 sm:pl-8">
+                     <div class="p-6 bg-slate-800 rounded-lg border border-slate-700">
+                        <h3 class="text-2xl font-bold accent-color mb-2">ÉTAPE 4 : LE PLAN DE VOL</h3>
+                        <p class="text-slate-300">Une fois en orbite lunaire, les astronautes quitteront leur capsule Orion pour embarquer dans l'ascenseur lunaire. Après leur mission à la surface, ils remonteront rejoindre Orion pour le voyage retour.</p>
+                    </div>
+                </div>
+                <div class="sm:w-1/2 sm:pr-8 mt-4 sm:mt-0 flex justify-center items-center">
+                    <div class="timeline-dot hidden sm:block"></div>
+                    <div class="mission-animation-container w-[300px] h-[300px] flex items-center justify-center relative scale-75 md:scale-100" title="Passez la souris pour animer">
+                        <!-- Schéma de mission animé -->
+                        <div class="moon-icon w-32 h-32 bg-gray-400 rounded-full absolute bottom-0"></div>
+                        <div class="earth-icon w-8 h-8 bg-blue-500 rounded-full absolute top-4 right-4 opacity-50"></div>
+                        <div class="orion-capsule w-8 h-8 absolute top-1/2 left-1/2">
+                            <svg viewBox="0 0 24 24"><path fill="#e2e8f0" d="M12 2L2 7l10 15 10-15-10-5z"/></svg>
+                        </div>
+                         <div class="hls-lander w-8 h-8 absolute top-1/2 left-1/2">
+                            <svg viewBox="0 0 24 24"><path fill="#38bdf8" d="M12,2L2,8.5V15.5L12,22L22,15.5V8.5L12,2Z" /></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Conclusion & Vision à Long Terme -->
+        <footer class="mt-20 md:mt-32 text-center border-t border-slate-700 pt-12 timeline-item" style="animation-delay: 1s;">
+            <h2 class="text-3xl md:text-4xl font-black accent-color mb-4">ET APRÈS ? LA COLONISATION.</h2>
+            <p class="max-w-3xl mx-auto text-lg text-slate-300 mb-8">
+               La compétition ne fait que commencer. Le choix de deux partenaires lance une nouvelle ère d'accès à la Lune. Dès 2032 (Artemis VII), des versions "cargo" de ces atterrisseurs commenceront à livrer le matériel lourd : habitats de surface, rovers pressurisés... Bâtir une base lunaire n'est plus de la science-fiction.
+            </p>
+            <div class="flex justify-center items-center gap-8">
+                <!-- Logo Artemis -->
+                <svg width="80" height="80" viewBox="0 0 125 125">
+                    <path fill="#0B3D91" d="M0,125 L62.5,93.75 L125,125 L125,0 A125 125 0 0 0 0 0 Z"></path>
+                    <path fill="#FFFFFF" d="M62.5,93.75 L0,125 L0,10 A120 120 0 0 1 62.5 12.5 Z"></path>
+                    <path fill="#C62828" d="M62.5,12.5 A120 120 0 0 1 125 10 L125,0 A125 125 0 0 0 62.5 0 Z"></path>
+                    <path fill="none" stroke="#FFFFFF" stroke-width="4" d="M0,125 A200 200 0 0 1 125,0"></path>
+                </svg>
+                <!-- Empreinte de botte -->
+                <svg class="w-20 h-20 text-slate-500" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.1,10.3C18.1,10.3,18,10.3,18.1,10.3c-2.3,0-4.1,1.8-4.1,4.1c0,0.1,0,0.1,0,0.2c0,0,0,0,0,0c-0.1,2,1.5,3.7,3.5,3.8 c2.2,0.1,4.1-1.6,4.2-3.8c0-0.1,0-0.1,0-0.2C22.2,12.2,20.4,10.3,18.1,10.3z M6.9,8.5c-0.2-1.9,1.1-3.6,3-4C11.8,4.1,13.6,5,14,6.8 c0.4,1.9-0.8,3.7-2.7,4.2C9.4,11.4,7.4,10.2,6.9,8.5z M4.1,13.4c-1.1,0-2,0.9-2,2c0,1.1,0.9,2,2,2h0.3c0.9,0,1.6-0.7,1.6-1.6v-0.9 C5.9,14.1,5.1,13.4,4.1,13.4z"></path>
+                </svg>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // Effet d'apparition au défilement
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            item.style.animationPlayState = 'paused';
+            observer.observe(item);
+        });
+    </script>
+
+</body>
+</html>
