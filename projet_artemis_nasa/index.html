@@ -11,220 +11,230 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0a0e1a; /* Un bleu très sombre, presque noir */
+            background-color: #0c1427; /* Un bleu nuit profond */
         }
         .timeline-item::before {
             content: '';
             position: absolute;
-            left: 20px;
-            top: 3rem; /* Ajusté pour un meilleur alignement */
-            bottom: -2rem;
-            width: 4px;
-            background-color: #38426c; /* Ligne de la chronologie */
-            border-radius: 2px;
-        }
-        .timeline-item:last-child::before {
-            display: none;
-        }
-        .timeline-dot {
-            position: absolute;
-            left: 10px;
-            top: 1.5rem; /* Ajusté pour un meilleur alignement */
-            width: 24px;
-            height: 24px;
+            width: 1.25rem;
+            height: 1.25rem;
             border-radius: 50%;
-            background-color: #4f5f9a;
-            border: 4px solid #1a2035;
+            background-color: #1f2937;
+            border: 3px solid #60a5fa; /* Bleu Artemis */
+            top: 0;
+            left: -0.625rem;
+            z-index: 10;
+        }
+        .glow {
+            text-shadow: 0 0 8px rgba(96, 165, 250, 0.7), 0 0 20px rgba(96, 165, 250, 0.5);
         }
     </style>
 </head>
-<body class="text-gray-200 p-4 sm:p-6 md:p-8">
+<body class="text-gray-200 antialiased">
 
-    <div class="max-w-7xl mx-auto">
+    <!-- Conteneur principal -->
+    <div class="container mx-auto p-4 md:p-8">
 
-        <!-- BLOC 1 : TÊTE D'AFFICHE -->
-        <header class="text-center p-8 rounded-2xl bg-gradient-to-b from-[#1a2035] to-[#0a0e1a] border border-gray-700 shadow-2xl mb-12">
-            <h1 class="text-4xl md:text-6xl font-black uppercase tracking-wider text-white">Le Plan Artemis</h1>
-            <h2 class="text-2xl md:text-4xl font-bold text-cyan-400 mb-6">De la Lune à Mars</h2>
-            <p class="max-w-3xl mx-auto text-lg text-gray-300 mb-8">
-                Après 50 ans, l'Humanité retourne sur la Lune. Mais cette fois, c'est pour y rester et préparer le voyage vers Mars. Voici le plan, étape par étape.
-            </p>
-            <!-- VISUEL : Terre -> Lune -> Mars -->
-            <div class="flex items-center justify-center space-x-4 md:space-x-8 text-white">
-                <div class="flex flex-col items-center">
-                    <svg class="w-16 h-16" viewBox="0 0 100 100" fill="#3b82f6"><circle cx="50" cy="50" r="45"/></svg>
-                    <span class="mt-2 font-bold">Terre</span>
-                </div>
-                <div class="flex-1 text-cyan-400 font-extrabold text-2xl tracking-widest relative">
-                    <span class="hidden sm:inline">················></span>
-                    <span class="sm:hidden">····></span>
-                </div>
-                <div class="flex flex-col items-center">
-                    <svg class="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 10a10 10 0 1120 0 10 10 0 01-20 0z"/></svg>
-                    <span class="mt-2 font-bold">Lune</span>
-                    <span class="text-xs text-cyan-300">(Gateway)</span>
-                </div>
-                <div class="flex-1 text-amber-500 font-extrabold text-2xl tracking-widest relative opacity-50">
-                     <span class="hidden sm:inline">··········></span>
-                     <span class="sm:hidden">···></span>
-                </div>
-                <div class="flex flex-col items-center">
-                    <svg class="w-14 h-14" viewBox="0 0 100 100" fill="#f97316"><circle cx="50" cy="50" r="45"/></svg>
-                    <span class="mt-2 font-bold">Mars</span>
-                </div>
+        <!-- BLOC 1 : TÊTE D'AFFICHE (INTRODUCTION) -->
+        <header class="text-center mb-16">
+            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-wider text-white glow">Le Plan Artemis</h1>
+            <h2 class="text-2xl md:text-3xl font-light text-blue-300 mt-2">De la Lune à Mars</h2>
+            <div class="mt-8 max-w-4xl mx-auto">
+                <!-- Visuel de la trajectoire -->
+                <svg viewBox="0 0 400 100" class="w-full h-auto">
+                    <path d="M20 50 C 100 0, 150 0, 200 50 S 250 100, 300 50 C 350 20, 380 20, 380 20" stroke="#60a5fa" stroke-width="1" fill="none" stroke-dasharray="4 2"/>
+                    <circle cx="20" cy="50" r="10" fill="#3b82f6">
+                        <animate attributeName="r" values="10;12;10" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                    <text x="20" y="75" font-size="8" fill="white" text-anchor="middle">Terre</text>
+                    <circle cx="200" cy="50" r="6" fill="#9ca3af"/>
+                    <text x="200" y="30" font-size="8" fill="white" text-anchor="middle">Lune</text>
+                     <circle cx="200" cy="50" r="15" stroke="#a78bfa" stroke-width="0.5" fill="none" stroke-dasharray="2 1">
+                        <animateTransform attributeName="transform" type="rotate" from="0 200 50" to="360 200 50" dur="10s" repeatCount="indefinite"/>
+                    </circle>
+                     <text x="225" y="40" font-size="6" fill="#a78bfa" class="font-bold">Gateway</text>
+                    <circle cx="380" cy="20" r="8" fill="#ef4444"/>
+                    <text x="380" y="40" font-size="8" fill="white" text-anchor="middle">Mars</text>
+                </svg>
             </div>
+            <p class="max-w-3xl mx-auto mt-6 text-gray-300 text-lg">
+                Après plus de 50 ans, l'Humanité retourne sur la Lune. Mais cette fois, il ne s'agit pas de "visiter". Artemis est un programme conçu pour établir une présence humaine durable sur et autour de la Lune, un tremplin technologique et opérationnel indispensable pour préparer le prochain bond de géant : le premier voyage habité vers Mars.
+            </p>
         </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            
-            <!-- BLOC 3 & 4 : BLOCS SATELLITES (regroupés pour le mobile) -->
-            <aside class="lg:col-span-3 lg:order-1 space-y-8">
-                <!-- BLOC 3 : LES BÂTISSEURS -->
-                <div class="bg-[#1a2035] p-6 rounded-xl border border-gray-700 sticky top-8">
-                    <h3 class="text-xl font-bold text-cyan-400 border-b-2 border-cyan-400/50 pb-2 mb-4">Une Alliance Mondiale</h3>
-                    <p class="text-gray-300 mb-6">Artemis est une collaboration mondiale. Les 'Accords Artemis' unissent les nations, et les entreprises privées construisent les engins.</p>
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="font-semibold text-white mb-2">Partenaires Internationaux :</h4>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="bg-blue-600 text-white px-3 py-1 text-sm rounded-full font-bold">NASA</span>
-                                <span class="bg-blue-800 text-white px-3 py-1 text-sm rounded-full font-bold">ESA</span>
-                                <span class="bg-red-600 text-white px-3 py-1 text-sm rounded-full font-bold">JAXA</span>
-                                <span class="bg-red-700 text-white px-3 py-1 text-sm rounded-full font-bold">CSA</span>
-                            </div>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-white mb-2">Partenaires Commerciaux :</h4>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="bg-gray-600 text-white px-3 py-1 text-sm rounded-full font-medium">SpaceX</span>
-                                <span class="bg-gray-600 text-white px-3 py-1 text-sm rounded-full font-medium">Boeing</span>
-                                <span class="bg-gray-600 text-white px-3 py-1 text-sm rounded-full font-medium">Lockheed Martin</span>
-                                <span class="bg-gray-600 text-white px-3 py-1 text-sm rounded-full font-medium">Blue Origin</span>
-                                <span class="bg-gray-600 text-white px-3 py-1 text-sm rounded-full font-medium">Northrop Grumman</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- Grille principale pour les colonnes -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-                <!-- BLOC 4 : LES OUTILS -->
-                 <div class="bg-[#1a2035] p-6 rounded-xl border border-gray-700 sticky top-80">
-                    <h3 class="text-xl font-bold text-cyan-400 border-b-2 border-cyan-400/50 pb-2 mb-4">Les 4 Piliers Techniques</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-center space-x-4">
-                            <div class="bg-gray-700 p-2 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L12 12M12 22L12 12M12 12L22 7L12 2L2 7L12 12Z"/><path d="M2 17L12 22L22 17"/><path d="M2 12L12 17L22 12"/></svg></div>
-                            <div><strong class="text-white">LE LANCEUR (SLS) :</strong> La fusée la plus puissante.</div>
-                        </div>
-                         <div class="flex items-center space-x-4">
-                            <div class="bg-gray-700 p-2 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-300" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 5a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg></div>
-                            <div><strong class="text-white">LE TRANSPORT (ORION) :</strong> Le 'taxi' des astronautes.</div>
-                        </div>
-                         <div class="flex items-center space-x-4">
-                           <div class="bg-gray-700 p-2 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l-4 4-4-4 4-4" /></svg></div>
-                            <div><strong class="text-white">LE CAMP DE BASE (GATEWAY) :</strong> La mini-station en orbite lunaire.</div>
-                        </div>
-                         <div class="flex items-center space-x-4">
-                            <div class="bg-gray-700 p-2 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
-                            <div><strong class="text-white">L'ASCENSEUR (HLS) :</strong> Les 'taxis' lunaires pour la surface.</div>
-                        </div>
+            <!-- BLOC 3 : LES BÂTISSEURS (COLONNE LATÉRALE GAUCHE) -->
+            <aside class="lg:col-span-3">
+                <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 h-full">
+                    <h3 class="text-2xl font-bold text-blue-300 mb-4">Une Alliance Mondiale & Commerciale</h3>
+                    <p class="text-sm text-gray-400 mb-6">
+                        Contrairement au programme Apollo, Artemis repose sur un écosystème collaboratif mondial unissant nations et industrie privée sous des principes d'exploration pacifique.
+                    </p>
+                    
+                    <h4 class="font-semibold text-white mb-2">Partenaires Internationaux Clés 🌍</h4>
+                    <ul class="list-disc list-inside text-sm space-y-2 mb-6">
+                        <li><span class="font-bold">🇪🇺 ESA</span> : Module de Service (ESM) d'Orion, modules I-Hab & ESPRIT.</li>
+                        <li><span class="font-bold">🇯🇵 JAXA</span> : Systèmes de support-vie, rover pressurisé.</li>
+                        <li><span class="font-bold">🇨🇦 ASC</span> : Bras robotique intelligent Canadarm3.</li>
+                    </ul>
+
+                    <h4 class="font-semibold text-white mb-2">Écosystème Commercial Américain 🚀</h4>
+                    <p class="text-xs text-gray-400 mb-2">La NASA allie la fiabilité des contractants historiques à l'agilité des nouveaux acteurs.</p>
+                    <div class="text-sm space-y-2">
+                        <p><span class="font-bold">"Old Space"</span>: Boeing (SLS), Lockheed Martin (Orion), Northrop Grumman.</p>
+                        <p><span class="font-bold">"New Space"</span>: SpaceX (Starship HLS), Blue Origin (Blue Moon), Axiom Space.</p>
                     </div>
                 </div>
             </aside>
 
-            <!-- BLOC 2 : FRISE CHRONOLOGIQUE -->
-            <main class="lg:col-span-9 lg:order-2">
-                <div class="space-y-8">
+            <!-- BLOC 2 : AXE CENTRAL - LA FRISE CHRONOLOGIQUE -->
+            <main class="lg:col-span-6">
+                <div class="relative pl-8 border-l-2 border-blue-500/30">
                     
-                    <!-- JALON 1 -->
-                    <div class="relative pl-12 timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:gap-4 mb-2">
-                             <h3 class="text-2xl font-bold text-white">ARTEMIS I</h3>
-                             <span class="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full w-fit mt-1 sm:mt-0">SUCCÈS ! (2022)</span>
-                        </div>
-                        <div class="bg-[#1a2035] p-6 rounded-xl border border-gray-700 flex flex-col md:flex-row items-start md:items-center gap-4">
-                            <div class="flex-shrink-0 text-green-400 flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" /><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" /></svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                    <!-- JALON 1 : ARTEMIS I -->
+                    <div class="timeline-item mb-12">
+                        <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                            <span class="absolute -left-3.5 -top-2.5 text-xl">1️⃣</span>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-white">ARTEMIS I</h3>
+                                <span class="bg-green-500 text-green-900 text-xs font-bold px-3 py-1 rounded-full">SUCCÈS ! (16/11/2022)</span>
                             </div>
-                            <p class="text-gray-300">Test à vide réussi. La fusée géante SLS et la capsule Orion ont prouvé leur fiabilité.</p>
+                            <p class="text-sm text-gray-300">Vol d'essai crucial sans équipage pour valider le lanceur SLS et le vaisseau Orion, poussant le matériel à ses limites pour garantir la sécurité future.</p>
+                            <p class="text-xs mt-2 text-blue-300">✔️ Validation du bouclier thermique à 2800°C.</p>
                         </div>
                     </div>
 
-                    <!-- JALON 2 -->
-                    <div class="relative pl-12 timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:gap-4 mb-2">
-                            <h3 class="text-2xl font-bold text-white">ARTEMIS II</h3>
-                            <span class="bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full w-fit mt-1 sm:mt-0">À VENIR (2025-2026)</span>
+                    <!-- JALON 2 : ARTEMIS II -->
+                    <div class="timeline-item mb-12">
+                         <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                            <span class="absolute -left-3.5 -top-2.5 text-xl">2️⃣</span>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-white">ARTEMIS II</h3>
+                                <span class="bg-yellow-500 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full">À VENIR (2025/2026)</span>
+                            </div>
+                            <p class="text-sm text-gray-300">Retour des humains dans l'espace cislunaire. L'équipage testera les systèmes de support-vie d'Orion lors d'un survol de la Lune sur une trajectoire de retour libre.</p>
+                            <p class="text-xs mt-2 text-blue-300">👩🏾‍🚀 Première femme, premier homme de couleur et premier Canadien à voyager vers la Lune.</p>
                         </div>
-                        <div class="bg-[#1a2035] p-6 rounded-xl border border-gray-700 flex flex-col md:flex-row items-start md:items-center gap-4">
-                           <div class="flex-shrink-0 text-blue-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 18a6 6 0 0 0 6-6"/><circle cx="12" cy="12" r="2"/><circle cx="10" cy="10" r=".5"/><circle cx="14" cy="10" r=".5"/><circle cx="10" cy="14" r=".5"/><circle cx="14" cy="14" r=".5"/></svg></div>
-                            <p class="text-gray-300">Le premier vol habité. 4 astronautes feront le tour de la Lune pour tester les systèmes de vie.</p>
+                    </div>
+                    
+                    <!-- JALON 3 : ARTEMIS III -->
+                    <div class="timeline-item mb-12">
+                         <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                            <span class="absolute -left-3.5 -top-2.5 text-xl">3️⃣</span>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-white">ARTEMIS III</h3>
+                                <span class="bg-orange-500 text-orange-900 text-xs font-bold px-3 py-1 rounded-full">L'ALUNISSAGE (Mi-2027)</span>
+                            </div>
+                            <p class="text-sm text-gray-300">Retour physique de l'humanité sur la Lune. Deux astronautes aluneront près du pôle Sud pour un séjour de 6,5 jours, à la recherche de glace d'eau.</p>
+                            <p class="text-xs mt-2 text-blue-300">👣 Amarrage en orbite avec le Starship HLS pour la descente.</p>
                         </div>
                     </div>
 
-                    <!-- JALON 3 -->
-                    <div class="relative pl-12 timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:gap-4 mb-2">
-                            <h3 class="text-2xl font-bold text-white">ARTEMIS III</h3>
-                            <span class="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full w-fit mt-1 sm:mt-0">L'ALUNISSAGE (2027)</span>
-                        </div>
-                        <div class="bg-[#1a2035] p-6 rounded-xl border border-gray-700 flex flex-col md:flex-row items-start md:items-center gap-4">
-                             <div class="flex-shrink-0 text-yellow-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2.828M12 8H9m3 13H9.28A2 2 0 017.5 19.472V14m5.032-3.032l-3.34-3.34a2 2 0 00-2.828 0l-3.34 3.34a2 2 0 000 2.828l3.34 3.34a2 2 0 002.828 0l3.34-3.34a2 2 0 000-2.828z" /></svg></div>
-                            <p class="text-gray-300">Le retour ! Deux astronautes (dont la première femme) se poseront au pôle Sud lunaire.</p>
-                        </div>
-                    </div>
-
-                    <!-- JALON 4 -->
-                    <div class="relative pl-12 timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:gap-4 mb-2">
-                           <h3 class="text-2xl font-bold text-white">ARTEMIS IV</h3>
-                           <span class="bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-full w-fit mt-1 sm:mt-0">CONSTRUCTION (2028)</span>
-                        </div>
-                        <div class="bg-[#1a2035] p-6 rounded-xl border border-gray-700 flex flex-col md:flex-row items-start md:items-center gap-4">
-                            <div class="flex-shrink-0 text-indigo-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-                            <p class="text-gray-300">Début de l'assemblage de la station 'Gateway' en orbite lunaire. C'est le futur camp de base.</p>
+                    <!-- JALON 4 : ARTEMIS IV -->
+                    <div class="timeline-item mb-12">
+                         <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                            <span class="absolute -left-3.5 -top-2.5 text-xl">4️⃣</span>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-white">ARTEMIS IV</h3>
+                                <span class="bg-purple-500 text-purple-900 text-xs font-bold px-3 py-1 rounded-full">CONSTRUCTION (2028)</span>
+                            </div>
+                            <p class="text-sm text-gray-300">Début de la phase de présence durable. Première mission à s'amarrer à la station Gateway pour livrer et installer le module d'habitation international I-Hab.</p>
+                            <p class="text-xs mt-2 text-blue-300">🏗️ Premier vol du lanceur SLS Block 1B, plus puissant.</p>
                         </div>
                     </div>
 
-                     <!-- JALON 5+ -->
-                    <div class="relative pl-12 timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:gap-4 mb-2">
-                           <h3 class="text-2xl font-bold text-white">ARTEMIS V, VI, VII...</h3>
-                           <span class="bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full w-fit mt-1 sm:mt-0">PRÉSENCE DURABLE (2030+)</span>
-                        </div>
-                        <div class="bg-[#1a2035] p-6 rounded-xl border border-gray-700 flex flex-col md:flex-row items-start md:items-center gap-4">
-                            <div class="flex-shrink-0 text-purple-300"><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-                            <p class="text-gray-300">Missions régulières. Livraison de rovers, de modules d'habitation. La Lune devient un laboratoire pour Mars.</p>
+                    <!-- JALON 5 : ARTEMIS V+ -->
+                    <div class="timeline-item">
+                        <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                            <span class="absolute -left-3.5 -top-2.5 text-xl">5️⃣</span>
+                             <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-xl font-bold text-white">ARTEMIS V, VI, VII...</h3>
+                                <span class="bg-sky-500 text-sky-900 text-xs font-bold px-3 py-1 rounded-full">PRÉSENCE DURABLE (2030+)</span>
+                            </div>
+                            <p class="text-sm text-gray-300">Les missions deviennent régulières. Livraison de nouvelles capacités à la Gateway, déploiement du rover LTV et construction de l'Artemis Base Camp à la surface.</p>
+                            <p class="text-xs mt-2 text-blue-300">🏕️ Objectif : un habitat pressurisé pour des expéditions de plusieurs semaines.</p>
                         </div>
                     </div>
                 </div>
             </main>
 
+            <!-- BLOC 4 : LES OUTILS (COLONNE LATÉRALE DROITE) -->
+            <aside class="lg:col-span-3">
+                <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 h-full">
+                    <h3 class="text-2xl font-bold text-blue-300 mb-4">Les 4 Piliers Technologiques</h3>
+                    <p class="text-sm text-gray-400 mb-6">
+                        L'architecture d'Artemis est un "système de systèmes" intégré où chaque élément est interdépendant.
+                    </p>
+                    <div class="space-y-6">
+                        <!-- Pilier 1: SLS -->
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-gray-700">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M20.9 10.1C21.6 9.4 22 8.5 22 7.5c0-2-2-3.5-3.5-3.5C17.5 4 16.6 4.4 15.9 5.1L12 9l-4.9 4.9c-.7.7-1.1 1.6-1.1 2.6 0 2 2 3.5 3.5 3.5.9 0 1.8-.4 2.6-1.1l4.9-4.9z"/><path d="m14 4-2 2"/><path d="m10 12-2 2"/><path d="m12 20-2-2"/><path d="M4 14l2-2"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white">LE LANCEUR (SLS)</h4>
+                                <p class="text-xs text-gray-400">La fusée la plus puissante jamais construite, capable d'envoyer Orion vers la Lune en un seul lancement.</p>
+                            </div>
+                        </div>
+                         <!-- Pilier 2: ORION -->
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-gray-700">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 2.5C12.5 2.5 8 5 8 11c0 3.5 4.5 9 4.5 9s4.5-5.5 4.5-9c0-6-4.5-8.5-4.5-8.5Z"/><path d="M12.5 6a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"/></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white">LE TRANSPORT (ORION)</h4>
+                                <p class="text-xs text-gray-400">Le vaisseau d'exploration de l'espace lointain, doté d'un bouclier thermique unique pour le retour lunaire.</p>
+                            </div>
+                        </div>
+                         <!-- Pilier 3: GATEWAY -->
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-gray-700">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><path d="M9.2 13.5a1.5 1.5 0 0 0 2.1 2.1l4.2-4.2a1.5 1.5 0 0 0-2.1-2.1l-2.1 2.1-1-1a1.5 1.5 0 0 0-2.1 2.1l1 1Z"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white">LE CAMP DE BASE (GATEWAY)</h4>
+                                <p class="text-xs text-gray-400">Un avant-poste en orbite lunaire (NRHO) servant de point de rendez-vous et de laboratoire.</p>
+                            </div>
+                        </div>
+                         <!-- Pilier 4: HLS -->
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-gray-700">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26a2 2 0 0 0-1.9-2.65L13 7l-2 5h2l-2 5-2-5h2l-2-5-1.85.35A2 2 0 0 0 6.26 10H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1.26a2 2 0 0 0 1.9 2.65L11 19l2-5h-2l2-5 2 5h-2l1.85-.35A2 2 0 0 0 17.74 16H19a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2Z"></path></svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white">L'ASCENSEUR (HLS)</h4>
+                                <p class="text-xs text-gray-400">Les atterrisseurs lunaires fournis comme service par des partenaires commerciaux (SpaceX, Blue Origin).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
         </div>
 
         <!-- BLOC 5 : CONCLUSION -->
-        <footer class="mt-16 text-center bg-[#1a2035] p-8 rounded-2xl border border-gray-700 flex flex-col items-center">
-             <div class="relative w-full h-32 flex items-center justify-center mb-4">
-                <!-- Silhouette Astronaute -->
-                <svg class="h-20 w-20 text-white absolute bottom-0 left-1/2 -translate-x-1/2" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 11c-3.86 0-7 1.832-7 4v3h14v-3c0-2.168-3.14-4-7-4z"/>
-                </svg>
-                <!-- Mars -->
-                <div class="w-12 h-12 bg-orange-600 rounded-full absolute top-4 right-1/4 animate-pulse"></div>
-                <!-- Horizon lunaire -->
-                <div class="absolute bottom-0 w-full h-8 bg-gray-600 rounded-t-full"></div>
-            </div>
-            <p class="text-lg md:text-xl max-w-4xl mx-auto font-semibold text-gray-300">
-                Chaque mission Artemis construit l'infrastructure pour le prochain bond de géant : les premiers pas de l'humanité sur <span class="text-orange-500 font-bold">MARS</span>.
+        <section class="mt-16 rounded-xl overflow-hidden relative border border-gray-700">
+             <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/14781987/pexels-photo-14781987.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');"></div>
+             <div class="absolute inset-0 bg-red-900/40 mix-blend-multiply"></div>
+             <div class="relative p-8 md:p-16 text-center text-white bg-black/30">
+                <h3 class="text-3xl md:text-4xl font-bold uppercase tracking-wide">L'Objectif Ultime : Mars</h3>
+                <p class="max-w-3xl mx-auto mt-4 text-gray-200">
+                    Chaque mission, chaque technologie testée, chaque heure passée sur la Lune est une répétition générale. La Lune est un banc d'essai indispensable où nous apprendrons à "vivre hors de la Terre", à maîtriser les ressources locales et à valider les systèmes pour des missions de 3 ans.
+                </p>
+                <blockquote class="mt-8 text-xl italic font-semibold text-white/80 glow">
+                    "La Lune n'est pas la destination. C'est le chemin."
+                </blockquote>
+             </div>
+        </section>
+
+        <!-- Mentions légales -->
+        <footer class="text-center mt-12 pb-4">
+            <p class="text-xs text-gray-500">
+                Infographie réalisée à des fins éducatives. Sources : NASA, ESA, JAXA, ASC. Les dates des missions sont sujettes à modification.
             </p>
         </footer>
 
     </div>
-
 </body>
 </html>
-
