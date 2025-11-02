@@ -131,6 +131,29 @@
             border-radius: 9999px;
             transition: width 0.5s ease-in-out;
         }
+        
+        /* Styles pour Details/Summary (migrés) */
+        details > summary {
+            list-style: none; /* Cache la flèche par défaut */
+            cursor: pointer;
+            position: relative;
+            padding-left: 1.75rem; /* Espace pour l'icône FontAwesome */
+        }
+        details > summary::-webkit-details-marker { display: none; }
+        details > summary::before {
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            content: "\f0da"; /* fa-caret-right */
+            position: absolute;
+            left: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(0deg);
+            transition: transform 0.2s;
+        }
+        details[open] > summary::before {
+            transform: translateY(-50%) rotate(90deg);
+        }
+        
     </style>
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 transition-colors duration-300">
@@ -384,13 +407,54 @@
                         <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">➕</span><strong>Date de Création</strong><span class="text-xs text-slate-500 ml-2">(Created Time)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date de création</span></li>
                         <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📟</span><strong>Urgence</strong><span class="text-xs text-slate-500 ml-2">(Urgency)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Formule</span></li>
                     </ul>
-                    <div class="relative code-block mt-2 text-sm bg-slate-200 dark:bg-slate-900 p-4 rounded-lg">
+                    
+                    <!-- Contenu <details> RESTAURÉ -->
+                    <div class="relative code-block mt-4 text-sm bg-slate-200 dark:bg-slate-900 p-4 rounded-lg">
                         <button class="copy-btn absolute top-2 right-2 px-2 py-1 bg-slate-400 dark:bg-slate-700 text-white text-xs rounded-md hover:bg-slate-500 dark:hover:bg-slate-600 transition-colors">
                             <i class="fa-solid fa-copy w-3 h-3"></i><span class="ml-2">Copier</span>
                         </button>
                         <pre class="overflow-x-auto"><code class="text-slate-800 dark:text-slate-100 whitespace-pre-wrap break-all">if(empty(prop("Échéance")), "⚪️ Planifier", if(formatDate(prop("Échéance"), "L") == formatDate(now(), "L"), "🔥 Aujourd'hui", if(prop("Échéance") < now(), "🚨 En Retard", if(dateBetween(prop("Échéance"), now(), "days") < 7, "🟠 Cette Semaine", "👍 Plus tard"))))</code></pre>
                     </div>
-                    <!-- ... (details/summary migrés) ... -->
+                    
+                    <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border-l-4 border-blue-500 mt-6">
+                        <h4 class="font-bold text-lg text-blue-800 dark:text-blue-200 flex items-center gap-2"><i class="fa-solid fa-link w-4 h-4"></i> Aide à la Connexion</h4>
+                        <p class="text-sm mt-2 text-blue-700 dark:text-blue-200">
+                            Chaque tâche (ou presque) doit être liée à un **Projet**. Une tâche isolée est souvent un symptôme de désorganisation. Si vous créez la tâche "Prendre RDV avec le courtier", liez-la immédiatement à votre projet `Achat immobilier Nantes`. Cela garantit que chaque action a un but précis.
+                        </p>
+                    </div>
+
+                    <div class="mt-4 space-y-4">
+                        <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                            <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Statut" :</h5>
+                                <ul class="list-disc list-inside">
+                                    <li>⚪️ À faire (Gris)</li>
+                                    <li>🔵 En cours (Bleu)</li>
+                                    <li>🟡 En attente (Jaune)</li>
+                                    <li>🟢 Terminé (Vert)</li>
+                                </ul>
+                                <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2 mt-4">Propriété "Priorité" :</h5>
+                                <ul class="list-disc list-inside">
+                                    <li>🔥 Haute (Rouge)</li>
+                                    <li>🟠 Moyenne (Orange)</li>
+                                    <li>🔵 Basse (Bleu)</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Tâche"</summary>
+                            <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                <p class="mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `📄`.</p>
+                                <p class="mb-4"><strong>Propriétés :</strong> Pré-remplissez la `Priorité` sur `🔵 Basse`.</p>
+                                <p><strong>Contenu de la page :</strong> Pour les tâches plus complexes, utilisez cette structure simple à l'intérieur de la page :</p>
+                                <ul class="list-disc list-inside mt-2 space-y-1">
+                                    <li>Titre H3 : `📝 Notes`</li>
+                                    <li>Titre H3 : `✅ Sous-tâches` (avec une liste de cases à cocher)</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
                 </div>
                 
                 <!-- Fiche 2 -->
@@ -418,7 +482,42 @@
                         <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📊</span><strong>Progression</strong><span class="text-xs text-slate-500 ml-2">(Progress)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Rollup</span></li>
                         <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📦</span><strong>Archiver</strong><span class="text-xs text-slate-500 ml-2">(Archive)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Case à cocher</span></li>
                     </ul>
-                    <!-- ... (details/summary migrés) ... -->
+                    
+                    <!-- Contenu <details> RESTAURÉ -->
+                    <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border-l-4 border-blue-500 mt-6">
+                        <h4 class="font-bold text-lg text-blue-800 dark:text-blue-200 flex items-center gap-2"><i class="fa-solid fa-link w-4 h-4"></i> Aide à la Connexion</h4>
+                        <p class="text-sm mt-2 text-blue-700 dark:text-blue-200">
+                            Un projet est le pont entre vos grandes ambitions et vos actions quotidiennes. Il doit toujours être lié à un **Domaine** (ex: `Achat immobilier Nantes` est lié au domaine `Finances Personnelles` ou `Appartement Nantes`) et, idéalement, à un **Objectif** (ex: `Devenir propriétaire`).
+                        </p>
+                    </div>
+
+                    <div class="mt-4 space-y-4">
+                        <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                            <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Statut" :</h5>
+                                <ul class="list-disc list-inside">
+                                    <li>⚪️ Planifié (Gris)</li>
+                                    <li>🔵 En cours (Bleu)</li>
+                                    <li>🟡 En pause (Jaune)</li>
+                                    <li>🟢 Terminé (Vert)</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Projet"</summary>
+                            <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                <p class="mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `🚀`.</p>
+                                <p class="mb-4"><strong>Propriétés :</strong> Pré-remplissez le `Statut` sur `Planifié`.</p>
+                                <p><strong>Contenu de la page :</strong> C'est le modèle le plus important. Utilisez cette structure à l'intérieur de la page :</p>
+                                <ul class="list-disc list-inside mt-2 space-y-2">
+                                    <li>Un <strong>encadré</strong> `🎯 Objectif Principal` pour décrire le résultat attendu.</li>
+                                    <li>Un titre H3 `🔗 Liens & Ressources` pour les documents importants.</li>
+                                    <li>Un titre H3 `✅ Plan d'Action` sous lequel vous insérez une <strong>vue liée</strong> de la base `⚡ Tâches Maîtresse`, filtrée pour que `Projet` contienne `Nouveau Projet`.</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
                 </div>
 
                 <!-- Fiche 3 -->
@@ -439,7 +538,22 @@
                         <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📚</span><strong>Ressources</strong><span class="text-xs text-slate-500 ml-2">(Resources)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
                         <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📜</span><strong>Standard à Maintenir</strong><span class="text-xs text-slate-500 ml-2">(Standard to Maintain)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Texte</span></li>
                     </ul>
-                    <!-- ... (details/summary migrés) ... -->
+                    
+                    <!-- Contenu <details> RESTAURÉ -->
+                    <div class="mt-4 space-y-4">
+                        <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Domaine"</summary>
+                            <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                <p class="mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `🧭`.</p>
+                                <p><strong>Contenu de la page :</strong> Utilisez cette structure pour créer un tableau de bord pour chaque domaine :</p>
+                                <ul class="list-disc list-inside mt-2 space-y-2">
+                                    <li>Un titre H2 `🧭 Vision & Objectifs`.</li>
+                                    <li>Un titre H2 `📊 Tableau de Bord`.</li>
+                                    <li>En dessous, créez 2 colonnes. À gauche, une <strong>vue liée</strong> de `🎯 Projets` (filtrée sur ce domaine). À droite, une <strong>vue liée</strong> de `📚 Ressources` (filtrée sur ce domaine).</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
                 </div>
                 
                 <!-- Fiche 4 -->
@@ -477,7 +591,48 @@
                         <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔗</span><strong>Domaine Associé</strong><span class="text-xs text-slate-500 ml-2">(Related Area)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
                         <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">👀</span><strong>Statut</strong><span class="text-xs text-slate-500 ml-2">(Status)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
                     </ul>
-                    <!-- ... (details/summary migrés) ... -->
+                    
+                    <!-- Contenu <details> RESTAURÉ -->
+                    <div class="mt-4 space-y-4">
+                        <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                            <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Type" :</h5>
+                                <ul class="list-disc list-inside">
+                                    <li>🤖 Prompt IA</li>
+                                    <li>Note de Littérature</li>
+                                    <li>Note Permanente</li>
+                                    <li>Article</li>
+                                    <li>Livre</li>
+                                    <li>Vidéo</li>
+                                    <li>Note de Réunion</li>
+                                </ul>
+                                <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2 mt-4">Propriété "Sujet/Tags" (Exemples) :</h5>
+                                <ul class="list-disc list-inside">
+                                    <li>IA, Productivité, Finance, VBA, Salesforce, Immobilier</li>
+                                </ul>
+                                <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2 mt-4">Propriété "Statut" :</h5>
+                                <ul class="list-disc list-inside">
+                                    <li>📥 À traiter (Gris)</li>
+                                    <li>🟡 En cours (Jaune)</li>
+                                    <li>✅ Terminé (Vert)</li>
+                                </ul>
+                            </div>
+                        </details>
+                        <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Note"</summary>
+                            <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                <p class="mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `💡`.</p>
+                                <p class="mb-4"><strong>Propriétés :</strong> Pré-remplissez le `Statut` sur `À lire / À traiter`.</p>
+                                <p><strong>Contenu de la page :</strong> Utilisez cette structure simple pour guider votre prise de notes :</p>
+                                <ul class="list-disc list-inside mt-2 space-y-1">
+                                    <li>Titre H3 : `💡 Idée Principale`</li>
+                                    <li>Titre H3 : `📝 Notes Détaillées`</li>
+                                    <li>Titre H3 : `🤔 Mes Réflexions`</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </div>
                 </div>
             </section>
             
@@ -526,10 +681,12 @@
                 <div class="info-card hidden-initial">
                     <h3 class="text-xl font-semibold mb-4 text-slate-900 dark:text-white">Plan d'Action pour votre Cockpit</h3>
                     <p class="text-slate-600 dark:text-slate-300 mb-6">Le Cockpit est votre page d'accueil. Il doit vous montrer ce qui est important, maintenant, sans vous submerger. Suivez ces étapes pour le construire.</p>
-                    <!-- ... (Migration de toutes les étapes du Cockpit) ... -->
+                    
+                    <!-- Contenu RESTAURÉ -->
                     <div class="space-y-6">
                         <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
                              <h4 class="font-bold text-lg text-slate-900 dark:text-white">Étape 1 : La Fondation - La Page "Backend"</h4>
+                             <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">Pour garder votre espace de travail propre, nous allons cacher les bases de données maîtresses.</p>
                              <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 space-y-2">
                                 <li>Créez une nouvelle page simple et nommez-la `⚙️ Backend`.</li>
                                 <li><strong>Déplacez toutes les bases de données</strong> que vous avez créées (Tâches, Projets, etc.) à l'intérieur de cette page.</li>
@@ -538,13 +695,66 @@
                         </div>
                         <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
                              <h4 class="font-bold text-lg text-slate-900 dark:text-white">Étape 2 : Créer la Page d'Accueil</h4>
+                             <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">C'est la page que vous ouvrirez tous les jours.</p>
                              <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 space-y-2">
                                 <li>Créez une nouvelle page vide.</li>
                                 <li>Donnez-lui un titre inspirant, par exemple : `<strong>[Votre Nom]'s Life OS</strong>` ou `<strong>Centre de Commandement</strong>`. Ajoutez l'icône `🚀`.</li>
                                 <li>Ajoutez une image de couverture qui vous motive (une photo de nature, une image abstraite, etc.).</li>
                             </ul>
                         </div>
-                        <!-- ... etc pour toutes les étapes ... -->
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                             <h4 class="font-bold text-lg text-slate-900 dark:text-white">Étape 3 : Le Message d'Accueil Personnalisé</h4>
+                             <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">Juste en dessous du titre, créez un encadré pour un accueil dynamique et motivant.</p>
+                             <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 space-y-2">
+                                <li>Tapez `/encadré` et choisissez l'icône `👋`.</li>
+                                <li>À l'intérieur, écrivez un message qui vous parle. Exemple :<br>
+                                    "Bonjour ! Nous sommes le <code class="text-xs bg-slate-200 dark:bg-slate-700 px-1 py-0.5 rounded">@Aujourd'hui</code>. <br>
+                                    <em>"Nous sommes ce que nous faisons à plusieurs reprises. L'excellence n'est donc pas un acte, mais une habitude."</em> - Aristote<br>
+                                    Quelle est la priorité absolue aujourd'hui pour avancer vers tes objectifs ?
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                             <h4 class="font-bold text-lg text-slate-900 dark:text-white">Étape 4 : La Structure Visuelle avec les Encadrés</h4>
+                             <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">Organisez votre espace en 3 colonnes. Dans chaque colonne, nous utiliserons des encadrés pour délimiter visuellement chaque section.</p>
+                             <div class="mt-4 grid md:grid-cols-3 gap-6">
+                                 <div class="bg-slate-200 dark:bg-slate-700/50 p-4 rounded-lg">
+                                     <h5 class="font-semibold text-center text-slate-800 dark:text-white">Colonne 1 : ACTION</h5>
+                                     <p class="text-xs text-center text-slate-600 dark:text-slate-300">Ce que je dois faire</p>
+                                 </div>
+                                 <div class="bg-slate-200 dark:bg-slate-700/50 p-4 rounded-lg">
+                                     <h5 class="font-semibold text-center text-slate-800 dark:text-white">Colonne 2 : VISION</h5>
+                                     <p class="text-xs text-center text-slate-600 dark:text-slate-300">Où je vais</p>
+                                 </div>
+                                <div class="bg-slate-200 dark:bg-slate-700/50 p-4 rounded-lg">
+                                     <h5 class="font-semibold text-center text-slate-800 dark:text-white">Colonne 3 : NAVIGATION</h5>
+                                     <p class="text-xs text-center text-slate-600 dark:text-slate-300">Comment j'y vais</p>
+                                 </div>
+                             </div>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                             <h4 class="font-bold text-lg text-slate-900 dark:text-white">Étape 5 : Remplir les Colonnes</h4>
+                             <div class="mt-4">
+                                 <strong class="text-indigo-500 dark:text-indigo-400">Dans la Colonne de Gauche (ACTION) :</strong>
+                                 <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 space-y-2">
+                                     <li>Créez un <strong>encadré</strong> `📥 Boîte de Réception & Actions` (icône `📥`). À l'intérieur, placez votre <strong>vue liée</strong> de `⚡ Tâches Maîtresse` avec les 3 onglets (`🔥 Aujourd'hui`, `📥 Boîte de Réception`, `🗓️ Semaine`).</li>
+                                     <li>Juste en dessous de cet encadré, ajoutez votre <strong>Bouton</strong> `➕ Nouvelle Tâche Rapide`.</li>
+                                 </ul>
+                             </div>
+                             <div class="mt-4">
+                                 <strong class="text-indigo-500 dark:text-indigo-400">Dans la Colonne Centrale (VISION) :</strong>
+                                 <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 space-y-2">
+                                     <li>Créez un <strong>encadré</strong> `🎯 Projets Actifs` (icône `🎯`). À l'intérieur, placez votre <strong>vue liée</strong> de `🎯 Projets` en affichage <strong>Galerie</strong>, filtrée pour ne montrer que les projets en cours.</li>
+                                 </ul>
+                             </div>
+                             <div class="mt-4">
+                                 <strong class="text-indigo-500 dark:text-indigo-400">Dans la Colonne de Droite (NAVIGATION) :</strong>
+                                 <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 space-y-2">
+                                     <li>Créez un <strong>encadré</strong> `🏆 Objectifs de la Semaine` (icône `🏆`). À l'intérieur, utilisez une simple liste à puces pour noter vos 3 priorités de la semaine.</li>
+                                     <li>Créez un second <strong>encadré</strong> `🧭 Navigation Rapide` (icône `🧭`). À l'intérieur, tapez `/lien` pour ajouter les liens vers vos pages de <strong>Domaines</strong> les plus importantes (`Finances`, `Carrière`, etc.).</li>
+                                 </ul>
+                             </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -557,7 +767,7 @@
                 <div class="info-card hidden-initial space-y-4">
                     <p class="text-slate-600 dark:text-slate-300">Voici le détail des actions à mener pour vos projets prioritaires. Créez les projets et les tâches correspondantes dans votre système.</p>
                     
-                    <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                    <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg" open>
                         <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">💰</span>Sujet : `Reprendre le contrôle total de mes finances`</summary>
                         <div class="p-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
                             <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg border-l-4 border-purple-500">
@@ -583,17 +793,52 @@
                         </div>
                     </details>
                     
+                    <!-- Contenu RESTAURÉ -->
                     <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
                         <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🔐</span>Sujet : `Optimiser ma sécurité numérique`</summary>
                          <div class="p-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
-                            <!-- ... (callouts migrés) ... -->
+                            <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg border-l-4 border-purple-500">
+                                <p class="font-semibold text-sm text-purple-800 dark:text-purple-200 flex items-center gap-2"><i class="fa-solid fa-link w-4 h-4"></i> Connexion Stratégique</p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1 text-purple-700 dark:text-purple-200">
+                                    <li><strong>Objectif servi :</strong> `Simplifier et sécuriser ma vie numérique`</li>
+                                    <li><strong>Domaine impacté :</strong> `Système & Organisation` (à créer si besoin)</li>
+                                </ul>
+                            </div>
+                           <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border-l-4 border-blue-500">
+                                <p class="font-semibold text-blue-800 dark:text-blue-200"><strong>Projet à créer :</strong> `Centraliser la gestion des mots de passe`</p>
+                           </div>
+                           <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg border-l-4 border-green-500">
+                                <p class="font-semibold text-green-800 dark:text-green-200"><strong>Tâches à créer :</strong></p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-2 text-green-700 dark:text-green-200">
+                                    <li>Lister tous les comptes et emplacements de mots de passe actuels.</li>
+                                    <li>Comparer Google Password Manager vs Trousseau iCloud.</li>
+                                    <li>Décider de la plateforme à conserver (Propriété `Échéance` : dans 1 semaine).</li>
+                                    <li>Migrer tous les mots de passe.</li>
+                                </ul>
+                           </div>
                         </div>
                     </details>
                     
                     <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
                         <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📂</span>Sujet : `Organiser ma vie numérique`</summary>
                          <div class="p-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
-                            <!-- ... (callouts migrés) ... -->
+                            <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg border-l-4 border-purple-500">
+                                <p class="font-semibold text-sm text-purple-800 dark:text-purple-200 flex items-center gap-2"><i class="fa-solid fa-link w-4 h-4"></i> Connexion Stratégique</p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1 text-purple-700 dark:text-purple-200">
+                                    <li><strong>Objectif servi :</strong> `Simplifier et sécuriser ma vie numérique`</li>
+                                    <li><strong>Domaine impacté :</strong> `Système & Organisation`</li>
+                                </ul>
+                            </div>
+                           <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border-l-4 border-blue-500">
+                                <p class="font-semibold text-blue-800 dark:text-blue-200"><strong>Projet à créer :</strong> `Réorganiser l'arborescence Google Drive`</p>
+                           </div>
+                            <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg border-l-4 border-green-500">
+                                <p class="font-semibold text-green-800 dark:text-green-200"><strong>Tâches à créer :</strong></p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-2 text-green-700 dark:text-green-200">
+                                    <li>Créer la structure de dossiers racine (1_Projets, 2_Domaines, etc.).</li>
+                                    <li>Déplacer tous les documents existants dans la nouvelle arborescence.</li>
+                                </ul>
+                           </div>
                         </div>
                     </details>
                 </div>
@@ -610,21 +855,106 @@
                     <h3 class="text-xl font-semibold mb-2 flex items-center gap-3 text-slate-900 dark:text-white"><i class="fa-solid fa-piggy-bank w-6 h-6 text-green-500"></i>Module Finances</h3>
                     <p class="text-slate-600 dark:text-slate-300 mb-4">Construisez ces bases de données pour un suivi financier complet.</p>
                     <div class="space-y-4">
+                        
+                        <!-- Fiche 7.1 RESTAURÉE -->
                         <div class="info-card bg-slate-50 dark:bg-slate-800/50">
                             <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.1 : `🏦 Comptes`</h4>
-                            <!-- ... (contenu migré) ... -->
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">La liste de vos comptes bancaires réels pour avoir une vue d'ensemble de vos actifs.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🏦</span><strong>Nom du Compte</strong><span class="text-xs text-slate-500 ml-2">(Account Name)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">💳</span><strong>Type</strong><span class="text-xs text-slate-500 ml-2">(Type)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">💰</span><strong>Solde Initial</strong><span class="text-xs text-slate-500 ml-2">(Initial Balance)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Nombre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📈</span><strong>Solde Actuel</strong><span class="text-xs text-slate-500 ml-2">(Current Balance)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Rollup</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">💸</span><strong>Transactions</strong><span class="text-xs text-slate-500 ml-2">(Transactions)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Type" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>Compte Courant</li><li>Épargne</li><li>Crédit</li><li>Investissement</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Compte"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `💰`. Pas de contenu de page nécessaire.</p>
+                                    </div>
+                                </details>
+                            </div>
                         </div>
+
+                        <!-- Fiche 7.2 RESTAURÉE -->
                         <div class="info-card bg-slate-50 dark:bg-slate-800/50">
                             <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.2 : `💸 Transactions`</h4>
-                            <!-- ... (contenu migré) ... -->
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Chaque dépense et chaque revenu. C'est la base la plus importante pour l'analyse financière.</p>
+                             <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">💬</span><strong>Description</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">💶</span><strong>Montant</strong><span class="text-xs text-slate-500 ml-2">(Amount)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Nombre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Date</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🏦</span><strong>Compte</strong><span class="text-xs text-slate-500 ml-2">(Account)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📊</span><strong>Catégorie</strong><span class="text-xs text-slate-500 ml-2">(Category)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Transaction"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `🛒`. Pas de contenu de page nécessaire.</p>
+                                    </div>
+                                </details>
+                            </div>
                         </div>
+
+                        <!-- Fiche 7.3 RESTAURÉE -->
                         <div class="info-card bg-slate-50 dark:bg-slate-800/50">
                             <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.3 : `📊 Budgets`</h4>
-                            <!-- ... (contenu migré) ... -->
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Les catégories de dépenses que vous souhaitez suivre pour maîtriser vos finances.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📊</span><strong>Catégorie</strong><span class="text-xs text-slate-500 ml-2">(Category)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🎯</span><strong>Budget Mensuel</strong><span class="text-xs text-slate-500 ml-2">(Monthly Budget)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Nombre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">쓴</span><strong>Dépenses du Mois</strong><span class="text-xs text-slate-500 ml-2">(Spent this Month)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Rollup</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📈</span><strong>Restant</strong><span class="text-xs text-slate-500 ml-2">(Remaining)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Formule</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Budget"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `💰`. Pas de contenu de page nécessaire.</p>
+                                    </div>
+                                </details>
+                            </div>
                         </div>
+
+                        <!-- Fiche 7.4 RESTAURÉE -->
                         <div class="info-card bg-slate-50 dark:bg-slate-800/50">
                             <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.4 : `🔁 Abonnements`</h4>
-                            <!-- ... (contenu migré) ... -->
+                             <p class="text-slate-600 dark:text-slate-300 mb-4">Le suivi de tous vos paiements récurrents pour éviter les mauvaises surprises.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔁</span><strong>Service</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">💶</span><strong>Coût Mensuel</strong><span class="text-xs text-slate-500 ml-2">(Monthly Cost)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Nombre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Prochaine Facturation</strong><span class="text-xs text-slate-500 ml-2">(Next Billing)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🏷️</span><strong>Statut</strong><span class="text-xs text-slate-500 ml-2">(Status)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Statut" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>✅ Actif (Vert)</li>
+                                            <li>❌ Annulé (Rouge)</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvel Abonnement"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `🔁`. Pas de contenu de page nécessaire.</p>
+                                    </div>
+                                </details>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -632,13 +962,328 @@
                 <!-- Module Carrière -->
                 <div class="info-card hidden-initial">
                     <h3 class="text-xl font-semibold mb-2 flex items-center gap-3 text-slate-900 dark:text-white"><i class="fa-solid fa-graduation-cap w-6 h-6 text-blue-500"></i>Module Carrière & Formations</h3>
-                    <!-- ... (contenu migré pour Fiches 7.5, 7.6, 7.7) ... -->
+                    <p class="text-slate-600 dark:text-slate-300 mb-4">Pour un suivi précis de votre évolution, ce module utilise 2 bases de données liées.</p>
+                    <div class="space-y-4">
+                        
+                        <!-- Fiche 7.5 RESTAURÉE -->
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.5 : `🎓 Formations`</h4>
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Le hub central pour toutes vos formations, passées, présentes et futures.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🎓</span><strong>Nom de la Formation</strong><span class="text-xs text-slate-500 ml-2">(Course Name)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🏢</span><strong>Organisme</strong><span class="text-xs text-slate-500 ml-2">(Provider)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Texte</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🚀</span><strong>Statut</strong><span class="text-xs text-slate-500 ml-2">(Status)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📚</span><strong>Modules</strong><span class="text-xs text-slate-500 ml-2">(Modules)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📊</span><strong>Progression</strong><span class="text-xs text-slate-500 ml-2">(Progress)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Rollup</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🏆</span><strong>Certificat</strong><span class="text-xs text-slate-500 ml-2">(Certificate)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Fichier</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Statut" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>⚪️ À faire (Gris)</li><li>🔵 En cours (Bleu)</li><li>🟢 Terminée (Vert)</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Formation"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p class="mb-4"><strong>Icône :</strong> `🎓`.</p>
+                                        <p><strong>Contenu de la page :</strong> Utilisez cette structure pour détailler une formation :</p>
+                                        <ul class="list-disc list-inside mt-2 space-y-1">
+                                            <li>Titre H3 : `🎯 Objectifs de la formation`</li>
+                                            <li>Titre H3 : `📚 Modules` (insérez une vue liée de la base `Modules de Formation`, filtrée sur cette formation)</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- Fiche 7.6 RESTAURÉE -->
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.6 : `📚 Modules de Formation`</h4>
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Chaque module d'une formation est une entrée ici. C'est la clé pour les barres de progression.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📚</span><strong>Nom du Module</strong><span class="text-xs text-slate-500 ml-2">(Module Name)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🎓</span><strong>Formation</strong><span class="text-xs text-slate-500 ml-2">(Course)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">✔️</span><strong>Terminé?</strong><span class="text-xs text-slate-500 ml-2">(Done?)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Case à cocher</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Module"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `📖`. Pas de contenu de page nécessaire.</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- Fiche 7.7 RESTAURÉE -->
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.7 : `🧾 Notes de Frais`</h4>
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Pour suivre vos avances de frais professionnels.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🧾</span><strong>Description</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">💶</span><strong>Montant</strong><span class="text-xs text-slate-500 ml-2">(Amount)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Nombre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Date</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🏷️</span><strong>Statut</strong><span class="text-xs text-slate-500 ml-2">(Status)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Statut" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>🟠 Soumise (Orange)</li><li>🔵 Validée (Bleu)</li><li>🟢 Remboursée (Vert)</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Note de Frais"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `🧾`. Pas de contenu de page nécessaire.</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Module Maison -->
                 <div class="info-card hidden-initial">
                     <h3 class="text-xl font-semibold mb-2 flex items-center gap-3 text-slate-900 dark:text-white"><i class="fa-solid fa-home w-6 h-6 text-amber-500"></i>Module Maison & Vie Perso</h3>
-                    <!-- ... (contenu migré pour Fiches 7.8 à 7.15) ... -->
+                    <p class="text-slate-600 dark:text-slate-300 mb-4">Toutes les bases pour gérer votre environnement personnel et vos biens.</p>
+                    <div class="space-y-4">
+                        
+                        <!-- Fiche 7.8 RESTAURÉE -->
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.8 : `📄 Contrats & Assurances`</h4>
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Pour centraliser tous vos contrats importants.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📄</span><strong>Nom</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔖</span><strong>Type</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Renouvellement</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📎</span><strong>Document</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Fichier</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🏷️</span><strong>Statut</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Type" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>Assurance</li><li>Bail</li><li>Téléphonie</li><li>Énergie</li>
+                                        </ul>
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2 mt-4">Propriété "Statut" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>✅ Actif (Vert)</li><li>⚪️ Expiré (Gris)</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Contrat"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `📄`.</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- Fiche 7.9 RESTAURÉE -->
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.9 : `🛒 Achats & Garanties`</h4>
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Pour suivre vos achats, factures et dates de garantie.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🛒</span><strong>Objet</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Date d'achat</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🛡️</span><strong>Fin de Garantie</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📎</span><strong>Facture</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Fichier</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔖</span><strong>Catégorie</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Catégorie" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>Électronique</li><li>Mobilier</li><li>Vêtements</li><li>Bricolage</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvel Achat"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `🛒`.</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- Fiche 7.10 RESTAURÉE -->
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.10 : `🚗 Véhicules`</h4>
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Pour suivre vos véhicules passés et actuels, ainsi que leurs assurances.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🚗</span><strong>Modèle</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔖</span><strong>Type</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🏷️</span><strong>Statut</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔗</span><strong>Assurance</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Type" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>Voiture</li><li>Moto</li><li>Vélo</li>
+                                        </ul>
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2 mt-4">Propriété "Statut" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>✅ En possession</li><li>⚪️ Vendu</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Véhicule"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `🚗`.</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- Fiche 7.11 RESTAURÉE -->
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.11 : `🌿 Plantes`</h4>
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Pour le suivi de vos plantes.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🌿</span><strong>Nom</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">💧</span><strong>Fréquence Arrosage</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Texte</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Dernier Arrosage</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Plante"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `🌿`.</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- Fiche 7.12 RESTAURÉE -->
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.12 : `🐾 Animaux`</h4>
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Pour suivre la santé de Pauline et Gus.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🐾</span><strong>Nom</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔖</span><strong>Type</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Dernier Vétérinaire</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📎</span><strong>Carnet de Santé</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Fichier</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Type" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>Chien</li><li>Chat</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvel Animal"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `🐾`.</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- Fiche 7.13 RESTAURÉE -->
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.13 : `❤️ Relations`</h4>
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Un CRM personnel pour entretenir les liens avec les personnes qui comptent.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">❤️</span><strong>Nom</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔖</span><strong>Catégorie</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Dernier Contact</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🎂</span><strong>Anniversaire</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Catégorie" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>Famille</li><li>Ami</li><li>Professionnel</li><li>Connaissance</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Contact"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `❤️`.</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- Fiche 7.14 RESTAURÉE -->
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.14 : `🔄 Suivi des Habitudes`</h4>
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Pour construire de bonnes habitudes, jour après jour.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📅</span><strong>Date</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">💪</span><strong>Sport</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Case à cocher</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📖</span><strong>Lecture</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Case à cocher</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🧘</span><strong>Méditation</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Case à cocher</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Aujourd'hui"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `🔄`. Configurez-le pour qu'il se répète tous les jours.</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+
+                        <!-- Fiche 7.15 RESTAURÉE -->
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.15 : `✍️ Création de Contenu`</h4>
+                            <p class="text-slate-600 dark:text-slate-300 mb-4">Pour gérer vos idées et projets créatifs, du brouillon à la publication.</p>
+                            <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">✍️</span><strong>Titre</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔖</span><strong>Type</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🏷️</span><strong>Statut</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                                <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Date de Publication</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                            </ul>
+                            <div class="mt-4 space-y-4">
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Type" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>Article de blog</li><li>Vidéo YouTube</li><li>Podcast</li>
+                                        </ul>
+                                        <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2 mt-4">Propriété "Statut" :</h5>
+                                        <ul class="list-disc list-inside">
+                                            <li>💡 Idée</li><li>📝 Brouillon</li><li>✅ Publié</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Contenu"</summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                        <p><strong>Icône :</strong> `✍️`.</p>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
             
@@ -797,10 +1442,12 @@
                  const icon = button.querySelector('i');
                  const textSpan = button.querySelector('span');
                  
+                 // Utilise l'API Clipboard moderne avec un fallback
                  if (navigator.clipboard && window.isSecureContext) {
                      navigator.clipboard.writeText(textToCopy).then(() => {
                          showCopySuccess(button, icon, textSpan);
                      }).catch(err => {
+                         console.error('Erreur (Clipboard API): ', err);
                          fallbackCopy(textToCopy, button, icon, textSpan);
                      });
                  } else {
@@ -811,7 +1458,7 @@
             function fallbackCopy(text, button, icon, textSpan) {
                 const textArea = document.createElement('textarea');
                 textArea.value = text;
-                textArea.style.position = 'fixed';
+                textArea.style.position = 'fixed'; // Évite de faire défiler la page
                 document.body.appendChild(textArea);
                 textArea.focus();
                 textArea.select();
@@ -819,6 +1466,7 @@
                     document.execCommand('copy');
                     showCopySuccess(button, icon, textSpan);
                 } catch (err) {
+                    console.error('Impossible de copier (fallback)', err);
                     textSpan.innerText = 'Erreur';
                     setTimeout(() => { textSpan.innerText = 'Copier'; }, 2000);
                 }
@@ -856,3 +1504,4 @@
     </script>
 </body>
 </html>
+
