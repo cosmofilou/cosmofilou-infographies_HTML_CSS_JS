@@ -196,11 +196,19 @@
     <div class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 mt-6">
         
         <!-- Header (Contenu Migré, Style de Référence) -->
-        <header class="text-center mb-12 info-card hidden-initial">
+        <header class="text-center mb-12 info-card hidden-initial p-8">
+            <!-- 1. Icône pertinente ajoutée -->
+            <i class="fa-solid fa-brain text-5xl text-indigo-500 dark:text-indigo-400 mb-6"></i>
+            
+            <!-- 3. Titre plus parlant -->
             <h1 class="text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-                Protocole V5
+                Protocole V5 : Architecte de votre Life OS
             </h1>
-            <p class="mt-4 text-lg sm:text-xl text-slate-600 dark:text-slate-300">Le guide pour transformer votre OS en co-pilote stratégique.</p>
+            
+            <!-- 2. Séparation ajoutée -->
+            <hr class="w-1/4 mx-auto my-6 border-slate-300 dark:border-slate-700">
+            
+            <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300">Le guide pour transformer votre OS en co-pilote stratégique.</p>
         </header>
 
         <main>
@@ -1415,10 +1423,17 @@
             </section>
         </main>
         
-        <!-- Footer (Règle 4 / /perso) -->
+        <!-- Footer (Règle 4 / /perso) - MODIFIÉ -->
         <footer class="text-center mt-16 mb-8">
-            <p class="text-sm text-slate-500 dark:text-slate-400">
-                Création originale de 'Cosmofilou' - Migrée et standardisée par l'Architecte de Design System.
+            <!-- 1. Barre de séparation ajoutée -->
+            <hr class="w-1/4 mx-auto mb-8 border-slate-300 dark:border-slate-700">
+            
+            <!-- 2. Texte du footer modifié -->
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">
+                &copy; <span id="copyright-year">2024</span> Cosmofilou. Tous droits réservés.
+            </p>
+            <p class="text-xs text-slate-400 dark:text-slate-500">
+                Publié sous licence MIT.
             </p>
         </footer>
         
@@ -1597,6 +1612,12 @@
             document.querySelectorAll('main section').forEach(section => {
                  sectionObserver.observe(section);
             });
+            
+            // --- 6. Ajout : Année du Copyright (pour le footer) ---
+            const yearSpan = document.getElementById('copyright-year');
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
 
         });
     </script>
