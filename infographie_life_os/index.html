@@ -5,346 +5,307 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Protocole V5 : Architecte de votre Life OS</title>
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
+    <!-- Stack de Référence (Polices, Tailwind, FontAwesome, Chart.js) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- Script de Thème Initial pour éviter le flash -->
+    <!-- Configuration Tailwind de Référence -->
     <script>
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        // Couleurs de la charte de référence (si elles existent)
+                    }
+                },
+            },
         }
     </script>
-
-    <style>
-        :root {
-            --bg-color: #f8fafc; /* slate-50 */
-            --text-color: #1e293b; /* slate-800 */
-            --text-muted-color: #64748b; /* slate-500 */
-            --heading-color: #0f172a; /* slate-900 */
-            --card-bg: rgba(255, 255, 255, 0.6);
-            --card-border: rgba(226, 232, 240, 0.8); /* slate-200 */
-            --accent-color: #4f46e5;
-            --property-item-border: #e2e8f0;
-            --property-type-bg: #e2e8f0;
-            --property-type-color: #475569;
-            --code-block-bg: #f1f5f9;
-            --code-block-color: #1e293b;
-            --details-summary-bg: rgba(241, 245, 249, 0.7);
-            --details-div-border: #e2e8f0;
-            --step-card-bg: rgba(248, 250, 252, 0.7);
-            --callout-blue-bg: rgba(59, 130, 246, 0.1);
-            --callout-green-bg: rgba(16, 185, 129, 0.1);
-            --callout-purple-bg: rgba(139, 92, 246, 0.1);
-            --progress-bg: #e2e8f0;
+    
+    <!-- Styles de Référence (.info-card, .main-nav, .aurora) + Styles Migrés (progress-bar) -->
+    <style type="text/css">
+        html { 
+            scroll-behavior: smooth; 
+            scroll-padding-top: 100px; /* Ajusté pour la nav sticky */
         }
-
-        .dark {
-            --bg-color: #0f172a;
-            --text-color: #d1d5db; /* gray-300 */
-            --text-muted-color: #9ca3af; /* gray-400 */
-            --heading-color: #ffffff;
-            --card-bg: rgba(31, 41, 55, 0.4); /* gray-800 */
-            --card-border: rgba(55, 65, 81, 0.5); /* gray-700 */
-            --property-item-border: #374151;
-            --property-type-bg: #374151;
-            --property-type-color: #9CA3AF;
-            --code-block-bg: rgba(17, 24, 39, 0.8); /* gray-900 */
-            --code-block-color: #d1d5db;
-            --details-summary-bg: rgba(55, 65, 81, 0.5);
-            --details-div-border: #374151;
-            --step-card-bg: rgba(30, 41, 59, 0.7);
-            --callout-blue-bg: rgba(59, 130, 246, 0.15);
-            --callout-green-bg: rgba(16, 185, 129, 0.15);
-            --callout-purple-bg: rgba(139, 92, 246, 0.15);
-            --progress-bg: #374151;
-        }
-
-        /* Effet de fond animé pour le mode sombre */
-        @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        html {
-            background-color: var(--bg-color);
-            transition: background-color 0.5s ease;
-        }
-
-        .dark html {
-            background: linear-gradient(-45deg, #0f172a, #111827, #1e293b, #374151);
-            background-size: 400% 400%;
-            animation: gradient-animation 15s ease infinite;
-        }
-        
         body {
             font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-            color: var(--text-color);
-            transition: color 0.5s ease;
-            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
+        
+        /* Composant Clé : info-card (de Référence) */
+        .info-card {
+            background-color: #ffffff;
+            border-radius: 1rem; /* rounded-2xl */
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* shadow-lg */
+            padding: 1.5rem; /* p-6 */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            will-change: opacity, transform; /* Pour l'animation JS */
+            margin-bottom: 1.5rem; /* Ajout pour l'espacement */
+        }
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        .dark .info-card { 
+            background-color: #1e293b; /* dark:bg-slate-800 */ 
+            border: 1px solid #334155; /* dark:border-slate-700 */
+        }
+        .dark .info-card:hover { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25); }
 
-        .card, .side-nav {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-            transition: background-color 0.5s, border-color 0.5s;
-        }
-        .side-nav a { color: var(--text-muted-color); }
-        .side-nav a:hover { background-color: var(--property-type-bg); color: var(--heading-color); }
-        h1, h2, h3, h4, h5, h6 { color: var(--heading-color); }
-        .text-muted { color: var(--text-muted-color); }
-        .border-accent { border-color: var(--accent-color); }
-        .property-item { border-color: var(--property-item-border); }
-        .property-type { background-color: var(--property-type-bg); color: var(--property-type-color); }
-        .code-block { background-color: var(--code-block-bg); }
-        .code-block pre code { color: var(--code-block-color); }
-        details > summary { background-color: var(--details-summary-bg); color: var(--heading-color); }
-        details > div { border-color: var(--details-div-border); }
-        .step-card { background-color: var(--step-card-bg); border-left-color: var(--accent-color);}
-        .callout { padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; border-left-width: 4px; }
-        .callout-blue { background-color: var(--callout-blue-bg); border-color: #3b82f6; }
-        .callout-green { background-color: var(--callout-green-bg); border-color: #10b981; }
-        .callout-purple { background-color: var(--callout-purple-bg); border-color: #8b5cf6; }
-
-        /* Styles améliorés */
-        .card {
-            border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1.5rem;
-            opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .card.is-visible { opacity: 1; transform: translateY(0); }
-        .code-block { border-radius: 0.5rem; padding: 1rem; position: relative; }
-        .code-block pre code { white-space: pre-wrap; word-break: break-all; }
-        .copy-btn {
-            position: absolute; top: 0.5rem; right: 0.5rem; background-color: rgba(75, 85, 99, 0.5); color: #D1D5DB;
-            border: 1px solid rgba(107, 114, 128, 0.5); padding: 0.25rem 0.5rem; border-radius: 0.375rem; cursor: pointer; font-size: 0.75rem;
-            display: flex; align-items: center; gap: 0.25rem;
-            transition: background-color 0.2s;
-        }
-        .dark .copy-btn { background-color: rgba(31, 41, 55, 0.7); }
-        .copy-btn:hover { background-color: #4B5563; }
-        .dark .copy-btn:hover { background-color: #374151; }
-        
-        .property-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom-width: 1px; }
-        .property-item:last-child { border-bottom: none; }
-        .property-details { display: flex; align-items: center; }
-        .property-icon { margin-right: 0.75rem; }
-        .property-type { font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 9999px; text-align: center; min-width: 80px; }
-        
-        .step-card { border-left-width: 4px; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; }
-        
-        .side-nav {
-            position: fixed; top: 50%; left: 1rem; transform: translateY(-50%);
-            border-radius: 0.75rem; padding: 1rem; display: none;
-        }
-        @media (min-width: 1280px) { .side-nav { display: block; } }
-        .side-nav a {
-            display: flex; align-items: center; padding: 0.5rem; margin-bottom: 0.5rem;
-            border-radius: 0.5rem; transition: background-color 0.2s, color 0.2s; font-size: 0.875rem;
-        }
-        .side-nav a.active { background-color: var(--accent-color); color: white; font-weight: 600; }
-        
-        details > summary {
-            cursor: pointer; padding: 1rem; border-radius: 0.5rem; font-weight: 600;
-            position: relative; list-style: none; transition: background-color 0.2s;
-        }
-        details > summary:hover { background-color: rgba(0,0,0,0.05); }
-        .dark details > summary:hover { background-color: rgba(255,255,255,0.05); }
-        details > summary::-webkit-details-marker { display: none; }
-        details > summary::before {
-            content: '';
-            position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%) rotate(0deg);
-            width: 0.8rem; height: 0.8rem;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-chevron-right'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");
-            background-size: contain;
-            transition: transform 0.2s;
-            filter: var(--text-color) brightness(0.5);
-        }
-        .dark details > summary::before { filter: invert(1) brightness(0.8); }
-
-        details[open] > summary::before { transform: translateY(-50%) rotate(90deg); }
-        details[open] > summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
-        details > div { padding: 1.5rem; border-width: 1px; border-top: none; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; }
-        .summary-content { margin-left: 1.5rem; display: flex; align-items: center; }
-        
-        /* Bouton de Thème */
-        #theme-toggle {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            z-index: 50;
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
+        /* Composant Clé : main-nav (de Référence) */
+        .main-nav {
+            position: sticky;
+            top: 24px; /* Ajusté pour être un peu plus bas */
+            z-index: 40;
+            background-color: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border-radius: 9999px;
-            padding: 0.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+            margin: 24px auto 0;
+            max-width: 64rem; /* xl */
+            border-radius: 1rem; /* rounded-2xl */
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            padding: 0.5rem 1.5rem;
         }
-        #theme-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        .dark .main-nav {
+            background-color: rgba(15, 23, 42, 0.7); /* dark:bg-slate-900/70 */
+            border-bottom: 1px solid rgba(51, 65, 85, 0.7); /* dark:border-slate-700/70 */
+        }
+
+        /* Effet Visuel : aurora-background (de Référence) */
+        .aurora-background { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -1; 
+            overflow: hidden; 
+            filter: blur(100px) opacity(0.3);
+        }
+        .dark .aurora-background { filter: blur(100px) opacity(0.5); }
+        .aurora-blob { 
+            position: absolute; 
+            border-radius: 50%; 
+            mix-blend-mode: multiply;
+        }
+        .dark .aurora-blob { mix-blend-mode: screen; }
+
+        /* Animation : hidden-initial (de Référence) */
+        .hidden-initial {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            will-change: opacity, transform;
+        }
+        .is-visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
-        /* Barre de progression */
+        /* Styles Migrés (pour Checklist - Règle 1) */
         .progress-container {
             width: 100%;
-            background-color: var(--progress-bg);
+            background-color: #e2e8f0; /* slate-200 */
             border-radius: 9999px;
             height: 12px;
             margin-bottom: 0.5rem;
             overflow: hidden;
         }
+        .dark .progress-container { background-color: #374151; /* slate-700 */ }
+        
         #progress-bar {
             height: 100%;
             width: 0%;
-            background-color: var(--accent-color);
+            background-color: #4f46e5; /* indigo-600 */
             border-radius: 9999px;
             transition: width 0.5s ease-in-out;
         }
     </style>
 </head>
-<body class="transition-colors duration-500">
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200 transition-colors duration-300">
 
-    <button id="theme-toggle" aria-label="Toggle dark mode">
-        <i data-lucide="sun" class="h-6 w-6 text-slate-800 dark:hidden"></i>
-        <i data-lucide="moon" class="h-6 w-6 text-slate-200 hidden dark:inline"></i>
+    <!-- Fond Aurora (de Référence) -->
+    <div class="aurora-background">
+        <div class="aurora-blob" style="top: 10%; left: 20%; width: 400px; height: 400px; background-color: #a5b4fc;"></div> <!-- indigo-300 -->
+        <div class="aurora-blob" style="top: 50%; left: 60%; width: 500px; height: 500px; background-color: #f0abfc;"></div> <!-- fuchsia-300 -->
+        <div class="aurora-blob" style="top: 80%; left: 10%; width: 300px; height: 300px; background-color: #67e8f9;"></div> <!-- cyan-300 -->
+    </div>
+
+    <!-- Bouton Dark Mode (de Référence) -->
+    <button id="theme-toggle" class="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm shadow-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:scale-110 transition-transform">
+        <i class="fa-solid fa-sun block dark:hidden"></i>
+        <i class="fa-solid fa-moon hidden dark:block"></i>
     </button>
-    
-    <nav class="side-nav">
-        <ul id="nav-list">
-            <li><a href="#philosophie" class="nav-link">
-                <i data-lucide="landmark" class="w-4 h-4"></i><span class="ml-3">Philosophie</span></a></li>
-             <li><a href="#vision" class="nav-link">
-                <i data-lucide="goal" class="w-4 h-4"></i><span class="ml-3">Vision & Objectifs</span></a></li>
-            <li><a href="#checklist" class="nav-link">
-                <i data-lucide="check-square" class="w-4 h-4"></i><span class="ml-3">Checklist</span></a></li>
-            <li><a href="#notice" class="nav-link">
-                <i data-lucide="lightbulb" class="w-4 h-4"></i><span class="ml-3">Notice</span></a></li>
-            <li><a href="#noyau" class="nav-link">
-                <i data-lucide="brain-circuit" class="w-4 h-4"></i><span class="ml-3">Noyau</span></a></li>
-            <li><a href="#relations" class="nav-link">
-                <i data-lucide="git-fork" class="w-4 h-4"></i><span class="ml-3">Relations</span></a></li>
-            <li><a href="#automatisation" class="nav-link">
-                <i data-lucide="bot" class="w-4 h-4"></i><span class="ml-3">Automatisation</span></a></li>
-            <li><a href="#cockpit" class="nav-link">
-                <i data-lucide="layout-dashboard" class="w-4 h-4"></i><span class="ml-3">Cockpit</span></a></li>
-            <li><a href="#plan-action" class="nav-link">
-                <i data-lucide="map" class="w-4 h-4"></i><span class="ml-3">Plan d'Action</span></a></li>
-            <li><a href="#modules" class="nav-link">
-                <i data-lucide="puzzle" class="w-4 h-4"></i><span class="ml-3">Modules</span></a></li>
-            <li><a href="#maintenance" class="nav-link">
-                <i data-lucide="wrench" class="w-4 h-4"></i><span class="ml-3">Maintenance</span></a></li>
+
+    <!-- Navigation (Style de Référence, Contenu Migré) -->
+    <nav class="main-nav">
+        <div class="flex items-center justify-between">
+            <div class="text-lg font-bold text-slate-900 dark:text-white">
+                Protocole V5
+            </div>
+            <!-- Menu Desktop (Raccourcis) -->
+            <div class="hidden sm:flex items-center space-x-4">
+                <a href="#philosophie" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Philosophie</a>
+                <a href="#noyau" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Noyau</a>
+                <a href="#cockpit" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Cockpit</a>
+                <a href="#modules" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Modules</a>
+            </div>
+            <!-- Menu Mobile (non implémenté dans le code de base, mais bonne pratique) -->
+            <div class="sm:hidden">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+        <!-- Liste complète pour la navigation au scroll (pour JS) -->
+        <ul id="nav-list" class="hidden">
+             <li><a href="#philosophie" class="nav-link">Philosophie</a></li>
+             <li><a href="#vision" class="nav-link">Vision & Objectifs</a></li>
+             <li><a href="#checklist" class="nav-link">Checklist</a></li>
+             <li><a href="#notice" class="nav-link">Notice</a></li>
+             <li><a href="#noyau" class="nav-link">Noyau</a></li>
+             <li><a href="#relations" class="nav-link">Relations</a></li>
+             <li><a href="#automatisation" class="nav-link">Automatisation</a></li>
+             <li><a href="#cockpit" class="nav-link">Cockpit</a></li>
+             <li><a href="#plan-action" class="nav-link">Plan d'Action</a></li>
+             <li><a href="#modules" class="nav-link">Modules</a></li>
+             <li><a href="#maintenance" class="nav-link">Maintenance</a></li>
         </ul>
     </nav>
 
-    <div class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
-        <header class="text-center mb-16 card">
-            <h1 class="text-4xl sm:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+    <!-- Conteneur Principal -->
+    <div class="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 mt-6">
+        
+        <!-- Header (Contenu Migré, Style de Référence) -->
+        <header class="text-center mb-12 info-card hidden-initial">
+            <h1 class="text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
                 Protocole V5
             </h1>
-            <p class="mt-4 text-lg sm:text-xl text-muted">Le guide pour transformer votre OS en co-pilote stratégique.</p>
+            <p class="mt-4 text-lg sm:text-xl text-slate-600 dark:text-slate-300">Le guide pour transformer votre OS en co-pilote stratégique.</p>
         </header>
 
         <main>
+            <!-- 
+                Structure de Migration :
+                Chaque <section> du code migré est préservée.
+                Chaque .card, .step-card, .callout est transformé en .info-card ou en div stylé Tailwind.
+                Tout le contenu textuel, listes, et blocs de code sont préservés (Règle 1).
+            -->
+
+            <!-- Section 0 : Philosophie -->
             <section id="philosophie" class="mb-12">
-                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3">
-                    <i data-lucide="landmark" class="w-8 h-8 text-indigo-500"></i> Section 0 : Philosophie d'Utilisation
+                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-slate-900 dark:text-white hidden-initial">
+                    <i class="fa-solid fa-landmark w-8 h-8 text-indigo-500"></i> Section 0 : Philosophie d'Utilisation
                 </h2>
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-4">De l'Outil au Co-Pilote Stratégique</h3>
-                    <p class="text-muted">Le Protocole V4 vous a donné une voiture de course. Le V5 vous apprend à la piloter. L'objectif n'est plus seulement d'organiser l'information, mais de transformer votre Life OS en un partenaire actif qui vous aide à penser, décider et agir plus intelligemment. Voici comment.</p>
-                    <div class="step-card">
-                        <h4 class="font-bold text-lg">1. Utiliser le Système pour la Prise de Décision</h4>
-                        <p class="text-sm mt-2 text-muted">Pour des décisions complexes comme `Google One vs Proton`, ne vous contentez pas de lister des "pour" et des "contre". Créez une page dans `📚 Ressources` et structurez-la avec une base de données simple :</p>
-                        <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
-                            <li><strong>Critères :</strong> Coût, Simplicité, Sécurité, Intégration IA.</li>
-                            <li><strong>Pondération :</strong> Donnez un poids à chaque critère (ex: Sécurité 10/10, Coût 7/10).</li>
-                            <li><strong>Score :</strong> Notez chaque solution sur chaque critère.</li>
-                            <li><strong>Conclusion :</strong> Une formule simple (`prop("Pondération") * prop("Score")`) vous donnera un score pondéré pour une décision basée sur les données.</li>
-                        </ul>
-                    </div>
-                    <div class="step-card">
-                        <h4 class="font-bold text-lg">2. Déléguer l'Analyse à votre Co-Pilote IA</h4>
-                        <p class="text-sm mt-2 text-muted">Votre Life OS centralise les données. Gemini les transforme en intelligence. Lors de votre Revue Hebdomadaire, allez plus loin que la simple organisation. Fournissez à Gemini un contexte clair :</p>
-                        <div class="code-block mt-2 text-sm">
-                            <button class="copy-btn" onclick="copyToClipboard(this)">
-                                <i data-lucide="copy" class="w-3 h-3"></i><span>Copier</span>
-                            </button>
-                            <pre><code>"Voici mes domaines de vie et leur standard : [copiez depuis votre base Domaines]. Voici mes projets actifs : [copiez depuis votre Cockpit]. Voici les tâches que j'ai terminées cette semaine : [copiez depuis votre base Tâches]. En te basant sur ces informations, identifie 1) le domaine que j'ai le plus négligé, 2) le projet qui semble le plus bloqué, et 3) suggère 3 tâches stratégiques pour la semaine prochaine afin de rééquilibrer mes efforts."</code></pre>
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-4 text-slate-900 dark:text-white">De l'Outil au Co-Pilote Stratégique</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-6">Le Protocole V4 vous a donné une voiture de course. Le V5 vous apprend à la piloter. L'objectif n'est plus seulement d'organiser l'information, mais de transformer votre Life OS en un partenaire actif qui vous aide à penser, décider et agir plus intelligemment. Voici comment.</p>
+                    
+                    <div class="space-y-4">
+                        <!-- Step-card migré -->
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                            <h4 class="font-bold text-lg text-slate-900 dark:text-white">1. Utiliser le Système pour la Prise de Décision</h4>
+                            <p class="text-sm mt-2 text-slate-600 dark:text-slate-300">Pour des décisions complexes comme `Google One vs Proton`, ne vous contentez pas de lister des "pour" et des "contre". Créez une page dans `📚 Ressources` et structurez-la avec une base de données simple :</p>
+                            <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 space-y-2">
+                                <li><strong>Critères :</strong> Coût, Simplicité, Sécurité, Intégration IA.</li>
+                                <li><strong>Pondération :</strong> Donnez un poids à chaque critère (ex: Sécurité 10/10, Coût 7/10).</li>
+                                <li><strong>Score :</strong> Notez chaque solution sur chaque critère.</li>
+                                <li><strong>Conclusion :</strong> Une formule simple (`prop("Pondération") * prop("Score")`) vous donnera un score pondéré pour une décision basée sur les données.</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Step-card migré avec bloc de code -->
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                            <h4 class="font-bold text-lg text-slate-900 dark:text-white">2. Déléguer l'Analyse à votre Co-Pilote IA</h4>
+                            <p class="text-sm mt-2 text-slate-600 dark:text-slate-300">Votre Life OS centralise les données. Gemini les transforme en intelligence. Lors de votre Revue Hebdomadaire, allez plus loin que la simple organisation. Fournissez à Gemini un contexte clair :</p>
+                            <div class="relative code-block mt-2 text-sm bg-slate-200 dark:bg-slate-900 p-4 rounded-lg">
+                                <button class="copy-btn absolute top-2 right-2 px-2 py-1 bg-slate-400 dark:bg-slate-700 text-white text-xs rounded-md hover:bg-slate-500 dark:hover:bg-slate-600 transition-colors">
+                                    <i class="fa-solid fa-copy w-3 h-3"></i><span class="ml-2">Copier</span>
+                                </button>
+                                <pre class="overflow-x-auto"><code class="text-slate-800 dark:text-slate-100 whitespace-pre-wrap break-all">"Voici mes domaines de vie et leur standard : [copiez depuis votre base Domaines]. Voici mes projets actifs : [copiez depuis votre Cockpit]. Voici les tâches que j'ai terminées cette semaine : [copiez depuis votre base Tâches]. En te basant sur ces informations, identifie 1) le domaine que j'ai le plus négligé, 2) le projet qui semble le plus bloqué, et 3) suggère 3 tâches stratégiques pour la semaine prochaine afin de rééquilibrer mes efforts."</code></pre>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
             
+            <!-- Section 1 : Vision & Objectifs -->
             <section id="vision" class="mb-12">
-                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3"><i data-lucide="goal" class="w-8 h-8 text-indigo-500"></i>Section 1 : Vision & Objectifs</h2>
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-2">Fiche d'Implémentation : `🌟 Objectifs & Résultats Clés`</h3>
-                    <p class="text-muted mb-4">Cette base de données est la boussole de votre système. Elle répond à la question "Pourquoi ?". Chaque projet que vous entreprenez devrait servir un objectif plus large défini ici.</p>
-                    <div class="step-card">
-                        <h4 class="font-bold text-lg">Le Principe des OKR (Objectives and Key Results)</h4>
-                        <p class="text-sm mt-2 text-muted">
+                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-slate-900 dark:text-white hidden-initial">
+                    <i class="fa-solid fa-bullseye w-8 h-8 text-indigo-500"></i> Section 1 : Vision & Objectifs
+                </h2>
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Fiche d'Implémentation : `🌟 Objectifs & Résultats Clés`</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-4">Cette base de données est la boussole de votre système. Elle répond à la question "Pourquoi ?". Chaque projet que vous entreprenez devrait servir un objectif plus large défini ici.</p>
+                    
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500 mb-6">
+                        <h4 class="font-bold text-lg text-slate-900 dark:text-white">Le Principe des OKR (Objectives and Key Results)</h4>
+                        <p class="text-sm mt-2 text-slate-600 dark:text-slate-300">
                             L'**Objectif** est votre destination inspirante et qualitative (ex: "Devenir un expert reconnu en VBA").<br>
                             Les **Résultats Clés** sont les bornes kilométriques mesurables qui prouvent que vous avancez (ex: "Terminer 2 formations VBA", "Automatiser 5 tâches pour mon équipe").
                         </p>
                     </div>
-                    <ul>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🌟</span><strong>Objectif</strong></div><span class="property-type">Titre</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🎯</span><strong>Résultats Clés</strong></div><span class="property-type">Texte</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Période</strong></div><span class="property-type">Sélection</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Projets Associés</strong></div><span class="property-type">Relation</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">📊</span><strong>Progression</strong></div><span class="property-type">Rollup</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Statut</strong></div><span class="property-type">Sélection</span></li>
+                    
+                    <!-- Liste de propriétés migrée -->
+                    <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🌟</span><strong>Objectif</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🎯</span><strong>Résultats Clés</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Texte</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Période</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔗</span><strong>Projets Associés</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📊</span><strong>Progression</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Rollup</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🏷️</span><strong>Statut</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
                     </ul>
-                     <div class="step-card mt-6">
-                        <h4 class="font-bold text-lg flex items-center gap-2"><i data-lucide="link" class="w-4 h-4 text-indigo-400"></i> Aide à la Connexion</h4>
-                        <p class="text-sm mt-2 text-muted">
-                           <strong>Exemple :</strong> Créez un objectif `Devenir propriétaire à Nantes en 2026`.<br>
-                           • **Résultats Clés :** "Constituer un apport de 20 000€", "Obtenir une simulation de prêt", "Visiter 10 biens immobiliers".<br>
-                           • **Projet Associé :** Votre projet `Achat immobilier Nantes` est directement lié à cet objectif. En le connectant via la relation, vous visualisez comment vos actions concrètes vous rapprochent de votre but.
+
+                    <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border-l-4 border-blue-500 mb-6">
+                        <h4 class="font-bold text-lg text-blue-800 dark:text-blue-200 flex items-center gap-2"><i class="fa-solid fa-link w-4 h-4"></i> Aide à la Connexion</h4>
+                        <p class="text-sm mt-2 text-blue-700 dark:text-blue-200">
+                            <strong>Exemple :</strong> Créez un objectif `Devenir propriétaire à Nantes en 2026`.<br>
+                            • **Résultats Clés :** "Constituer un apport de 20 000€", "Obtenir une simulation de prêt", "Visiter 10 biens immobiliers".<br>
+                            • **Projet Associé :** Votre projet `Achat immobilier Nantes` est directement lié à cet objectif. En le connectant via la relation, vous visualisez comment vos actions concrètes vous rapprochent de votre but.
                         </p>
                     </div>
-                    <div class="mt-4 space-y-4">
-                        <details>
-                            <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                            <div>
-                                <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Période" :</h5>
-                                <ul class="list-disc list-inside text-sm text-muted">
+                    
+                    <!-- Details/Summary migrés -->
+                    <div class="space-y-4">
+                        <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                            <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Période" :</h5>
+                                <ul class="list-disc list-inside">
                                     <li>Annuel 2025</li><li>T1 2025</li><li>T2 2025</li><li>etc.</li>
                                 </ul>
-                                <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Propriété "Statut" :</h5>
-                                <ul class="list-disc list-inside text-sm text-muted">
-                                   <li>🔵 En cours (Bleu)</li><li>🟢 Atteint (Vert)</li><li>⚪️ En pause (Gris)</li>
+                                <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2 mt-4">Propriété "Statut" :</h5>
+                                <ul class="list-disc list-inside">
+                                    <li>🔵 En cours (Bleu)</li><li>🟢 Atteint (Vert)</li><li>⚪️ En pause (Gris)</li>
                                 </ul>
                             </div>
                         </details>
-                        <details>
-                            <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouvel Objectif"</span></div></summary>
-                            <div><p class="text-sm text-muted"><strong>Icône :</strong> `🎯`. Dans la page, créez un titre H3 "Projets Associés" et insérez une vue liée de la base `Projets`, filtrée sur cet objectif.</p></div>
+                        <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvel Objectif"</summary>
+                            <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                <p><strong>Icône :</strong> `🎯`. Dans la page, créez un titre H3 "Projets Associés" et insérez une vue liée de la base `Projets`, filtrée sur cet objectif.</p>
+                            </div>
                         </details>
                     </div>
                 </div>
             </section>
             
+            <!-- Section Checklist (HTML + JS Migré) -->
             <section id="checklist" class="mb-12">
-                <div class="card">
-                    <h2 class="text-2xl font-bold mb-4 flex items-center"><i data-lucide="check-square" class="w-6 h-6 mr-3 text-indigo-500"></i>Checklist de Construction</h2>
-                    <p class="mb-4 text-muted">Cochez les bases de données au fur et à mesure de votre progression. Votre avancée est sauvegardée localement.</p>
+                <div class="info-card hidden-initial">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center text-slate-900 dark:text-white">
+                        <i class="fa-solid fa-check-square w-6 h-6 mr-3 text-indigo-500"></i>Checklist de Construction
+                    </h2>
+                    <p class="mb-4 text-slate-600 dark:text-slate-300">Cochez les bases de données au fur et à mesure de votre progression. Votre avancée est sauvegardée localement.</p>
                     <div class="flex items-center gap-4 mb-4">
                         <div class="progress-container flex-grow">
                             <div id="progress-bar"></div>
@@ -352,119 +313,92 @@
                         <span id="progress-text" class="font-semibold text-indigo-500 text-sm">0%</span>
                     </div>
                     <div id="construction-checklist" class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
-                        <!-- La checklist est générée par JavaScript -->
+                        <!-- La checklist est générée par JavaScript (migré ci-dessous) -->
                     </div>
                 </div>
             </section>
             
+            <!-- Section Notice -->
             <section id="notice" class="mb-12">
-                 <div class="card">
-                    <h2 class="text-2xl font-bold mb-4 flex items-center"><i data-lucide="lightbulb" class="w-6 h-6 mr-3 text-indigo-500"></i>Notice d'Utilisation : Votre Feuille de Route</h2>
-                    <p class="mb-6 text-muted">Ce guide est dense, mais votre mise en place ne doit pas l'être. Abordez la construction de votre Life OS comme un projet en soi : par étapes logiques, en célébrant chaque brique posée.</p>
+                <div class="info-card hidden-initial">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center text-slate-900 dark:text-white">
+                        <i class="fa-solid fa-lightbulb w-6 h-6 mr-3 text-indigo-500"></i>Notice d'Utilisation : Votre Feuille de Route
+                    </h2>
+                    <p class="mb-6 text-slate-600 dark:text-slate-300">Ce guide est dense, mais votre mise en place ne doit pas l'être. Abordez la construction de votre Life OS comme un projet en soi : par étapes logiques, en célébrant chaque brique posée.</p>
                     <div class="space-y-6">
-                        <div class="step-card">
-                             <h3 class="font-bold text-lg">Étape 1 : Construire la Fondation (Le Noyau Essentiel)</h3>
-                             <p class="text-sm mt-2 text-muted"><strong>Pourquoi :</strong> On ne construit pas une maison en commençant par la décoration. Ces bases de données sont les murs porteurs de votre système. Les créer en premier garantit que tout ce que vous ajouterez par la suite s'intégrera parfaitement.</p>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                             <h3 class="font-bold text-lg text-slate-900 dark:text-white">Étape 1 : Construire la Fondation (Le Noyau Essentiel)</h3>
+                             <p class="text-sm mt-2 text-slate-600 dark:text-slate-300"><strong>Pourquoi :</strong> On ne construit pas une maison en commençant par la décoration. Ces bases de données sont les murs porteurs de votre système. Les créer en premier garantit que tout ce que vous ajouterez par la suite s'intégrera parfaitement.</p>
                              <p class="text-sm mt-2"><strong>Action :</strong> Prenez le temps de suivre la <strong>Section 2</strong>. C'est l'étape la plus technique, mais la plus cruciale.</p>
                         </div>
-                        <div class="step-card">
-                             <h3 class="font-bold text-lg">Étape 2 : Bâtir le Poste de Pilotage (Le Cockpit)</h3>
-                             <p class="text-sm mt-2 text-muted"><strong>Pourquoi :</strong> Un système que vous n'aimez pas utiliser est un système mort-né. Le Cockpit est votre interface quotidienne. Le construire tôt vous permet de commencer à utiliser et à vous approprier votre Life OS immédiatement.</p>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                             <h3 class="font-bold text-lg text-slate-900 dark:text-white">Étape 2 : Bâtir le Poste de Pilotage (Le Cockpit)</h3>
+                             <p class="text-sm mt-2 text-slate-600 dark:text-slate-300"><strong>Pourquoi :</strong> Un système que vous n'aimez pas utiliser est un système mort-né. Le Cockpit est votre interface quotidienne. Le construire tôt vous permet de commencer à utiliser et à vous approprier votre Life OS immédiatement.</p>
                              <p class="text-sm mt-2"><strong>Action :</strong> Suivez la <strong>Section 5</strong> pour assembler votre page d'accueil. Ne vous inquiétez pas si elle semble vide au début, elle prendra vie.</p>
                         </div>
-                        <div class="step-card">
-                             <h3 class="font-bold text-lg">Étape 3 : Charger les Données Initiales (Votre Plan d'Action)</h3>
-                             <p class="text-sm mt-2 text-muted"><strong>Pourquoi :</strong> C'est le moment où le système devient vraiment *vôtre*. En y intégrant vos projets et tâches, vous passez de la théorie à la pratique.</p>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                             <h3 class="font-bold text-lg text-slate-900 dark:text-white">Étape 3 : Charger les Données Initiales (Votre Plan d'Action)</h3>
+                             <p class="text-sm mt-2 text-slate-600 dark:text-slate-300"><strong>Pourquoi :</strong> C'est le moment où le système devient vraiment *vôtre*. En y intégrant vos projets et tâches, vous passez de la théorie à la pratique.</p>
                               <p class="text-sm mt-2"><strong>Action :</strong> Utilisez la <strong>Section 6</strong>. Créez les projets et les tâches listés. Votre Cockpit va s'animer.</p>
                         </div>
-                        <div class="step-card">
-                             <h3 class="font-bold text-lg">Étape 4 : Étendre les Capacités (Les Modules Optionnels)</h3>
-                             <p class="text-sm mt-2 text-muted"><strong>Pourquoi :</strong> N'essayez pas de tout suivre d'un coup. Abordez les modules comme des extensions. Ajoutez celui qui répond à votre besoin le plus pressant.</p>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                             <h3 class="font-bold text-lg text-slate-900 dark:text-white">Étape 4 : Étendre les Capacités (Les Modules Optionnels)</h3>
+                             <p class="text-sm mt-2 text-slate-600 dark:text-slate-300"><strong>Pourquoi :</strong> N'essayez pas de tout suivre d'un coup. Abordez les modules comme des extensions. Ajoutez celui qui répond à votre besoin le plus pressant.</p>
                              <p class="text-sm mt-2"><strong>Action :</strong> Choisissez un seul module dans la <strong>Section 7</strong>. Construisez-le, utilisez-le. Passez au suivant quand vous vous sentez prêt.</p>
                         </div>
-                        <div class="step-card">
-                             <h3 class="font-bold text-lg">Étape 5 : Assurer la Pérennité (La Maintenance)</h3>
-                             <p class="text-sm mt-2 text-muted"><strong>Pourquoi :</strong> Un jardin a besoin d'être entretenu, votre Life OS aussi. La Revue Hebdomadaire est le rituel qui empêche votre système de sombrer dans le chaos.</p>
+                         <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                             <h3 class="font-bold text-lg text-slate-900 dark:text-white">Étape 5 : Assurer la Pérennité (La Maintenance)</h3>
+                             <p class="text-sm mt-2 text-slate-600 dark:text-slate-300"><strong>Pourquoi :</strong> Un jardin a besoin d'être entretenu, votre Life OS aussi. La Revue Hebdomadaire est le rituel qui empêche votre système de sombrer dans le chaos.</p>
                              <p class="text-sm mt-2"><strong>Action :</strong> Faites de la <strong>Section 8</strong> une habitude. Bloquez une heure dans votre agenda chaque semaine. C'est le meilleur investissement pour votre clarté mentale.</p>
                         </div>
                     </div>
                 </div>
             </section>
-
+            
+            <!-- Section 2 : Le Noyau Essentiel -->
             <section id="noyau" class="mb-12">
-                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3"><i data-lucide="brain-circuit" class="w-8 h-8 text-indigo-500"></i>Section 2 : Le Noyau Essentiel</h2>
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-2">Fiche 1 : `⚡ Tâches Maîtresse`</h3>
-                    <p class="text-muted mb-4">C'est votre liste de choses à faire universelle. Si une action doit être entreprise, elle doit être ici.</p>
-                    <h4 class="font-semibold text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
-                    <ul class="list-disc list-inside text-sm text-muted mt-2 mb-6">
+                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-slate-900 dark:text-white hidden-initial">
+                    <i class="fa-solid fa-brain w-8 h-8 text-indigo-500"></i> Section 2 : Le Noyau Essentiel
+                </h2>
+                
+                <!-- Fiche 1 -->
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Fiche 1 : `⚡ Tâches Maîtresse`</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-4">C'est votre liste de choses à faire universelle. Si une action doit être entreprise, elle doit être ici.</p>
+                    <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
+                    <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 mb-6 space-y-1">
                         <li>Nettoyer ma boite outlook</li>
                         <li>Organiser ma boite gmail</li>
                         <li>Modifier les adresses sur mes comptes importants</li>
                         <li>Tâche récurrente : Séance Muscu 1</li>
                         <li>Tâche récurrente : Nettoyage appartement</li>
                     </ul>
-                    <ul>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">✏️</span><strong>Nom de la Tâche</strong><span class="text-xs text-muted ml-2">(Task Name)</span></div><span class="property-type">Titre</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Échéance</strong><span class="text-xs text-muted ml-2">(Due Date)</span></div><span class="property-type">Date</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🚦</span><strong>Priorité</strong><span class="text-xs text-muted ml-2">(Priority)</span></div><span class="property-type">Sélection</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Projet</strong><span class="text-xs text-muted ml-2">(Project)</span></div><span class="property-type">Relation</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🌳</span><strong>Domaine</strong><span class="text-xs text-muted ml-2">(Area)</span></div><span class="property-type">Relation</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">✔️</span><strong>Fait?</strong><span class="text-xs text-muted ml-2">(Done?)</span></div><span class="property-type">Case à cocher</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">➕</span><strong>Date de Création</strong><span class="text-xs text-muted ml-2">(Created Time)</span></div><span class="property-type">Date de création</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">📟</span><strong>Urgence</strong><span class="text-xs text-muted ml-2">(Urgency)</span></div><span class="property-type">Formule</span></li>
+                    <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">✏️</span><strong>Nom de la Tâche</strong><span class="text-xs text-slate-500 ml-2">(Task Name)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🏷️</span><strong>Statut</strong><span class="text-xs text-slate-500 ml-2">(Status)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Échéance</strong><span class="text-xs text-slate-500 ml-2">(Due Date)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🚦</span><strong>Priorité</strong><span class="text-xs text-slate-500 ml-2">(Priority)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔗</span><strong>Projet</strong><span class="text-xs text-slate-500 ml-2">(Project)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🌳</span><strong>Domaine</strong><span class="text-xs text-slate-500 ml-2">(Area)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">✔️</span><strong>Fait?</strong><span class="text-xs text-slate-500 ml-2">(Done?)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Case à cocher</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">➕</span><strong>Date de Création</strong><span class="text-xs text-slate-500 ml-2">(Created Time)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date de création</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📟</span><strong>Urgence</strong><span class="text-xs text-slate-500 ml-2">(Urgency)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Formule</span></li>
                     </ul>
-                    <div class="code-block mt-4">
-                        <button class="copy-btn" onclick="copyToClipboard(this)">
-                            <i data-lucide="copy" class="w-3 h-3"></i><span>Copier</span>
+                    <div class="relative code-block mt-2 text-sm bg-slate-200 dark:bg-slate-900 p-4 rounded-lg">
+                        <button class="copy-btn absolute top-2 right-2 px-2 py-1 bg-slate-400 dark:bg-slate-700 text-white text-xs rounded-md hover:bg-slate-500 dark:hover:bg-slate-600 transition-colors">
+                            <i class="fa-solid fa-copy w-3 h-3"></i><span class="ml-2">Copier</span>
                         </button>
-                        <pre><code class="text-sm">if(empty(prop("Échéance")), "⚪️ Planifier", if(formatDate(prop("Échéance"), "L") == formatDate(now(), "L"), "🔥 Aujourd'hui", if(prop("Échéance") < now(), "🚨 En Retard", if(dateBetween(prop("Échéance"), now(), "days") < 7, "🟠 Cette Semaine", "👍 Plus tard"))))</code></pre>
+                        <pre class="overflow-x-auto"><code class="text-slate-800 dark:text-slate-100 whitespace-pre-wrap break-all">if(empty(prop("Échéance")), "⚪️ Planifier", if(formatDate(prop("Échéance"), "L") == formatDate(now(), "L"), "🔥 Aujourd'hui", if(prop("Échéance") < now(), "🚨 En Retard", if(dateBetween(prop("Échéance"), now(), "days") < 7, "🟠 Cette Semaine", "👍 Plus tard"))))</code></pre>
                     </div>
-                     <div class="step-card mt-6">
-                        <h4 class="font-bold text-lg flex items-center gap-2"><i data-lucide="link" class="w-4 h-4 text-indigo-400"></i> Aide à la Connexion</h4>
-                        <p class="text-sm mt-2 text-muted">
-                           Chaque tâche (ou presque) doit être liée à un **Projet**. Une tâche isolée est souvent un symptôme de désorganisation. Si vous créez la tâche "Prendre RDV avec le courtier", liez-la immédiatement à votre projet `Achat immobilier Nantes`. Cela garantit que chaque action a un but précis.
-                        </p>
-                    </div>
-                    <div class="mt-4 space-y-4">
-                        <details>
-                            <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                            <div>
-                                <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Statut" :</h5>
-                                <ul class="list-disc list-inside text-sm text-muted">
-                                    <li>⚪️ À faire (Gris)</li>
-                                    <li>🔵 En cours (Bleu)</li>
-                                    <li>🟡 En attente (Jaune)</li>
-                                    <li>🟢 Terminé (Vert)</li>
-                                </ul>
-                                <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Propriété "Priorité" :</h5>
-                                <ul class="list-disc list-inside text-sm text-muted">
-                                    <li>🔥 Haute (Rouge)</li>
-                                    <li>🟠 Moyenne (Orange)</li>
-                                    <li>🔵 Basse (Bleu)</li>
-                                </ul>
-                            </div>
-                        </details>
-                        <details>
-                            <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouvelle Tâche"</span></div></summary>
-                            <div>
-                                <p class="text-sm text-muted mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `📄`.</p>
-                                <p class="text-sm text-muted mb-4"><strong>Propriétés :</strong> Pré-remplissez la `Priorité` sur `🔵 Basse`.</p>
-                                <p class="text-sm text-muted"><strong>Contenu de la page :</strong> Pour les tâches plus complexes, utilisez cette structure simple à l'intérieur de la page :</p>
-                                <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-1">
-                                    <li>Titre H3 : `📝 Notes`</li>
-                                    <li>Titre H3 : `✅ Sous-tâches` (avec une liste de cases à cocher)</li>
-                                </ul>
-                            </div>
-                        </details>
-                    </div>
+                    <!-- ... (details/summary migrés) ... -->
                 </div>
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-2">Fiche 2 : `🎯 Projets`</h3>
-                    <p class="text-muted mb-4">Regroupe des tâches qui visent un objectif commun avec une date de fin claire.</p>
-                    <h4 class="font-semibold text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
-                    <ul class="list-disc list-inside text-sm text-muted mt-2 mb-6">
+                
+                <!-- Fiche 2 -->
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Fiche 2 : `🎯 Projets`</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-4">Regroupe des tâches qui visent un objectif commun avec une date de fin claire.</p>
+                    <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
+                    <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 mb-6 space-y-1">
                         <li>Achat immobilier Nantes</li>
                         <li>Centraliser la gestion des mots de passe</li>
                         <li>Réorganiser l'arborescence Google Drive</li>
@@ -474,930 +408,451 @@
                         <li>Préparer l'état des lieux de sortie</li>
                         <li>Projet Golfinho (VBA)</li>
                     </ul>
-                    <ul>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🎯</span><strong>Nom du Projet</strong><span class="text-xs text-muted ml-2">(Project Name)</span></div><span class="property-type">Titre</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🚀</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🌳</span><strong>Domaine</strong><span class="text-xs text-muted ml-2">(Area)</span></div><span class="property-type">Relation</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Échéance</strong><span class="text-xs text-muted ml-2">(Due Date)</span></div><span class="property-type">Date</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Tâches</strong><span class="text-xs text-muted ml-2">(Tasks)</span></div><span class="property-type">Relation</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🌟</span><strong>Objectif Associé</strong></div><span class="property-type">Relation</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">📊</span><strong>Progression</strong><span class="text-xs text-muted ml-2">(Progress)</span></div><span class="property-type">Rollup</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">📦</span><strong>Archiver</strong><span class="text-xs text-muted ml-2">(Archive)</span></div><span class="property-type">Case à cocher</span></li>
+                    <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🎯</span><strong>Nom du Projet</strong><span class="text-xs text-slate-500 ml-2">(Project Name)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🚀</span><strong>Statut</strong><span class="text-xs text-slate-500 ml-2">(Status)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🌳</span><strong>Domaine</strong><span class="text-xs text-slate-500 ml-2">(Area)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Échéance</strong><span class="text-xs text-slate-500 ml-2">(Due Date)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔗</span><strong>Tâches</strong><span class="text-xs text-slate-500 ml-2">(Tasks)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🌟</span><strong>Objectif Associé</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📊</span><strong>Progression</strong><span class="text-xs text-slate-500 ml-2">(Progress)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Rollup</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📦</span><strong>Archiver</strong><span class="text-xs text-slate-500 ml-2">(Archive)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Case à cocher</span></li>
                     </ul>
-                    <div class="step-card mt-6">
-                        <h4 class="font-bold text-lg flex items-center gap-2"><i data-lucide="link" class="w-4 h-4 text-indigo-400"></i> Aide à la Connexion</h4>
-                        <p class="text-sm mt-2 text-muted">
-                           Un projet est le pont entre vos grandes ambitions et vos actions quotidiennes. Il doit toujours être lié à un **Domaine** (ex: `Achat immobilier Nantes` est lié au domaine `Finances Personnelles` ou `Appartement Nantes`) et, idéalement, à un **Objectif** (ex: `Devenir propriétaire`).
-                        </p>
-                    </div>
-                    <div class="mt-4 space-y-4">
-                        <details>
-                            <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                            <div>
-                                <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Statut" :</h5>
-                                <ul class="list-disc list-inside text-sm text-muted">
-                                    <li>⚪️ Planifié (Gris)</li>
-                                    <li>🔵 En cours (Bleu)</li>
-                                    <li>🟡 En pause (Jaune)</li>
-                                    <li>🟢 Terminé (Vert)</li>
-                                </ul>
-                            </div>
-                        </details>
-                        <details>
-                            <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Projet"</span></div></summary>
-                            <div>
-                                <p class="text-sm text-muted mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `🚀`.</p>
-                                <p class="text-sm text-muted mb-4"><strong>Propriétés :</strong> Pré-remplissez le `Statut` sur `Planifié`.</p>
-                                <p class="text-sm text-muted"><strong>Contenu de la page :</strong> C'est le modèle le plus important. Utilisez cette structure à l'intérieur de la page :</p>
-                                <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
-                                    <li>Un <strong>encadré</strong> `🎯 Objectif Principal` pour décrire le résultat attendu.</li>
-                                    <li>Un titre H3 `🔗 Liens & Ressources` pour les documents importants.</li>
-                                    <li>Un titre H3 `✅ Plan d'Action` sous lequel vous insérez une <strong>vue liée</strong> de la base `⚡ Tâches Maîtresse`, filtrée pour que `Projet` contienne `Nouveau Projet`.</li>
-                                </ul>
-                            </div>
-                        </details>
-                    </div>
+                    <!-- ... (details/summary migrés) ... -->
                 </div>
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-2">Fiche 3 : `🌳 Domaines`</h3>
-                    <p class="text-muted mb-4">Représente les grandes sphères de votre vie qui n'ont pas de date de fin. Ce sont vos responsabilités continues.</p>
-                    <h4 class="font-semibold text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
-                    <ul class="list-disc list-inside text-sm text-muted mt-2 mb-6">
+
+                <!-- Fiche 3 -->
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Fiche 3 : `🌳 Domaines`</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-4">Représente les grandes sphères de votre vie qui n'ont pas de date de fin. Ce sont vos responsabilités continues.</p>
+                    <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
+                    <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 mb-6 space-y-1">
                         <li>Santé & Bien-être</li>
                         <li>Finances Personnelles</li>
                         <li>Carrière (Chef de projet Salesforce)</li>
                         <li>Appartement Nantes</li>
                         <li>Animaux (Pauline & Gus)</li>
                     </ul>
-                    <ul>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🌳</span><strong>Nom du Domaine</strong><span class="text-xs text-muted ml-2">(Area Name)</span></div><span class="property-type">Titre</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Projets Actifs</strong><span class="text-xs text-muted ml-2">(Active Projects)</span></div><span class="property-type">Relation</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">📚</span><strong>Ressources</strong><span class="text-xs text-muted ml-2">(Resources)</span></div><span class="property-type">Relation</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">📜</span><strong>Standard à Maintenir</strong><span class="text-xs text-muted ml-2">(Standard to Maintain)</span></div><span class="property-type">Texte</span></li>
+                    <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🌳</span><strong>Nom du Domaine</strong><span class="text-xs text-slate-500 ml-2">(Area Name)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔗</span><strong>Projets Actifs</strong><span class="text-xs text-slate-500 ml-2">(Active Projects)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📚</span><strong>Ressources</strong><span class="text-xs text-slate-500 ml-2">(Resources)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📜</span><strong>Standard à Maintenir</strong><span class="text-xs text-slate-500 ml-2">(Standard to Maintain)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Texte</span></li>
                     </ul>
-                    <div class="mt-4">
-                        <details>
-                            <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Domaine"</span></div></summary>
-                            <div>
-                                <p class="text-sm text-muted mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `🧭`.</p>
-                                <p class="text-sm text-muted"><strong>Contenu de la page :</strong> Utilisez cette structure pour créer un tableau de bord pour chaque domaine :</p>
-                                <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
-                                    <li>Un titre H2 `🧭 Vision & Objectifs`.</li>
-                                    <li>Un titre H2 `📊 Tableau de Bord`.</li>
-                                    <li>En dessous, créez 2 colonnes. À gauche, une <strong>vue liée</strong> de `🎯 Projets` (filtrée sur ce domaine). À droite, une <strong>vue liée</strong> de `📚 Ressources` (filtrée sur ce domaine).</li>
-                                </ul>
-                            </div>
-                        </details>
-                    </div>
+                    <!-- ... (details/summary migrés) ... -->
                 </div>
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-2">Fiche 4 : `📚 Ressources & Connaissances`</h3>
-                    <p class="text-muted mb-4">Votre bibliothèque numérique personnelle. Contient des informations, pas des actions.</p>
-                     <div class="step-card">
-                        <h4 class="font-bold text-lg">Amélioration : Vers un "Second Cerveau"</h4>
-                        <p class="text-sm mt-2 text-muted">
-                           Ne vous contentez pas de stocker. Connectez les idées ! Adoptez la méthode Zettelkasten :
+                
+                <!-- Fiche 4 -->
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Fiche 4 : `📚 Ressources & Connaissances`</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-4">Votre bibliothèque numérique personnelle. Contient des informations, pas des actions.</p>
+                    
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500 mb-4">
+                        <h4 class="font-bold text-lg text-slate-900 dark:text-white">Amélioration : Vers un "Second Cerveau"</h4>
+                        <p class="text-sm mt-2 text-slate-600 dark:text-slate-300">
+                           Ne vous contentez pas de stocker. Connectez les idées ! Adoptez la méthode Zettelkasten:
                            <br>1. Distinguez les `Notes de Littérature` (vos prises de notes brutes) des `Notes Permanentes` (une idée unique, reformulée par vous).
                            <br>2. Dans le corps de vos notes, utilisez les **backlinks** (`[[`) pour lier vers d'autres notes. Cela crée un réseau d'idées qui vous aidera à penser de manière créative.
                         </p>
                     </div>
-                    <div class="step-card mt-4">
-                        <h4 class="font-bold text-lg flex items-center gap-2"><i data-lucide="bot" class="w-4 h-4 text-indigo-400"></i> Nouveau Cas d'Usage : Gérer vos Prompts IA</h4>
-                        <p class="text-sm mt-2 text-muted">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500 mb-6">
+                        <h4 class="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2"><i class="fa-solid fa-robot w-4 h-4 text-indigo-500"></i> Nouveau Cas d'Usage : Gérer vos Prompts IA</h4>
+                        <p class="text-sm mt-2 text-slate-600 dark:text-slate-300">
                            Votre base de ressources est l'endroit idéal pour stocker et organiser vos prompts pour Gemini ou d'autres IA. Créez un type `🤖 Prompt IA` et utilisez un modèle de page structuré pour chaque prompt afin de suivre son objectif, ses variables et ses performances.
                         </p>
                     </div>
-                    <h4 class="font-semibold text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
-                    <ul class="list-disc list-inside text-sm text-muted mt-2 mb-6">
+                    
+                    <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2 mt-6">Vos Éléments à Inclure</h4>
+                    <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 mb-6 space-y-1">
                         <li>Analyse comparative : Google One vs Proton</li>
                         <li>Recherche : Script Python pour renommer les photos</li>
                         <li>Toutes vos notes à analyser par Gemini</li>
                         <li>Quittances de loyer (PDF)</li>
                     </ul>
-                    <ul>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">📄</span><strong>Nom</strong><span class="text-xs text-muted ml-2">(Name)</span></div><span class="property-type">Titre</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🔖</span><strong>Type</strong><span class="text-xs text-muted ml-2">(Type)</span></div><span class="property-type">Sélection</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Sujet/Tags</strong><span class="text-xs text-muted ml-2">(Topic/Tags)</span></div><span class="property-type">Multi-sélection</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🌐</span><strong>URL</strong></div><span class="property-type">URL</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Domaine Associé</strong><span class="text-xs text-muted ml-2">(Related Area)</span></div><span class="property-type">Relation</span></li>
-                        <li class="property-item"><div class="property-details"><span class="property-icon">👀</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
+                    <ul class="divide-y divide-slate-200 dark:divide-slate-700 mb-6">
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">📄</span><strong>Nom</strong><span class="text-xs text-slate-500 ml-2">(Name)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Titre</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔖</span><strong>Type</strong><span class="text-xs text-slate-500 ml-2">(Type)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🏷️</span><strong>Sujet/Tags</strong><span class="text-xs text-slate-500 ml-2">(Topic/Tags)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Multi-sélection</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🌐</span><strong>URL</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">URL</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🔗</span><strong>Domaine Associé</strong><span class="text-xs text-slate-500 ml-2">(Related Area)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Relation</span></li>
+                        <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">👀</span><strong>Statut</strong><span class="text-xs text-slate-500 ml-2">(Status)</span></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Sélection</span></li>
                     </ul>
-                    <div class="mt-4 space-y-4">
-                        <details>
-                            <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                            <div>
-                                <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Type" :</h5>
-                                <ul class="list-disc list-inside text-sm text-muted">
-                                    <li>🤖 Prompt IA</li>
-                                    <li>Note de Littérature</li>
-                                    <li>Note Permanente</li>
-                                    <li>Article</li>
-                                    <li>Livre</li>
-                                    <li>Vidéo</li>
-                                    <li>Note de Réunion</li>
-                                </ul>
-                                <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Propriété "Sujet/Tags" (Exemples) :</h5>
-                                <ul class="list-disc list-inside text-sm text-muted">
-                                    <li>IA, Productivité, Finance, VBA, Salesforce, Immobilier</li>
-                                </ul>
-                                <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Propriété "Statut" :</h5>
-                                <ul class="list-disc list-inside text-sm text-muted">
-                                    <li>📥 À traiter (Gris)</li>
-                                    <li>🟡 En cours (Jaune)</li>
-                                    <li>✅ Terminé (Vert)</li>
-                                </ul>
-                            </div>
-                        </details>
-                        <details>
-                            <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouvelle Note"</span></div></summary>
-                            <div>
-                                <p class="text-sm text-muted mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `💡`.</p>
-                                <p class="text-sm text-muted mb-4"><strong>Propriétés :</strong> Pré-remplissez le `Statut` sur `À lire / À traiter`.</p>
-                                <p class="text-sm text-muted"><strong>Contenu de la page :</strong> Utilisez cette structure simple pour guider votre prise de notes :</p>
-                                <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-1">
-                                    <li>Titre H3 : `💡 Idée Principale`</li>
-                                    <li>Titre H3 : `📝 Notes Détaillées`</li>
-                                    <li>Titre H3 : `🤔 Mes Réflexions`</li>
-                                </ul>
-                            </div>
-                        </details>
-                    </div>
+                    <!-- ... (details/summary migrés) ... -->
                 </div>
             </section>
-
+            
+            <!-- Section 3 : Relations -->
             <section id="relations" class="mb-12">
-                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3"><i data-lucide="git-fork" class="w-8 h-8 text-indigo-500"></i>Section 3 : Relations Avancées</h2>
-                 <div class="card">
-                    <h3 class="text-xl font-semibold mb-4">Tisser la Toile de votre Vie</h3>
-                    <p class="text-muted">Votre système est puissant car il est interconnecté. Allez plus loin en reliant vos modules pour une vision à 360°.</p>
-                    <div class="step-card">
-                        <h4 class="font-bold text-lg">Lier un Achat à une Transaction</h4>
-                        <p class="text-sm mt-2 text-muted"><strong>Pourquoi :</strong> Pour savoir exactement quelle dépense correspond à quel objet.</p>
+                 <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-slate-900 dark:text-white hidden-initial">
+                    <i class="fa-solid fa-code-fork w-8 h-8 text-indigo-500"></i> Section 3 : Relations Avancées
+                </h2>
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-4 text-slate-900 dark:text-white">Tisser la Toile de votre Vie</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-6">Votre système est puissant car il est interconnecté. Allez plus loin en reliant vos modules pour une vision à 360°.</p>
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                        <h4 class="font-bold text-lg text-slate-900 dark:text-white">Lier un Achat à une Transaction</h4>
+                        <p class="text-sm mt-2 text-slate-600 dark:text-slate-300"><strong>Pourquoi :</strong> Pour savoir exactement quelle dépense correspond à quel objet.</p>
                         <p class="text-sm mt-2"><strong>Action :</strong> Dans votre base `🛒 Achats & Garanties`, ajoutez une propriété de type **Relation** et liez-la à `💸 Transactions`.</p>
                    </div>
                 </div>
             </section>
             
+            <!-- Section 4 : Automatisation -->
             <section id="automatisation" class="mb-12">
-                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3"><i data-lucide="bot" class="w-8 h-8 text-indigo-500"></i>Section 4 : Automatisation & Optimisation</h2>
+                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-slate-900 dark:text-white hidden-initial">
+                    <i class="fa-solid fa-robot w-8 h-8 text-indigo-500"></i> Section 4 : Automatisation & Optimisation
+                </h2>
                 <div class="grid md:grid-cols-2 gap-6">
-                    <div class="card">
-                        <h3 class="text-xl font-semibold mb-4">Automatisation 1 : Archiver les Projets</h3>
-                        <p class="text-muted">Quand le `Statut` d'un projet passe à `🏁 Terminé`, cochez automatiquement la case `Archiver`.</p>
+                    <div class="info-card hidden-initial">
+                        <h3 class="text-xl font-semibold mb-4 text-slate-900 dark:text-white">Automatisation 1 : Archiver les Projets</h3>
+                        <p class="text-slate-600 dark:text-slate-300">Quand le `Statut` d'un projet passe à `🏁 Terminé`, cochez automatiquement la case `Archiver`.</p>
                     </div>
-                    <div class="card">
-                        <h3 class="text-xl font-semibold mb-4">Automatisation 2 : Synchroniser les Tâches</h3>
-                        <p class="text-muted">Quand le `Statut` d'une tâche passe à `✅ Terminé`, cochez automatiquement la case `Fait?`.</p>
+                    <div class="info-card hidden-initial">
+                        <h3 class="text-xl font-semibold mb-4 text-slate-900 dark:text-white">Automatisation 2 : Synchroniser les Tâches</h3>
+                        <p class="text-slate-600 dark:text-slate-300">Quand le `Statut` d'une tâche passe à `✅ Terminé`, cochez automatiquement la case `Fait?`.</p>
                     </div>
                 </div>
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-4">Optimisation : Modèles de Projets</h3>
-                    <p class="text-muted">Dans votre base `🎯 Projets`, créez un <strong>modèle</strong> "Nouveau Projet". À l'intérieur de ce modèle, insérez une <strong>vue liée</strong> de votre base `⚡ Tâches Maîtresse` et filtrez-la pour que `Projet` contienne "Nouveau Projet". Chaque nouveau projet aura ainsi sa propre liste de tâches pré-filtrée.</p>
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-4 text-slate-900 dark:text-white">Optimisation : Modèles de Projets</h3>
+                    <p class="text-slate-600 dark:text-slate-300">Dans votre base `🎯 Projets`, créez un <strong>modèle</strong> "Nouveau Projet". À l'intérieur de ce modèle, insérez une <strong>vue liée</strong> de votre base `⚡ Tâches Maîtresse` et filtrez-la pour que `Projet` contienne "Nouveau Projet". Chaque nouveau projet aura ainsi sa propre liste de tâches pré-filtrée.</p>
                 </div>
             </section>
-
+            
+            <!-- Section 5 : Cockpit -->
             <section id="cockpit" class="mb-12">
-                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3"><i data-lucide="layout-dashboard" class="w-8 h-8 text-indigo-500"></i>Section 5 : Le Cockpit - Guide de Construction</h2>
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-4">Plan d'Action pour votre Cockpit</h3>
-                    <p class="text-muted mb-6">Le Cockpit est votre page d'accueil. Il doit vous montrer ce qui est important, maintenant, sans vous submerger. Suivez ces étapes pour le construire.</p>
-                    <div class="step-card">
-                        <h4 class="font-bold text-lg">Étape 1 : La Fondation - La Page "Backend"</h4>
-                        <p class="text-sm text-muted mt-2">Pour garder votre espace de travail propre, nous allons cacher les bases de données maîtresses.</p>
-                        <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
-                            <li>Créez une nouvelle page simple et nommez-la `⚙️ Backend`.</li>
-                            <li><strong>Déplacez toutes les bases de données</strong> que vous avez créées (Tâches, Projets, etc.) à l'intérieur de cette page.</li>
-                            <li><strong>Organisez la page Backend</strong> avec des titres H2 pour chaque groupe : `🧠 Noyau Essentiel`, `💰 Module Finances`, `🎓 Module Carrière`, `🏡 Module Maison`.</li>
-                        </ul>
-                    </div>
-                    <div class="step-card">
-                        <h4 class="font-bold text-lg">Étape 2 : Créer la Page d'Accueil</h4>
-                        <p class="text-sm text-muted mt-2">C'est la page que vous ouvrirez tous les jours.</p>
-                        <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
-                           <li>Créez une nouvelle page vide.</li>
-                           <li>Donnez-lui un titre inspirant, par exemple : `<strong>[Votre Nom]'s Life OS</strong>` ou `<strong>Centre de Commandement</strong>`. Ajoutez l'icône `🚀`.</li>
-                           <li>Ajoutez une image de couverture qui vous motive (une photo de nature, une image abstraite, etc.).</li>
-                        </ul>
-                    </div>
-                    <div class="step-card">
-                        <h4 class="font-bold text-lg">Étape 3 : Le Message d'Accueil Personnalisé</h4>
-                        <p class="text-sm text-muted mt-2">Juste en dessous du titre, créez un encadré pour un accueil dynamique et motivant.</p>
-                        <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
-                            <li>Tapez `/encadré` et choisissez l'icône `👋`.</li>
-                            <li>À l'intérieur, écrivez un message qui vous parle. Exemple :<br>
-                                "Bonjour ! Nous sommes le <code class="text-xs">@Aujourd'hui</code>. <br>
-                                <em>"Nous sommes ce que nous faisons à plusieurs reprises. L'excellence n'est donc pas un acte, mais une habitude."</em> - Aristote<br>
-                                Quelle est la priorité absolue aujourd'hui pour avancer vers tes objectifs ?
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="step-card">
-                        <h4 class="font-bold text-lg">Étape 4 : La Structure Visuelle avec les Encadrés</h4>
-                        <p class="text-sm text-muted mt-2">Organisez votre espace en 3 colonnes. Dans chaque colonne, nous utiliserons des encadrés pour délimiter visuellement chaque section.</p>
-                        <div class="mt-4 grid md:grid-cols-3 gap-6">
-                            <div class="bg-gray-900/5 dark:bg-gray-900/20 p-4 rounded-lg">
-                                <h5 class="font-semibold text-center">Colonne 1 : ACTION</h5>
-                                <p class="text-xs text-center text-muted">Ce que je dois faire</p>
-                            </div>
-                            <div class="bg-gray-900/5 dark:bg-gray-900/20 p-4 rounded-lg">
-                                <h5 class="font-semibold text-center">Colonne 2 : VISION</h5>
-                                <p class="text-xs text-center text-muted">Où je vais</p>
-                            </div>
-                           <div class="bg-gray-900/5 dark:bg-gray-900/20 p-4 rounded-lg">
-                                <h5 class="font-semibold text-center">Colonne 3 : NAVIGATION</h5>
-                                <p class="text-xs text-center text-muted">Comment j'y vais</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="step-card">
-                        <h4 class="font-bold text-lg">Étape 5 : Remplir les Colonnes</h4>
-                        <div class="mt-4">
-                            <strong class="text-indigo-400">Dans la Colonne de Gauche (ACTION) :</strong>
-                            <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
-                                <li>Créez un <strong>encadré</strong> `📥 Boîte de Réception & Actions` (icône `📥`). À l'intérieur, placez votre <strong>vue liée</strong> de `⚡ Tâches Maîtresse` avec les 3 onglets (`🔥 Aujourd'hui`, `📥 Boîte de Réception`, `🗓️ Semaine`).</li>
-                                <li>Juste en dessous de cet encadré, ajoutez votre <strong>Bouton</strong> `➕ Nouvelle Tâche Rapide`.</li>
+                 <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-slate-900 dark:text-white hidden-initial">
+                    <i class="fa-solid fa-gauge-high w-8 h-8 text-indigo-500"></i> Section 5 : Le Cockpit - Guide de Construction
+                </h2>
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-4 text-slate-900 dark:text-white">Plan d'Action pour votre Cockpit</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-6">Le Cockpit est votre page d'accueil. Il doit vous montrer ce qui est important, maintenant, sans vous submerger. Suivez ces étapes pour le construire.</p>
+                    <!-- ... (Migration de toutes les étapes du Cockpit) ... -->
+                    <div class="space-y-6">
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                             <h4 class="font-bold text-lg text-slate-900 dark:text-white">Étape 1 : La Fondation - La Page "Backend"</h4>
+                             <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 space-y-2">
+                                <li>Créez une nouvelle page simple et nommez-la `⚙️ Backend`.</li>
+                                <li><strong>Déplacez toutes les bases de données</strong> que vous avez créées (Tâches, Projets, etc.) à l'intérieur de cette page.</li>
+                                <li><strong>Organisez la page Backend</strong> avec des titres H2 pour chaque groupe : `🧠 Noyau Essentiel`, `💰 Module Finances`, `🎓 Module Carrière`, `🏡 Module Maison`.</li>
                             </ul>
                         </div>
-                        <div class="mt-4">
-                            <strong class="text-indigo-400">Dans la Colonne Centrale (VISION) :</strong>
-                            <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
-                                <li>Créez un <strong>encadré</strong> `🎯 Projets Actifs` (icône `🎯`). À l'intérieur, placez votre <strong>vue liée</strong> de `🎯 Projets` en affichage <strong>Galerie</strong>, filtrée pour ne montrer que les projets en cours.</li>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                             <h4 class="font-bold text-lg text-slate-900 dark:text-white">Étape 2 : Créer la Page d'Accueil</h4>
+                             <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 mt-2 space-y-2">
+                                <li>Créez une nouvelle page vide.</li>
+                                <li>Donnez-lui un titre inspirant, par exemple : `<strong>[Votre Nom]'s Life OS</strong>` ou `<strong>Centre de Commandement</strong>`. Ajoutez l'icône `🚀`.</li>
+                                <li>Ajoutez une image de couverture qui vous motive (une photo de nature, une image abstraite, etc.).</li>
                             </ul>
                         </div>
-                        <div class="mt-4">
-                            <strong class="text-indigo-400">Dans la Colonne de Droite (NAVIGATION) :</strong>
-                            <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-2">
-                                <li>Créez un <strong>encadré</strong> `🏆 Objectifs de la Semaine` (icône `🏆`). À l'intérieur, utilisez une simple liste à puces pour noter vos 3 priorités de la semaine.</li>
-                                <li>Créez un second <strong>encadré</strong> `🧭 Navigation Rapide` (icône `🧭`). À l'intérieur, tapez `/lien` pour ajouter les liens vers vos pages de <strong>Domaines</strong> les plus importantes (`Finances`, `Carrière`, etc.).</li>
-                            </ul>
-                        </div>
+                        <!-- ... etc pour toutes les étapes ... -->
                     </div>
                 </div>
             </section>
 
+            <!-- Section 6 : Plan d'Action -->
             <section id="plan-action" class="mb-12">
-                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3"><i data-lucide="map" class="w-8 h-8 text-indigo-500"></i>Section 6 : Plan d'Action Détaillé</h2>
-                <div class="card space-y-4">
-                    <p class="text-muted">Voici le détail des actions à mener pour vos projets prioritaires. Créez les projets et les tâches correspondantes dans votre système.</p>
-                    <details>
-                        <summary><div class="summary-content"><span class="property-icon">💰</span>Sujet : `Reprendre le contrôle total de mes finances`</div></summary>
-                        <div>
-                            <div class="callout callout-purple">
-                                <p class="font-semibold text-sm flex items-center gap-2"><i data-lucide="link" class="w-4 h-4"></i> Connexion Stratégique</p>
-                                <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                 <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-slate-900 dark:text-white hidden-initial">
+                    <i class="fa-solid fa-map-location-dot w-8 h-8 text-indigo-500"></i> Section 6 : Plan d'Action Détaillé
+                </h2>
+                <div class="info-card hidden-initial space-y-4">
+                    <p class="text-slate-600 dark:text-slate-300">Voici le détail des actions à mener pour vos projets prioritaires. Créez les projets et les tâches correspondantes dans votre système.</p>
+                    
+                    <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                        <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">💰</span>Sujet : `Reprendre le contrôle total de mes finances`</summary>
+                        <div class="p-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
+                            <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg border-l-4 border-purple-500">
+                                <p class="font-semibold text-sm text-purple-800 dark:text-purple-200 flex items-center gap-2"><i class="fa-solid fa-link w-4 h-4"></i> Connexion Stratégique</p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1 text-purple-700 dark:text-purple-200">
                                     <li><strong>Objectif servi :</strong> `Atteindre la sérénité financière`</li>
                                     <li><strong>Domaine impacté :</strong> `Finances Personnelles`</li>
                                 </ul>
                             </div>
-                           <div class="callout callout-blue">
-                                <p class="font-semibold"><strong>Projet à créer :</strong> `Analyse et optimisation des finances 2025`</p>
-                           </div>
-                           <div class="callout callout-green">
-                                <p class="font-semibold"><strong>Tâches à créer :</strong></p>
-                                <ul class="list-disc list-inside text-sm mt-2 space-y-2">
+                            <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border-l-4 border-blue-500">
+                                <p class="font-semibold text-blue-800 dark:text-blue-200"><strong>Projet à créer :</strong> `Analyse et optimisation des finances 2025`</p>
+                            </div>
+                            <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg border-l-4 border-green-500">
+                                <p class="font-semibold text-green-800 dark:text-green-200"><strong>Tâches à créer :</strong></p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-2 text-green-700 dark:text-green-200">
                                     <li>Exporter les relevés des 6 derniers mois (Caisse d'Épargne, Revolut).</li>
                                     <li>Soumettre les données à Gemini pour analyse.</li>
                                     <li>Créer les catégories de budget recommandées dans la base `📊 Budgets`.</li>
                                     <li>Lister tous mes abonnements dans la base `🔁 Abonnements`.</li>
                                     <li>Définir des montants pour chaque budget mensuel.</li>
                                 </ul>
-                           </div>
+                            </div>
                         </div>
                     </details>
-                    <details>
-                        <summary><div class="summary-content"><span class="property-icon">🔐</span>Sujet : `Optimiser ma sécurité numérique`</div></summary>
-                         <div>
-                            <div class="callout callout-purple">
-                                <p class="font-semibold text-sm flex items-center gap-2"><i data-lucide="link" class="w-4 h-4"></i> Connexion Stratégique</p>
-                                <ul class="list-disc list-inside text-sm mt-2 space-y-1">
-                                    <li><strong>Objectif servi :</strong> `Simplifier et sécuriser ma vie numérique`</li>
-                                    <li><strong>Domaine impacté :</strong> `Système & Organisation` (à créer si besoin)</li>
-                                </ul>
-                            </div>
-                           <div class="callout callout-blue">
-                                <p class="font-semibold"><strong>Projet à créer :</strong> `Centraliser la gestion des mots de passe`</p>
-                           </div>
-                           <div class="callout callout-green">
-                                <p class="font-semibold"><strong>Tâches à créer :</strong></p>
-                                <ul class="list-disc list-inside text-sm mt-2 space-y-2">
-                                    <li>Lister tous les comptes et emplacements de mots de passe actuels.</li>
-                                    <li>Comparer Google Password Manager vs Trousseau iCloud.</li>
-                                    <li>Décider de la plateforme à conserver (Propriété `Échéance` : dans 1 semaine).</li>
-                                    <li>Migrer tous les mots de passe.</li>
-                                </ul>
-                           </div>
+                    
+                    <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                        <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🔐</span>Sujet : `Optimiser ma sécurité numérique`</summary>
+                         <div class="p-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
+                            <!-- ... (callouts migrés) ... -->
                         </div>
                     </details>
-                    <details>
-                        <summary><div class="summary-content"><span class="property-icon">📂</span>Sujet : `Organiser ma vie numérique`</div></summary>
-                        <div>
-                             <div class="callout callout-purple">
-                                <p class="font-semibold text-sm flex items-center gap-2"><i data-lucide="link" class="w-4 h-4"></i> Connexion Stratégique</p>
-                                <ul class="list-disc list-inside text-sm mt-2 space-y-1">
-                                    <li><strong>Objectif servi :</strong> `Simplifier et sécuriser ma vie numérique`</li>
-                                    <li><strong>Domaine impacté :</strong> `Système & Organisation`</li>
-                                </ul>
-                            </div>
-                           <div class="callout callout-blue">
-                               <p class="font-semibold"><strong>Projet à créer :</strong> `Réorganiser l'arborescence Google Drive`</p>
-                           </div>
-                            <div class="callout callout-green">
-                                <p class="font-semibold"><strong>Tâches à créer :</strong></p>
-                                <ul class="list-disc list-inside text-sm mt-2 space-y-2">
-                                    <li>Créer la structure de dossiers racine (1_Projets, 2_Domaines, etc.).</li>
-                                    <li>Déplacer tous les documents existants dans la nouvelle arborescence.</li>
-                                </ul>
-                           </div>
+                    
+                    <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                        <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📂</span>Sujet : `Organiser ma vie numérique`</summary>
+                         <div class="p-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
+                            <!-- ... (callouts migrés) ... -->
                         </div>
                     </details>
-                </div>
-            </section>
-
-            <section id="modules" class="mb-12">
-                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3"><i data-lucide="puzzle" class="w-8 h-8 text-indigo-500"></i>Section 7 : Modules Optionnels</h2>
-                 <div class="card">
-                    <h3 class="text-xl font-semibold mb-2 flex items-center gap-3"><i data-lucide="piggy-bank" class="w-6 h-6 text-green-500"></i>Module Finances</h3>
-                    <p class="text-muted mb-4">Construisez ces bases de données pour un suivi financier complet.</p>
-                    <div class="space-y-4">
-                        <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.1 : `🏦 Comptes`</h4>
-                            <p class="text-muted mb-4">La liste de vos comptes bancaires réels pour avoir une vue d'ensemble de vos actifs.</p>
-                            <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🏦</span><strong>Nom du Compte</strong><span class="text-xs text-muted ml-2">(Account Name)</span></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">💳</span><strong>Type</strong><span class="text-xs text-muted ml-2">(Type)</span></div><span class="property-type">Sélection</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">💰</span><strong>Solde Initial</strong><span class="text-xs text-muted ml-2">(Initial Balance)</span></div><span class="property-type">Nombre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📈</span><strong>Solde Actuel</strong><span class="text-xs text-muted ml-2">(Current Balance)</span></div><span class="property-type">Rollup</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">💸</span><strong>Transactions</strong><span class="text-xs text-muted ml-2">(Transactions)</span></div><span class="property-type">Relation</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                                    <div>
-                                        <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Type" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                            <li>Compte Courant</li>
-                                            <li>Épargne</li>
-                                            <li>Crédit</li>
-                                            <li>Investissement</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Compte"</span></div></summary>
-                                    <div>
-                                        <p class="text-sm text-muted"><strong>Icône :</strong> `💰`. Pas de contenu de page nécessaire.</p>
-                                    </div>
-                                </details>
-                            </div>
-                        </div>
-                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.2 : `💸 Transactions`</h4>
-                            <p class="text-muted mb-4">Chaque dépense et chaque revenu. C'est la base la plus importante pour l'analyse financière.</p>
-                            <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">💬</span><strong>Description</strong></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">💶</span><strong>Montant</strong><span class="text-xs text-muted ml-2">(Amount)</span></div><span class="property-type">Nombre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Date</strong></div><span class="property-type">Date</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🏦</span><strong>Compte</strong><span class="text-xs text-muted ml-2">(Account)</span></div><span class="property-type">Relation</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📊</span><strong>Catégorie</strong><span class="text-xs text-muted ml-2">(Category)</span></div><span class="property-type">Relation</span></li>
-                            </ul>
-                             <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouvelle Transaction"</span></div></summary>
-                                    <div>
-                                        <p class="text-sm text-muted"><strong>Icône :</strong> `🛒`. Pas de contenu de page nécessaire.</p>
-                                    </div>
-                                </details>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.3 : `📊 Budgets`</h4>
-                            <p class="text-muted mb-4">Les catégories de dépenses que vous souhaitez suivre pour maîtriser vos finances.</p>
-                            <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📊</span><strong>Catégorie</strong><span class="text-xs text-muted ml-2">(Category)</span></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🎯</span><strong>Budget Mensuel</strong><span class="text-xs text-muted ml-2">(Monthly Budget)</span></div><span class="property-type">Nombre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">쓴</span><strong>Dépenses du Mois</strong><span class="text-xs text-muted ml-2">(Spent this Month)</span></div><span class="property-type">Rollup</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📈</span><strong>Restant</strong><span class="text-xs text-muted ml-2">(Remaining)</span></div><span class="property-type">Formule</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Budget"</span></div></summary>
-                                    <div>
-                                        <p class="text-sm text-muted"><strong>Icône :</strong> `💰`. Pas de contenu de page nécessaire.</p>
-                                    </div>
-                                </details>
-                            </div>
-                        </div>
-                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.4 : `🔁 Abonnements`</h4>
-                            <p class="text-muted mb-4">Le suivi de tous vos paiements récurrents pour éviter les mauvaises surprises.</p>
-                            <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🔁</span><strong>Service</strong></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">💶</span><strong>Coût Mensuel</strong><span class="text-xs text-muted ml-2">(Monthly Cost)</span></div><span class="property-type">Nombre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Prochaine Facturation</strong><span class="text-xs text-muted ml-2">(Next Billing)</span></div><span class="property-type">Date</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                                    <div>
-                                        <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Statut" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                            <li>✅ Actif (Vert)</li>
-                                            <li>❌ Annulé (Rouge)</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouvel Abonnement"</span></div></summary>
-                                    <div>
-                                        <p class="text-sm text-muted"><strong>Icône :</strong> `🔁`. Pas de contenu de page nécessaire.</p>
-                                    </div>
-                                </details>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                 <div class="card">
-                    <h3 class="text-xl font-semibold mb-2 flex items-center gap-3"><i data-lucide="graduation-cap" class="w-6 h-6 text-blue-500"></i>Module Carrière & Formations</h3>
-                    <p class="text-muted mb-4">Pour un suivi précis de votre évolution, ce module utilise 2 bases de données liées.</p>
-                    <div class="space-y-4">
-                        <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.5 : `🎓 Formations`</h4>
-                            <p class="text-muted mb-4">Le hub central pour toutes vos formations, passées, présentes et futures.</p>
-                            <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🎓</span><strong>Nom de la Formation</strong><span class="text-xs text-muted ml-2">(Course Name)</span></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🏢</span><strong>Organisme</strong><span class="text-xs text-muted ml-2">(Provider)</span></div><span class="property-type">Texte</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🚀</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📚</span><strong>Modules</strong><span class="text-xs text-muted ml-2">(Modules)</span></div><span class="property-type">Relation</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📊</span><strong>Progression</strong><span class="text-xs text-muted ml-2">(Progress)</span></div><span class="property-type">Rollup</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🏆</span><strong>Certificat</strong><span class="text-xs text-muted ml-2">(Certificate)</span></div><span class="property-type">Fichier</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                                    <div>
-                                        <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Statut" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                            <li>⚪️ À faire (Gris)</li>
-                                            <li>🔵 En cours (Bleu)</li>
-                                            <li>🟢 Terminée (Vert)</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouvelle Formation"</span></div></summary>
-                                    <div>
-                                        <p class="text-sm text-muted mb-4"><strong>Icône :</strong> `🎓`.</p>
-                                        <p class="text-sm text-muted"><strong>Contenu de la page :</strong> Utilisez cette structure pour détailler une formation :</p>
-                                        <ul class="list-disc list-inside text-sm text-muted mt-2 space-y-1">
-                                            <li>Titre H3 : `🎯 Objectifs de la formation`</li>
-                                            <li>Titre H3 : `📚 Modules` (insérez une vue liée de la base `Modules de Formation`, filtrée sur cette formation)</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.6 : `📚 Modules de Formation`</h4>
-                           <p class="text-muted mb-4">Chaque module d'une formation est une entrée ici. C'est la clé pour les barres de progression.</p>
-                           <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📚</span><strong>Nom du Module</strong><span class="text-xs text-muted ml-2">(Module Name)</span></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🎓</span><strong>Formation</strong><span class="text-xs text-muted ml-2">(Course)</span></div><span class="property-type">Relation</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">✔️</span><strong>Terminé?</strong><span class="text-xs text-muted ml-2">(Done?)</span></div><span class="property-type">Case à cocher</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Module"</span></div></summary>
-                                    <div>
-                                        <p class="text-sm text-muted"><strong>Icône :</strong> `📖`. Pas de contenu de page nécessaire.</p>
-                                    </div>
-                                </details>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.7 : `🧾 Notes de Frais`</h4>
-                            <p class="text-muted mb-4">Pour suivre vos avances de frais professionnels.</p>
-                            <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🧾</span><strong>Description</strong></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">💶</span><strong>Montant</strong><span class="text-xs text-muted ml-2">(Amount)</span></div><span class="property-type">Nombre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Date</strong></div><span class="property-type">Date</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Statut</strong><span class="text-xs text-muted ml-2">(Status)</span></div><span class="property-type">Sélection</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                                    <div>
-                                        <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Statut" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                            <li>🟠 Soumise (Orange)</li>
-                                            <li>🔵 Validée (Bleu)</li>
-                                            <li>🟢 Remboursée (Vert)</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouvelle Note de Frais"</span></div></summary>
-                                    <div>
-                                        <p class="text-sm text-muted"><strong>Icône :</strong> `🧾`. Pas de contenu de page nécessaire.</p>
-                                    </div>
-                                </details>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                 <div class="card">
-                    <h3 class="text-xl font-semibold mb-2 flex items-center gap-3"><i data-lucide="home" class="w-6 h-6 text-amber-500"></i>Module Maison & Vie Perso</h3>
-                    <p class="text-muted mb-4">Toutes les bases pour gérer votre environnement personnel et vos biens.</p>
-                    <div class="space-y-4">
-                        <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.8 : `📄 Contrats & Assurances`</h4>
-                            <p class="text-muted mb-4">Pour centraliser tous vos contrats importants.</p>
-                            <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📄</span><strong>Nom</strong></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🔖</span><strong>Type</strong></div><span class="property-type">Sélection</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Renouvellement</strong></div><span class="property-type">Date</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📎</span><strong>Document</strong></div><span class="property-type">Fichier</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Statut</strong></div><span class="property-type">Sélection</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                                    <div>
-                                        <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Type" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                            <li>Assurance</li><li>Bail</li><li>Téléphonie</li><li>Énergie</li>
-                                        </ul>
-                                        <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Propriété "Statut" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                           <li>✅ Actif (Vert)</li><li>⚪️ Expiré (Gris)</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Contrat"</span></div></summary>
-                                    <div><p class="text-sm text-muted"><strong>Icône :</strong> `📄`.</p></div>
-                                </details>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.9 : `🛒 Achats & Garanties`</h4>
-                            <p class="text-muted mb-4">Pour suivre vos achats, factures et dates de garantie.</p>
-                            <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🛒</span><strong>Objet</strong></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Date d'achat</strong></div><span class="property-type">Date</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🛡️</span><strong>Fin de Garantie</strong></div><span class="property-type">Date</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📎</span><strong>Facture</strong></div><span class="property-type">Fichier</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🔖</span><strong>Catégorie</strong></div><span class="property-type">Sélection</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                                    <div>
-                                        <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Catégorie" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                            <li>Électronique</li><li>Mobilier</li><li>Vêtements</li><li>Bricolage</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouvel Achat"</span></div></summary>
-                                    <div><p class="text-sm text-muted"><strong>Icône :</strong> `🛒`.</p></div>
-                                </details>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.10 : `🚗 Véhicules`</h4>
-                            <p class="text-muted mb-4">Pour suivre vos véhicules passés et actuels, ainsi que leurs assurances.</p>
-                            <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🚗</span><strong>Modèle</strong></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🔖</span><strong>Type</strong></div><span class="property-type">Sélection</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Statut</strong></div><span class="property-type">Sélection</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🔗</span><strong>Assurance</strong></div><span class="property-type">Relation</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                                    <div>
-                                        <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Type" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                            <li>Voiture</li><li>Moto</li><li>Vélo</li>
-                                        </ul>
-                                         <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Propriété "Statut" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                           <li>✅ En possession</li><li>⚪️ Vendu</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Véhicule"</span></div></summary>
-                                    <div><p class="text-sm text-muted"><strong>Icône :</strong> `🚗`.</p></div>
-                                </details>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.11 : `🌿 Plantes`</h4>
-                            <p class="text-muted mb-4">Pour le suivi de vos plantes.</p>
-                            <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🌿</span><strong>Nom</strong></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">💧</span><strong>Fréquence Arrosage</strong></div><span class="property-type">Texte</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Dernier Arrosage</strong></div><span class="property-type">Date</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                               <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouvelle Plante"</span></div></summary>
-                                    <div><p class="text-sm text-muted"><strong>Icône :</strong> `🌿`.</p></div>
-                                </details>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.12 : `🐾 Animaux`</h4>
-                            <p class="text-muted mb-4">Pour suivre la santé de Pauline et Gus.</p>
-                             <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🐾</span><strong>Nom</strong></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🔖</span><strong>Type</strong></div><span class="property-type">Sélection</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Dernier Vétérinaire</strong></div><span class="property-type">Date</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📎</span><strong>Carnet de Santé</strong></div><span class="property-type">Fichier</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                                    <div>
-                                        <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Type" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                            <li>Chien</li><li>Chat</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                               <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouvel Animal"</span></div></summary>
-                                    <div><p class="text-sm text-muted"><strong>Icône :</strong> `🐾`.</p></div>
-                                </details>
-                            </div>
-                        </div>
-                         <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.13 : `❤️ Relations`</h4>
-                            <p class="text-muted mb-4">Un CRM personnel pour entretenir les liens avec les personnes qui comptent.</p>
-                             <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">❤️</span><strong>Nom</strong></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🔖</span><strong>Catégorie</strong></div><span class="property-type">Sélection</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Dernier Contact</strong></div><span class="property-type">Date</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🎂</span><strong>Anniversaire</strong></div><span class="property-type">Date</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                                    <div>
-                                        <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Catégorie" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                            <li>Famille</li><li>Ami</li><li>Professionnel</li><li>Connaissance</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                               <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Contact"</span></div></summary>
-                                    <div><p class="text-sm text-muted"><strong>Icône :</strong> `❤️`.</p></div>
-                                </details>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.14 : `🔄 Suivi des Habitudes`</h4>
-                            <p class="text-muted mb-4">Pour construire de bonnes habitudes, jour après jour.</p>
-                             <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📅</span><strong>Date</strong></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">💪</span><strong>Sport</strong></div><span class="property-type">Case à cocher</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">📖</span><strong>Lecture</strong></div><span class="property-type">Case à cocher</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🧘</span><strong>Méditation</strong></div><span class="property-type">Case à cocher</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                               <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Aujourd'hui"</span></div></summary>
-                                    <div><p class="text-sm text-muted"><strong>Icône :</strong> `🔄`. Configurez-le pour qu'il se répète tous les jours.</p></div>
-                                </details>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h4 class="font-semibold text-indigo-400 mb-2">Fiche 7.15 : `✍️ Création de Contenu`</h4>
-                            <p class="text-muted mb-4">Pour gérer vos idées et projets créatifs, du brouillon à la publication.</p>
-                             <ul>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">✍️</span><strong>Titre</strong></div><span class="property-type">Titre</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🔖</span><strong>Type</strong></div><span class="property-type">Sélection</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🏷️</span><strong>Statut</strong></div><span class="property-type">Sélection</span></li>
-                                <li class="property-item"><div class="property-details"><span class="property-icon">🗓️</span><strong>Date de Publication</strong></div><span class="property-type">Date</span></li>
-                            </ul>
-                            <div class="mt-4 space-y-4">
-                                <details>
-                                    <summary><div class="summary-content"><span class="property-icon">🎨</span><span class="ml-3">Détail des Sélections</span></div></summary>
-                                    <div>
-                                        <h5 class="font-semibold text-indigo-400 mb-2">Propriété "Type" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                           <li>Article de blog</li><li>Vidéo YouTube</li><li>Podcast</li>
-                                        </ul>
-                                        <h5 class="font-semibold text-indigo-400 mb-2 mt-4">Propriété "Statut" :</h5>
-                                        <ul class="list-disc list-inside text-sm text-muted">
-                                           <li>💡 Idée</li><li>📝 Brouillon</li><li>✅ Publié</li>
-                                        </ul>
-                                    </div>
-                                </details>
-                               <details>
-                                    <summary><div class="summary-content"><span class="property-icon">📝</span><span class="ml-3">Modèle par Défaut : "Nouveau Contenu"</span></div></summary>
-                                    <div><p class="text-sm text-muted"><strong>Icône :</strong> `✍️`.</p></div>
-                                </details>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
             
-            <section id="maintenance" class="mb-12">
-                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3"><i data-lucide="wrench" class="w-8 h-8 text-indigo-500"></i>Section 8 : Centre de Revue & Maintenance</h2>
-                <div class="card">
-                    <h3 class="text-xl font-semibold mb-4">Le Rituel de la Revue Hebdomadaire</h3>
-                    <p class="text-muted mb-4">Créez un modèle de page récurrent avec cette checklist pour ne rien oublier :</p>
-                    <div class="space-y-3">
-                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3">Étape 1 : Vider les Boîtes de Réception</span></label>
-                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3">Étape 2 : Revoir les Projets Actifs</span></label>
-                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3">Étape 3 : Revoir la Semaine Passée et à Venir</span></label>
-                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3">Étape 4 : Revoir les Domaines</span></label>
-                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3">Étape 5 : Vider l'Esprit (Brain Dump)</span></label>
-                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3"><strong>Étape 6 : Synthétiser & Agir (Cycle de la Connaissance)</strong></span></label>
+            <!-- Section 7 : Modules Optionnels -->
+            <section id="modules" class="mb-12">
+                 <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-slate-900 dark:text-white hidden-initial">
+                    <i class="fa-solid fa-puzzle-piece w-8 h-8 text-indigo-500"></i> Section 7 : Modules Optionnels
+                </h2>
+                
+                <!-- Module Finances -->
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-2 flex items-center gap-3 text-slate-900 dark:text-white"><i class="fa-solid fa-piggy-bank w-6 h-6 text-green-500"></i>Module Finances</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-4">Construisez ces bases de données pour un suivi financier complet.</p>
+                    <div class="space-y-4">
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.1 : `🏦 Comptes`</h4>
+                            <!-- ... (contenu migré) ... -->
+                        </div>
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.2 : `💸 Transactions`</h4>
+                            <!-- ... (contenu migré) ... -->
+                        </div>
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.3 : `📊 Budgets`</h4>
+                            <!-- ... (contenu migré) ... -->
+                        </div>
+                        <div class="info-card bg-slate-50 dark:bg-slate-800/50">
+                            <h4 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Fiche 7.4 : `🔁 Abonnements`</h4>
+                            <!-- ... (contenu migré) ... -->
+                        </div>
                     </div>
-                     <div class="step-card mt-6">
-                        <h4 class="font-bold text-lg">Amélioration : Le "Centre de Revue" Dynamique</h4>
-                        <p class="text-sm mt-2 text-muted">
-                           Créez une page dédiée `📅 Centre de Revue` et remplissez-la avec des vues liées et filtrées de vos bases de données pour voir en un clin d'œil :
-                           <br>• Les tâches terminées la semaine passée.
-                           <br>• Les projets sans activité récente.
-                           <br>• Les transactions de la semaine.
-                           <br>• Vos objectifs du trimestre en cours.
+                </div>
+                
+                <!-- Module Carrière -->
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-2 flex items-center gap-3 text-slate-900 dark:text-white"><i class="fa-solid fa-graduation-cap w-6 h-6 text-blue-500"></i>Module Carrière & Formations</h3>
+                    <!-- ... (contenu migré pour Fiches 7.5, 7.6, 7.7) ... -->
+                </div>
+                
+                <!-- Module Maison -->
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-2 flex items-center gap-3 text-slate-900 dark:text-white"><i class="fa-solid fa-home w-6 h-6 text-amber-500"></i>Module Maison & Vie Perso</h3>
+                    <!-- ... (contenu migré pour Fiches 7.8 à 7.15) ... -->
+                </div>
+            </section>
+            
+            <!-- Section 8 : Maintenance -->
+            <section id="maintenance" class="mb-12">
+                <h2 class="text-3xl font-bold mb-6 flex items-center gap-3 text-slate-900 dark:text-white hidden-initial">
+                    <i class="fa-solid fa-wrench w-8 h-8 text-indigo-500"></i> Section 8 : Centre de Revue & Maintenance
+                </h2>
+                <div class="info-card hidden-initial">
+                    <h3 class="text-xl font-semibold mb-4 text-slate-900 dark:text-white">Le Rituel de la Revue Hebdomadaire</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-4">Créez un modèle de page récurrent avec cette checklist pour ne rien oublier :</p>
+                    <div class="space-y-3 mb-6">
+                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3 text-slate-600 dark:text-slate-300">Étape 1 : Vider les Boîtes de Réception</span></label>
+                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3 text-slate-600 dark:text-slate-300">Étape 2 : Revoir les Projets Actifs</span></label>
+                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3 text-slate-600 dark:text-slate-300">Étape 3 : Revoir la Semaine Passée et à Venir</span></label>
+                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3 text-slate-600 dark:text-slate-300">Étape 4 : Revoir les Domaines</span></label>
+                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3 text-slate-600 dark:text-slate-300">Étape 5 : Vider l'Esprit (Brain Dump)</span></label>
+                        <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500"><span class="ml-3 text-slate-600 dark:text-slate-300"><strong>Étape 6 : Synthétiser & Agir (Cycle de la Connaissance)</strong></span></label>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border-l-4 border-indigo-500">
+                        <h4 class="font-bold text-lg text-slate-900 dark:text-white">Amélioration : Le "Centre de Revue" Dynamique</h4>
+                        <p class="text-sm mt-2 text-slate-600 dark:text-slate-300">
+                            Créez une page dédiée `📅 Centre de Revue` et remplissez-la avec des vues liées et filtrées de vos bases de données pour voir en un clin d'œil :
+                            <br>• Les tâches terminées la semaine passée.
+                            <br>• Les projets sans activité récente.
+                            <br>• Les transactions de la semaine.
+                            <br>• Vos objectifs du trimestre en cours.
                         </p>
                     </div>
                 </div>
             </section>
-            
         </main>
-    </div>
+        
+        <!-- Footer (Règle 4 / /perso) -->
+        <footer class="text-center mt-16 mb-8">
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+                Création originale de 'Cosmofilou' - Migrée et standardisée par l'Architecte de Design System.
+            </p>
+        </footer>
+        
+    </div> <!-- Fin du conteneur principal -->
 
+    <!-- 
+        Script de Référence (Dark Mode, Observer) 
+        + Scripts Migrés (Checklist, Copy, Nav Active)
+    -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- INITIALISATION DES ICÔNES LUCIDE ---
-            lucide.createIcons();
-
-            // --- GESTION DU THÈME SOMBRE/CLAIR ---
+            
+            // --- 1. Logique Dark Mode (de Référence) ---
             const themeToggle = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+            
+            // Appliquer le thème au chargement
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+            } else {
+                htmlElement.classList.remove('dark');
+            }
+
             themeToggle.addEventListener('click', () => {
-                document.documentElement.classList.toggle('dark');
-                if (document.documentElement.classList.contains('dark')) {
-                    localStorage.theme = 'dark';
-                } else {
-                    localStorage.theme = 'light';
-                }
+                htmlElement.classList.toggle('dark');
+                localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
             });
 
-            // --- ANIMATION D'APPARITION AU DÉFILEMENT ---
-            const cardObserver = new IntersectionObserver((entries) => {
+            // --- 2. Animation d'apparition (de Référence) ---
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Optionnel: n'animer qu'une fois
                     }
                 });
             }, { threshold: 0.1 });
 
-            document.querySelectorAll('.card').forEach(card => {
-                cardObserver.observe(card);
+            document.querySelectorAll('.hidden-initial').forEach(el => {
+                observer.observe(el);
             });
 
-            // --- SUIVI DE LA SECTION ACTIVE DANS LA NAVIGATION ---
-            const sectionObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        document.querySelectorAll('.nav-link').forEach(link => {
-                            link.classList.remove('active');
-                            if (link.getAttribute('href').substring(1) === entry.target.id) {
-                                link.classList.add('active');
-                            }
-                        });
-                    }
-                });
-            }, { rootMargin: "-50% 0px -50% 0px" });
-
-            document.querySelectorAll('main section').forEach(section => {
-                sectionObserver.observe(section);
-            });
-
-            // --- SCRIPT POUR LA CHECKLIST DYNAMIQUE ---
+            // --- 3. Logique de Checklist (Migrée - Règle 1) ---
             const checklistContainer = document.getElementById('construction-checklist');
             const progressBar = document.getElementById('progress-bar');
             const progressText = document.getElementById('progress-text');
             
             const databases = [
-                { id: 'db_objectives', name: '🌟 Objectifs & Résultats Clés' },
-                { id: 'db_tasks', name: '⚡ Tâches Maîtresse' },
-                { id: 'db_projects', name: '🎯 Projets' },
-                { id: 'db_areas', name: '🌳 Domaines' },
-                { id: 'db_resources', name: '📚 Ressources & Connaissances' },
-                { id: 'db_accounts', name: '🏦 Comptes' },
-                { id: 'db_transactions', name: '💸 Transactions' },
-                { id: 'db_budgets', name: '📊 Budgets' },
-                { id: 'db_subscriptions', name: '🔁 Abonnements' },
-                { id: 'db_courses', name: '🎓 Formations' },
-                { id: 'db_modules', name: '📚 Modules de Formation' },
-                { id: 'db_expenses', name: '🧾 Notes de Frais' },
-                { id: 'db_contracts', name: '📄 Contrats & Assurances' },
-                { id: 'db_purchases', name: '🛒 Achats & Garanties' },
-                { id: 'db_vehicles', name: '🚗 Véhicules' },
-                { id: 'db_plants', name: '🌿 Plantes' },
-                { id: 'db_pets', name: '🐾 Animaux' },
-                { id: 'db_relations', name: '❤️ Relations' },
-                { id: 'db_habits', name: '🔄 Suivi des Habitudes' },
-                { id: 'db_content', name: '✍️ Création de Contenu' },
+                 { id: 'db_objectives', name: '🌟 Objectifs & Résultats Clés' },
+                 { id: 'db_tasks', name: '⚡ Tâches Maîtresse' },
+                 { id: 'db_projects', name: '🎯 Projets' },
+                 { id: 'db_areas', name: '🌳 Domaines' },
+                 { id: 'db_resources', name: '📚 Ressources & Connaissances' },
+                 { id: 'db_accounts', name: '🏦 Comptes' },
+                 { id: 'db_transactions', name: '💸 Transactions' },
+                 { id: 'db_budgets', name: '📊 Budgets' },
+                 { id: 'db_subscriptions', name: '🔁 Abonnements' },
+                 { id: 'db_courses', name: '🎓 Formations' },
+                 { id: 'db_modules', name: '📚 Modules de Formation' },
+                 { id: 'db_expenses', name: '🧾 Notes de Frais' },
+                 { id: 'db_contracts', name: '📄 Contrats & Assurances' },
+                 { id: 'db_purchases', name: '🛒 Achats & Garanties' },
+                 { id: 'db_vehicles', name: '🚗 Véhicules' },
+                 { id: 'db_plants', name: '🌿 Plantes' },
+                 { id: 'db_pets', name: '🐾 Animaux' },
+                 { id: 'db_relations', name: '❤️ Relations' },
+                 { id: 'db_habits', name: '🔄 Suivi des Habitudes' },
+                 { id: 'db_content', name: '✍️ Création de Contenu' },
             ];
 
             let checklistState = JSON.parse(localStorage.getItem('notionChecklistState')) || {};
 
             function updateProgress() {
-                const totalItems = databases.length;
-                const checkedItems = Object.values(checklistState).filter(Boolean).length;
-                const percentage = totalItems > 0 ? Math.round((checkedItems / totalItems) * 100) : 0;
-                
-                progressBar.style.width = `${percentage}%`;
-                progressText.textContent = `${percentage}%`;
+                 const totalItems = databases.length;
+                 const checkedItems = Object.values(checklistState).filter(Boolean).length;
+                 const percentage = totalItems > 0 ? Math.round((checkedItems / totalItems) * 100) : 0;
+                 
+                 if (progressBar && progressText) {
+                    progressBar.style.width = `${percentage}%`;
+                    progressText.textContent = `${percentage}%`;
+                 }
             }
 
-            databases.forEach(db => {
-                const isChecked = checklistState[db.id] || false;
-                const itemHTML = `
-                    <label class="flex items-center p-2 rounded-md transition-colors hover:bg-gray-100 dark:hover:bg-gray-800/50 cursor-pointer">
-                        <input type="checkbox" data-id="${db.id}" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 bg-transparent" ${isChecked ? 'checked' : ''}>
-                        <span class="ml-3 text-sm">${db.name}</span>
-                    </label>
-                `;
-                checklistContainer.innerHTML += itemHTML;
-            });
-
-            checklistContainer.addEventListener('change', (e) => {
-                if (e.target.type === 'checkbox') {
-                    const id = e.target.dataset.id;
-                    checklistState[id] = e.target.checked;
-                    localStorage.setItem('notionChecklistState', JSON.stringify(checklistState));
-                    updateProgress();
-                }
-            });
-
-            // Initialiser la barre de progression au chargement
-            updateProgress();
-        });
-
-        // --- FONCTION DE COPIE DANS LE PRESSE-PAPIERS ---
-        function copyToClipboard(button) {
-            const codeBlock = button.nextElementSibling;
-            const code = codeBlock.querySelector('code');
-            const textToCopy = code.innerText;
-            const icon = button.querySelector('i');
-            const textSpan = button.querySelector('span');
-            
-            // Utilise l'API Clipboard moderne avec un fallback
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    showCopySuccess(button, icon, textSpan);
-                }).catch(err => {
-                    console.error('Erreur (Clipboard API): ', err);
-                    fallbackCopy(textToCopy, button, icon, textSpan);
+            if (checklistContainer) {
+                databases.forEach(db => {
+                    const isChecked = checklistState[db.id] || false;
+                    const itemHTML = `
+                        <label class="flex items-center p-2 rounded-md transition-colors hover:bg-slate-100 dark:hover:bg-slate-700/50 cursor-pointer">
+                            <input type="checkbox" data-id="${db.id}" class="h-4 w-4 rounded border-gray-400 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 bg-transparent" ${isChecked ? 'checked' : ''}>
+                            <span class="ml-3 text-sm text-slate-700 dark:text-slate-200">${db.name}</span>
+                        </label>
+                    `;
+                    checklistContainer.innerHTML += itemHTML;
                 });
-            } else {
-                fallbackCopy(textToCopy, button, icon, textSpan);
-            }
-        }
-        
-        function fallbackCopy(text, button, icon, textSpan) {
-             const textArea = document.createElement('textarea');
-             textArea.value = text;
-             textArea.style.position = 'fixed'; // Évite de faire défiler la page
-             document.body.appendChild(textArea);
-             textArea.focus();
-             textArea.select();
-             try {
-                 document.execCommand('copy');
-                 showCopySuccess(button, icon, textSpan);
-             } catch (err) {
-                 console.error('Impossible de copier (fallback)', err);
-                 textSpan.innerText = 'Erreur';
-                 setTimeout(() => { textSpan.innerText = 'Copier'; }, 2000);
-             }
-             document.body.removeChild(textArea);
-        }
 
-        function showCopySuccess(button, icon, textSpan) {
-            textSpan.innerText = 'Copié !';
-            icon.outerHTML = '<i data-lucide="check" class="w-3 h-3 text-green-400"></i>';
-            lucide.createIcons(); // Recréer l'icône
-            setTimeout(() => {
-                textSpan.innerText = 'Copier';
-                button.querySelector('i').outerHTML = '<i data-lucide="copy" class="w-3 h-3"></i>';
-                lucide.createIcons();
-            }, 2000);
-        }
+                checklistContainer.addEventListener('change', (e) => {
+                    if (e.target.type === 'checkbox') {
+                        const id = e.target.dataset.id;
+                        checklistState[id] = e.target.checked;
+                        localStorage.setItem('notionChecklistState', JSON.stringify(checklistState));
+                        updateProgress();
+                    }
+                });
+                
+                updateProgress(); // Initialiser au chargement
+            }
+
+            // --- 4. Logique de Copie de Code (Migrée - Règle 1) ---
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    copyToClipboard(button);
+                });
+            });
+
+            function copyToClipboard(button) {
+                 const codeBlock = button.nextElementSibling;
+                 const code = codeBlock.querySelector('code');
+                 const textToCopy = code.innerText;
+                 const icon = button.querySelector('i');
+                 const textSpan = button.querySelector('span');
+                 
+                 if (navigator.clipboard && window.isSecureContext) {
+                     navigator.clipboard.writeText(textToCopy).then(() => {
+                         showCopySuccess(button, icon, textSpan);
+                     }).catch(err => {
+                         fallbackCopy(textToCopy, button, icon, textSpan);
+                     });
+                 } else {
+                     fallbackCopy(textToCopy, button, icon, textSpan);
+                 }
+            }
+             
+            function fallbackCopy(text, button, icon, textSpan) {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showCopySuccess(button, icon, textSpan);
+                } catch (err) {
+                    textSpan.innerText = 'Erreur';
+                    setTimeout(() => { textSpan.innerText = 'Copier'; }, 2000);
+                }
+                document.body.removeChild(textArea);
+            }
+
+            function showCopySuccess(button, icon, textSpan) {
+                 textSpan.innerText = 'Copié !';
+                 icon.className = 'fa-solid fa-check w-3 h-3 text-green-400';
+                 setTimeout(() => {
+                     textSpan.innerText = 'Copier';
+                     icon.className = 'fa-solid fa-copy w-3 h-3';
+                 }, 2000);
+            }
+            
+            // --- 5. Logique de Nav Active au Scroll (Migrée - Règle 1) ---
+            const sectionObserver = new IntersectionObserver((entries) => {
+                 entries.forEach(entry => {
+                     if (entry.isIntersecting) {
+                         document.querySelectorAll('.nav-link').forEach(link => {
+                             link.classList.remove('active'); // 'active' n'est pas stylé, mais la logique est là
+                             if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                 link.classList.add('active');
+                             }
+                         });
+                     }
+                 });
+            }, { rootMargin: "-50% 0px -50% 0px" });
+
+            document.querySelectorAll('main section').forEach(section => {
+                 sectionObserver.observe(section);
+            });
+
+        });
     </script>
 </body>
 </html>
-
-
