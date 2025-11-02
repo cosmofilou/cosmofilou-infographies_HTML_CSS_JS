@@ -132,12 +132,11 @@
             transition: width 0.5s ease-in-out;
         }
         
-        /* Styles pour Details/Summary (migrés) */
+        /* Styles pour Details/Summary (corrigés) */
         details > summary {
             list-style: none; /* Cache la flèche par défaut */
             cursor: pointer;
-            position: relative;
-            padding-left: 1.75rem; /* Espace pour l'icône FontAwesome */
+            /* position: relative; est appliqué via la classe Tailwind 'relative' */
         }
         details > summary::-webkit-details-marker { display: none; }
         details > summary::before {
@@ -145,10 +144,14 @@
             font-weight: 900;
             content: "\f0da"; /* fa-caret-right */
             position: absolute;
-            left: 0.5rem;
+            left: 1rem; /* Corresponds à p-4 */
             top: 50%;
             transform: translateY(-50%) rotate(0deg);
             transition: transform 0.2s;
+            color: #64748b; /* slate-500 */
+        }
+        .dark details > summary::before {
+            color: #94a3b8; /* slate-400 */
         }
         details[open] > summary::before {
             transform: translateY(-50%) rotate(90deg);
@@ -300,7 +303,7 @@
                     <!-- Details/Summary migrés -->
                     <div class="space-y-4">
                         <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                            <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                             <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                 <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Période" :</h5>
                                 <ul class="list-disc list-inside">
@@ -313,7 +316,7 @@
                             </div>
                         </details>
                         <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvel Objectif"</summary>
+                            <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvel Objectif"</span></summary>
                             <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                 <p><strong>Icône :</strong> `🎯`. Dans la page, créez un titre H3 "Projets Associés" et insérez une vue liée de la base `Projets`, filtrée sur cet objectif.</p>
                             </div>
@@ -425,7 +428,7 @@
 
                     <div class="mt-4 space-y-4">
                         <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                            <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                             <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                 <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Statut" :</h5>
                                 <ul class="list-disc list-inside">
@@ -443,7 +446,7 @@
                             </div>
                         </details>
                         <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Tâche"</summary>
+                            <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Tâche"</span></summary>
                             <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                 <p class="mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `📄`.</p>
                                 <p class="mb-4"><strong>Propriétés :</strong> Pré-remplissez la `Priorité` sur `🔵 Basse`.</p>
@@ -493,7 +496,7 @@
 
                     <div class="mt-4 space-y-4">
                         <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                            <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                             <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                 <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Statut" :</h5>
                                 <ul class="list-disc list-inside">
@@ -505,7 +508,7 @@
                             </div>
                         </details>
                         <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Projet"</summary>
+                            <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Projet"</span></summary>
                             <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                 <p class="mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `🚀`.</p>
                                 <p class="mb-4"><strong>Propriétés :</strong> Pré-remplissez le `Statut` sur `Planifié`.</p>
@@ -542,7 +545,7 @@
                     <!-- Contenu <details> RESTAURÉ -->
                     <div class="mt-4 space-y-4">
                         <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Domaine"</summary>
+                            <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Domaine"</span></summary>
                             <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                 <p class="mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `🧭`.</p>
                                 <p><strong>Contenu de la page :</strong> Utilisez cette structure pour créer un tableau de bord pour chaque domaine :</p>
@@ -595,7 +598,7 @@
                     <!-- Contenu <details> RESTAURÉ -->
                     <div class="mt-4 space-y-4">
                         <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                            <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                             <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                 <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Type" :</h5>
                                 <ul class="list-disc list-inside">
@@ -620,7 +623,7 @@
                             </div>
                         </details>
                         <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                            <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Note"</summary>
+                            <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Note"</span></summary>
                             <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                 <p class="mb-4"><strong>Icône :</strong> Donnez à ce modèle l'icône `💡`.</p>
                                 <p class="mb-4"><strong>Propriétés :</strong> Pré-remplissez le `Statut` sur `À lire / À traiter`.</p>
@@ -768,7 +771,7 @@
                     <p class="text-slate-600 dark:text-slate-300">Voici le détail des actions à mener pour vos projets prioritaires. Créez les projets et les tâches correspondantes dans votre système.</p>
                     
                     <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg" open>
-                        <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">💰</span>Sujet : `Reprendre le contrôle total de mes finances`</summary>
+                        <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">💰</span>Sujet : \`Reprendre le contrôle total de mes finances\`</span></summary>
                         <div class="p-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
                             <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg border-l-4 border-purple-500">
                                 <p class="font-semibold text-sm text-purple-800 dark:text-purple-200 flex items-center gap-2"><i class="fa-solid fa-link w-4 h-4"></i> Connexion Stratégique</p>
@@ -795,7 +798,7 @@
                     
                     <!-- Contenu RESTAURÉ -->
                     <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                        <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🔐</span>Sujet : `Optimiser ma sécurité numérique`</summary>
+                        <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🔐</span>Sujet : \`Optimiser ma sécurité numérique\`</span></summary>
                          <div class="p-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
                             <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg border-l-4 border-purple-500">
                                 <p class="font-semibold text-sm text-purple-800 dark:text-purple-200 flex items-center gap-2"><i class="fa-solid fa-link w-4 h-4"></i> Connexion Stratégique</p>
@@ -820,7 +823,7 @@
                     </details>
                     
                     <details class="bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                        <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📂</span>Sujet : `Organiser ma vie numérique`</summary>
+                        <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📂</span>Sujet : \`Organiser ma vie numérique\`</span></summary>
                          <div class="p-4 border-t border-slate-200 dark:border-slate-700 space-y-4">
                             <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg border-l-4 border-purple-500">
                                 <p class="font-semibold text-sm text-purple-800 dark:text-purple-200 flex items-center gap-2"><i class="fa-solid fa-link w-4 h-4"></i> Connexion Stratégique</p>
@@ -869,7 +872,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Type" :</h5>
                                         <ul class="list-disc list-inside">
@@ -878,7 +881,7 @@
                                     </div>
                                 </details>
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Compte"</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Compte"</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <p><strong>Icône :</strong> `💰`. Pas de contenu de page nécessaire.</p>
                                     </div>
@@ -899,7 +902,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Transaction"</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Transaction"</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <p><strong>Icône :</strong> `🛒`. Pas de contenu de page nécessaire.</p>
                                     </div>
@@ -919,7 +922,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Budget"</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Budget"</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <p><strong>Icône :</strong> `💰`. Pas de contenu de page nécessaire.</p>
                                     </div>
@@ -939,7 +942,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Statut" :</h5>
                                         <ul class="list-disc list-inside">
@@ -949,7 +952,7 @@
                                     </div>
                                 </details>
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvel Abonnement"</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvel Abonnement"</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <p><strong>Icône :</strong> `🔁`. Pas de contenu de page nécessaire.</p>
                                     </div>
@@ -979,7 +982,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Statut" :</h5>
                                         <ul class="list-disc list-inside">
@@ -988,7 +991,7 @@
                                     </div>
                                 </details>
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Formation"</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Formation"</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <p class="mb-4"><strong>Icône :</strong> `🎓`.</p>
                                         <p><strong>Contenu de la page :</strong> Utilisez cette structure pour détailler une formation :</p>
@@ -1012,7 +1015,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Module"</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Module"</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <p><strong>Icône :</strong> `📖`. Pas de contenu de page nécessaire.</p>
                                     </div>
@@ -1032,7 +1035,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Statut" :</h5>
                                         <ul class="list-disc list-inside">
@@ -1041,7 +1044,7 @@
                                     </div>
                                 </details>
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Note de Frais"</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Note de Frais"</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <p><strong>Icône :</strong> `🧾`. Pas de contenu de page nécessaire.</p>
                                     </div>
@@ -1070,7 +1073,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Type" :</h5>
                                         <ul class="list-disc list-inside">
@@ -1083,8 +1086,8 @@
                                     </div>
                                 </details>
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Contrat"</summary>
-                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Contrat"</span></summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300"><p><strong>Icône :</strong> `📄`.</p></div>
                                         <p><strong>Icône :</strong> `📄`.</p>
                                     </div>
                                 </details>
@@ -1104,7 +1107,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Catégorie" :</h5>
                                         <ul class="list-disc list-inside">
@@ -1113,8 +1116,8 @@
                                     </div>
                                 </details>
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvel Achat"</summary>
-                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvel Achat"</span></summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300"><p><strong>Icône :</strong> `🛒`.</p></div>
                                         <p><strong>Icône :</strong> `🛒`.</p>
                                     </div>
                                 </details>
@@ -1133,7 +1136,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Type" :</h5>
                                         <ul class="list-disc list-inside">
@@ -1146,8 +1149,8 @@
                                     </div>
                                 </details>
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Véhicule"</summary>
-                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Véhicule"</span></summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300"><p><strong>Icône :</strong> `🚗`.</p></div>
                                         <p><strong>Icône :</strong> `🚗`.</p>
                                     </div>
                                 </details>
@@ -1164,9 +1167,9 @@
                                 <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🗓️</span><strong>Dernier Arrosage</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Date</span></li>
                             </ul>
                             <div class="mt-4 space-y-4">
-                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Plante"</summary>
-                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                               <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvelle Plante"</span></summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300"><p><strong>Icône :</strong> `🌿`.</p></div>
                                         <p><strong>Icône :</strong> `🌿`.</p>
                                     </div>
                                 </details>
@@ -1185,7 +1188,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Type" :</h5>
                                         <ul class="list-disc list-inside">
@@ -1193,9 +1196,9 @@
                                         </ul>
                                     </div>
                                 </details>
-                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvel Animal"</summary>
-                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                               <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouvel Animal"</span></summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300"><p><strong>Icône :</strong> `🐾`.</p></div>
                                         <p><strong>Icône :</strong> `🐾`.</p>
                                     </div>
                                 </details>
@@ -1214,7 +1217,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Catégorie" :</h5>
                                         <ul class="list-disc list-inside">
@@ -1222,9 +1225,9 @@
                                         </ul>
                                     </div>
                                 </details>
-                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Contact"</summary>
-                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                               <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Contact"</span></summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300"><p><strong>Icône :</strong> `❤️`.</p></div>
                                         <p><strong>Icône :</strong> `❤️`.</p>
                                     </div>
                                 </details>
@@ -1242,9 +1245,9 @@
                                 <li class="flex justify-between items-center py-3"><div class="flex items-center"><span class="mr-3">🧘</span><strong>Méditation</strong></div><span class="text-xs font-medium bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-full">Case à cocher</span></li>
                             </ul>
                             <div class="mt-4 space-y-4">
-                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Aujourd'hui"</summary>
-                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
+                               <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Aujourd'hui"</span></summary>
+                                    <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300"><p><strong>Icône :</strong> `🔄`. Configurez-le pour qu'il se répète tous les jours.</p></div>
                                         <p><strong>Icône :</strong> `🔄`. Configurez-le pour qu'il se répète tous les jours.</p>
                                     </div>
                                 </details>
@@ -1263,7 +1266,7 @@
                             </ul>
                             <div class="mt-4 space-y-4">
                                 <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</summary>
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">🎨</span>Détail des Sélections</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <h5 class="font-semibold text-indigo-500 dark:text-indigo-400 mb-2">Propriété "Type" :</h5>
                                         <ul class="list-disc list-inside">
@@ -1275,8 +1278,8 @@
                                         </ul>
                                     </div>
                                 </details>
-                                <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
-                                    <summary class="cursor-pointer p-4 font-semibold text-slate-900 dark:text-white flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Contenu"</summary>
+                               <details class="bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                    <summary class="cursor-pointer p-4 pl-9 relative font-semibold text-slate-900 dark:text-white"><span class="flex items-center gap-3"><span class="property-icon">📝</span>Modèle par Défaut : "Nouveau Contenu"</span></summary>
                                     <div class="p-4 border-t border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300">
                                         <p><strong>Icône :</strong> `✍️`.</p>
                                     </div>
@@ -1504,4 +1507,5 @@
     </script>
 </body>
 </html>
+
 
