@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proposition de Modernisation V3.00 - Golfinho</title>
     
-    <!-- Chargement de Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chargement de Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Chargement de Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chargement de Font Awesome --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* Simulation de la police par défaut d'Office (Segoe UI) */
         body {
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
         
+        /* Application de la police Agency FB pour Golfinho si disponible */
+        .vba-golfinho-title {
+            font-family: "Agency FB", Arial, sans-serif; /* Agency FB, avec des fallbacks */
+        }
+
         /* --- NOUVELLE STRUCTURE V3 --- */
         .vba-userform {
             display: flex;
@@ -199,10 +202,8 @@
                 
                 <!-- 1. MENU LATÉRAL (Gauche) --><aside class="vba-sidebar">
                     <!-- En-tête du menu avec logo + nom (MODIFIÉ) --><div class="vba-sidebar-header">
-                        <div class="flex items-center gap-2"> <!-- Alignement ajusté + gap -->
-                            <!-- Remplacement de l'emoji par une icône Font Awesome SVG -->
-                            <i class="fa-solid fa-dolphin text-3xl text-blue-500"></i>
-                            <span class="text-xl font-bold tracking-wide text-white">Golfinho</span>
+                        <div class="flex items-center gap-2"> <!-- Alignement ajusté + gap --><!-- Point bleu avant Golfinho --><span class="h-3 w-3 bg-blue-500 rounded-full"></span> 
+                            <!-- Police et taille de Golfinho ajustées --><span class="text-2xl font-bold tracking-wide text-white vba-golfinho-title">Golfinho</span>
                         </div>
                         <!-- Version "Gelule" (Pill) en dessous --><span class="inline-block bg-blue-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full mt-1">v3.00</span> <!-- Marge supérieure ajustée --></div>
 
@@ -278,10 +279,8 @@
                         <!-- PAGE: ACCUEIL (MODIFIÉE AVEC GRILLE 3 COLONNES) --><div id="page-accueil" class="page-content">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Accueil</h2>
                             <p class="text-gray-700 mb-6">Bienvenue sur Golfinho 3.0. Sélectionnez une rubrique dans le menu de gauche pour commencer.</p>
-                            <!-- Changement: Grille 2 colonnes -> 3 colonnes pour plus de densité -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
-                                <!-- Cadre 1: Imports Fréquents -->
-                                <div class="vba-frame">
+                            <!-- Changement: Grille 2 colonnes -> 3 colonnes pour plus de densité --><div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
+                                <!-- Cadre 1: Imports Fréquents --><div class="vba-frame">
                                     <h3 class="vba-frame-title">Imports Fréquents</h3>
                                     <div class="p-4 space-y-3">
                                         <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFLGEST</span></div>
@@ -290,8 +289,7 @@
                                         <div class="vba-button"><i class="fa-solid fa-satellite-dish fa-fw w-5"></i><span>Importer MBW/GPRS</span></div>
                                     </div>
                                 </div>
-                                <!-- Cadre 2: Actions Principales -->
-                                <div class="vba-frame">
+                                <!-- Cadre 2: Actions Principales --><div class="vba-frame">
                                     <h3 class="vba-frame-title">Actions Principales</h3>
                                     <div class="p-4 space-y-3">
                                         <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extraction cité(s)</span></div>
@@ -299,12 +297,10 @@
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-calendar-alt fa-fw w-5"></i><span>Accéder au planning</span></div>
                                     </div>
                                 </div>
-                                <!-- Cadre 3: Infos & Rapports -->
-                                <div class="vba-frame">
+                                <!-- Cadre 3: Infos & Rapports --><div class="vba-frame">
                                     <h3 class="vba-frame-title">Infos & Rapports</h3>
                                     <div class="p-4 space-y-3">
-                                        <!-- Infos (tronquées) -->
-                                        <div class="text-sm text-gray-700 space-y-2">
+                                        <!-- Infos (tronquées) --><div class="text-sm text-gray-700 space-y-2">
                                             <div class="flex justify-between items-center gap-2">
                                                 <span class="font-medium whitespace-nowrap">Serveur :</span>
                                                 <span class="vba-path-truncate text-blue-700 text-xs text-right" title="\\jetform_comptage\app\data\fichiers_source_flux_mbw\tres_long_chemin_qui_doit_retourner_a_la_ligne\...">\\jetform_comptage\app\data\...</span>
@@ -319,8 +315,7 @@
                                             </div>
                                         </div>
                                         <hr class="my-3">
-                                        <!-- Bouton Rapport -->
-                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Générer un rapport SDC</span></div>
+                                        <!-- Bouton Rapport --><div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Générer un rapport SDC</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -347,8 +342,7 @@
                                 <div class="vba-frame md:col-span-2">
                                     <h3 class="vba-frame-title">Mise à jour de la Base (Produits, etc.)</h3>
                                     <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        <!-- Bouton standardisé -->
-                                        <div class="vba-button"><i class="fa-solid fa-box-open fa-fw w-5"></i><span>Gérer les Produits</span></div>
+                                        <!-- Bouton standardisé --><div class="vba-button"><i class="fa-solid fa-box-open fa-fw w-5"></i><span>Gérer les Produits</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-wrench fa-fw w-5"></i><span>Gérer Déposé / Posé</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-history fa-fw w-5"></i><span>Gérer Histo. 14</span></div>
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-exchange-alt fa-fw w-5"></i><span>Tout Transférer</span></div>
