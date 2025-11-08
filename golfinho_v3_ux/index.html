@@ -245,9 +245,14 @@
                     
                     <div class="vba-sidebar-header">
                         <div class="flex items-center gap-2"> 
+                            <!-- Icône Dauphin (MODIFIÉ) -->
                             <i class="fa-solid fa-dolphin text-5xl text-blue-500"></i>
+                            
+                            <!-- Titre (MODIFIÉ: text-6xl + police) -->
                             <span class="text-6xl font-bold tracking-wide text-white vba-golfinho-title">Golfinho</span>
                         </div>
+                        
+                        <!-- Version -->
                         <span class="inline-block bg-blue-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full mt-1">v5.00</span> 
                     </div>
 
@@ -304,6 +309,7 @@
                     <header class="vba-content-header">
                         <button class="vba-button-link" aria-label="Licorne">
                             <i class="fa-brands fa-salesforce fa-fw"></i>
+                            <!-- (MODIFIÉ: "Outil:" retiré) -->
                             <span>Licorne</span>
                         </button>
                         <button class="vba-button-link" aria-label="Helpjuice">
@@ -322,10 +328,14 @@
                     <!-- == CONTENU DE PAGE (V3) == -->
                     <div class="vba-content-page">
 
-                        <!-- Page: Accueil (MODIFIÉE AVEC ACCORDÉONS V4) -->
+                        <!-- Page: Accueil (MODIFIÉE AVEC ACCORDÉONS V4 + BIENVENUE) -->
                         <div id="page-accueil" class="page-content">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Tableau de Bord</h2>
-                            <p class="text-gray-700 mb-6">Ouvrez les sections dont vous avez besoin. Les modules complets restent accessibles via le menu de gauche.</p>
+                            
+                            <!-- Message de bienvenue personnalisé -->
+                            <div class="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+                                <h2 class="text-2xl font-bold text-gray-800 mb-2">Bienvenue, Aurélien !</h2>
+                                <p class="text-gray-700">Votre centre de commande Golfinho est prêt. Retrouvez ici toutes les automatisations pour exceller sur Licorne/Salesforce.</p>
+                            </div>
                             
                             <!-- Section 1: Actions Rapides (Ouverte par défaut) -->
                             <div class="vba-accordion-section">
