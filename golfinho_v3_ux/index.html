@@ -179,13 +179,14 @@
             color: black;
         }
         
+        /* Correction pour le chemin tronqué */
         .vba-path-truncate {
-            display: block;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             cursor: help; 
             position: relative; 
+            max-width: 150px; /* Limite la largeur max pour forcer la troncature */
         }
         
         /* --- STYLES ACCORDION (Importés de V4) --- */
@@ -363,9 +364,10 @@
                                         <div class="space-y-3">
                                             <h4 class="font-semibold mb-2 text-gray-700">Infos & Rapports</h4>
                                             <div class="text-sm text-gray-700 space-y-2 p-3 bg-gray-50 rounded-md">
-                                                <div class="flex justify-between items-center gap-2"><span class="font-medium">Serveur :</span><span class="vba-path-truncate text-blue-700 text-xs text-right" title="\\long\path\to\server\...">\\long\path\to\server\...</span></div>
-                                                <div class="flex justify-between items-center gap-2"><span class="font-medium">Source :</span><span class="vba-path-truncate text-blue-700 text-xs text-right" title="G:\Mon Drive\Downloads\...">G:\Mon Drive\Downloads\...</span></div>
-                                                <div class="flex justify-between items-center gap-2"><span class="font-medium">Utilisateur :</span><span class="text-right">adacosta</span></div>
+                                                <!-- (MODIFIÉ: Correction affichage chemin) -->
+                                                <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Serveur :</span><span class="vba-path-truncate text-blue-700 text-xs text-right" title="\\long\path\to\server\...">\\long\path\to\server\...</span></div>
+                                                <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Source :</span><span class="vba-path-truncate text-blue-700 text-xs text-right" title="G:\Mon Drive\Downloads\...">G:\Mon Drive\Downloads\...</span></div>
+                                                <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Utilisateur :</span><span class="text-right">adacosta</span></div>
                                             </div>
                                             <div class="vba-button vba-button-secondary mt-3"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Générer un rapport SDC</span></div>
                                         </div>
@@ -487,36 +489,168 @@
                                         <div><label class="block font-medium mb-1">Date:</label><input type="date" class="w-full p-2 border rounded-md"></div>
                                     </div>
                                 </div>
+                                <div class="vba-frame md:col-span-2">
+                                    <h3 class="vba-frame-title">Gestion des CR de Pose</h3>
+                                    <div class="p-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        <div><label class="block font-medium mb-1">Type de CR:</label><select class="w-full p-2 border rounded-md"><option>EAU/CET v2</option><option>RFC v2</option><option>v3 (bêta)</option></select></div>
+                                        <div class="p-4 bg-gray-50 rounded-lg space-y-2"><div class="vba-button vba-button-secondary"><i class="fa-solid fa-eye fa-fw w-5"></i><span>Vision envoi anomalies</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-copy fa-fw w-5"></i><span>Copier les anomalies</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-paper-plane fa-fw w-5"></i><span>Envoi des EDC</span></div></div>
+                                        <div class="p-4 bg-gray-50 rounded-lg space-y-2"><div class="vba-button vba-button-secondary"><i class="fa-solid fa-box-tissue fa-fw w-5"></i><span>Importer Stock Interv.</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-plus-circle fa-fw w-5"></i><span>Incrémenter DPLTAB</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-broom fa-fw w-5"></i><span>Nettoyage NS</span></div></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- ... Autres pages complètes (Relevés, Flux, Analyse, Rapports, Outils) ... -->
+                        <!-- Page: Relevés (Page complète V3) -->
                         <div id="page-releves" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés (Module Complet)</h2>
-                            <p class="text-gray-700">Contenu intégral du module Relevés...</p>
-                            <!-- Mettez ici le contenu complet de V3 pour Relevés -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Relève Manuelle</h3>
+                                    <div class="p-4 space-y-3">
+                                        <p class="font-medium">Support de relevé:</p>
+                                        <div class="vba-button"><i class="fa-solid fa-file-signature fa-fw w-5"></i><span>Générer un support</span></div>
+                                        <div class="flex gap-4 pt-2"><label><input type="radio" name="releve" class="mr-1" checked> RF</label><label><input type="radio" name="releve" class="mr-1"> Bailleur</label></div>
+                                    </div>
+                                </div>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Télérelève</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div class="vba-button"><i class="fa-solid fa-broom fa-fw w-5"></i><span>Nettoyage export Accès Pro</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-triangle-exclamation fa-fw w-5"></i><span>Analyse des alarmes</span></div>
+                                        <hr class="my-3">
+                                        <p class="font-medium">Test / Install</p>
+                                        <div class="vba-button"><i class="fa-solid fa-network-wired fa-fw w-5"></i><span>Erreur réseau GPRS</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-microchip fa-fw w-5"></i><span>Télérelève impos.</span></div>
+                                        <p class="font-medium pt-2">Type radio:</p>
+                                        <div class="grid grid-cols-2 gap-2"><label><input type="checkbox" class="mr-1"> Diehl R4</label><label><input type="checkbox" class="mr-1"> Apator OMS</label><label><input type="checkbox" class="mr-1"> Diehl OMS</label><label><input type="checkbox" class="mr-1"> RFC</label><label><input type="checkbox" class="mr-1"> Apator</label><label><input type="checkbox" class="mr-1"> CET</label></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        
+                        <!-- Page: Flux de Fichiers (Page complète V3) -->
                         <div id="page-flux" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Flux de Fichiers (Module Complet)</h2>
-                            <p class="text-gray-700">Contenu intégral du module Flux de Fichiers...</p>
-                            <!-- Mettez ici le contenu complet de V3 pour Flux -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Importation de Fichiers</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>OFIGEST</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>AccèsPro</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>MBW</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Trame Bâti</span></div>
+                                        <hr><div class="vba-button vba-button-secondary"><i class="fa-solid fa-upload fa-fw w-5"></i><span>PRCGEST (Extract. agence)</span></div>
+                                    </div>
+                                </div>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Extraction de Données</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extraction cité(s)</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extraction patrimoine client</span></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        
+                        <!-- Page: Analyse & EDI (Page complète V3) -->
                         <div id="page-analyse" class="page-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Analyse & EDI (Module Complet)</h2>
-                            <p class="text-gray-700">Contenu intégral du module Analyse & EDI...</p>
-                            <!-- Mettez ici le contenu complet de V3 pour Analyse -->
+                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Analyse & EDI (Module Complet)</h2>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Analyse de Fichiers</h3>
+                                    <div class="p-4 space-y-3">
+                                        <p class="font-medium text-center">Analyse Cité VS MBW</p>
+                                        <div class="vba-button"><i class="fa-solid fa-code-merge fa-fw w-5"></i><span>Fusion fichiers MBW</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-file-waveform fa-fw w-5"></i><span>Création fichier d'analyse</span></div>
+                                        <hr>
+                                        <p class="font-medium text-center">MyVoid (Index BPRS)</p>
+                                        <div class="vba-button"><i class="fa-solid fa-play-circle fa-fw w-5"></i><span>Lancer l'analyse MyVoid</span></div>
+                                    </div>
+                                </div>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Module EDI</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-code fa-fw w-5"></i><span>EDI CET 8 Car.</span></div>
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-list-ol fa-fw w-5"></i><span>Codes IF</span></div>
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-ban fa-fw w-5"></i><span>Suppr. 999</span></div>
+                                    </div>
+                                </div>
+                             </div>
                         </div>
+                        
+                        <!-- Page: Rapports & Exports (Page complète V3) -->
                         <div id="page-rapports" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Rapports & Exports (Module Complet)</h2>
-                            <p class="text-gray-700">Contenu intégral du module Rapports & Exports...</p>
-                            <!-- Mettez ici le contenu complet de V3 pour Rapports -->
-                        </div>
-                        <div id="page-outils" class="page-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Outils & Paramètres (Module Complet)</h2>
-                            <p class="text-gray-700">Contenu intégral du module Outils & Paramètres...</p>
-                            <!-- Mettez ici le contenu complet de V3 pour Outils -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Exports Standards</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div class="vba-button"><i class="fa-solid fa-file-excel fa-fw w-5"></i><span>Exports Excel</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-file-pdf fa-fw w-5"></i><span>Exports PDF</span></div>
+                                    </div>
+                                </div>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Rapports Métier</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div class="vba-button"><i class="fa-solid fa-file-export fa-fw w-5"></i><span>Rapport Analyse SDC</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-file-export fa-fw w-5"></i><span>Rapport Analyse Client</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-file-export fa-fw w-5"></i><span>Rapport Bilan (Bailleur)</span></div>
+                                    </div>
+                                </div>
+                                <div class="vba-frame md:col-span-2">
+                                    <h3 class="vba-frame-title">Génération Rapports (Pose...)</h3>
+                                     <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div class="vba-button"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Créer un rapport</span></div>
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-excel fa-fw w-5"></i><span>MàJ bâti</span></div>
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-pdf fa-fw w-5"></i><span>EDC flash en PDF</span></div>
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-pdf fa-fw w-5"></i><span>CR v2 en PDF</span></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
+                        <!-- Page: Outils & Paramètres (Page complète V3) -->
+                        <div id="page-outils" class="page-content hidden">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Outils & Paramètres (Module Complet)</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="vba-frame md:col-span-2">
+                                    <h3 class="vba-frame-title">Configuration des Chemins</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div><label class="block font-medium mb-1">Chemin Serveur &nbsp;:</label><div class="flex gap-2"><input type="text" value="\\jetform_comptage\..." class="w-full p-2 border rounded-md bg-gray-50"><button class="vba-button px-3"><i class="fa-solid fa-pen"></i></button></div></div>
+                                        <div><label class="block font-medium mb-1">Dossier Source &nbsp;:</label><div class="flex gap-2"><input type="text" value="G:\Mon Drive\00_Downloads" class="w-full p-2 border rounded-md bg-gray-50"><button class="vba-button px-3"><i class="fa-solid fa-pen"></i></button></div></div>
+                                    </div>
+                                </div>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Accès Outils & Dossiers</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-folder fa-fw w-5"></i><span>Ouvrir Dossier Fichiers</span></div>
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-screwdriver-wrench fa-fw w-5"></i><span>Ouvrir Dossier Utilitaires</span></div>
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-save fa-fw w-5"></i><span>Ouvrir Dossier Backup</span></div>
+                                    </div>
+                                </div>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Mode Administrateur</h3>
+                                    <div class="p-4 grid grid-cols-2 gap-3">
+                                        <div class="vba-button"><i class="fa-solid fa-power-off fa-fw w-5"></i><span>Service Mode</span></div>
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-sign-out-alt fa-fw w-5"></i><span>Exit Service</span></div>
+                                    </div>
+                                </div>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Paramètres DPLTAB</h3>
+                                    <div class="p-4 space-y-2">
+                                        <p class="font-medium">Paramètres à générer :</p>
+                                        <label><input type="checkbox" class="mr-1"> Tous les CR</label><label><input type="checkbox" class="mr-1"> CP</label><label><input type="checkbox" class="mr-1"> SC</label><label><input type="checkbox" class="mr-1"> NT</label>
+                                    </div>
+                                </div>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Analyse & Suppression (Admin)</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div><p class="font-medium mb-2">Analyse du patrimoine</p><div class="grid grid-cols-2 gap-1"><label><input type="checkbox" class="mr-1"> Pose à l'envers</label><label><input type="checkbox" class="mr-1"> Conso 0</label><label><input type="checkbox" class="mr-1"> Alarmes</label><label><input type="checkbox" class="mr-1"> Observations</label><label><input type="checkbox" class="mr-1"> Périodes</label></div></div>
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-trash fa-fw w-5"></i><span>Suppr. Rapports / Généraux</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </main>
