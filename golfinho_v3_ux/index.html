@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proposition de Modernisation V3.00 - Golfinho</title>
     
-    <!-- Chargement de Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chargement de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Chargement de Font Awesome --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chargement de Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* Simulation de la police par défaut d'Office (Segoe UI) */
         body {
@@ -198,16 +200,30 @@
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Maquette Visuelle "Golfinho 3.0"</h2>
             <p class="mb-6 text-gray-700">Simulation d'un `UserForm` avec un menu latéral (`ListBox` ou `Frame` stylisé) et des `Frames` de contenu dynamiques. Cette approche est plus moderne, scalable et réaliste pour un grand nombre de fonctionnalités.</p>
 
-            <!-- Début de la simulation du UserForm --><div class="vba-userform max-w-6xl mx-auto">
+            <!-- ================================================================= -->
+            <!-- == DÉBUT DE LA SIMULATION DU USERFORM VBA == -->
+            <!-- ================================================================= -->
+            <div class="vba-userform max-w-6xl mx-auto">
                 
-                <!-- 1. MENU LATÉRAL (Gauche) --><aside class="vba-sidebar">
-                    <!-- En-tête du menu avec logo + nom (MODIFIÉ) --><div class="vba-sidebar-header">
-                        <div class="flex items-center gap-2"> <!-- Alignement ajusté + gap --><!-- Point bleu avant Golfinho --><span class="h-3 w-3 bg-blue-500 rounded-full"></span> 
-                            <!-- Police et taille de Golfinho ajustées --><span class="text-2xl font-bold tracking-wide text-white vba-golfinho-title">Golfinho</span>
+                <!-- == MENU LATÉRAL (Simulation Frame/ListBox) == -->
+                <aside class="vba-sidebar">
+                    
+                    <!-- En-tête du menu avec logo + nom (MODIFIÉ) -->
+                    <div class="vba-sidebar-header">
+                        <div class="flex items-center gap-2"> 
+                            <!-- Point bleu -->
+                            <span class="h-3 w-3 bg-blue-500 rounded-full"></span> 
+                            
+                            <!-- Titre avec police et taille augmentées -->
+                            <span class="text-6xl font-bold tracking-wide text-white vba-golfinho-title">Golfinho</span>
                         </div>
-                        <!-- Version "Gelule" (Pill) en dessous --><span class="inline-block bg-blue-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full mt-1">v3.00</span> <!-- Marge supérieure ajustée --></div>
+                        
+                        <!-- Version -->
+                        <span class="inline-block bg-blue-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full mt-1">v3.00</span> 
+                    </div>
 
-                    <!-- Navigation principale --><nav class="vba-sidebar-menu">
+                    <!-- Navigation principale -->
+                    <nav class="vba-sidebar-menu">
                         <div class="vba-menu-item vba-menu-item-active" data-page="accueil">
                             <i class="fa-solid fa-house fa-fw w-5"></i>
                             <span>Accueil</span>
@@ -248,15 +264,19 @@
                         </div>
                     </nav>
 
-                    <!-- Pied de page du menu (MODIFIÉ) --><div class="vba-sidebar-footer">
+                    <!-- Pied de page avec Copyright (MODIFIÉ) -->
+                    <div class="vba-sidebar-footer">
                         <span class="block font-semibold">Aurélien DA COSTA</span>
                         <span class="block">Direction Technique</span>
                         <span class="block">Groupe Proxiserve | Prox-Hydro</span>
                     </div>
                 </aside>
 
-                <!-- 2. ZONE DE CONTENU (Droite) --><main class="vba-content-area">
-                    <!-- En-tête du contenu --><header class="vba-content-header">
+                <!-- == ZONE DE CONTENU PRINCIPALE (Simulation Frame) == -->
+                <main class="vba-content-area">
+                    
+                    <!-- En-tête du contenu (Actions globales) -->
+                    <header class="vba-content-header">
                         <button class="vba-button-link" aria-label="Licorne">
                             <i class="fa-brands fa-salesforce fa-fw"></i>
                             <span>Outil: Licorne</span>
@@ -274,13 +294,19 @@
                         </button>
                     </header>
 
-                    <!-- Conteneur pour les pages --><div class="vba-content-page">
+                    <!-- Conteneur pour les pages (MODIFIÉ) -->
+                    <div class="vba-content-page">
 
-                        <!-- PAGE: ACCUEIL (MODIFIÉE AVEC GRILLE 3 COLONNES) --><div id="page-accueil" class="page-content">
+                        <!-- Page: Accueil (MODIFIÉE - Grille à 3 colonnes) -->
+                        <div id="page-accueil" class="page-content">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Accueil</h2>
                             <p class="text-gray-700 mb-6">Bienvenue sur Golfinho 3.0. Sélectionnez une rubrique dans le menu de gauche pour commencer.</p>
-                            <!-- Changement: Grille 2 colonnes -> 3 colonnes pour plus de densité --><div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
-                                <!-- Cadre 1: Imports Fréquents --><div class="vba-frame">
+                            
+                            <!-- Grille à 3 colonnes pour l'accueil -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
+                                
+                                <!-- Cadre: Imports Fréquents -->
+                                <div class="vba-frame">
                                     <h3 class="vba-frame-title">Imports Fréquents</h3>
                                     <div class="p-4 space-y-3">
                                         <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFLGEST</span></div>
@@ -289,7 +315,9 @@
                                         <div class="vba-button"><i class="fa-solid fa-satellite-dish fa-fw w-5"></i><span>Importer MBW/GPRS</span></div>
                                     </div>
                                 </div>
-                                <!-- Cadre 2: Actions Principales --><div class="vba-frame">
+                                
+                                <!-- Cadre: Actions Principales -->
+                                <div class="vba-frame">
                                     <h3 class="vba-frame-title">Actions Principales</h3>
                                     <div class="p-4 space-y-3">
                                         <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extraction cité(s)</span></div>
@@ -297,10 +325,14 @@
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-calendar-alt fa-fw w-5"></i><span>Accéder au planning</span></div>
                                     </div>
                                 </div>
-                                <!-- Cadre 3: Infos & Rapports --><div class="vba-frame">
+                                
+                                <!-- Cadre: Infos & Rapports -->
+                                <div class="vba-frame">
                                     <h3 class="vba-frame-title">Infos & Rapports</h3>
                                     <div class="p-4 space-y-3">
-                                        <!-- Infos (tronquées) --><div class="text-sm text-gray-700 space-y-2">
+                                        
+                                        <!-- Section Infos avec chemins tronqués -->
+                                        <div class="text-sm text-gray-700 space-y-2">
                                             <div class="flex justify-between items-center gap-2">
                                                 <span class="font-medium whitespace-nowrap">Serveur :</span>
                                                 <span class="vba-path-truncate text-blue-700 text-xs text-right" title="\\jetform_comptage\app\data\fichiers_source_flux_mbw\tres_long_chemin_qui_doit_retourner_a_la_ligne\...">\\jetform_comptage\app\data\...</span>
@@ -315,13 +347,16 @@
                                             </div>
                                         </div>
                                         <hr class="my-3">
-                                        <!-- Bouton Rapport --><div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Générer un rapport SDC</span></div>
+                                        
+                                        <!-- Bouton Rapport -->
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Générer un rapport SDC</span></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- PAGE: PATRIMOINE (Inchangée) --><div id="page-patrimoine" class="page-content hidden">
+                        <!-- Page: Patrimoine -->
+                        <div id="page-patrimoine" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Patrimoine</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
@@ -342,7 +377,8 @@
                                 <div class="vba-frame md:col-span-2">
                                     <h3 class="vba-frame-title">Mise à jour de la Base (Produits, etc.)</h3>
                                     <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        <!-- Bouton standardisé --><div class="vba-button"><i class="fa-solid fa-box-open fa-fw w-5"></i><span>Gérer les Produits</span></div>
+                                        
+                                        <div class="vba-button"><i class="fa-solid fa-box-open fa-fw w-5"></i><span>Gérer les Produits</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-wrench fa-fw w-5"></i><span>Gérer Déposé / Posé</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-history fa-fw w-5"></i><span>Gérer Histo. 14</span></div>
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-exchange-alt fa-fw w-5"></i><span>Tout Transférer</span></div>
@@ -351,7 +387,8 @@
                             </div>
                         </div>
 
-                        <!-- PAGE: INTERVENTIONS (Inchangée) --><div id="page-interventions" class="page-content hidden">
+                        <!-- Page: Interventions -->
+                        <div id="page-interventions" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Interventions (Pose, Entretien, Location)</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
@@ -387,7 +424,8 @@
                             </div>
                         </div>
 
-                        <!-- PAGE: RELEVÉS (Inchangée) --><div id="page-releves" class="page-content hidden">
+                        <!-- Page: Relevés -->
+                        <div id="page-releves" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés (Manuelle & Télérelève)</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
@@ -414,7 +452,8 @@
                             </div>
                         </div>
 
-                        <!-- PAGE: FLUX (Corrigée PRCGEST) --><div id="page-flux" class="page-content hidden">
+                        <!-- Page: Flux de Fichiers -->
+                        <div id="page-flux" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Flux de Fichiers (Import / Extraction)</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
@@ -437,7 +476,8 @@
                             </div>
                         </div>
 
-                        <!-- PAGE: ANALYSE (Inchangée) --><div id="page-analyse" class="page-content hidden">
+                        <!-- Page: Analyse & EDI -->
+                        <div id="page-analyse" class="page-content hidden">
                              <h2 class="text-2xl font-bold text-gray-800 mb-4">Analyse & EDI</h2>
                              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
@@ -462,7 +502,8 @@
                              </div>
                         </div>
                         
-                        <!-- PAGE: RAPPORTS (Inchangée) --><div id="page-rapports" class="page-content hidden">
+                        <!-- Page: Rapports & Exports -->
+                        <div id="page-rapports" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Rapports & Exports</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
@@ -492,7 +533,8 @@
                             </div>
                         </div>
 
-                        <!-- PAGE: OUTILS (Inchangée) --><div id="page-outils" class="page-content hidden">
+                        <!-- Page: Outils & Paramètres -->
+                        <div id="page-outils" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Outils & Paramètres</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame md:col-span-2">
@@ -537,8 +579,12 @@
                     </div>
                 </main>
             </div>
+            <!-- ================================================================= -->
+            <!-- == FIN DE LA SIMULATION DU USERFORM VBA == -->
+            <!-- ================================================================= -->
             
-            <!-- Section de Justification (Inchangée) --><section class="mt-10 pt-6 border-t border-gray-300">
+            <!-- Section de justification -->
+            <section class="mt-10 pt-6 border-t border-gray-300">
                 <h2 class="text-2xl font-bold text-gray-900 mb-4">Justification de la V3.00</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -563,7 +609,8 @@
         </main>
     </div>
 
-    <!-- Script pour la navigation (Inchangé) --><script>
+    <!-- Script pour gérer la navigation par onglets (simulation) -->
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const menuItems = document.querySelectorAll('.vba-menu-item');
             const pages = document.querySelectorAll('.page-content');
