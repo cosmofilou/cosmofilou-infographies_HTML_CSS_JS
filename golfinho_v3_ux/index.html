@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proposition de Modernisation V5.00 - Golfinho (Hybride)</title>
     
-    <!-- Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Font Awesome --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* Simulation de la police par défaut d'Office (Segoe UI) */
         body {
@@ -235,21 +237,26 @@
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Maquette Visuelle "Golfinho 5.0"</h2>
             <p class="mb-6 text-gray-700">Cette version "Hybride" conserve le menu latéral de la V3 pour une navigation claire, mais transforme la page d'Accueil en un puissant tableau de bord pliable (style V4) pour un accès direct aux modules clés.</p>
 
-            <!-- == MAQUETTE VBA SIMULÉE V5 == --><div class="vba-userform max-w-6xl mx-auto">
+            <!-- == MAQUETTE VBA SIMULÉE V5 == -->
+            <div class="vba-userform max-w-6xl mx-auto">
                 
-                <!-- == MENU LATÉRAL (V3) == --><aside class="vba-sidebar">
+                <!-- == MENU LATÉRAL (V3) == -->
+                <aside class="vba-sidebar">
                     
                     <div class="vba-sidebar-header">
                         <div class="flex items-center gap-2"> 
-                            <!-- Emoji Dauphin (MODIFIÉ) --><span class="text-5xl">🐬</span>
+                            <!-- Emoji Dauphin (RETIRÉ) -->
                             
-                            <!-- Titre (MODIFIÉ: text-5xl + police) --><span class="text-5xl font-bold tracking-wide text-white vba-golfinho-title">Golfinho</span>
+                            <!-- Titre (MODIFIÉ: text-6xl + police) -->
+                            <span class="text-6xl font-bold tracking-wide text-white vba-golfinho-title">Golfinho</span>
                         </div>
                         
-                        <!-- Version --><span class="inline-block bg-blue-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full mt-1">v5.00</span> 
+                        <!-- Version (MODIFIÉ: v3.00) -->
+                        <span class="inline-block bg-blue-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full mt-1">v3.00</span> 
                     </div>
 
-                    <!-- Navigation principale --><nav class="vba-sidebar-menu">
+                    <!-- Navigation principale -->
+                    <nav class="vba-sidebar-menu">
                         <div class="vba-menu-item vba-menu-item-active" data-page="accueil">
                             <i class="fa-solid fa-house fa-fw w-5"></i>
                             <span>Accueil / Dashboard</span>
@@ -286,7 +293,8 @@
                         </div>
                     </nav>
 
-                    <!-- Pied de page --><div class="vba-sidebar-footer">
+                    <!-- Pied de page -->
+                    <div class="vba-sidebar-footer">
                         <span class="block font-semibold">Aurélien DA COSTA</span>
                         <span class="block">Direction Technique Groupe</span>
                         <span class="block">Proxiserve - Prox-Hydro</span>
@@ -294,12 +302,14 @@
                     </div>
                 </aside>
 
-                <!-- == ZONE DE CONTENU PRINCIPALE (V3) == --><main class="vba-content-area">
+                <!-- == ZONE DE CONTENU PRINCIPALE (V3) == -->
+                <main class="vba-content-area">
                     
                     <header class="vba-content-header">
                         <button class="vba-button-link" aria-label="Licorne">
                             <i class="fa-brands fa-salesforce fa-fw"></i>
-                            <!-- (MODIFIÉ: "Outil:" retiré) --><span>Licorne</span>
+                            <!-- (MODIFIÉ: "Outil:" retiré) -->
+                            <span>Licorne</span>
                         </button>
                         <button class="vba-button-link" aria-label="Helpjuice">
                             <i class="fa-solid fa-book-open fa-fw"></i>
@@ -314,16 +324,21 @@
                         </button>
                     </header>
 
-                    <!-- == CONTENU DE PAGE (V3) == --><div class="vba-content-page">
+                    <!-- == CONTENU DE PAGE (V3) == -->
+                    <div class="vba-content-page">
 
-                        <!-- Page: Accueil (MODIFIÉE AVEC ACCORDÉONS V4 + BIENVENUE) --><div id="page-accueil" class="page-content">
+                        <!-- Page: Accueil (MODIFIÉE AVEC ACCORDÉONS V4 + BIENVENUE) -->
+                        <div id="page-accueil" class="page-content">
                             
-                            <!-- Message de bienvenue personnalisé --><div class="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+                            <!-- Message de bienvenue personnalisé -->
+                            <div class="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
                                 <h2 class="text-2xl font-bold text-gray-800 mb-2">Bienvenue, Aurélien !</h2>
-                                <p class="text-gray-700">Votre centre de commande Golfinho est prêt. Retrouvez ici toutes les automatisations pour exceller sur Licorne/Salesforce.</p>
+                                <!-- (MODIFIÉ: "Licorne/Salesforce" -> "Licorne") -->
+                                <p class="text-gray-700">Votre centre de commande Golfinho est prêt. Retrouvez ici toutes les automatisations pour exceller sur Licorne.</p>
                             </div>
                             
-                            <!-- Section 1: Actions Rapides (Ouverte par défaut) --><div class="vba-accordion-section">
+                            <!-- Section 1: Actions Rapides (Ouverte par défaut) -->
+                            <div class="vba-accordion-section">
                                 <div class="vba-accordion-header open" data-target="accordion-content-1">
                                     <div class="flex items-center gap-3">
                                         <i class="fa-solid fa-bolt fa-fw text-blue-600"></i>
@@ -358,7 +373,8 @@
                                 </div>
                             </div>
                             
-                            <!-- Section 2: Patrimoine (Dashboard) --><div class="vba-accordion-section">
+                            <!-- Section 2: Patrimoine (Dashboard) -->
+                            <div class="vba-accordion-section">
                                 <div class="vba-accordion-header" data-target="accordion-content-2">
                                     <div class="flex items-center gap-3">
                                         <i class="fa-solid fa-building-columns fa-fw text-blue-600"></i>
@@ -385,7 +401,8 @@
                                 </div>
                             </div>
 
-                            <!-- Section 3: Flux de Fichiers (Dashboard) --><div class="vba-accordion-section">
+                            <!-- Section 3: Flux de Fichiers (Dashboard) -->
+                            <div class="vba-accordion-section">
                                 <div class="vba-accordion-header" data-target="accordion-content-5">
                                     <div class="flex items-center gap-3">
                                         <i class="fa-solid fa-file-import fa-fw text-blue-600"></i>
@@ -412,7 +429,8 @@
 
                         </div>
 
-                        <!-- Page: Patrimoine (Page complète V3) --><div id="page-patrimoine" class="page-content hidden">
+                        <!-- Page: Patrimoine (Page complète V3) -->
+                        <div id="page-patrimoine" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Patrimoine (Module Complet)</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
@@ -442,9 +460,11 @@
                             </div>
                         </div>
 
-                        <!-- Page: Interventions (Page complète V3) --><div id="page-interventions" class="page-content hidden">
+                        <!-- Page: Interventions (Page complète V3) -->
+                        <div id="page-interventions" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Interventions (Module Complet)</h2>
-                            <!-- Contenu copié de V3 --><div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Contenu copié de V3 -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
                                     <h3 class="vba-frame-title">Entretien</h3>
                                     <div class="p-4 space-y-3">
@@ -470,36 +490,45 @@
                             </div>
                         </div>
 
-                        <!-- ... Autres pages complètes (Relevés, Flux, Analyse, Rapports, Outils) ... --><div id="page-releves" class="page-content hidden">
+                        <!-- ... Autres pages complètes (Relevés, Flux, Analyse, Rapports, Outils) ... -->
+                        <div id="page-releves" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés (Module Complet)</h2>
                             <p class="text-gray-700">Contenu intégral du module Relevés...</p>
-                            <!-- Mettez ici le contenu complet de V3 pour Relevés --></div>
+                            <!-- Mettez ici le contenu complet de V3 pour Relevés -->
+                        </div>
                         <div id="page-flux" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Flux de Fichiers (Module Complet)</h2>
                             <p class="text-gray-700">Contenu intégral du module Flux de Fichiers...</p>
-                            <!-- Mettez ici le contenu complet de V3 pour Flux --></div>
+                            <!-- Mettez ici le contenu complet de V3 pour Flux -->
+                        </div>
                         <div id="page-analyse" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Analyse & EDI (Module Complet)</h2>
                             <p class="text-gray-700">Contenu intégral du module Analyse & EDI...</p>
-                            <!-- Mettez ici le contenu complet de V3 pour Analyse --></div>
+                            <!-- Mettez ici le contenu complet de V3 pour Analyse -->
+                        </div>
                         <div id="page-rapports" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Rapports & Exports (Module Complet)</h2>
                             <p class="text-gray-700">Contenu intégral du module Rapports & Exports...</p>
-                            <!-- Mettez ici le contenu complet de V3 pour Rapports --></div>
+                            <!-- Mettez ici le contenu complet de V3 pour Rapports -->
+                        </div>
                         <div id="page-outils" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Outils & Paramètres (Module Complet)</h2>
                             <p class="text-gray-700">Contenu intégral du module Outils & Paramètres...</p>
-                            <!-- Mettez ici le contenu complet de V3 pour Outils --></div>
+                            <!-- Mettez ici le contenu complet de V3 pour Outils -->
+                        </div>
 
 
                     </div>
                 </main>
             </div>
             
-            <!-- == FIN DE LA MAQUETTE == --></main>
+            <!-- == FIN DE LA MAQUETTE == -->
+
+        </main>
     </div>
 
-    <!-- Script pour la navigation simulée (FUSION V3 + V4) --><script>
+    <!-- Script pour la navigation simulée (FUSION V3 + V4) -->
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             
             // --- Logique V3 (Menu Latéral) ---
