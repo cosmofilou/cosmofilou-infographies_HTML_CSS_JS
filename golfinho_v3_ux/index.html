@@ -245,8 +245,8 @@
                     
                     <div class="vba-sidebar-header">
                         <div class="flex items-center gap-2"> 
-                            <!-- Icône Dauphin (MODIFIÉ) -->
-                            <i class="fa-solid fa-dolphin text-5xl text-blue-500"></i>
+                            <!-- Emoji Dauphin (MODIFIÉ) -->
+                            <span class="text-5xl">🐬</span>
                             
                             <!-- Titre (MODIFIÉ: text-6xl + police) -->
                             <span class="text-6xl font-bold tracking-wide text-white vba-golfinho-title">Golfinho</span>
@@ -480,17 +480,42 @@
                                 </div>
                                 <div class="vba-frame md:col-span-2">
                                     <h3 class="vba-frame-title">Création d'un CR Chantier (Pose)</h3>
-                                    <!-- ... contenu ... -->
+                                    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div><label class="block font-medium mb-1">Technicien:</label><input type="text" placeholder="Sélectionner..." class="w-full p-2 border rounded-md"></div>
+                                        <div><label class="block font-medium mb-1">Options:</label><div class="flex gap-4 pt-2"><label><input type="checkbox" class="mr-1"> P1</label><label><input type="checkbox" class="mr-1"> P2</label><label><input type="checkbox" class="mr-1"> P3</label></div></div>
+                                        <div><label class="block font-medium mb-1">Nom de la SDC:</label><input type="text" class="w-full p-2 border rounded-md"></div>
+                                        <div><label class="block font-medium mb-1">Date:</label><input type="date" class="w-full p-2 border rounded-md"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- ... Autres pages complètes (Relevés, Flux, Analyse, Rapports, Outils) ... -->
-                        <div id="page-releves" class="page-content hidden"><h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés (Module Complet)</h2><p>Contenu intégral du module Relevés...</p></div>
-                        <div id="page-flux" class="page-content hidden"><h2 class="text-2xl font-bold text-gray-800 mb-4">Flux de Fichiers (Module Complet)</h2><p>Contenu intégral du module Flux de Fichiers...</p></div>
-                        <div id="page-analyse" class="page-content hidden"><h2 class="text-2xl font-bold text-gray-800 mb-4">Analyse & EDI (Module Complet)</h2><p>Contenu intégral du module Analyse & EDI...</p></div>
-                        <div id="page-rapports" class="page-content hidden"><h2 class="text-2xl font-bold text-gray-800 mb-4">Rapports & Exports (Module Complet)</h2><p>Contenu intégral du module Rapports & Exports...</p></div>
-                        <div id="page-outils" class="page-content hidden"><h2 class="text-2xl font-bold text-gray-800 mb-4">Outils & Paramètres (Module Complet)</h2><p>Contenu intégral du module Outils & Paramètres...</p></div>
+                        <div id="page-releves" class="page-content hidden">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés (Module Complet)</h2>
+                            <p class="text-gray-700">Contenu intégral du module Relevés...</p>
+                            <!-- Mettez ici le contenu complet de V3 pour Relevés -->
+                        </div>
+                        <div id="page-flux" class="page-content hidden">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Flux de Fichiers (Module Complet)</h2>
+                            <p class="text-gray-700">Contenu intégral du module Flux de Fichiers...</p>
+                            <!-- Mettez ici le contenu complet de V3 pour Flux -->
+                        </div>
+                        <div id="page-analyse" class="page-content hidden">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Analyse & EDI (Module Complet)</h2>
+                            <p class="text-gray-700">Contenu intégral du module Analyse & EDI...</p>
+                            <!-- Mettez ici le contenu complet de V3 pour Analyse -->
+                        </div>
+                        <div id="page-rapports" class="page-content hidden">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Rapports & Exports (Module Complet)</h2>
+                            <p class="text-gray-700">Contenu intégral du module Rapports & Exports...</p>
+                            <!-- Mettez ici le contenu complet de V3 pour Rapports -->
+                        </div>
+                        <div id="page-outils" class="page-content hidden">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Outils & Paramètres (Module Complet)</h2>
+                            <p class="text-gray-700">Contenu intégral du module Outils & Paramètres...</p>
+                            <!-- Mettez ici le contenu complet de V3 pour Outils -->
+                        </div>
 
 
                     </div>
