@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proposition de Modernisation V6.00 - Golfinho (Optimisée)</title>
+    <title>Proposition de Modernisation V3.00 - Golfinho</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,7 +21,7 @@
             font-family: "Agency FB", Arial, sans-serif; /* Agency FB, avec des fallbacks */
         }
 
-        /* --- STRUCTURE V3 (MENU LATÉRAL) --- */
+        /* --- NOUVELLE STRUCTURE V3 --- */
         .vba-userform {
             display: flex;
             height: 700px; /* Hauteur fixe pour simuler le UserForm */
@@ -53,6 +53,7 @@
         .vba-sidebar-menu {
             flex-grow: 1;
             padding: 1rem 0.75rem; /* p-4 p-3 */
+            overflow-y: auto; /* Ajouté au cas où le menu serait long */
         }
         .vba-menu-item {
             display: flex;
@@ -79,7 +80,7 @@
             margin: 0.5rem 1rem; /* my-2 mx-4 */
         }
 
-        /* Pied de page du menu */
+        /* Pied de page du menu (MODIFIÉ) */
         .vba-sidebar-footer {
             flex-shrink: 0; /* Ne pas réduire */
             padding: 1rem 1.5rem; /* p-4 px-6 */
@@ -94,7 +95,7 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Important pour que le scroll interne fonctionne */
+            overflow: hidden; /* Changé de y-auto à hidden */
         }
         .vba-content-header {
             display: flex;
@@ -106,10 +107,10 @@
             border-bottom: 1px solid #D1D5DB; /* border-b border-gray-300 */
             flex-shrink: 0;
         }
-        /* Contenu de page, maintenant avec scroll */
+        /* Page de contenu avec scroll interne */
         .vba-content-page {
             padding: 1.5rem; /* p-6 */
-            overflow-y: auto; /* Active le scroll pour le contenu de la page */
+            overflow-y: auto; /* Scroll vertical pour le contenu */
             height: 100%; /* Prend la hauteur restante */
         }
 
@@ -119,7 +120,8 @@
             border-radius: 0.5rem; /* rounded-lg */
             background-color: #ffffff; /* white */
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-sm */
-            height: 100%; 
+            /* height: 100%; Retiré pour permettre au contenu de définir la hauteur */
+            margin-bottom: 1.5rem; /* Ajout d'un espace en bas de chaque frame */
         }
         .vba-frame-title {
             font-weight: 600; 
@@ -179,49 +181,14 @@
             color: black;
         }
         
-        /* Correction pour le chemin tronqué */
+        /* Style pour tronquer le texte (chemins) avec infobulle */
         .vba-path-truncate {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             cursor: help; 
             position: relative; 
-            max-width: 150px; /* Limite la largeur max pour forcer la troncature */
-        }
-        
-        /* --- STYLES ACCORDION (Importés de V4) --- */
-        .vba-accordion-section {
-            border: 1px solid #D1D5DB; /* gray-300 */
-            border-radius: 0.5rem; /* rounded-lg */
-            background-color: #ffffff; /* white */
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-sm */
-            margin-bottom: 1rem; /* Espace entre les sections */
-            overflow: hidden; /* Pour les coins arrondis */
-        }
-        .vba-accordion-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 1.25rem; /* p-3 px-5 */
-            font-weight: 600; 
-            color: #1F2937; /* gray-800 */
-            background-color: #F9FAFB; /* gray-50 */
-            border-bottom: 1px solid #D1D5DB; /* border-b border-gray-300 */
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .vba-accordion-header:hover {
-            background-color: #F3F4F6; /* gray-100 */
-        }
-        .vba-accordion-header .icon-toggle {
-            transition: transform 0.2s ease-in-out;
-        }
-        .vba-accordion-header.open .icon-toggle {
-            transform: rotate(180deg);
-        }
-        .vba-accordion-content {
-            padding: 1.5rem; /* p-6 */
-            border-top: 1px solid #E5E7EB; /* border-t gray-200 */
+            max-width: 150px; /* Force la troncature */
         }
     </style>
 </head>
@@ -229,23 +196,26 @@
 
     <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
         <header class="p-6 md:p-10 bg-gray-800 text-white">
-            <h1 class="text-3xl font-bold">Proposition de Modernisation UI/UX (V6.00)</h1>
-            <p class="text-lg text-gray-300">Application VBA "Golfinho" - UX Optimisée (Menu simple + Pages Pliables)</p>
+            <h1 class="text-3xl font-bold">Proposition de Modernisation UI/UX (V3.00)</h1>
+            <p class="text-lg text-gray-300">Application VBA "Golfinho" - Navigation Latérale</p>
         </header>
 
         <main class="p-6 md:p-10">
 
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Maquette Visuelle "Golfinho 6.0"</h2>
-            <p class="mb-6 text-gray-700">Cette version finale optimise l'UX : les noms sont simplifiés, le "Dashboard" est focalisé sur les actions clés, et toutes les autres pages adoptent une navigation cohérente à base d'accordéons.</p>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Maquette Visuelle "Golfinho 3.0"</h2>
+            <p class="mb-6 text-gray-700">Simulation d'un `UserForm` avec un menu latéral (`ListBox` ou `Frame` stylisé) et des `Frames` de contenu dynamiques. Cette approche est plus moderne, scalable et réaliste pour un grand nombre de fonctionnalités.</p>
 
-            <!-- == MAQUETTE VBA SIMULÉE V6 == -->
+            <!-- == MAQUETTE VBA SIMULÉE == -->
             <div class="vba-userform max-w-6xl mx-auto">
                 
-                <!-- == MENU LATÉRAL (V3) == -->
+                <!-- == MENU LATÉRAL (Simulation Frame/ListBox) == -->
                 <aside class="vba-sidebar">
                     
+                    <!-- En-tête du menu avec logo + nom (MODIFIÉ) -->
                     <div class="vba-sidebar-header">
                         <div class="flex items-center gap-2"> 
+                            <!-- Icône Dauphin (RETIRÉ) -->
+                            
                             <!-- Titre (MODIFIÉ: text-6xl + police) -->
                             <span class="text-6xl font-bold tracking-wide text-white vba-golfinho-title">Golfinho</span>
                         </div>
@@ -254,11 +224,11 @@
                         <span class="inline-block bg-blue-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full mt-1">v3.00</span> 
                     </div>
 
-                    <!-- Navigation principale (MODIFIÉE: Noms simplifiés) -->
+                    <!-- Navigation principale -->
                     <nav class="vba-sidebar-menu">
                         <div class="vba-menu-item vba-menu-item-active" data-page="accueil">
                             <i class="fa-solid fa-house fa-fw w-5"></i>
-                            <span>Dashboard</span>
+                            <span>Accueil</span>
                         </div>
                         <div class="vba-menu-item" data-page="patrimoine">
                             <i class="fa-solid fa-building-columns fa-fw w-5"></i>
@@ -272,7 +242,9 @@
                             <i class="fa-solid fa-satellite-dish fa-fw w-5"></i>
                             <span>Relevés</span>
                         </div>
+                        
                         <div class="vba-menu-divider"></div>
+
                         <div class="vba-menu-item" data-page="flux">
                             <i class="fa-solid fa-file-import fa-fw w-5"></i>
                             <span>Flux de Fichiers</span>
@@ -285,14 +257,16 @@
                             <i class="fa-solid fa-file-invoice fa-fw w-5"></i>
                             <span>Rapports & Exports</span>
                         </div>
+
                         <div class="vba-menu-divider"></div>
+
                         <div class="vba-menu-item" data-page="outils">
                             <i class="fa-solid fa-cogs fa-fw w-5"></i>
                             <span>Outils & Paramètres</span>
                         </div>
                     </nav>
 
-                    <!-- Pied de page -->
+                    <!-- Pied de page avec Copyright (MODIFIÉ) -->
                     <div class="vba-sidebar-footer">
                         <span class="block font-semibold">Aurélien DA COSTA</span>
                         <span class="block">Direction Technique Groupe</span>
@@ -301,12 +275,14 @@
                     </div>
                 </aside>
 
-                <!-- == ZONE DE CONTENU PRINCIPALE (V3) == -->
+                <!-- == ZONE DE CONTENU PRINCIPALE (Simulation Frame) == -->
                 <main class="vba-content-area">
                     
+                    <!-- En-tête du contenu (Actions globales) -->
                     <header class="vba-content-header">
                         <button class="vba-button-link" aria-label="Licorne">
                             <i class="fa-brands fa-salesforce fa-fw"></i>
+                            <!-- (MODIFIÉ: "Outil:" retiré) -->
                             <span>Licorne</span>
                         </button>
                         <button class="vba-button-link" aria-label="Helpjuice">
@@ -322,96 +298,84 @@
                         </button>
                     </header>
 
-                    <!-- == CONTENU DE PAGE (V3) == -->
+                    <!-- Contenu de la page (dynamique) -->
                     <div class="vba-content-page">
 
-                        <!-- Page: Accueil (MODIFIÉE: Dashboard simple) -->
+                        <!-- Page: Accueil (MODIFIÉE) -->
                         <div id="page-accueil" class="page-content">
-                            
-                            <!-- Message de bienvenue personnalisé -->
-                            <div class="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
+                            <!-- Message de bienvenue (MODIFIÉ) -->
+                             <div class="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
                                 <h2 class="text-2xl font-bold text-gray-800 mb-2">Bienvenue, Aurélien !</h2>
                                 <p class="text-gray-700">Votre centre de commande Golfinho est prêt. Retrouvez ici toutes les automatisations pour exceller sur Licorne.</p>
                             </div>
                             
-                            <!-- Section 1: Actions Rapides (Ouverte par défaut) -->
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header open" data-target="accordion-content-1">
-                                    <div class="flex items-center gap-3">
-                                        <i class="fa-solid fa-bolt fa-fw text-blue-600"></i>
-                                        <span class="text-lg">Actions Rapides & Informations</span>
+                            <!-- Grille à 3 colonnes pour l'accueil -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
+                                
+                                <!-- Cadre: Imports Fréquents -->
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Imports Fréquents</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFLGEST</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer AccèsPro</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-triangle-exclamation fa-fw w-5"></i><span>Importer Alarmes</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-satellite-dish fa-fw w-5"></i><span>Importer MBW/GPRS</span></div>
                                     </div>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
                                 </div>
-                                <div id="accordion-content-1" class="vba-accordion-content">
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
-                                        <div class="space-y-3">
-                                            <h4 class="font-semibold mb-2 text-gray-700">Imports Fréquents</h4>
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFLGEST</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer AccèsPro</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-triangle-exclamation fa-fw w-5"></i><span>Importer Alarmes</span></div>
+                                
+                                <!-- Cadre: Actions Principales -->
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Actions Principales</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extraction cité(s)</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extraction patrimoine client</span></div>
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-calendar-alt fa-fw w-5"></i><span>Accéder au planning</span></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Cadre: Infos & Rapports -->
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Infos & Rapports</h3>
+                                    <div class="p-4 space-y-3">
+                                        
+                                        <!-- Infos (MODIFIÉ: tronqué + infobulle) -->
+                                        <div class="text-sm text-gray-700 space-y-2 p-3 bg-gray-50 rounded-md">
+                                            <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Serveur :</span><span class="vba-path-truncate text-blue-700 text-xs text-right" title="\\long\path\to\server\...">\\long\path\to\server\...</span></div>
+                                            <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Source :</span><span class="vba-path-truncate text-blue-700 text-xs text-right" title="G:\Mon Drive\Downloads\...">G:\Mon Drive\Downloads\...</span></div>
+                                            <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Utilisateur :</span><span class="text-right">adacosta</span></div>
                                         </div>
-                                        <div class="space-y-3">
-                                            <h4 class="font-semibold mb-2 text-gray-700">Actions Principales</h4>
-                                            <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extraction cité(s)</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extraction patrimoine client</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-calendar-alt fa-fw w-5"></i><span>Accéder au planning</span></div>
-                                        </div>
-                                        <div class="space-y-3">
-                                            <h4 class="font-semibold mb-2 text-gray-700">Infos & Rapports</h4>
-                                            <div class="text-sm text-gray-700 space-y-2 p-3 bg-gray-50 rounded-md">
-                                                <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Serveur :</span><span class="vba-path-truncate text-blue-700 text-xs text-right" title="\\long\path\to\server\...">\\long\path\to\server\...</span></div>
-                                                <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Source :</span><span class="vba-path-truncate text-blue-700 text-xs text-right" title="G:\Mon Drive\Downloads\...">G:\Mon Drive\Downloads\...</span></div>
-                                                <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Utilisateur :</span><span class="text-right">adacosta</span></div>
-                                            </div>
-                                            <div class="vba-button vba-button-secondary mt-3"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Générer un rapport SDC</span></div>
-                                        </div>
+                                        <hr class="my-3">
+                                        
+                                        <!-- Bouton Rapport -->
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Générer un rapport SDC</span></div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- (Sections "Patrimoine" et "Flux" retirées du Dashboard) -->
-
                         </div>
 
-                        <!-- Page: Patrimoine (MODIFIÉE: Accordion layout) -->
+                        <!-- Page: Patrimoine -->
                         <div id="page-patrimoine" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Patrimoine</h2>
-                            
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header open" data-target="accordion-pat-1">
-                                    <span class="text-lg">Création Patrimoine</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-pat-1" class="vba-accordion-content">
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Création Patrimoine</h3>
+                                    <div class="p-4 space-y-3">
                                         <div class="vba-button"><i class="fa-solid fa-map-marker-alt fa-fw w-5"></i><span>Gérer les Lieux</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-sitemap fa-fw w-5"></i><span>Gérer les P.D.M.</span></div>
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-exchange-alt fa-fw w-5"></i><span>Transférer Lieux / P.D.M.</span></div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-pat-2">
-                                    <span class="text-lg">Mise à jour Radiateurs</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-pat-2" class="vba-accordion-content hidden">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Mise à jour Radiateurs</h3>
+                                     <div class="p-4 space-y-3">
                                         <div class="vba-button"><i class="fa-solid fa-circle-info fa-fw w-5"></i><span>Gérer les Informations</span></div>
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-exchange-alt fa-fw w-5"></i><span>Transférer Informations</span></div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-pat-3">
-                                    <span class="text-lg">Mise à jour de la Base (Produits, etc.)</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-pat-3" class="vba-accordion-content hidden">
+                                <div class="vba-frame md:col-span-2">
+                                    <h3 class="vba-frame-title">Mise à jour de la Base (Produits, etc.)</h3>
                                     <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <!-- Boutons standardisés -->
                                         <div class="vba-button"><i class="fa-solid fa-box-open fa-fw w-5"></i><span>Gérer les Produits</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-wrench fa-fw w-5"></i><span>Gérer Déposé / Posé</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-history fa-fw w-5"></i><span>Gérer Histo. 14</span></div>
@@ -421,53 +385,35 @@
                             </div>
                         </div>
 
-                        <!-- Page: Interventions (MODIFIÉE: Accordion layout) -->
+                        <!-- Page: Interventions -->
                         <div id="page-interventions" class="page-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Interventions</h2>
-                            
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header open" data-target="accordion-int-1">
-                                    <span class="text-lg">Entretien</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Interventions (Pose, Entretien, Location)</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Entretien</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div class="vba-button"><i class="fa-solid fa-calendar-alt fa-fw w-5"></i><span>Accéder au planning</span></div>
+                                    </div>
                                 </div>
-                                <div id="accordion-int-1" class="vba-accordion-content">
-                                    <div class="vba-button max-w-xs"><i class="fa-solid fa-calendar-alt fa-fw w-5"></i><span>Accéder au planning</span></div>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Location</h3>
+                                    <div class="p-4 space-y-3">
+                                        <p class="font-medium">Statut :</p>
+                                        <div class="flex gap-4"><label><input type="radio" name="location" class="mr-1"> Vierge</label><label><input type="radio" name="location" class="mr-1" checked> Mise à jour</label></div>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-int-2">
-                                    <span class="text-lg">Location</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-int-2" class="vba-accordion-content hidden">
-                                    <p class="font-medium">Statut :</p>
-                                    <div class="flex gap-4 mt-2"><label><input type="radio" name="location_v6" class="mr-1"> Vierge</label><label><input type="radio" name="location_v6" class="mr-1" checked> Mise à jour</label></div>
-                                </div>
-                            </div>
-
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-int-3">
-                                    <span class="text-lg">Création d'un CR Chantier (Pose)</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-int-3" class="vba-accordion-content hidden">
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="vba-frame md:col-span-2">
+                                    <h3 class="vba-frame-title">Création d'un CR Chantier (Pose)</h3>
+                                    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div><label class="block font-medium mb-1">Technicien:</label><input type="text" placeholder="Sélectionner..." class="w-full p-2 border rounded-md"></div>
                                         <div><label class="block font-medium mb-1">Options:</label><div class="flex gap-4 pt-2"><label><input type="checkbox" class="mr-1"> P1</label><label><input type="checkbox" class="mr-1"> P2</label><label><input type="checkbox" class="mr-1"> P3</label></div></div>
                                         <div><label class="block font-medium mb-1">Nom de la SDC:</label><input type="text" class="w-full p-2 border rounded-md"></div>
                                         <div><label class="block font-medium mb-1">Date:</label><input type="date" class="w-full p-2 border rounded-md"></div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-int-4">
-                                    <span class="text-lg">Gestion des CR de Pose</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-int-4" class="vba-accordion-content hidden">
-                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="vba-frame md:col-span-2">
+                                    <h3 class="vba-frame-title">Gestion des CR de Pose</h3>
+                                    <div class="p-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
                                         <div><label class="block font-medium mb-1">Type de CR:</label><select class="w-full p-2 border rounded-md"><option>EAU/CET v2</option><option>RFC v2</option><option>v3 (bêta)</option></select></div>
                                         <div class="p-4 bg-gray-50 rounded-lg space-y-2"><div class="vba-button vba-button-secondary"><i class="fa-solid fa-eye fa-fw w-5"></i><span>Vision envoi anomalies</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-copy fa-fw w-5"></i><span>Copier les anomalies</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-paper-plane fa-fw w-5"></i><span>Envoi des EDC</span></div></div>
                                         <div class="p-4 bg-gray-50 rounded-lg space-y-2"><div class="vba-button vba-button-secondary"><i class="fa-solid fa-box-tissue fa-fw w-5"></i><span>Importer Stock Interv.</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-plus-circle fa-fw w-5"></i><span>Incrémenter DPLTAB</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-broom fa-fw w-5"></i><span>Nettoyage NS</span></div></div>
@@ -476,161 +422,106 @@
                             </div>
                         </div>
 
-                        <!-- Page: Relevés (MODIFIÉE: Accordion layout) -->
+                        <!-- Page: Relevés -->
                         <div id="page-releves" class="page-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés</h2>
-                            
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header open" data-target="accordion-rel-1">
-                                    <span class="text-lg">Relève Manuelle</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-rel-1" class="vba-accordion-content">
-                                    <p class="font-medium">Support de relevé:</p>
-                                    <div class="flex gap-4 items-center mt-2">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés (Manuelle & Télérelève)</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Relève Manuelle</h3>
+                                    <div class="p-4 space-y-3">
+                                        <p class="font-medium">Support de relevé:</p>
                                         <div class="vba-button"><i class="fa-solid fa-file-signature fa-fw w-5"></i><span>Générer un support</span></div>
                                         <div class="flex gap-4 pt-2"><label><input type="radio" name="releve" class="mr-1" checked> RF</label><label><input type="radio" name="releve" class="mr-1"> Bailleur</label></div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-rel-2">
-                                    <span class="text-lg">Télérelève</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-rel-2" class="vba-accordion-content hidden">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div class="space-y-3">
-                                            <div class="vba-button"><i class="fa-solid fa-broom fa-fw w-5"></i><span>Nettoyage export Accès Pro</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-triangle-exclamation fa-fw w-5"></i><span>Analyse des alarmes</span></div>
-                                        </div>
-                                        <div class="space-y-3 p-4 bg-gray-50 rounded-lg">
-                                            <p class="font-medium">Test / Install</p>
-                                            <div class="vba-button"><i class="fa-solid fa-network-wired fa-fw w-5"></i><span>Erreur réseau GPRS</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-microchip fa-fw w-5"></i><span>Télérelève impos.</span></div>
-                                            <p class="font-medium pt-2">Type radio:</p>
-                                            <div class="grid grid-cols-2 gap-2"><label><input type="checkbox" class="mr-1"> Diehl R4</label><label><input type="checkbox" class="mr-1"> Apator OMS</label><label><input type="checkbox" class="mr-1"> Diehl OMS</label><label><input type="checkbox" class="mr-1"> RFC</label><label><input type="checkbox" class="mr-1"> Apator</label><label><input type="checkbox" class="mr-1"> CET</label></div>
-                                        </div>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Télérelève</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div class="vba-button"><i class="fa-solid fa-broom fa-fw w-5"></i><span>Nettoyage export Accès Pro</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-triangle-exclamation fa-fw w-5"></i><span>Analyse des alarmes</span></div>
+                                        <hr class="my-3">
+                                        <p class="font-medium">Test / Install</p>
+                                        <div class="vba-button"><i class="fa-solid fa-network-wired fa-fw w-5"></i><span>Erreur réseau GPRS</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-microchip fa-fw w-5"></i><span>Télérelève impos.</span></div>
+                                        <p class="font-medium pt-2">Type radio:</p>
+                                        <div class="grid grid-cols-2 gap-2"><label><input type="checkbox" class="mr-1"> Diehl R4</label><label><input type="checkbox" class="mr-1"> Apator OMS</label><label><input type="checkbox" class="mr-1"> Diehl OMS</label><label><input type="checkbox" class="mr-1"> RFC</label><label><input type="checkbox" class="mr-1"> Apator</label><label><input type="checkbox" class="mr-1"> CET</label></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Page: Flux de Fichiers (MODIFIÉE: Accordion layout) -->
+
+                        <!-- Page: Flux de Fichiers -->
                         <div id="page-flux" class="page-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Flux de Fichiers</h2>
-                            
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header open" data-target="accordion-flux-1">
-                                    <span class="text-lg">Importation de Fichiers</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-flux-1" class="vba-accordion-content">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Flux de Fichiers (Import / Extraction)</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Importation de Fichiers</h3>
+                                    <div class="p-4 space-y-3">
                                         <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>OFIGEST</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>AccèsPro</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>MBW</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Trame Bâti</span></div>
-                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-upload fa-fw w-5"></i><span>PRCGEST (Extract. agence)</span></div>
+                                        <hr><div class="vba-button vba-button-secondary"><i class="fa-solid fa-upload fa-fw w-5"></i><span>PRCGEST (Extract. agence)</span></div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-flux-2">
-                                    <span class="text-lg">Extraction de Données</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-flux-2" class="vba-accordion-content hidden">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Extraction de Données</h3>
+                                    <div class="p-4 space-y-3">
                                         <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extraction cité(s)</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extraction patrimoine client</span></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Page: Analyse & EDI (MODIFIÉE: Accordion layout) -->
+
+                        <!-- Page: Analyse & EDI -->
                         <div id="page-analyse" class="page-content hidden">
                              <h2 class="text-2xl font-bold text-gray-800 mb-4">Analyse & EDI</h2>
-                             
-                             <div class="vba-accordion-section">
-                                <div class="vba-accordion-header open" data-target="accordion-ana-1">
-                                    <span class="text-lg">Analyse de Fichiers</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                 <div id="accordion-ana-1" class="vba-accordion-content">
-                                     <div class="space-y-4">
-                                        <div>
-                                            <p class="font-medium text-center">Analyse Cité VS MBW</p>
-                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-                                                <div class="vba-button"><i class="fa-solid fa-code-merge fa-fw w-5"></i><span>Fusion fichiers MBW</span></div>
-                                                <div class="vba-button"><i class="fa-solid fa-file-waveform fa-fw w-5"></i><span>Création fichier d'analyse</span></div>
-                                            </div>
-                                        </div>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Analyse de Fichiers</h3>
+                                    <div class="p-4 space-y-3">
+                                        <p class="font-medium text-center">Analyse Cité VS MBW</p>
+                                        <div class="vba-button"><i class="fa-solid fa-code-merge fa-fw w-5"></i><span>Fusion fichiers MBW</span></div>
+                                        <div class="vba-button"><i class="fa-solid fa-file-waveform fa-fw w-5"></i><span>Création fichier d'analyse</span></div>
                                         <hr>
-                                        <div>
-                                            <p class="font-medium text-center">MyVoid (Index BPRS)</p>
-                                            <div class="vba-button max-w-sm mx-auto mt-2"><i class="fa-solid fa-play-circle fa-fw w-5"></i><span>Lancer l'analyse MyVoid</span></div>
-                                        </div>
+                                        <p class="font-medium text-center">MyVoid (Index BPRS)</p>
+                                        <div class="vba-button"><i class="fa-solid fa-play-circle fa-fw w-5"></i><span>Lancer l'analyse MyVoid</span></div>
                                     </div>
                                 </div>
-                            </div>
-                             
-                             <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-ana-2">
-                                    <span class="text-lg">Module EDI</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                 <div id="accordion-ana-2" class="vba-accordion-content hidden">
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Module EDI</h3>
+                                    <div class="p-4 space-y-3">
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-code fa-fw w-5"></i><span>EDI CET 8 Car.</span></div>
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-list-ol fa-fw w-5"></i><span>Codes IF</span></div>
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-ban fa-fw w-5"></i><span>Suppr. 999</span></div>
                                     </div>
                                 </div>
-                            </div>
+                             </div>
                         </div>
                         
-                        <!-- Page: Rapports & Exports (MODIFIÉE: Accordion layout) -->
+                        <!-- Page: Rapports & Exports -->
                         <div id="page-rapports" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Rapports & Exports</h2>
-                            
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header open" data-target="accordion-rap-1">
-                                    <span class="text-lg">Exports Standards</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-rap-1" class="vba-accordion-content">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Exports Standards</h3>
+                                    <div class="p-4 space-y-3">
                                         <div class="vba-button"><i class="fa-solid fa-file-excel fa-fw w-5"></i><span>Exports Excel</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-file-pdf fa-fw w-5"></i><span>Exports PDF</span></div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-rap-2">
-                                    <span class="text-lg">Rapports Métier</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-rap-2" class="vba-accordion-content hidden">
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Rapports Métier</h3>
+                                    <div class="p-4 space-y-3">
                                         <div class="vba-button"><i class="fa-solid fa-file-export fa-fw w-5"></i><span>Rapport Analyse SDC</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-file-export fa-fw w-5"></i><span>Rapport Analyse Client</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-file-export fa-fw w-5"></i><span>Rapport Bilan (Bailleur)</span></div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-rap-3">
-                                    <span class="text-lg">Génération Rapports (Pose...)</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-rap-3" class="vba-accordion-content hidden">
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="vba-frame md:col-span-2">
+                                    <h3 class="vba-frame-title">Génération Rapports (Pose...)</h3>
+                                     <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                                         <div class="vba-button"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Créer un rapport</span></div>
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-excel fa-fw w-5"></i><span>MàJ bâti</span></div>
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-pdf fa-fw w-5"></i><span>EDC flash en PDF</span></div>
@@ -640,67 +531,47 @@
                             </div>
                         </div>
 
-                        <!-- Page: Outils & Paramètres (MODIFIÉE: Accordion layout) -->
+                        <!-- Page: Outils & Paramètres -->
                         <div id="page-outils" class="page-content hidden">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Outils & Paramètres</h2>
-                            
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header open" data-target="accordion-out-1">
-                                    <span class="text-lg">Configuration des Chemins</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-out-1" class="vba-accordion-content">
-                                    <div class="space-y-3">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="vba-frame md:col-span-2">
+                                    <h3 class="vba-frame-title">Configuration des Chemins</h3>
+                                    <div class="p-4 space-y-3">
                                         <div><label class="block font-medium mb-1">Chemin Serveur &nbsp;:</label><div class="flex gap-2"><input type="text" value="\\jetform_comptage\..." class="w-full p-2 border rounded-md bg-gray-50"><button class="vba-button px-3"><i class="fa-solid fa-pen"></i></button></div></div>
                                         <div><label class="block font-medium mb-1">Dossier Source &nbsp;:</label><div class="flex gap-2"><input type="text" value="G:\Mon Drive\00_Downloads" class="w-full p-2 border rounded-md bg-gray-50"><button class="vba-button px-3"><i class="fa-solid fa-pen"></i></button></div></div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-out-2">
-                                    <span class="text-lg">Accès Outils & Dossiers</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-out-2" class="vba-accordion-content hidden">
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Accès Outils & Dossiers</h3>
+                                    <div class="p-4 space-y-3">
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-folder fa-fw w-5"></i><span>Ouvrir Dossier Fichiers</span></div>
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-screwdriver-wrench fa-fw w-5"></i><span>Ouvrir Dossier Utilitaires</span></div>
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-save fa-fw w-5"></i><span>Ouvrir Dossier Backup</span></div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-out-3">
-                                    <span class="text-lg">Administration</span>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Mode Administrateur</h3>
+                                    <div class="p-4 grid grid-cols-2 gap-3">
+                                        <div class="vba-button"><i class="fa-solid fa-power-off fa-fw w-5"></i><span>Service Mode</span></div>
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-sign-out-alt fa-fw w-5"></i><span>Exit Service</span></div>
+                                    </div>
                                 </div>
-                                <div id="accordion-out-3" class="vba-accordion-content hidden">
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                        <div>
-                                            <h4 class="font-semibold mb-2 text-gray-700">Mode Administrateur</h4>
-                                            <div class="grid grid-cols-2 gap-3">
-                                                <div class="vba-button"><i class="fa-solid fa-power-off fa-fw w-5"></i><span>Service Mode</span></div>
-                                                <div class="vba-button vba-button-secondary"><i class="fa-solid fa-sign-out-alt fa-fw w-5"></i><span>Exit Service</span></div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-semibold mb-2 text-gray-700">Paramètres DPLTAB</h4>
-                                            <div class="space-y-2">
-                                                <p class="font-medium">Paramètres à générer :</p>
-                                                <label><input type="checkbox" class="mr-1"> Tous les CR</label><label><input type="checkbox" class="mr-1"> CP</label><label><input type="checkbox" class="mr-1"> SC</label><label><input type="checkbox" class="mr-1"> NT</label>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-semibold mb-2 text-gray-700">Analyse & Suppression</h4>
-                                            <div><p class="font-medium mb-2">Analyse du patrimoine</p><div class="grid grid-cols-2 gap-1"><label><input type="checkbox" class="mr-1"> Pose à l'envers</label><label><input type="checkbox" class="mr-1"> Conso 0</label><label><input type="checkbox" class="mr-1"> Alarmes</label><label><input type="checkbox" class="mr-1"> Observations</label><label><input type="checkbox" class="mr-1"> Périodes</label></div></div>
-                                            <div class="vba-button vba-button-secondary mt-3"><i class="fa-solid fa-trash fa-fw w-5"></i><span>Suppr. Rapports / Généraux</span></div>
-                                        </div>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Paramètres DPLTAB</h3>
+                                    <div class="p-4 space-y-2">
+                                        <p class="font-medium">Paramètres à générer :</p>
+                                        <label><input type="checkbox" class="mr-1"> Tous les CR</label><label><input type="checkbox" class="mr-1"> CP</label><label><input type="checkbox" class="mr-1"> SC</label><label><input type="checkbox" class="mr-1"> NT</label>
+                                    </div>
+                                </div>
+                                <div class="vba-frame">
+                                    <h3 class="vba-frame-title">Analyse & Suppression (Admin)</h3>
+                                    <div class="p-4 space-y-3">
+                                        <div><p class="font-medium mb-2">Analyse du patrimoine</p><div class="grid grid-cols-2 gap-1"><label><input type="checkbox" class="mr-1"> Pose à l'envers</label><label><input type="checkbox" class="mr-1"> Conso 0</label><label><input type="checkbox" class="mr-1"> Alarmes</label><label><input type="checkbox" class="mr-1"> Observations</label><label><input type="checkbox" class="mr-1"> Périodes</label></div></div>
+                                        <div class="vba-button vba-button-secondary"><i class="fa-solid fa-trash fa-fw w-5"></i><span>Suppr. Rapports / Généraux</span></div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
 
                     </div>
@@ -709,14 +580,34 @@
             
             <!-- == FIN DE LA MAQUETTE == -->
 
+            <section class="mt-10 pt-6 border-t border-gray-300">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Justification de la V3.00</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-blue-700 mb-2"><i class="fa-solid fa-list-ul mr-2"></i>Navigation Scalable</h3>
+                        <p class="text-gray-700">Le `MultiPage` est abandonné au profit d'un menu latéral. C'est la plus grande amélioration. Nous pouvons désormais avoir 5, 8, ou 10 rubriques sans jamais casser l'interface, ce qui la rend pérenne.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-blue-700 mb-2"><i class="fa-solid fa-arrows-alt-h mr-2"></i>Disposition Réaliste</h3>
+                        <p class="text-gray-700">Le contenu des pages est structuré pour être lisible. Un `UserForm` VBA n'est pas "responsive". Cette disposition garantit que la fenêtre sera utilisable sur 99% des écrans professionnels.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-blue-700 mb-2"><i class="fa-solid fa-brain mr-2"></i>Architecture Cognitive Logique</h3>
+                        <p class="text-gray-700">En scindant **"Flux de Fichiers"** (j'importe/j'extrais) et **"Analyse & EDI"** (je traite/j'analyse), l'architecture de l'information respecte le "modèle mental" de l'utilisateur. Il n'y a plus d'onglet "fourre-tout".</p>
+                    </div>
+                     <div>
+                        <h3 class="text-xl font-semibold text-blue-700 mb-2"><i class="fa-solid fa-tachograph-digital mr-2"></i>Accueil "Tableau de bord"</h3>
+                        <p class="text-gray-700">L'accueil n'est plus une page vide, mais un véritable tableau de bord regroupant les 80% des actions les plus fréquentes (Imports, Extractions), ce qui améliore drastiquement le workflow quotidien.</p>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
-    <!-- Script pour la navigation simulée (FUSION V3 + V4) -->
+    <!-- Script pour la navigation simulée -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            
-            // --- Logique V3 (Menu Latéral) ---
             const menuItems = document.querySelectorAll('.vba-menu-item');
             const pages = document.querySelectorAll('.page-content');
 
@@ -738,24 +629,6 @@
                     });
                 });
             });
-
-            // --- Logique V4 (Accordion) ---
-            const accordionHeaders = document.querySelectorAll('.vba-accordion-header');
-
-            accordionHeaders.forEach(header => {
-                header.addEventListener('click', () => {
-                    const targetId = header.dataset.target;
-                    const targetContent = document.getElementById(targetId);
-                    
-                    if (targetContent) {
-                        // Basculer la classe 'hidden' sur le contenu
-                        targetContent.classList.toggle('hidden');
-                        // Basculer la classe 'open' sur le header (pour l'icône)
-                        header.classList.toggle('open');
-                    }
-                });
-            });
-
         });
     </script>
 
