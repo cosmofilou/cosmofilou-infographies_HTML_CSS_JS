@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proposition de Modernisation V3.00 - Golfinho</title>
     
-    <!-- Chargement de Tailwind CSS -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Chargement de Font Awesome pour les icônes -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* Simulation de la police par défaut d'Office (Segoe UI) */
@@ -79,7 +79,7 @@
             margin: 0.5rem 1rem; /* my-2 mx-4 */
         }
 
-        /* NOUVEAU: Style pour le pied de page du menu */
+        /* Pied de page du menu (MODIFIÉ) */
         .vba-sidebar-footer {
             flex-shrink: 0; /* Ne pas réduire */
             padding: 1rem 1.5rem; /* p-4 px-6 */
@@ -200,9 +200,7 @@
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Maquette Visuelle "Golfinho 3.0"</h2>
             <p class="mb-6 text-gray-700">Simulation d'un `UserForm` avec un menu latéral (`ListBox` ou `Frame` stylisé) et des `Frames` de contenu dynamiques. Cette approche est plus moderne, scalable et réaliste pour un grand nombre de fonctionnalités.</p>
 
-            <!-- ================================================================= -->
-            <!-- == DÉBUT DE LA SIMULATION DU USERFORM VBA == -->
-            <!-- ================================================================= -->
+            <!-- == MAQUETTE VBA SIMULÉE == -->
             <div class="vba-userform max-w-6xl mx-auto">
                 
                 <!-- == MENU LATÉRAL (Simulation Frame/ListBox) == -->
@@ -214,7 +212,7 @@
                             <!-- Point bleu -->
                             <span class="h-3 w-3 bg-blue-500 rounded-full"></span> 
                             
-                            <!-- Titre avec police et taille augmentées -->
+                            <!-- Titre (MODIFIÉ: text-6xl + police) -->
                             <span class="text-6xl font-bold tracking-wide text-white vba-golfinho-title">Golfinho</span>
                         </div>
                         
@@ -267,8 +265,9 @@
                     <!-- Pied de page avec Copyright (MODIFIÉ) -->
                     <div class="vba-sidebar-footer">
                         <span class="block font-semibold">Aurélien DA COSTA</span>
-                        <span class="block">Direction Technique</span>
-                        <span class="block">Groupe Proxiserve | Prox-Hydro</span>
+                        <span class="block">Direction Technique Groupe</span>
+                        <span class="block">Proxiserve - Prox-Hydro</span>
+                        <span class="block mt-2">© 2025 Tous droits réservés.</span>
                     </div>
                 </aside>
 
@@ -279,7 +278,8 @@
                     <header class="vba-content-header">
                         <button class="vba-button-link" aria-label="Licorne">
                             <i class="fa-brands fa-salesforce fa-fw"></i>
-                            <span>Outil: Licorne</span>
+                            <!-- (MODIFIÉ: "Outil:" retiré) -->
+                            <span>Licorne</span>
                         </button>
                         <button class="vba-button-link" aria-label="Helpjuice">
                             <i class="fa-solid fa-book-open fa-fw"></i>
@@ -294,10 +294,10 @@
                         </button>
                     </header>
 
-                    <!-- Conteneur pour les pages (MODIFIÉ) -->
+                    <!-- Contenu de la page (dynamique) -->
                     <div class="vba-content-page">
 
-                        <!-- Page: Accueil (MODIFIÉE - Grille à 3 colonnes) -->
+                        <!-- Page: Accueil (MODIFIÉE) -->
                         <div id="page-accueil" class="page-content">
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Accueil</h2>
                             <p class="text-gray-700 mb-6">Bienvenue sur Golfinho 3.0. Sélectionnez une rubrique dans le menu de gauche pour commencer.</p>
@@ -331,7 +331,7 @@
                                     <h3 class="vba-frame-title">Infos & Rapports</h3>
                                     <div class="p-4 space-y-3">
                                         
-                                        <!-- Section Infos avec chemins tronqués -->
+                                        <!-- Infos (MODIFIÉ: tronqué + infobulle) -->
                                         <div class="text-sm text-gray-700 space-y-2">
                                             <div class="flex justify-between items-center gap-2">
                                                 <span class="font-medium whitespace-nowrap">Serveur :</span>
@@ -377,7 +377,7 @@
                                 <div class="vba-frame md:col-span-2">
                                     <h3 class="vba-frame-title">Mise à jour de la Base (Produits, etc.)</h3>
                                     <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        
+                                        <!-- Boutons standardisés -->
                                         <div class="vba-button"><i class="fa-solid fa-box-open fa-fw w-5"></i><span>Gérer les Produits</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-wrench fa-fw w-5"></i><span>Gérer Déposé / Posé</span></div>
                                         <div class="vba-button"><i class="fa-solid fa-history fa-fw w-5"></i><span>Gérer Histo. 14</span></div>
@@ -569,7 +569,7 @@
                                 <div class="vba-frame">
                                     <h3 class="vba-frame-title">Analyse & Suppression (Admin)</h3>
                                     <div class="p-4 space-y-3">
-                                        <div><p class="font-medium mb-2">Analyse du patrimoine</p><div class="grid grid-cols-2 gap-1"><label><input type="checkbox" class="mr-1"> Pose à l'envers</label><label><input type="checkbox" class."mr-1"> Conso 0</label><label><input type="checkbox" class="mr-1"> Alarmes</label><label><input type="checkbox" class="mr-1"> Observations</label><label><input type="checkbox" class="mr-1"> Périodes</label></div></div>
+                                        <div><p class="font-medium mb-2">Analyse du patrimoine</p><div class="grid grid-cols-2 gap-1"><label><input type="checkbox" class="mr-1"> Pose à l'envers</label><label><input type_checkbox class="mr-1"> Conso 0</label><label><input type="checkbox" class="mr-1"> Alarmes</label><label><input type="checkbox" class="mr-1"> Observations</label><label><input type="checkbox" class="mr-1"> Périodes</label></div></div>
                                         <div class="vba-button vba-button-secondary"><i class="fa-solid fa-trash fa-fw w-5"></i><span>Suppr. Rapports / Généraux</span></div>
                                     </div>
                                 </div>
@@ -579,11 +579,9 @@
                     </div>
                 </main>
             </div>
-            <!-- ================================================================= -->
-            <!-- == FIN DE LA SIMULATION DU USERFORM VBA == -->
-            <!-- ================================================================= -->
             
-            <!-- Section de justification -->
+            <!-- == FIN DE LA MAQUETTE == -->
+
             <section class="mt-10 pt-6 border-t border-gray-300">
                 <h2 class="text-2xl font-bold text-gray-900 mb-4">Justification de la V3.00</h2>
                 
@@ -609,7 +607,7 @@
         </main>
     </div>
 
-    <!-- Script pour gérer la navigation par onglets (simulation) -->
+    <!-- Script pour la navigation simulée -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const menuItems = document.querySelectorAll('.vba-menu-item');
