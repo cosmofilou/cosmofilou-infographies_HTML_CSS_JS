@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proposition de Modernisation V5.00 - Golfinho (Hybride)</title>
+    <!-- Le titre est mis à jour pour refléter la version V3 Hybride -->
+    <title>Proposition de Modernisation V3.00 - Golfinho (Hybride)</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -53,6 +54,7 @@
         .vba-sidebar-menu {
             flex-grow: 1;
             padding: 1rem 0.75rem; /* p-4 p-3 */
+            overflow-y: auto; 
         }
         .vba-menu-item {
             display: flex;
@@ -79,7 +81,7 @@
             margin: 0.5rem 1rem; /* my-2 mx-4 */
         }
 
-        /* Pied de page du menu */
+        /* Pied de page du menu (MODIFIÉ) */
         .vba-sidebar-footer {
             flex-shrink: 0; /* Ne pas réduire */
             padding: 1rem 1.5rem; /* p-4 px-6 */
@@ -94,7 +96,7 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Important pour que le scroll interne fonctionne */
+            overflow: hidden; 
         }
         .vba-content-header {
             display: flex;
@@ -106,10 +108,10 @@
             border-bottom: 1px solid #D1D5DB; /* border-b border-gray-300 */
             flex-shrink: 0;
         }
-        /* Contenu de page, maintenant avec scroll */
+        /* Page de contenu avec scroll interne */
         .vba-content-page {
             padding: 1.5rem; /* p-6 */
-            overflow-y: auto; /* Active le scroll pour le contenu de la page */
+            overflow-y: auto; /* Scroll vertical pour le contenu */
             height: 100%; /* Prend la hauteur restante */
         }
 
@@ -119,7 +121,7 @@
             border-radius: 0.5rem; /* rounded-lg */
             background-color: #ffffff; /* white */
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-sm */
-            height: 100%; 
+            margin-bottom: 1.5rem; 
         }
         .vba-frame-title {
             font-weight: 600; 
@@ -179,17 +181,16 @@
             color: black;
         }
         
-        /* Correction pour le chemin tronqué */
         .vba-path-truncate {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             cursor: help; 
             position: relative; 
-            max-width: 150px; /* Limite la largeur max pour forcer la troncature */
+            max-width: 150px; /* Force la troncature */
         }
-        
-        /* --- STYLES ACCORDION (Importés de V4) --- */
+
+        /* --- STYLES ACCORDION (V4) --- */
         .vba-accordion-section {
             border: 1px solid #D1D5DB; /* gray-300 */
             border-radius: 0.5rem; /* rounded-lg */
@@ -206,7 +207,6 @@
             font-weight: 600; 
             color: #1F2937; /* gray-800 */
             background-color: #F9FAFB; /* gray-50 */
-            border-bottom: 1px solid #D1D5DB; /* border-b border-gray-300 */
             cursor: pointer;
             transition: background-color 0.2s;
         }
@@ -229,30 +229,25 @@
 
     <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
         <header class="p-6 md:p-10 bg-gray-800 text-white">
-            <h1 class="text-3xl font-bold">Proposition de Modernisation UI/UX (V5.00)</h1>
-            <p class="text-lg text-gray-300">Application VBA "Golfinho" - Approche Hybride (Menu Latéral + Dashboard Pliable)</p>
+            <h1 class="text-3xl font-bold">Proposition de Modernisation UI/UX (V3.00 Hybride)</h1>
+            <p class="text-lg text-gray-300">Application VBA "Golfinho" - Navigation Latérale + Dashboard Pliable</p>
         </header>
 
         <main class="p-6 md:p-10">
 
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Maquette Visuelle "Golfinho 5.0"</h2>
-            <p class="mb-6 text-gray-700">Cette version "Hybride" conserve le menu latéral de la V3 pour une navigation claire, mais transforme la page d'Accueil en un puissant tableau de bord pliable (style V4) pour un accès direct aux modules clés.</p>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Maquette Visuelle "Golfinho 3.0" (Hybride)</h2>
+            <p class="mb-6 text-gray-700">Cette version réintroduit le "Dashboard" pliable (style V5) sur la page d'Accueil, tout en conservant la navigation latérale V3. L'accueil est désormais centré sur votre workflow principal.</p>
 
-            <!-- == MAQUETTE VBA SIMULÉE V5 == -->
+            <!-- == MAQUETTE VBA SIMULÉE == -->
             <div class="vba-userform max-w-6xl mx-auto">
                 
-                <!-- == MENU LATÉRAL (V3) == -->
+                <!-- == MENU LATÉRAL (Simulation Frame/ListBox) == -->
                 <aside class="vba-sidebar">
                     
                     <div class="vba-sidebar-header">
                         <div class="flex items-center gap-2"> 
-                            <!-- Emoji Dauphin (RETIRÉ) -->
-                            
-                            <!-- Titre (MODIFIÉ: text-6xl + police) -->
                             <span class="text-6xl font-bold tracking-wide text-white vba-golfinho-title">Golfinho</span>
                         </div>
-                        
-                        <!-- Version (MODIFIÉ: v3.00) -->
                         <span class="inline-block bg-blue-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full mt-1">v3.00</span> 
                     </div>
 
@@ -264,15 +259,15 @@
                         </div>
                         <div class="vba-menu-item" data-page="patrimoine">
                             <i class="fa-solid fa-building-columns fa-fw w-5"></i>
-                            <span>Patrimoine (Détails)</span>
+                            <span>Patrimoine</span>
                         </div>
                         <div class="vba-menu-item" data-page="interventions">
                             <i class="fa-solid fa-person-digging fa-fw w-5"></i>
-                            <span>Interventions (Détails)</span>
+                            <span>Interventions</span>
                         </div>
                         <div class="vba-menu-item" data-page="releves">
                             <i class="fa-solid fa-satellite-dish fa-fw w-5"></i>
-                            <span>Relevés (Détails)</span>
+                            <span>Relevés</span>
                         </div>
                         <div class="vba-menu-divider"></div>
                         <div class="vba-menu-item" data-page="flux">
@@ -294,7 +289,7 @@
                         </div>
                     </nav>
 
-                    <!-- Pied de page -->
+                    <!-- Pied de page avec Copyright -->
                     <div class="vba-sidebar-footer">
                         <span class="block font-semibold">Aurélien DA COSTA</span>
                         <span class="block">Direction Technique Groupe</span>
@@ -303,13 +298,12 @@
                     </div>
                 </aside>
 
-                <!-- == ZONE DE CONTENU PRINCIPALE (V3) == -->
+                <!-- == ZONE DE CONTENU PRINCIPALE == -->
                 <main class="vba-content-area">
                     
                     <header class="vba-content-header">
                         <button class="vba-button-link" aria-label="Licorne">
                             <i class="fa-brands fa-salesforce fa-fw"></i>
-                            <!-- (MODIFIÉ: "Outil:" retiré) -->
                             <span>Licorne</span>
                         </button>
                         <button class="vba-button-link" aria-label="Helpjuice">
@@ -325,105 +319,77 @@
                         </button>
                     </header>
 
-                    <!-- == CONTENU DE PAGE (V3) == -->
+                    <!-- Contenu de la page (dynamique) -->
                     <div class="vba-content-page">
 
-                        <!-- Page: Accueil (MODIFIÉE AVEC ACCORDÉONS V4 + BIENVENUE) -->
+                        <!-- Page: Accueil (MODIFIÉE AVEC WORKFLOW) -->
                         <div id="page-accueil" class="page-content">
                             
-                            <!-- Message de bienvenue personnalisé -->
                             <div class="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
                                 <h2 class="text-2xl font-bold text-gray-800 mb-2">Bienvenue, Aurélien !</h2>
-                                <!-- (MODIFIÉ: "Licorne/Salesforce" -> "Licorne") -->
                                 <p class="text-gray-700">Votre centre de commande Golfinho est prêt. Retrouvez ici toutes les automatisations pour exceller sur Licorne.</p>
                             </div>
                             
-                            <!-- Section 1: Actions Rapides (Ouverte par défaut) -->
+                            <!-- NOUVEAU: Accordéon Workflow (ouvert par défaut) -->
                             <div class="vba-accordion-section">
-                                <div class="vba-accordion-header open" data-target="accordion-content-1">
+                                <div class="vba-accordion-header open" data-target="accordion-content-workflow">
                                     <div class="flex items-center gap-3">
-                                        <i class="fa-solid fa-bolt fa-fw text-blue-600"></i>
-                                        <span class="text-lg">Actions Rapides & Informations</span>
+                                        <i class="fa-solid fa-cogs fa-fw text-blue-600"></i>
+                                        <span class="text-lg">Workflow Principal d'Importation</span>
                                     </div>
                                     <i class="fa-solid fa-chevron-down icon-toggle"></i>
                                 </div>
-                                <div id="accordion-content-1" class="vba-accordion-content">
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
-                                        <div class="space-y-3">
-                                            <h4 class="font-semibold mb-2 text-gray-700">Imports Fréquents</h4>
+                                <div id="accordion-content-workflow" class="vba-accordion-content">
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6"> 
+                                        <!-- Etape 1 -->
+                                        <div class="space-y-3 p-3 bg-gray-50 rounded-lg">
+                                            <h4 class="font-semibold text-gray-700"><span class="text-blue-600 font-bold">Étape 1 :</span> Extraire</h4>
+                                            <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extraction cité(s)</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extraction patrimoine client</span></div>
+                                        </div>
+                                        <!-- Etape 2 (Nouveau) -->
+                                        <div class="space-y-3 p-3 bg-gray-50 rounded-lg">
+                                            <h4 class="font-semibold text-gray-700"><span class="text-blue-600 font-bold">Étape 2 :</span> Générer Index</h4>
+                                            <div class="vba-button"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Générer Index AccèsPro</span></div>
+                                        </div>
+                                        <!-- Etape 3 -->
+                                        <div class="space-y-3 p-3 bg-gray-50 rounded-lg">
+                                            <h4 class="font-semibold text-gray-700"><span class="text-blue-600 font-bold">Étape 3 :</span> Importer</h4>
                                             <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFLGEST</span></div>
                                             <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer AccèsPro</span></div>
                                             <div class="vba-button"><i class="fa-solid fa-triangle-exclamation fa-fw w-5"></i><span>Importer Alarmes</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-satellite-dish fa-fw w-5"></i><span>Importer MBW/GPRS</span></div>
                                         </div>
-                                        <div class="space-y-3">
-                                            <h4 class="font-semibold mb-2 text-gray-700">Actions Principales</h4>
-                                            <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extraction cité(s)</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extraction patrimoine client</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-calendar-alt fa-fw w-5"></i><span>Accéder au planning</span></div>
-                                        </div>
-                                        <div class="space-y-3">
-                                            <h4 class="font-semibold mb-2 text-gray-700">Infos & Rapports</h4>
-                                            <div class="text-sm text-gray-700 space-y-2 p-3 bg-gray-50 rounded-md">
-                                                <!-- (MODIFIÉ: Correction affichage chemin) -->
-                                                <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Serveur :</span><span class="vba-path-truncate text-blue-700 text-xs text-right" title="\\long\path\to\server\...">\\long\path\to\server\...</span></div>
-                                                <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Source :</span><span class="vba-path-truncate text-blue-700 text-xs text-right" title="G:\Mon Drive\Downloads\...">G:\Mon Drive\Downloads\...</span></div>
-                                                <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Utilisateur :</span><span class="text-right">adacosta</span></div>
-                                            </div>
-                                            <div class="vba-button vba-button-secondary mt-3"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Générer un rapport SDC</span></div>
+                                        <!-- Etape 4 -->
+                                        <div class="space-y-3 p-3 bg-gray-50 rounded-lg">
+                                            <h4 class="font-semibold text-gray-700"><span class="text-blue-600 font-bold">Étape 4 :</span> Analyser</h4>
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-play-circle fa-fw w-5"></i><span>Lancer Analyse MyVoid</span></div>
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-waveform fa-fw w-5"></i><span>Analyse Cité/MBW</span></div>
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Générer Rapport SDC</span></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             
-                            <!-- Section 2: Patrimoine (Dashboard) -->
+                            <!-- Accordéon Informations (fermé par défaut) -->
                             <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-content-2">
+                                <div class="vba-accordion-header" data-target="accordion-content-info">
                                     <div class="flex items-center gap-3">
-                                        <i class="fa-solid fa-building-columns fa-fw text-blue-600"></i>
-                                        <span class="text-lg">Patrimoine (Raccourcis)</span>
+                                        <i class="fa-solid fa-info-circle fa-fw text-blue-600"></i>
+                                        <span class="text-lg">Informations Système</span>
                                     </div>
                                     <i class="fa-solid fa-chevron-down icon-toggle"></i>
                                 </div>
-                                <div id="accordion-content-2" class="vba-accordion-content hidden">
+                                <div id="accordion-content-info" class="vba-accordion-content hidden">
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                        <div class="space-y-3">
-                                            <h4 class="font-semibold mb-2 text-gray-700">Création Patrimoine</h4>
-                                            <div class="vba-button"><i class="fa-solid fa-map-marker-alt fa-fw w-5"></i><span>Gérer les Lieux</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-sitemap fa-fw w-5"></i><span>Gérer les P.D.M.</span></div>
+                                        <div class="text-sm text-gray-700 space-y-2 p-3 bg-gray-50 rounded-md">
+                                            <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Serveur :</span><span class="vba-path-truncate text-blue-700 text-xs text-right" title="\\long\path\to\server\...">\\long\path\to\server\...</span></div>
                                         </div>
-                                        <div class="space-y-3">
-                                            <h4 class="font-semibold mb-2 text-gray-700">Mise à jour Radiateurs</h4>
-                                            <div class="vba-button"><i class="fa-solid fa-circle-info fa-fw w-5"></i><span>Gérer les Informations</span></div>
+                                        <div class="text-sm text-gray-700 space-y-2 p-3 bg-gray-50 rounded-md">
+                                            <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Source :</span><span class="vba-path-truncate text-blue-700 text-xs text-right" title="G:\Mon Drive\Downloads\...">G:\Mon Drive\Downloads\...</span></div>
                                         </div>
-                                        <div class="space-y-3">
-                                            <h4 class="font-semibold mb-2 text-gray-700">Mise à jour Base</h4>
-                                            <div class="vba-button"><i class="fa-solid fa-box-open fa-fw w-5"></i><span>Gérer les Produits</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Section 3: Flux de Fichiers (Dashboard) -->
-                            <div class="vba-accordion-section">
-                                <div class="vba-accordion-header" data-target="accordion-content-5">
-                                    <div class="flex items-center gap-3">
-                                        <i class="fa-solid fa-file-import fa-fw text-blue-600"></i>
-                                        <span class="text-lg">Flux de Fichiers (Raccourcis)</span>
-                                    </div>
-                                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                </div>
-                                <div id="accordion-content-5" class="vba-accordion-content hidden">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div class="space-y-3">
-                                            <h4 class="font-semibold mb-2 text-gray-700">Importation</h4>
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>OFIGEST</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Trame Bâti</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-upload fa-fw w-5"></i><span>PRCGEST (Extract. agence)</span></div>
-                                        </div>
-                                        <div class="space-y-3">
-                                            <h4 class="font-semibold mb-2 text-gray-700">Extraction</h4>
-                                            <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extraction cité(s)</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extraction patrimoine client</span></div>
+                                        <div class="text-sm text-gray-700 space-y-2 p-3 bg-gray-50 rounded-md">
+                                            <div class="flex justify-between items-center gap-2"><span class="font-medium shrink-0">Utilisateur :</span><span class="text-right">adacosta</span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -431,9 +397,9 @@
 
                         </div>
 
-                        <!-- Page: Patrimoine (Page complète V3) -->
+                        <!-- Page: Patrimoine -->
                         <div id="page-patrimoine" class="page-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Patrimoine (Module Complet)</h2>
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Patrimoine</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
                                     <h3 class="vba-frame-title">Création Patrimoine</h3>
@@ -462,10 +428,9 @@
                             </div>
                         </div>
 
-                        <!-- Page: Interventions (Page complète V3) -->
+                        <!-- Page: Interventions -->
                         <div id="page-interventions" class="page-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Interventions (Module Complet)</h2>
-                            <!-- Contenu copié de V3 -->
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Interventions (Pose, Entretien, Location)</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
                                     <h3 class="vba-frame-title">Entretien</h3>
@@ -477,7 +442,7 @@
                                     <h3 class="vba-frame-title">Location</h3>
                                     <div class="p-4 space-y-3">
                                         <p class="font-medium">Statut :</p>
-                                        <div class="flex gap-4"><label><input type="radio" name="location_v5" class="mr-1"> Vierge</label><label><input type="radio" name="location_v5" class="mr-1" checked> Mise à jour</label></div>
+                                        <div class="flex gap-4"><label><input type="radio" name="location" class="mr-1"> Vierge</label><label><input type="radio" name="location" class="mr-1" checked> Mise à jour</label></div>
                                     </div>
                                 </div>
                                 <div class="vba-frame md:col-span-2">
@@ -500,9 +465,9 @@
                             </div>
                         </div>
 
-                        <!-- Page: Relevés (Page complète V3) -->
+                        <!-- Page: Relevés -->
                         <div id="page-releves" class="page-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés (Module Complet)</h2>
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés (Manuelle & Télérelève)</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
                                     <h3 class="vba-frame-title">Relève Manuelle</h3>
@@ -527,10 +492,10 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Page: Flux de Fichiers (Page complète V3) -->
+
+                        <!-- Page: Flux de Fichiers -->
                         <div id="page-flux" class="page-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Flux de Fichiers (Module Complet)</h2>
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Flux de Fichiers (Import / Extraction)</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
                                     <h3 class="vba-frame-title">Importation de Fichiers</h3>
@@ -551,10 +516,10 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Page: Analyse & EDI (Page complète V3) -->
+
+                        <!-- Page: Analyse & EDI -->
                         <div id="page-analyse" class="page-content hidden">
-                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Analyse & EDI (Module Complet)</h2>
+                             <h2 class="text-2xl font-bold text-gray-800 mb-4">Analyse & EDI</h2>
                              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
                                     <h3 class="vba-frame-title">Analyse de Fichiers</h3>
@@ -578,9 +543,9 @@
                              </div>
                         </div>
                         
-                        <!-- Page: Rapports & Exports (Page complète V3) -->
+                        <!-- Page: Rapports & Exports -->
                         <div id="page-rapports" class="page-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Rapports & Exports (Module Complet)</h2>
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Rapports & Exports</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame">
                                     <h3 class="vba-frame-title">Exports Standards</h3>
@@ -609,9 +574,9 @@
                             </div>
                         </div>
 
-                        <!-- Page: Outils & Paramètres (Page complète V3) -->
+                        <!-- Page: Outils & Paramètres -->
                         <div id="page-outils" class="page-content hidden">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Outils & Paramètres (Module Complet)</h2>
+                            <h2 class="text-2xl font-bold text-gray-800 mb-4">Outils & Paramètres</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="vba-frame md:col-span-2">
                                     <h3 class="vba-frame-title">Configuration des Chemins</h3>
@@ -658,6 +623,28 @@
             
             <!-- == FIN DE LA MAQUETTE == -->
 
+            <section class="mt-10 pt-6 border-t border-gray-300">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Justification de la V3.00 (Hybride)</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-blue-700 mb-2"><i class="fa-solid fa-compress-arrows-alt mr-2"></i>Navigation Hybride</h3>
+                        <p class="text-gray-700">Cette version combine le meilleur de la V3 (menu latéral clair) et de la V4 (sections pliables). La navigation est structurée, mais le Dashboard est flexible.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-blue-700 mb-2"><i class="fa-solid fa-project-diagram mr-2"></i>Workflow Optimisé</h3>
+                        <p class="text-gray-700">La page d'accueil guide l'utilisateur à travers les étapes logiques (Extraire > Générer > Importer > Analyser), ce qui clarifie le processus métier et réduit les erreurs.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-blue-700 mb-2"><i class="fa-solid fa-brain mr-2"></i>Architecture Cognitive Logique</h3>
+                        <p class="text-gray-700">En scindant **"Flux de Fichiers"** (j'importe/j'extrais) et **"Analyse & EDI"** (je traite/j'analyse), l'architecture de l'information respecte le "modèle mental" de l'utilisateur. Il n'y a plus d'onglet "fourre-tout".</p>
+                    </div>
+                     <div>
+                        <h3 class="text-xl font-semibold text-blue-700 mb-2"><i class="fa-solid fa-tachograph-digital mr-2"></i>Accueil "Tableau de bord"</h3>
+                        <p class="text-gray-700">L'accueil n'est plus une page vide, mais un véritable tableau de bord centré sur le workflow principal, ce qui améliore drastiquement l'efficacité quotidienne.</p>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
