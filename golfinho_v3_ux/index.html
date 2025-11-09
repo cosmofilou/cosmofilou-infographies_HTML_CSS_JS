@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Titre V3.00 final -->
     <title>Proposition de Modernisation V3.0 - Golfinho (Final)</title>
     
     <!-- Tailwind CSS -->
@@ -94,7 +93,6 @@
         }
 
         /* --- ZONE DE CONTENU (Simulation Frame) --- */
-        /* MODIFIÉ: S'adapte à la barre de statut */
         .vba-main-wrapper {
             display: flex;
             flex-grow: 1; /* Prend l'espace restant */
@@ -159,6 +157,7 @@
             justify-content: center;
             width: 100%;
             text-decoration: none; /* Pour les liens-boutons */
+            min-height: 44px; /* Hauteur minimale pour l'accessibilité et l'alignement */
         }
         .vba-button:hover {
             background-color: #1D4ED8; /* blue-700 */
@@ -291,7 +290,6 @@
             <p class="mb-6 text-gray-700">Cette version finale (V3.00) intègre le Dashboard à 3 étapes et la barre de statut cliquable.</p>
 
             <!-- == MAQUETTE VBA SIMULÉE == -->
-            <!-- MODIFIÉ: Structure UserForm mise à jour pour inclure le main-wrapper et la barre de statut -->
             <div class="vba-userform max-w-6xl mx-auto">
                 
                 <div class="vba-main-wrapper">
@@ -300,12 +298,9 @@
                         
                         <div class="vba-sidebar-header">
                             <div class="flex items-center gap-3">
-                                <!-- Logo Dauphin -->
                                 <i class="fa-solid fa-dolphin fa-2x text-blue-400"></i>
                                 <div>
-                                    <!-- Titre de la marque -->
                                     <span class="text-5xl font-bold tracking-wide text-white vba-golfinho-title">Golfinho</span>
-                                    <!-- Version -->
                                     <span class="inline-block bg-blue-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full ml-1">v3.00</span>
                                 </div>
                             </div>
@@ -361,7 +356,7 @@
                     <!-- == ZONE DE CONTENU PRINCIPALE == -->
                     <main class="vba-content-area">
                         
-                        <!-- Header (MODIFIÉ: Inclut le nom d'utilisateur) -->
+                        <!-- Header -->
                         <header class="vba-content-header">
                             <button class="vba-button-link" aria-label="Licorne">
                                 <i class="fa-brands fa-salesforce fa-fw"></i>
@@ -372,7 +367,6 @@
                                 <span>Base de Connaissance</span>
                             </button>
                             
-                            <!-- Nom utilisateur visible en permanence -->
                             <div class="text-sm text-gray-700 font-medium p-2 ml-4">
                                 <i class="fa-solid fa-user-circle text-gray-500 mr-1"></i>
                                 <span>adacosta</span>
@@ -410,11 +404,12 @@
                                         <i class="fa-solid fa-chevron-down icon-toggle"></i>
                                     </div>
                                     <div id="accordion-workflow-1" class="vba-accordion-content">
+                                        <!-- Boutons avec texte court pour hauteur uniforme -->
                                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"> 
-                                            <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extraction cité(s)</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extraction patrimoine client</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-upload fa-fw w-5"></i><span>PRCGEST (Extract. agence)</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-globe fa-fw w-5"></i><span>Accès Portail AccèsPro</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extract. Cité(s)</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extract. Client</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-upload fa-fw w-5"></i><span>PRCGEST (Agence)</span></div>
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-globe fa-fw w-5"></i><span>DFLGEST Agence</span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -431,7 +426,7 @@
                                     <div id="accordion-workflow-2" class="vba-accordion-content hidden">
                                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                             <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFLGEST</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer AccèsPro</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer Back-Office</span></div>
                                             <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFCGEST</span></div>
                                             <div class="vba-button"><i class="fa-solid fa-satellite-dish fa-fw w-5"></i><span>Importer MBW/GPRS</span></div>
                                         </div>
@@ -458,7 +453,7 @@
                                 </div>
                             </div>
 
-                            <!-- Page: Patrimoine (Conservée) -->
+                            <!-- Page: Patrimoine -->
                             <div id="page-patrimoine" class="page-content hidden">
                                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Patrimoine</h2>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -489,7 +484,7 @@
                                 </div>
                             </div>
 
-                            <!-- Page: Interventions (Conservée) -->
+                            <!-- Page: Interventions -->
                             <div id="page-interventions" class="page-content hidden">
                                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Interventions (Pose, Entretien, Location)</h2>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -526,7 +521,7 @@
                                 </div>
                             </div>
 
-                            <!-- Page: Relevés (Conservée) -->
+                            <!-- Page: Relevés -->
                             <div id="page-releves" class="page-content hidden">
                                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés (Manuelle & Télérelève)</h2>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -554,25 +549,23 @@
                                 </div>
                             </div>
 
-                            <!-- Page: Flux de Fichiers (Conservée) -->
+                            <!-- Page: Flux de Fichiers -->
                             <div id="page-flux" class="page-content hidden">
                                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Flux de Fichiers (Import / Extraction)</h2>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <!-- Priorité à l'extraction -->
                                     <div class="vba-frame">
                                         <h3 class="vba-frame-title"><i class="fa-solid fa-download fa-fw text-blue-600"></i>Extraction de Données</h3>
                                         <div class="p-4 space-y-3">
                                             <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extraction cité(s)</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extraction patrimoine client</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extract. Client</span></div>
                                             <div class="vba-button"><i class="fa-solid fa-upload fa-fw w-5"></i><span>PRCGEST (Extract. agence)</span></div>
                                         </div>
                                     </div>
-                                    <!-- Cohérence des noms -->
                                     <div class="vba-frame">
                                         <h3 class="vba-frame-title"><i class="fa-solid fa-file-import fa-fw text-blue-600"></i>Importation de Fichiers</h3>
                                         <div class="p-4 space-y-3">
                                             <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFLGEST</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer AccèsPro</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer Back-Office</span></div>
                                             <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFCGEST</span></div>
                                             <div class="vba-button"><i class="fa-solid fa-satellite-dish fa-fw w-5"></i><span>Importer MBW/GPRS</span></div>
                                             <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer Trame Bâti</span></div>
@@ -581,7 +574,7 @@
                                 </div>
                             </div>
 
-                            <!-- Page: Analyse & EDI (Conservée) -->
+                            <!-- Page: Analyse & EDI -->
                             <div id="page-analyse" class="page-content hidden">
                                  <h2 class="text-2xl font-bold text-gray-800 mb-4">Analyse & EDI</h2>
                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -607,7 +600,7 @@
                                    </div>
                             </div>
                             
-                            <!-- Page: Rapports & Exports (Conservée) -->
+                            <!-- Page: Rapports & Exports -->
                             <div id="page-rapports" class="page-content hidden">
                                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Rapports & Exports</h2>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -638,7 +631,7 @@
                                 </div>
                             </div>
 
-                            <!-- Page: Outils & Paramètres (Conservée) -->
+                            <!-- Page: Outils & Paramètres -->
                             <div id="page-outils" class="page-content hidden">
                                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Outils & Paramètres</h2>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -669,7 +662,7 @@
                                         <div class="p-4 space-y-3">
                                             <div><label class="block font-medium mb-1">Chemin Serveur &nbsp;:</label><div class="flex gap-2">
                                                 <input type="text" value="\\jetform_comptage\Service_Comptage\..." class="w-full p-2 border rounded-md bg-gray-50">
-                                                <button class="flex-shrink-0 flex items-center justify-center bg-blue-600 text-white rounded-md px-2 py-2 hover:bg-blue-700" title="Sauvegarder le chemin Serveur">
+                                                <button class="flex-shrink-0 flex items-center justify-center bg-blue-600 text-white rounded-md px-2 py-2 hover:bg-blue-700" title="SauvegardDager le chemin Serveur">
                                                     <i class="fa-solid fa-save"></i>
                                                 </button>
                                             </div></div>
@@ -718,7 +711,7 @@
                     </main>
                 </div>
 
-                <!-- NOUVEAU: Barre de statut V3.final -->
+                <!-- Barre de statut V3.final -->
                 <footer class="vba-status-bar">
                     <div class="vba-status-bar-group">
                         <span class="vba-status-bar-link" data-target-page="outils" title="Modifier le chemin Serveur">
