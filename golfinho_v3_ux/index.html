@@ -11,7 +11,6 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* ... (Styles CSS de la maquette, identiques à avant) ... */
         /* Simulation de la police par défaut d'Office (Segoe UI) */
         body {
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -509,26 +508,106 @@
 
                             <!-- Page: Patrimoine -->
                             <div id="page-patrimoine" class="page-content hidden">
-                                <!-- ... Contenu des autres pages ... -->
+                                <!-- NOUVEAU CONTENU AJOUTÉ -->
                                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Patrimoine</h2>
-                                <p>Contenu de la page Patrimoine...</p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="vba-frame">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-building-columns fa-fw text-blue-600"></i>Création Patrimoine</h3>
+                                        <div class="p-4 space-y-3">
+                                            <div class="vba-button"><i class="fa-solid fa-map-marker-alt fa-fw w-5"></i><span>Gérer les Lieux</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-sitemap fa-fw w-5"></i><span>Gérer les P.D.M.</span></div>
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-exchange-alt fa-fw w-5"></i><span>Transférer Lieux / P.D.M.</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="vba-frame">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-water fa-fw text-blue-600"></i>Mise à jour Radiateurs</h3>
+                                         <div class="p-4 space-y-3">
+                                            <div class="vba-button"><i class="fa-solid fa-circle-info fa-fw w-5"></i><span>Gérer les Informations</span></div>
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-exchange-alt fa-fw w-5"></i><span>Transférer Informations</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="vba-frame md:col-span-2">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-database fa-fw text-blue-600"></i>Mise à jour de la Base (Produits, etc.)</h3>
+                                        <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div class="vba-button"><i class="fa-solid fa-box-open fa-fw w-5"></i><span>Gérer les Produits</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-wrench fa-fw w-5"></i><span>Gérer Déposé / Posé</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-history fa-fw w-5"></i><span>Gérer Histo. 14</span></div>
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-exchange-alt fa-fw w-5"></i><span>Tout Transférer</span></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Page: Interventions -->
                             <div id="page-interventions" class="page-content hidden">
-                                <h2 class="text-2xl font-bold text-gray-800 mb-4">Interventions</h2>
-                                <p>Contenu de la page Interventions...</p>
+                                <!-- NOUVEAU CONTENU AJOUTÉ -->
+                                <h2 class="text-2xl font-bold text-gray-800 mb-4">Interventions (Pose, Entretien, Location)</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="vba-frame">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-calendar-alt fa-fw text-blue-600"></i>Entretien</h3>
+                                        <div class="p-4 space-y-3">
+                                            <div class="vba-button"><i class="fa-solid fa-calendar-alt fa-fw w-5"></i><span>Accéder au planning</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="vba-frame">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-box-tissue fa-fw text-blue-600"></i>Location</h3>
+                                        <div class="p-4 space-y-3">
+                                            <p class="font-medium">Statut :</p>
+                                            <div class="flex gap-4"><label><input type="radio" name="location" class="mr-1"> Vierge</label><label><input type="radio" name="location" class="mr-1" checked> Mise à jour</label></div>
+                                        </div>
+                                    </div>
+                                    <div class="vba-frame md:col-span-2">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-file-signature fa-fw text-blue-600"></i>Création d'un CR Chantier (Pose)</h3>
+                                        <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div><label class="block font-medium mb-1">Technicien:</label><input type="text" placeholder="Sélectionner..." class="w-full p-2 border rounded-md"></div>
+                                            <div><label class="block font-medium mb-1">Options:</label><div class="flex gap-4 pt-2"><label><input type="checkbox" class="mr-1"> P1</label><label><input type="checkbox" class="mr-1"> P2</label><label><input type="checkbox" class="mr-1"> P3</label></div></div>
+                                            <div><label class="block font-medium mb-1">Nom de la SDC:</label><input type="text" class="w-full p-2 border rounded-md"></div>
+                                            <div><label class="block font-medium mb-1">Date:</label><input type="date" class="w-full p-2 border rounded-md"></div>
+                                        </div>
+                                    </div>
+                                    <div class="vba-frame md:col-span-2">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-cogs fa-fw text-blue-600"></i>Gestion des CR de Pose</h3>
+                                        <div class="p-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                            <div><label class="block font-medium mb-1">Type de CR:</label><select class="w-full p-2 border rounded-md"><option>EAU/CET v2</option><option>RFC v2</option><option>v3 (bêta)</option></select></div>
+                                            <div class="p-4 bg-gray-50 rounded-lg space-y-2"><div class="vba-button vba-button-secondary"><i class="fa-solid fa-eye fa-fw w-5"></i><span>Vision envoi anomalies</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-copy fa-fw w-5"></i><span>Copier les anomalies</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-paper-plane fa-fw w-5"></i><span>Envoi des EDC</span></div></div>
+                                            <div class="p-4 bg-gray-50 rounded-lg space-y-2"><div class="vba-button vba-button-secondary"><i class="fa-solid fa-box-tissue fa-fw w-5"></i><span>Importer Stock Interv.</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-plus-circle fa-fw w-5"></i><span>Incrémenter DPLTAB</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-broom fa-fw w-5"></i><span>Nettoyage NS</span></div></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Page: Relevés -->
                             <div id="page-releves" class="page-content hidden">
-                                <h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés</h2>
-                                <p>Contenu de la page Relevés...</p>
+                                <!-- NOUVEAU CONTENU AJOUTÉ -->
+                                <h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés (Manuelle & Télérelève)</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="vba-frame">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-pencil-ruler fa-fw text-blue-600"></i>Relève Manuelle</h3>
+                                        <div class="p-4 space-y-3">
+                                            <p class="font-medium">Support de relevé:</p>
+                                            <div class="vba-button"><i class="fa-solid fa-file-signature fa-fw w-5"></i><span>Générer un support</span></div>
+                                            <div class="flex gap-4 pt-2"><label><input type="radio" name="releve" class="mr-1" checked> RF</label><label><input type="radio" name="releve" class="mr-1"> Bailleur</label></div>
+                                        </div>
+                                    </div>
+                                    <div class="vba-frame">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-satellite-dish fa-fw text-blue-600"></i>Télérelève</h3>
+                                        <div class="p-4 space-y-3">
+                                            <div class="vba-button"><i class="fa-solid fa-broom fa-fw w-5"></i><span>Nettoyage export Accès Pro</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-triangle-exclamation fa-fw w-5"></i><span>Analyse des alarmes</span></div>
+                                            <hr class="my-3">
+                                            <p class="font-medium">Test / Install</p>
+                                            <div class="vba-button"><i class="fa-solid fa-network-wired fa-fw w-5"></i><span>Erreur réseau GPRS</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-microchip fa-fw w-5"></i><span>Télérelève impos.</span></div>
+                                            <p class="font-medium pt-2">Type radio:</p>
+                                            <div class="grid grid-cols-2 gap-2"><label><input type="checkbox" class="mr-1"> Diehl R4</label><label><input type="checkbox" class="mr-1"> Apator OMS</label><label><input type="checkbox" class="mr-1"> Diehl OMS</label><label><input type="checkbox" class="mr-1"> RFC</label><label><input type="checkbox" class="mr-1"> Apator</label><label><input type="checkbox" class="mr-1"> CET</label></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Page: Flux de Fichiers -->
                             <div id="page-flux" class="page-content hidden">
-                                <!-- ... Contenu copié de la maquette ... -->
+                                <!-- Contenu copié de la maquette -->
                                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Flux de Fichiers (Import / Extraction)</h2>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div class="vba-frame">
@@ -554,19 +633,66 @@
 
                             <!-- Page: Analyse & EDI -->
                             <div id="page-analyse" class="page-content hidden">
+                                 <!-- NOUVEAU CONTENU AJOUTÉ -->
                                  <h2 class="text-2xl font-bold text-gray-800 mb-4">Analyse & EDI</h2>
-                                 <p>Contenu de la page Analyse...</p>
+                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                     <div class="vba-frame">
+                                         <h3 class="vba-frame-title"><i class="fa-solid fa-chart-pie fa-fw text-blue-600"></i>Analyse de Fichiers</h3>
+                                         <div class="p-4 space-y-3">
+                                             <p class="font-medium text-center">Analyse Cité VS MBW</p>
+                                             <div class="vba-button"><i class="fa-solid fa-code-merge fa-fw w-5"></i><span>Fusion fichiers MBW</span></div>
+                                             <div class="vba-button"><i class="fa-solid fa-file-waveform fa-fw w-5"></i><span>Création fichier d'analyse</span></div>
+                                             <hr>
+                                             <p class="font-medium text-center">MyVoid (Index BPRS)</p>
+                                             <div class="vba-button"><i class="fa-solid fa-play-circle fa-fw w-5"></i><span>Lancer l'analyse MyVoid</span></div>
+                                         </div>
+                                     </div>
+                                     <div class="vba-frame">
+                                         <h3 class="vba-frame-title"><i class="fa-solid fa-file-code fa-fw text-blue-600"></i>Module EDI</h3>
+                                         <div class="p-4 space-y-3">
+                                             <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-code fa-fw w-5"></i><span>EDI CET 8 Car.</span></div>
+                                             <div class="vba-button vba-button-secondary"><i class="fa-solid fa-list-ol fa-fw w-5"></i><span>Codes IF</span></div>
+                                             <div class="vba-button vba-button-secondary"><i class="fa-solid fa-ban fa-fw w-5"></i><span>Suppr. 999</span></div>
+                                         </div>
+                                     </div>
+                                   </div>
                             </div>
                             
                             <!-- Page: Rapports & Exports -->
                             <div id="page-rapports" class="page-content hidden">
+                                <!-- NOUVEAU CONTENU AJOUTÉ -->
                                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Rapports & Exports</h2>
-                                <p>Contenu de la page Rapports...</p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="vba-frame">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-file-excel fa-fw text-blue-600"></i>Exports Standards</h3>
+                                        <div class="p-4 space-y-3">
+                                            <div class="vba-button"><i class="fa-solid fa-file-excel fa-fw w-5"></i><span>Exports Excel</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-file-pdf fa-fw w-5"></i><span>Exports PDF</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="vba-frame">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-file-invoice fa-fw text-blue-600"></i>Rapports Métier</h3>
+                                        <div class="p-4 space-y-3">
+                                            <div class="vba-button"><i class="fa-solid fa-file-export fa-fw w-5"></i><span>Rapport Analyse SDC</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-file-export fa-fw w-5"></i><span>Rapport Analyse Client</span></div>
+                                            <div class="vba-button"><i class="fa-solid fa-file-export fa-fw w-5"></i><span>Rapport Bilan (Bailleur)</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="vba-frame md:col-span-2">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-person-digging fa-fw text-blue-600"></i>Génération Rapports (Pose...)</h3>
+                                         <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <div class="vba-button"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Créer un rapport</span></div>
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-excel fa-fw w-5"></i><span>MàJ bâti</span></div>
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-pdf fa-fw w-5"></i><span>EDC flash en PDF</span></div>
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-pdf fa-fw w-5"></i><span>CR v2 en PDF</span></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Page: Outils & Paramètres -->
                             <div id="page-outils" class="page-content hidden">
-                                <!-- ... Contenu copié de la maquette ... -->
+                                <!-- Contenu copié de la maquette -->
                                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Outils & Paramètres</h2>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div class="vba-frame md:col-span-2">
@@ -626,6 +752,20 @@
                                         <div class="p-4 grid grid-cols-2 gap-3">
                                             <div class="vba-button"><i class="fa-solid fa-power-off fa-fw w-5"></i><span>Service Mode</span></div>
                                             <div class="vba-button vba-button-secondary"><i class="fa-solid fa-sign-out-alt fa-fw w-5"></i><span>Exit Service</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="vba-frame">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-sliders-h fa-fw text-blue-600"></i>Paramètres DPLTAB</h3>
+                                        <div class="p-4 space-y-2">
+                                            <p class="font-medium">Paramètres à générer :</p>
+                                            <label><input type="checkbox" class="mr-1"> Tous les CR</label><label><input type="checkbox" class="mr-1"> CP</label><label><input type="checkbox" class="mr-1"> SC</label><label><input type="checkbox" class="mr-1"> NT</label>
+                                        </div>
+                                    </div>
+                                    <div class="vba-frame">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-trash fa-fw text-blue-600"></i>Analyse & Suppression (Admin)</h3>
+                                        <div class="p-4 space-y-3">
+                                            <div><p class="font-medium mb-2">Analyse du patrimoine</p><div class="grid grid-cols-2 gap-1"><label><input type="checkbox" class="mr-1"> Pose à l'envers</label><label><input type="checkbox" class="mr-1"> Conso 0</label><label><input type="checkbox" class="mr-1"> Alarmes</label><label><input type="checkbox" class="mr-1"> Observations</label><label><input type="checkbox" class="mr-1"> Périodes</label></div></div>
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-trash fa-fw w-5"></i><span>Suppr. Rapports / Généraux</span></div>
                                         </div>
                                     </div>
                                 </div>
@@ -932,16 +1072,11 @@ Private Sub cmdOpenDemandes_Click()
     Call OpenExplorer("C:\Program Files") ' <--- REMPLACEZ PAR VOTRE CHEMIN DEMANDES
 End Sub
 
-' Private Sub cmdOpenFichiers_Click()
-'    Call OpenExplorer("C:\Chemin\Fichiers")
-' End Sub
+' --- Ajoutez ici les _Click pour les autres boutons (ex: Dashboard) ---
 
-' Private Sub cmdOpenUtilitaires_Click()
-'    Call OpenExplorer("C:\Chemin\Utilitaires")
-' End Sub
-
-' Private Sub cmdOpenBackup_Click()
-'    Call OpenExplorer("C:\Chemin\Backup")
+' Private Sub cmdExtractCites_Click()
+'    MsgBox "Lancement de l'extraction des cités..."
+'    ' Collez votre ancienne macro ici
 ' End Sub
 
 
@@ -1000,20 +1135,20 @@ End Sub
                         <h3 class="text-xl font-bold text-gray-900">Partie 5 : Construction des Pages de Contenu (Ex: Dashboard)</h3>
                     </div>
                     <div class="guide-content">
-                        <p>Maintenant, remplissez la première page.</p>
+                        <p>Maintenant, remplissez les pages une par une.</p>
                         <ol class="list-decimal">
                             <li>Ouvrez `frmMain` en visuel.</li>
                             <li>Cliquez sur le <code>mpContent</code> et assurez-vous que <strong>`pageDashboard`</strong> est sélectionnée.</li>
                             <li>Dessinez-y les `Frame` et les `CommandButton` (Boutons de commande) en suivant la maquette.</li>
                         </ol>
                         
-                        <h4>A. Le `Frame` "Bienvenue"</h4>
+                        <h4>A. Le `Frame` "Bienvenue" (sur `pageDashboard`)</h4>
                         <ul>
                             <li>Propriétés : <code>Caption</code>: (vide), <code>SpecialEffect</code>: 0-Flat, <code>BorderColor</code>: &amp;H00D1D5DB&amp; (Gris clair), <code>BackColor</code>: &amp;H00FFFFFF&amp; (Blanc).</li>
                             <li>Ajoutez un <code>Label</code> dedans pour le texte "Bienvenue...".</li>
                         </ul>
 
-                        <h4>B. Le `Frame` "Étape 1: Extraire"</h4>
+                        <h4>B. Le `Frame` "Étape 1: Extraire" (sur `pageDashboard`)</h4>
                         <ul>
                             <li>Propriétés : <code>Caption</code>: <strong>Étape 1: Extraire</strong>, <code>Font</code>: Tahoma, Gras, 10.</li>
                             <li>Mêmes styles que "Bienvenue" pour les bordures et le fond.</li>
@@ -1034,16 +1169,24 @@ End Sub
                             <li><code>Height</code>: <strong>40</strong>, <code>Width</code>: <strong>160</strong> (par ex.)</li>
                         </ul>
                         <p>Répétez pour tous les boutons (`cmdExtractClient`, `cmdPRCGEST`, etc.) en ajustant <code>BackColor</code> pour les boutons secondaires (<code>&amp;H0063554B&amp;</code> - Gris foncé).</p>
+                        
+                        <h4>D. Page `pagePatrimoine` et suivantes</h4>
+                        <ol class="list-decimal">
+                            <li>Cliquez sur le <code>mpContent</code> et sélectionnez l'onglet <strong>`pagePatrimoine`</strong>.</li>
+                            <li>Dessinez un <code>Frame</code>, nommez-le <code>fraPatrimoineCreation</code>, <code>Caption</code>: <strong>Création Patrimoine</strong>.</li>
+                            <li>Dessinez un <code>CommandButton</code> dedans, nommez-le <code>cmdGererLieux</code>, <code>Caption</code>: <strong>Gérer les Lieux</strong>.</li>
+                            <li>Répétez ce processus pour remplir toutes les pages comme sur la maquette.</li>
+                        </ol>
                     </div>
                 </div>
 
-                <!-- NOUVELLE PARTIE 6 -->
+                <!-- PARTIE 6: Construction Page Outils -->
                 <div class="guide-section">
                     <div class="guide-header">
                         <h3 class="text-xl font-bold text-gray-900">Partie 6 : Construction de la Page "Outils & Paramètres"</h3>
                     </div>
                     <div class="guide-content">
-                        <p>Pour ajouter vos nouveaux boutons :</p>
+                        <p>Pour ajouter vos boutons d'accès aux serveurs :</p>
                         <ol class="list-decimal">
                             <li>Ouvrez `frmMain` en visuel.</li>
                             <li>Cliquez sur le <code>mpContent</code> et sélectionnez l'onglet <strong>`pageOutils`</strong>.</li>
@@ -1057,7 +1200,6 @@ End Sub
                             <li><code>Caption</code>: <strong>Ouvrir Serveur Jetform</strong></li>
                             <li><code>BackColor</code>: <strong>&amp;H0063554B&amp;</strong> (Gris foncé - secondaire)</li>
                             <li><code>ForeColor</code>: <strong>&amp;H00FFFFFF&amp;</strong> (Blanc)</li>
-                            <li>... (Même police et taille que les autres boutons)</li>
                         </ul>
                         <ol class="list-decimal" start="7">
                             <li>Copiez ce bouton et réglez les propriétés pour le second :</li>
@@ -1065,7 +1207,6 @@ End Sub
                         <ul>
                             <li><code>(Name)</code>: <strong>cmdOpenDemandes</strong></li>
                             <li><code>Caption</code>: <strong>Ouvrir Serveur Demandes</strong></li>
-                            <li>... (Mêmes styles)</li>
                         </ul>
                         <p>Le code que vous avez copié dans la **Partie 4** s'occupera déjà de gérer les clics sur ces boutons.</p>
                     </div>
