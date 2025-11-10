@@ -604,15 +604,30 @@
                                             </div></div>
                                         </div>
                                     </div>
+                                    
+                                    <!-- MODIFICATION: Ajout des nouveaux boutons -->
                                     <div class="vba-frame">
                                         <h3 class="vba-frame-title"><i class="fa-solid fa-folder fa-fw text-blue-600"></i>Accès Outils & Dossiers</h3>
                                         <div class="p-4 space-y-3">
+                                            <!-- NOUVEAU -->
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-server fa-fw w-5"></i><span>Ouvrir Serveur Jetform</span></div>
+                                            <!-- NOUVEAU -->
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-folder-tree fa-fw w-5"></i><span>Ouvrir Serveur Demandes</span></div>
+                                            <hr class="my-2 border-gray-300">
+                                            <!-- Existant -->
                                             <div class="vba-button vba-button-secondary"><i class="fa-solid fa-folder fa-fw w-5"></i><span>Ouvrir Dossier Fichiers</span></div>
                                             <div class="vba-button vba-button-secondary"><i class="fa-solid fa-screwdriver-wrench fa-fw w-5"></i><span>Ouvrir Dossier Utilitaires</span></div>
                                             <div class="vba-button vba-button-secondary"><i class="fa-solid fa-save fa-fw w-5"></i><span>Ouvrir Dossier Backup</span></div>
                                         </div>
                                     </div>
                                     <!-- ... Autres frames ... -->
+                                    <div class="vba-frame">
+                                        <h3 class="vba-frame-title"><i class="fa-solid fa-shield-halved fa-fw text-blue-600"></i>Mode Administrateur</h3>
+                                        <div class="p-4 grid grid-cols-2 gap-3">
+                                            <div class="vba-button"><i class="fa-solid fa-power-off fa-fw w-5"></i><span>Service Mode</span></div>
+                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-sign-out-alt fa-fw w-5"></i><span>Exit Service</span></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -653,7 +668,7 @@
 
             <!-- 
             ====================================================================
-            NOUVELLE SECTION : GUIDE DE CONSTRUCTION VBA
+            GUIDE DE CONSTRUCTION VBA (MIS À JOUR)
             ====================================================================
             -->
             <section class="mt-10 pt-6 border-t border-gray-300">
@@ -899,6 +914,38 @@ Private Sub lblNav_Outils_Click()
 End Sub
 
 ' =================================================================
+' ACTIONS DES PAGES (DASHBOARD, OUTILS, ETC.)
+' =================================================================
+
+' --- Page Outils: Accès Dossiers ---
+' (Assurez-vous que vos boutons s'appellent cmdOpenJetform, cmdOpenDemandes, etc.)
+
+Private Sub cmdOpenJetform_Click()
+    ' Ouvre le serveur Jetform. Mettez votre chemin réseau ici.
+    ' EXEMPLE: "\\SERVEUR\Jetform"
+    Call OpenExplorer("C:\Windows") ' <--- REMPLACEZ PAR VOTRE CHEMIN JETFORM
+End Sub
+
+Private Sub cmdOpenDemandes_Click()
+    ' Ouvre le serveur Demandes. Mettez votre chemin réseau ici.
+    ' EXEMPLE: "\\SERVEUR\Demandes"
+    Call OpenExplorer("C:\Program Files") ' <--- REMPLACEZ PAR VOTRE CHEMIN DEMANDES
+End Sub
+
+' Private Sub cmdOpenFichiers_Click()
+'    Call OpenExplorer("C:\Chemin\Fichiers")
+' End Sub
+
+' Private Sub cmdOpenUtilitaires_Click()
+'    Call OpenExplorer("C:\Chemin\Utilitaires")
+' End Sub
+
+' Private Sub cmdOpenBackup_Click()
+'    Call OpenExplorer("C:\Chemin\Backup")
+' End Sub
+
+
+' =================================================================
 ' UTILITAIRE DE NAVIGATION
 ' =================================================================
 
@@ -928,6 +975,21 @@ Private Sub UpdateNavColors(ByVal ActiveLabel As MSForms.Label)
         .ForeColor = &H00FFFFFF ' Blanc
     End With
 End Sub
+
+' =================================================================
+' UTILITAIRES GÉNÉRAUX
+' =================================================================
+
+Private Sub OpenExplorer(ByVal sPath As String)
+    ' Ouvre un chemin dans l'Explorateur Windows
+    ' Gère les erreurs si le chemin est invalide
+    On Error Resume Next
+    Shell "explorer.exe """ & sPath & """", vbNormalFocus
+    If Err.Number <> 0 Then
+        MsgBox "Impossible d'ouvrir le chemin :" & vbCrLf & sPath, vbExclamation, "Erreur de chemin"
+    End If
+    On Error GoTo 0
+End Sub
 </code></pre>
                     </div>
                 </div>
@@ -935,7 +997,7 @@ End Sub
                 <!-- ÉTAPE 5: Construction Dashboard -->
                 <div class="guide-section">
                     <div class="guide-header">
-                        <h3 class="text-xl font-bold text-gray-900">Partie 5 : Construction de la Page d'Accueil (`pageDashboard`)</h3>
+                        <h3 class="text-xl font-bold text-gray-900">Partie 5 : Construction des Pages de Contenu (Ex: Dashboard)</h3>
                     </div>
                     <div class="guide-content">
                         <p>Maintenant, remplissez la première page.</p>
@@ -972,6 +1034,40 @@ End Sub
                             <li><code>Height</code>: <strong>40</strong>, <code>Width</code>: <strong>160</strong> (par ex.)</li>
                         </ul>
                         <p>Répétez pour tous les boutons (`cmdExtractClient`, `cmdPRCGEST`, etc.) en ajustant <code>BackColor</code> pour les boutons secondaires (<code>&amp;H0063554B&amp;</code> - Gris foncé).</p>
+                    </div>
+                </div>
+
+                <!-- NOUVELLE PARTIE 6 -->
+                <div class="guide-section">
+                    <div class="guide-header">
+                        <h3 class="text-xl font-bold text-gray-900">Partie 6 : Construction de la Page "Outils & Paramètres"</h3>
+                    </div>
+                    <div class="guide-content">
+                        <p>Pour ajouter vos nouveaux boutons :</p>
+                        <ol class="list-decimal">
+                            <li>Ouvrez `frmMain` en visuel.</li>
+                            <li>Cliquez sur le <code>mpContent</code> et sélectionnez l'onglet <strong>`pageOutils`</strong>.</li>
+                            <li>Prenez un <code>Frame</code> (Cadre) et dessinez-le.</li>
+                            <li>Propriétés : <code>Caption</code>: <strong>Accès Outils & Dossiers</strong>, <code>Font</code>: Tahoma, Gras, 10.</li>
+                            <li>Prenez un <code>CommandButton</code> et dessinez-le *dans* ce `Frame`.</li>
+                            <li>Réglez ses <strong>Propriétés</strong> :</li>
+                        </ul>
+                        <ul>
+                            <li><code>(Name)</code>: <strong>cmdOpenJetform</strong></li>
+                            <li><code>Caption</code>: <strong>Ouvrir Serveur Jetform</strong></li>
+                            <li><code>BackColor</code>: <strong>&amp;H0063554B&amp;</strong> (Gris foncé - secondaire)</li>
+                            <li><code>ForeColor</code>: <strong>&amp;H00FFFFFF&amp;</strong> (Blanc)</li>
+                            <li>... (Même police et taille que les autres boutons)</li>
+                        </ul>
+                        <ol class="list-decimal" start="7">
+                            <li>Copiez ce bouton et réglez les propriétés pour le second :</li>
+                        </OL>
+                        <ul>
+                            <li><code>(Name)</code>: <strong>cmdOpenDemandes</strong></li>
+                            <li><code>Caption</code>: <strong>Ouvrir Serveur Demandes</strong></li>
+                            <li>... (Mêmes styles)</li>
+                        </ul>
+                        <p>Le code que vous avez copié dans la **Partie 4** s'occupera déjà de gérer les clics sur ces boutons.</p>
                     </div>
                 </div>
 
