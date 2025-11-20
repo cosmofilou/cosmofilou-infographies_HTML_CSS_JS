@@ -31,6 +31,11 @@ Ce dépôt contient une collection d'infographies interactives, créées avec HT
 * **Dossier :** [infographie_protocole_v4](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/infographie_life_os/)
 * **Description :** Un guide de construction ultime pour créer un système d'organisation personnelle "Life OS".
 
+### 6. SI ARCHITECTURE : Vue d'ensemble des flux critiques
+
+* **Description :** Cette infographie interactive (ou visuelle) fournit une vue d'ensemble de l'architecture du système d'information (SI), mettant en lumière les flux de données critiques (IoT, Backend, Data Lake, CRM) au sein de Proxiserve / Prox-Hydro.
+* **Accéder à l'infographie :** [Voir l'infographie "SI ARCHITECTURE"](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/si_architecture_flux_critiques/)
+
 ---
 
 ## Mentions légales et Licence
