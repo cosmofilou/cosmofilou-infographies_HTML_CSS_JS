@@ -17,7 +17,7 @@
         :root {
             /* --- Colors: Dark Mode (Default) --- */
             --bg-app: #050b14;
-            --bg-card: rgba(16, 24, 39, 0.65);
+            --bg-card: rgba(16, 24, 39, 0.85); /* Plus opaque pour lisibilité */
             --text-primary: #e2e8f0;
             --text-secondary: #94a3b8;
             --border-color: rgba(255, 255, 255, 0.15);
@@ -33,6 +33,7 @@
             /* Status */
             --status-migration: #ef4444;
             --status-live: #22c55e;
+            --status-build: #eab308; /* Jaune pour construction */
 
             /* Typography */
             --font-heading: 'Orbitron', sans-serif;
@@ -42,9 +43,9 @@
 
         [data-theme="light"] {
             --bg-app: #f1f5f9;
-            --bg-card: rgba(255, 255, 255, 0.75);
+            --bg-card: rgba(255, 255, 255, 0.9);
             --text-primary: #1e293b;
-            --text-secondary: #64748b;
+            --text-secondary: #475569;
             --border-color: rgba(0, 0, 0, 0.1);
             --accent-glow: rgba(0, 0, 0, 0.05);
             
@@ -69,8 +70,8 @@
             overflow-x: hidden;
             transition: background-color 0.5s ease, color 0.5s ease;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 255, 157, 0.03) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.03) 0%, transparent 20%);
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 157, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 25%);
         }
 
         /* --- Header & Controls --- */
@@ -84,8 +85,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(180deg, var(--bg-app) 0%, rgba(0,0,0,0) 100%);
-            pointer-events: none; /* Click through to canvas */
+            background: linear-gradient(180deg, var(--bg-app) 60%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
         }
 
         .header-content {
@@ -94,28 +95,35 @@
 
         h1 {
             font-family: var(--font-heading);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            background: linear-gradient(90deg, var(--text-primary), var(--text-secondary));
+            background: linear-gradient(90deg, var(--text-primary), #fff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px var(--accent-glow);
         }
 
         .subtitle {
             font-family: var(--font-tech);
-            font-size: 1rem;
-            color: var(--text-secondary);
+            font-size: 1.1rem;
+            color: var(--flow-resident);
             margin-top: 0.2rem;
+            font-weight: 600;
         }
 
-        .theme-toggle {
+        .header-actions {
+            display: flex;
+            gap: 1rem;
             pointer-events: auto;
+        }
+
+        .btn-control {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             color: var(--text-primary);
-            padding: 0.5rem 1rem;
-            border-radius: 30px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
             cursor: pointer;
             font-family: var(--font-tech);
             font-weight: 700;
@@ -125,24 +133,31 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 0.8rem;
         }
 
-        .theme-toggle:hover {
+        .btn-control:hover {
             border-color: var(--flow-resident);
             box-shadow: 0 0 15px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+
+        .btn-vision {
+            border-color: var(--flow-resident);
+            color: var(--flow-resident);
         }
 
         /* --- Layout & Grid --- */
         .dashboard-container {
             width: 100%;
             min-height: 100vh;
-            padding: 6rem 2rem 4rem 2rem;
+            padding: 8rem 2rem 6rem 2rem; /* More top padding for header */
             position: relative;
             display: grid;
             grid-template-columns: repeat(12, 1fr);
             grid-template-rows: repeat(6, auto);
-            gap: 2rem;
-            max-width: 1600px;
+            gap: 2.5rem;
+            max-width: 1800px;
             margin: 0 auto;
             z-index: 10;
         }
@@ -154,31 +169,32 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1; /* Behind cards, but above background */
+            z-index: 1;
             pointer-events: none;
             overflow: visible;
         }
 
         .connection-line {
             fill: none;
-            stroke-width: 2px;
+            stroke-width: 1.5px;
             stroke-linecap: round;
-            opacity: 0.6;
+            opacity: 0.3;
             transition: stroke 0.5s ease;
         }
 
         .connection-flow {
             fill: none;
-            stroke-width: 4px;
+            stroke-width: 3px;
             stroke-linecap: round;
-            stroke-dasharray: 10, 20;
-            animation: flowAnimation 1s linear infinite;
-            opacity: 0.8;
+            stroke-dasharray: 8, 16;
+            animation: flowAnimation 1.5s linear infinite;
+            opacity: 0.9;
+            filter: drop-shadow(0 0 3px currentColor);
         }
 
         @keyframes flowAnimation {
             to {
-                stroke-dashoffset: -30;
+                stroke-dashoffset: -24;
             }
         }
 
@@ -187,55 +203,55 @@
             position: relative;
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 12px; /* Slightly sharper for tech look */
             padding: 0;
             overflow: hidden;
             backdrop-filter: blur(var(--glass-blur));
             -webkit-backdrop-filter: blur(var(--glass-blur));
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             cursor: pointer;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            z-index: 20; /* Above SVG */
-            min-height: 140px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 20;
+            min-height: 160px;
         }
 
         .node-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: var(--text-secondary);
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            border-color: var(--text-primary);
+            z-index: 25;
         }
 
-        .node-card:hover::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 16px;
-            box-shadow: inset 0 0 20px var(--accent-glow);
-            pointer-events: none;
+        /* Glitch effect on hover for tech feel */
+        .node-card:hover .card-title {
+            color: var(--flow-resident);
+            text-shadow: 2px 0 var(--status-migration), -2px 0 var(--flow-telemetry);
         }
 
         .card-bg {
-            height: 100px;
+            height: 110px;
             width: 100%;
             background-size: cover;
             background-position: center;
             position: relative;
+            /* Fallback color */
+            background-color: #1e293b; 
         }
 
-        .card-bg::before {
+        .card-bg::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, transparent 0%, var(--bg-card) 90%);
+            background: linear-gradient(to bottom, rgba(5, 11, 20, 0.2) 0%, var(--bg-card) 100%);
         }
 
         .card-content {
-            padding: 0.8rem 1.2rem 1.2rem;
+            padding: 1rem 1.5rem 1.5rem;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
@@ -244,42 +260,45 @@
         .card-title {
             font-family: var(--font-tech);
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             text-transform: uppercase;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            transition: all 0.2s;
         }
 
         .card-desc {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-secondary);
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         /* Status Indicators */
         .status-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 4px 8px;
-            border-radius: 12px;
+            top: 12px;
+            right: 12px;
+            padding: 6px 10px;
+            border-radius: 4px;
             font-size: 0.7rem;
             font-weight: bold;
             font-family: var(--font-tech);
             text-transform: uppercase;
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
-            gap: 5px;
-            background: rgba(0,0,0,0.6);
+            gap: 6px;
+            background: rgba(0,0,0,0.8);
             backdrop-filter: blur(4px);
             border: 1px solid rgba(255,255,255,0.1);
+            z-index: 2;
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
         }
 
@@ -288,13 +307,19 @@
             box-shadow: 0 0 8px var(--status-migration);
             animation: pulse 1.5s infinite;
         }
-        .migrating { color: var(--status-migration); }
+        .migrating { color: var(--status-migration); border-color: var(--status-migration); }
 
         .live .status-dot {
             background-color: var(--status-live);
             box-shadow: 0 0 8px var(--status-live);
         }
-        .live { color: var(--status-live); }
+        .live { color: var(--status-live); border-color: var(--status-live); }
+
+        .build .status-dot {
+            background-color: var(--status-build);
+            box-shadow: 0 0 8px var(--status-build);
+        }
+        .build { color: var(--status-build); border-color: var(--status-build); }
 
         @keyframes pulse {
             0% { opacity: 1; }
@@ -302,35 +327,32 @@
             100% { opacity: 1; }
         }
 
-        /* --- Specific Grid Positioning (Desktop) --- */
-        /* Grid 12 cols.
-           Left: Inputs. Center: Logic. Right: Output.
-        */
-
+        /* --- Grid Areas --- */
+        /* Row 1: Data Sources & Ingestion */
         #node-iot { grid-area: 1 / 1 / 3 / 3; }
-        #node-tablet { grid-area: 4 / 1 / 6 / 3; }
-        
-        #node-middleware { grid-area: 3 / 3 / 5 / 5; }
-        
-        #node-mobility { grid-area: 4 / 5 / 6 / 7; }
         #node-snowflake { grid-area: 1 / 4 / 3 / 6; }
         
-        #node-salesforce { grid-area: 2 / 7 / 5 / 10; z-index: 30; } /* Big Central Node */
-        #node-azure { grid-area: 5 / 7 / 7 / 9; }
-
+        /* Row 2-3: Core & Logic */
+        #node-middleware { grid-area: 3 / 3 / 5 / 5; }
+        #node-salesforce { grid-area: 2 / 7 / 5 / 10; z-index: 30; } /* Central Hub */
         #node-access { grid-area: 2 / 11 / 4 / 13; }
+
+        /* Row 4-5: Mobility & Front Ends */
+        #node-tablet { grid-area: 4 / 1 / 6 / 3; }
+        #node-mobility { grid-area: 4 / 5 / 6 / 7; }
+        #node-azure { grid-area: 5 / 7 / 7 / 9; }
         #node-myconso { grid-area: 5 / 10 / 7 / 13; }
 
 
-        /* --- Modal --- */
+        /* --- Modal & Detailed View --- */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
+            background: rgba(5, 11, 20, 0.95);
+            backdrop-filter: blur(8px);
             z-index: 200;
             display: flex;
             justify-content: center;
@@ -347,16 +369,17 @@
 
         .modal {
             background: var(--bg-app);
-            border: 1px solid var(--flow-resident);
-            width: 90%;
-            max-width: 800px;
+            border: 1px solid var(--border-color);
+            width: 95%;
+            max-width: 900px;
             max-height: 90vh;
             overflow-y: auto;
             border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.7);
+            transform: translateY(30px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
         }
 
@@ -364,81 +387,134 @@
             transform: translateY(0);
         }
 
-        .close-modal {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            cursor: pointer;
+        .modal-header {
+            padding: 2rem 2rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
-        .close-modal:hover { color: var(--status-migration); }
 
         .modal-header h2 {
             font-family: var(--font-heading);
-            color: var(--flow-resident);
+            color: var(--text-primary);
+            font-size: 1.8rem;
             margin-bottom: 0.5rem;
         }
 
-        /* Salesforce Tree Styling */
-        .tree-container {
-            margin-top: 2rem;
-            padding-left: 1rem;
-            border-left: 2px solid var(--border-color);
+        .modal-subtitle {
+            color: var(--flow-resident);
+            font-family: var(--font-tech);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
 
-        .tree-item {
+        .close-modal {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .close-modal:hover { 
+            background: var(--status-migration); 
+            color: white; 
+            border-color: var(--status-migration);
+        }
+
+        .modal-body {
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Technical Specs in Modal */
+        .tech-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+            background: rgba(255,255,255,0.02);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px dashed var(--border-color);
+        }
+
+        .spec-item strong {
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 0.3rem;
+            font-family: var(--font-tech);
+            font-size: 1.1rem;
+        }
+
+        .info-block {
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-title {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Hierarchy/Tree Styling */
+        .tree-view {
+            border-left: 2px solid var(--border-color);
+            padding-left: 1.5rem;
+            margin-top: 1rem;
+        }
+        .tree-node {
             margin-bottom: 1.5rem;
             position: relative;
         }
-        
-        .tree-item::before {
+        .tree-node::before {
             content: '';
             position: absolute;
-            left: -18px;
-            top: 12px;
-            width: 16px;
+            left: -26px;
+            top: 14px;
+            width: 20px;
             height: 2px;
             background: var(--border-color);
         }
-
-        .tree-label {
-            font-family: var(--font-tech);
-            font-weight: 700;
-            font-size: 1.1rem;
-            padding: 8px 16px;
+        .node-header {
             background: var(--bg-card);
-            border-radius: 8px;
+            padding: 0.8rem 1.2rem;
+            border-radius: 6px;
             border: 1px solid var(--border-color);
             display: inline-block;
+            font-family: var(--font-tech);
+            font-weight: 700;
             color: var(--text-primary);
         }
-
-        .tree-children {
+        .node-children {
             margin-left: 2rem;
-            margin-top: 1rem;
-            border-left: 1px dashed var(--text-secondary);
+            margin-top: 0.8rem;
             padding-left: 1rem;
+            border-left: 1px dashed var(--text-secondary);
         }
-
-        .tree-child {
-            margin-bottom: 0.8rem;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+        .child-item {
+            padding: 0.4rem 0;
             position: relative;
-            padding-left: 10px;
+            padding-left: 15px;
         }
-        
-        .tree-child::before {
-            content: '';
+        .child-item::before {
+            content: '↳';
             position: absolute;
-            left: -17px;
-            top: 10px;
-            width: 15px;
-            height: 1px;
-            background: var(--text-secondary);
+            left: -5px;
+            color: var(--text-secondary);
         }
 
         /* --- Legend & Footer --- */
@@ -447,26 +523,37 @@
             bottom: 2rem;
             left: 2rem;
             background: var(--bg-card);
-            padding: 1rem;
-            border-radius: 8px;
+            padding: 1.2rem;
+            border-radius: 12px;
             border: 1px solid var(--border-color);
             backdrop-filter: blur(var(--glass-blur));
             z-index: 90;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
-            font-size: 0.8rem;
+            gap: 0.8rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .legend h4 {
+            font-family: var(--font-tech);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-primary);
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
         }
 
-        .legend-color {
-            width: 12px;
-            height: 3px;
+        .legend-line {
+            width: 25px;
+            height: 4px;
+            border-radius: 2px;
         }
 
         footer {
@@ -474,9 +561,10 @@
             text-align: center;
             font-size: 0.8rem;
             color: var(--text-secondary);
-            margin-top: 2rem;
+            margin-top: 4rem;
             padding-bottom: 2rem;
-            opacity: 0.6;
+            opacity: 0.7;
+            font-family: var(--font-tech);
         }
 
         /* --- Responsive Design --- */
@@ -484,34 +572,32 @@
             .dashboard-container {
                 display: flex;
                 flex-direction: column;
-                gap: 3rem;
+                gap: 2rem;
                 padding-top: 8rem;
             }
 
             .node-card {
                 width: 100%;
-                min-height: 120px;
+                min-height: 140px;
             }
 
-            /* Adjust big nodes on mobile */
-            #node-salesforce {
-                min-height: 160px;
-                order: 5; 
-            }
-            
-            /* Logical Flow Ordering for Mobile */
+            /* Mobile Order based on flow roughly */
             #node-iot { order: 1; }
-            #node-tablet { order: 2; }
+            #node-snowflake { order: 2; }
             #node-middleware { order: 3; }
-            #node-mobility { order: 4; }
-            #node-snowflake { order: 5; }
-            #node-salesforce { order: 6; border-color: var(--flow-telemetry); }
-            #node-azure { order: 7; }
-            #node-access { order: 8; }
+            #node-salesforce { order: 4; min-height: 200px; border-color: var(--flow-telemetry); }
+            #node-access { order: 5; }
+            #node-tablet { order: 6; }
+            #node-mobility { order: 7; }
+            #node-azure { order: 8; }
             #node-myconso { order: 9; }
 
             .legend {
-                display: none; /* Hide legend on small screens to save space */
+                display: none; 
+            }
+            
+            .header-actions span {
+                display: none;
             }
         }
     </style>
@@ -521,12 +607,18 @@
     <header>
         <div class="header-content">
             <h1>Architecture SI <span style="color: var(--flow-resident)">Licorne</span></h1>
-            <p class="subtitle">Vision 2025/2026 - Digitalisation Métier</p>
+            <p class="subtitle">Digitalisation des Processus de Comptage (2025-2026)</p>
         </div>
-        <button class="theme-toggle" id="themeBtn">
-            <i class="fa-solid fa-circle-half-stroke"></i>
-            <span>Thème</span>
-        </button>
+        <div class="header-actions">
+            <button class="btn-control btn-vision" onclick="openModal('vision')">
+                <i class="fa-solid fa-eye"></i>
+                <span>Vision & Contexte</span>
+            </button>
+            <button class="btn-control" id="themeBtn">
+                <i class="fa-solid fa-circle-half-stroke"></i>
+                <span>Thème</span>
+            </button>
+        </div>
     </header>
 
     <!-- SVG Layer for Connections -->
@@ -535,153 +627,284 @@
     <!-- Main Grid -->
     <main class="dashboard-container" id="container">
 
-        <!-- 1. Immeuble -->
+        <!-- 1. Immeuble (IoT) -->
         <div class="node-card" id="node-iot" onclick="openModal('iot')">
-            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80');"></div>
             <div class="status-badge live"><div class="status-dot"></div>Live</div>
             <div class="card-content">
-                <div class="card-title"><i class="fa-solid fa-building"></i> Immeuble (IoT)</div>
-                <div class="card-desc">Centrales GPRS & Capteurs Logements.</div>
+                <div class="card-title"><i class="fa-solid fa-broadcast-tower"></i> Zone Terrain (IoT)</div>
+                <div class="card-desc">Concentrateurs GPRS & Parc de Compteurs.</div>
             </div>
         </div>
 
         <!-- 2. Tablette -->
         <div class="node-card" id="node-tablet" onclick="openModal('tablet')">
-            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1581092921461-eab6245b0262?auto=format&fit=crop&w=800&q=80');"></div>
             <div class="status-badge live"><div class="status-dot"></div>Live</div>
             <div class="card-content">
                 <div class="card-title"><i class="fa-solid fa-tablet-screen-button"></i> Tablette Tech</div>
-                <div class="card-desc">Outil de relève mobilité terrain.</div>
+                <div class="card-desc">Outil de relève (Mode Déconnecté).</div>
             </div>
         </div>
 
         <!-- 3. Snowflake -->
         <div class="node-card" id="node-snowflake" onclick="openModal('snowflake')">
-            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef526b01201b?auto=format&fit=crop&w=600&q=80');"></div>
-            <div class="status-badge live"><div class="status-dot"></div>Live</div>
+            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef526b01201b?auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="status-badge live"><div class="status-dot"></div>Data Warehouse</div>
             <div class="card-content">
-                <div class="card-title"><i class="fa-solid fa-snowflake"></i> Snowflake (Data)</div>
-                <div class="card-desc">Entrepôt de données & Index journaliers.</div>
+                <div class="card-title"><i class="fa-regular fa-snowflake"></i> Snowflake</div>
+                <div class="card-desc">Réceptacle quotidien des index bruts.</div>
             </div>
         </div>
 
         <!-- 4. Middleware -->
         <div class="node-card" id="node-middleware" onclick="openModal('middleware')">
-            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80');"></div>
-            <div class="status-badge migrating"><div class="status-dot"></div>Migration</div>
+            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="status-badge build"><div class="status-dot"></div>Transition</div>
             <div class="card-content">
-                <div class="card-title"><i class="fa-solid fa-network-wired"></i> Middleware</div>
-                <div class="card-desc">Talend > Informatica (En cours).</div>
+                <div class="card-title"><i class="fa-solid fa-network-wired"></i> ETL / Middleware</div>
+                <div class="card-desc">Talend (Batch) <i class="fa-solid fa-arrow-right"></i> Informatica (RT).</div>
             </div>
         </div>
 
         <!-- 5. Server Mobility -->
         <div class="node-card" id="node-mobility" onclick="openModal('mobility')">
-            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1597852074816-d933c7d2b988?auto=format&fit=crop&w=600&q=80');"></div>
-            <div class="status-badge live"><div class="status-dot"></div>Live</div>
+            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="status-badge live"><div class="status-dot"></div>Synchro</div>
             <div class="card-content">
-                <div class="card-title"><i class="fa-solid fa-server"></i> Srv Mobility</div>
-                <div class="card-desc">Passerelle de synchronisation.</div>
+                <div class="card-title"><i class="fa-solid fa-server"></i> Serveur Mobility</div>
+                <div class="card-desc">Passerelle de synchronisation terrain.</div>
             </div>
         </div>
 
         <!-- 6. Azure -->
         <div class="node-card" id="node-azure" onclick="openModal('azure')">
-            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80');"></div>
-            <div class="status-badge migrating"><div class="status-dot"></div>Déploiement</div>
+            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1603732551681-2e91159b9dc2?auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="status-badge migrating"><div class="status-dot"></div>Migration</div>
             <div class="card-content">
-                <div class="card-title"><i class="fa-brands fa-microsoft"></i> Azure (Cloud)</div>
-                <div class="card-desc">Hébergement Données MyConso.</div>
+                <div class="card-title"><i class="fa-brands fa-microsoft"></i> Azure Cloud</div>
+                <div class="card-desc">Hébergement Données MyConso (Scalabilité).</div>
             </div>
         </div>
 
         <!-- 7. Salesforce (CORE) -->
-        <div class="node-card" id="node-salesforce" onclick="openModal('salesforce')" style="border: 1px solid var(--flow-telemetry); box-shadow: 0 0 20px rgba(0, 255, 157, 0.1);">
-            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80');"></div>
-            <div class="status-badge live"><div class="status-dot"></div>4/11 Agences</div>
+        <div class="node-card" id="node-salesforce" onclick="openModal('salesforce')" style="border: 1px solid var(--flow-telemetry); box-shadow: 0 0 25px rgba(0, 255, 157, 0.15);">
+            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="status-badge live"><div class="status-dot"></div>Core Business</div>
             <div class="card-content">
-                <div class="card-title" style="color: var(--flow-telemetry); font-size: 1.3rem;"><i class="fa-brands fa-salesforce"></i> Salesforce Licorne</div>
-                <div class="card-desc">Cœur du Système. Maître des données techniques & contractuelles.</div>
+                <div class="card-title" style="color: var(--flow-telemetry); font-size: 1.4rem;"><i class="fa-brands fa-salesforce"></i> Salesforce "Licorne"</div>
+                <div class="card-desc">Master Data Management. Contrats & Patrimoine. (4/11 Agences).</div>
             </div>
         </div>
 
         <!-- 8. Accès Pro -->
         <div class="node-card" id="node-access" onclick="openModal('access')">
-            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80');"></div>
-            <div class="status-badge live"><div class="status-dot"></div>Live</div>
+            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1556155092-490a1ba16284?auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="status-badge live"><div class="status-dot"></div>B2B</div>
             <div class="card-content">
-                <div class="card-title"><i class="fa-solid fa-laptop-code"></i> Accès Pro</div>
-                <div class="card-desc">Extranet B2B & Injection GPRS.</div>
+                <div class="card-title"><i class="fa-solid fa-laptop-file"></i> Accès Pro</div>
+                <div class="card-desc">Portail Syndics & Injection GPRS Secours.</div>
             </div>
         </div>
 
         <!-- 9. MyConso -->
         <div class="node-card" id="node-myconso" onclick="openModal('myconso')">
-            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1512428559087-560fa0db7979?auto=format&fit=crop&w=600&q=80');"></div>
-            <div class="status-badge live"><div class="status-dot"></div>Live</div>
+            <div class="card-bg" style="background-image: url('https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?auto=format&fit=crop&w=800&q=80');"></div>
+            <div class="status-badge live"><div class="status-dot"></div>B2C</div>
             <div class="card-content">
-                <div class="card-title"><i class="fa-solid fa-mobile-screen"></i> MyConso App</div>
-                <div class="card-desc">App Résidents (Suivi consommation).</div>
+                <div class="card-title"><i class="fa-solid fa-mobile-screen"></i> App MyConso</div>
+                <div class="card-desc">Visualisation conso occupants via Azure.</div>
             </div>
         </div>
 
         <footer>
-            <p>© 2025 - Architecte SI LICORNE - Confidentiel - Reproduction Interdite</p>
+            <p>© 2025 - Direction des Systèmes d'Information - Projet LICORNE v2.0 - Confidentiel</p>
         </footer>
     </main>
 
     <!-- Legend -->
     <div class="legend">
+        <h4>Flux de Données</h4>
         <div class="legend-item">
-            <div class="legend-color" style="background: var(--flow-telemetry); box-shadow: 0 0 5px var(--flow-telemetry)"></div>
-            <span>Flux Télérelève</span>
+            <div class="legend-line" style="background: var(--flow-telemetry); box-shadow: 0 0 6px var(--flow-telemetry)"></div>
+            <span>Télérelève Automatisée</span>
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: var(--flow-mobility); box-shadow: 0 0 5px var(--flow-mobility)"></div>
-            <span>Flux Mobilité</span>
+            <div class="legend-line" style="background: var(--flow-mobility); box-shadow: 0 0 6px var(--flow-mobility)"></div>
+            <span>Flux Mobilité (Terrain)</span>
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: var(--flow-resident); box-shadow: 0 0 5px var(--flow-resident)"></div>
-            <span>Flux Résident</span>
+            <div class="legend-line" style="background: var(--flow-resident); box-shadow: 0 0 6px var(--flow-resident)"></div>
+            <span>Service Résident</span>
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: var(--flow-delivery); box-shadow: 0 0 5px var(--flow-delivery)"></div>
-            <span>Flux Livrables</span>
+            <div class="legend-line" style="background: var(--flow-delivery); box-shadow: 0 0 6px var(--flow-delivery)"></div>
+            <span>Livrables & Facturation</span>
         </div>
     </div>
 
     <!-- Modals -->
     <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
         <div class="modal" id="modalContent">
-            <button class="close-modal" onclick="forceCloseModal()"><i class="fa-solid fa-times"></i></button>
             <div class="modal-header">
-                <h2 id="modalTitle">Titre</h2>
+                <div>
+                    <h2 id="modalTitle">Titre</h2>
+                    <div class="modal-subtitle" id="modalSubtitle">Sous-titre</div>
+                </div>
+                <button class="close-modal" onclick="forceCloseModal()"><i class="fa-solid fa-times"></i></button>
             </div>
-            <div id="modalBody">
+            <div class="modal-body" id="modalBody">
                 <!-- Content injected via JS -->
             </div>
         </div>
     </div>
 
     <script>
-        // --- Data & Configuration ---
-        const nodes = {
-            'iot': { title: "Immeuble (IoT)", desc: "Les centrales GPRS collectent les données des compteurs divisionnaires et les envoient à Snowflake toutes les 24h." },
-            'tablet': { title: "Tablette Tech", desc: "Application terrain utilisée par les techniciens pour la relève manuelle et la maintenance. Synchronisation bidirectionnelle." },
-            'snowflake': { title: "Snowflake (Data Warehouse)", desc: "Point de centralisation de toutes les données brutes. Stocke les index journaliers et l'historique complet." },
-            'middleware': { title: "Middleware (ETL)", desc: "Orchestration des flux. Transition de Talend vers Informatica Cloud pour améliorer la robustesse et la scalabilité." },
-            'mobility': { title: "Serveur Mobility", desc: "Serveur tampon qui gère l'authentification des tablettes et le différé de synchronisation en zone blanche." },
-            'azure': { title: "Azure (Cloud)", desc: "Hébergement scalables pour les API MyConso. Reçoit les données agrégées de Snowflake pour affichage rapide." },
-            'salesforce': { title: "Salesforce (LICORNE)", type: 'tree' }, // Special Type
-            'access': { title: "Accès Pro (Portail)", desc: "Extranet pour les gestionnaires de patrimoine. Permet aussi l'injection manuelle de fichiers GPRS de secours." },
-            'myconso': { title: "MyConso (App)", desc: "Application grand public permettant aux résidents de suivre leur consommation d'eau et d'énergie en temps réel." }
+        // --- Data Content (Based on User Report) ---
+        const contentData = {
+            'vision': {
+                title: "Vision & Contexte Projet",
+                subtitle: "Digitalisation 2025/2026",
+                body: `
+                    <div class="info-block">
+                        <div class="info-title"><i class="fa-solid fa-bullseye"></i> Objectifs Stratégiques</div>
+                        <p>Le projet Licorne vise à digitaliser entièrement les processus de comptage d'eau et d'énergie. Actuellement déployé sur <strong>4 agences sur 11</strong>, l'objectif est de couvrir l'ensemble du parc d'ici 2026.</p>
+                    </div>
+                    <div class="tech-specs">
+                        <div class="spec-item"><strong>Mutation Middleware</strong>Transition d'une logique Batch (Talend) vers du Temps Réel (Informatica).</div>
+                        <div class="spec-item"><strong>Cloud First</strong>Migration de l'infrastructure de calcul et d'exposition vers Azure pour la scalabilité.</div>
+                        <div class="spec-item"><strong>Data Centric</strong>Centralisation via Snowflake pour un pilotage fin des index.</div>
+                    </div>
+                `
+            },
+            'iot': {
+                title: "Zone Terrain (IoT)",
+                subtitle: "Acquisition de Données",
+                body: `
+                    <p>La couche physique du SI. Elle assure la remontée des index et des paramètres environnementaux.</p>
+                    <div class="tech-specs">
+                        <div class="spec-item"><strong>Capteurs</strong>Compteurs divisionnaires (Eau, Électricité, Calories) + Sondes de Température (Logements).</div>
+                        <div class="spec-item"><strong>Concentrateurs</strong>Centrales GPRS installées en toiture ou locaux techniques.</div>
+                        <div class="spec-item"><strong>Fréquence</strong>Remontée quotidienne (J+1) vers Snowflake.</div>
+                    </div>
+                `
+            },
+            'snowflake': {
+                title: "Snowflake Data Warehouse",
+                subtitle: "Zone Data & Stockage",
+                body: `
+                    <p>Réceptacle unique de toutes les données brutes en provenance du terrain. Agit comme la 'Vérité Terrain' avant traitement métier.</p>
+                    <div class="info-block" style="margin-top: 1rem; border-left: 3px solid var(--flow-resident); padding-left: 1rem;">
+                        <em>"Le lac de données qui alimente à la fois la facturation (Salesforce) et la restitution client (Azure)."</em>
+                    </div>
+                `
+            },
+            'middleware': {
+                title: "Middleware (ETL)",
+                subtitle: "Orchestration des Flux",
+                body: `
+                    <div class="info-block">
+                        <div class="info-title"><i class="fa-solid fa-rotate"></i> Transition en cours</div>
+                        <p>Le SI est en pleine mutation technologique sur cette couche critique.</p>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li style="margin-bottom: 0.5rem;"><strong>Talend (Legacy) :</strong> Gère les flux historiques en mode Batch (traitement par lots nocturne).</li>
+                            <li style="color: var(--status-build);"><strong>Informatica (Cible) :</strong> En cours de déploiement. Permettra le traitement en temps réel et une meilleure observabilité des flux.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'salesforce': {
+                title: "Salesforce (Licorne)",
+                subtitle: "Cœur du Système (Core Business)",
+                body: `
+                    <p>Master Data Management. C'est ici que sont validées les données avant facturation.</p>
+                    
+                    <div class="info-block">
+                        <div class="info-title"><i class="fa-solid fa-sitemap"></i> Modèle de Données (Arborescence)</div>
+                        <div class="tree-view">
+                            <div class="tree-node">
+                                <div class="node-header">Entité Organisationnelle (Agence)</div>
+                                <div class="node-children">
+                                    <div class="child-item"><strong>Comptes Gestionnaires</strong> (Syndics, Bailleurs, Mono-propriétaires)</div>
+                                    <div class="tree-node" style="margin-top: 1rem;">
+                                        <div class="node-header" style="border-color: var(--flow-telemetry)">Patrimoine (Résidences)</div>
+                                        <div class="node-children">
+                                            <div class="child-item">Bâtiments</div>
+                                            <div class="child-item">Lieux / Logements</div>
+                                            <div class="child-item" style="color: var(--flow-telemetry)"><strong>Points de Mesure (PDL)</strong></div>
+                                            <div class="child-item">Compteurs (Device physique)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tech-specs">
+                        <div class="spec-item"><strong>Validation Auto</strong>Algorithmes de contrôle de cohérence des index.</div>
+                        <div class="spec-item"><strong>Vision 360</strong>Vue unifiée Client + Technique.</div>
+                    </div>
+                `
+            },
+            'access': {
+                title: "Accès Pro (Portail B2B)",
+                subtitle: "Interface Gestionnaires",
+                body: `
+                    <p>Extranet destiné aux clients B2B (Syndics de copropriété, Bailleurs).</p>
+                    <div class="tech-specs">
+                        <div class="spec-item"><strong>Flux Livrables</strong>Réception des PDF/EDI validés par Salesforce.</div>
+                        <div class="spec-item"><strong>Secours GPRS</strong>Interface d'injection manuelle des fichiers en cas de panne automate.</div>
+                        <div class="spec-item"><strong>Notifications</strong>Envoi automatique d'emails lors de la mise à disposition des factures.</div>
+                    </div>
+                `
+            },
+            'tablet': {
+                title: "Tablette Tech",
+                subtitle: "Outil Terrain",
+                body: `
+                    <p>Outil des techniciens itinérants pour la relève visuelle, la maintenance et le remplacement de compteurs.</p>
+                    <div class="tech-specs">
+                        <div class="spec-item"><strong>Mode Déconnecté</strong>Fonctionnement autonome en sous-sol (sans réseau).</div>
+                        <div class="spec-item"><strong>Flux Mobilité</strong>Chargement des tournées le matin (via Mobility) -> Relève -> Déchargement le soir.</div>
+                    </div>
+                `
+            },
+            'mobility': {
+                title: "Serveur Mobility",
+                subtitle: "Passerelle de Synchronisation",
+                body: `
+                    <p>Serveur tampon sécurisé. Il fait l'interface entre le réseau interne (Middleware/Salesforce) et le réseau externe (Tablettes 4G).</p>
+                    <p>Gère les conflits de synchronisation et l'authentification des terminaux mobiles.</p>
+                `
+            },
+            'azure': {
+                title: "Microsoft Azure",
+                subtitle: "Cloud & Scalabilité",
+                body: `
+                    <p>Infrastructure d'hébergement moderne pour les applications frontales.</p>
+                    <div class="tech-specs">
+                        <div class="spec-item"><strong>Hébergement MyConso</strong>API et Base de données de l'application résidents.</div>
+                        <div class="spec-item"><strong>Migration</strong>Déport progressif de la puissance de calcul depuis les serveurs on-premise vers le Cloud.</div>
+                    </div>
+                `
+            },
+            'myconso': {
+                title: "MyConso App",
+                subtitle: "Application Résidents (B2C)",
+                body: `
+                    <p>Application mobile et web permettant aux occupants de suivre leur consommation.</p>
+                    <div class="info-block">
+                        <div class="info-title"><i class="fa-solid fa-route"></i> Flux Résident</div>
+                        <p>Les données partent de Snowflake, sont agrégées et poussées vers Azure pour être consultables en temps réel (J+1) par l'utilisateur final.</p>
+                    </div>
+                `
+            }
         };
 
         const connections = [
             // Telemetry (Green)
             { from: 'node-iot', to: 'node-snowflake', color: 'var(--flow-telemetry)' },
-            { from: 'node-snowflake', to: 'node-access', color: 'var(--flow-telemetry)' },
-            { from: 'node-access', to: 'node-salesforce', color: 'var(--flow-telemetry)' },
+            { from: 'node-snowflake', to: 'node-access', color: 'var(--flow-telemetry)' }, // Logic path for manual inject context visually
+            { from: 'node-snowflake', to: 'node-salesforce', color: 'var(--flow-telemetry)', dashed: true }, // Direct logic flow
             
             // Mobility (Orange)
             { from: 'node-tablet', to: 'node-mobility', color: 'var(--flow-mobility)' },
@@ -694,58 +917,17 @@
 
             // Deliverables (Purple)
             { from: 'node-salesforce', to: 'node-access', color: 'var(--flow-delivery)' },
-            // Access -> External Client (Implied)
         ];
 
         // --- Modal Logic ---
         function openModal(id) {
-            const data = nodes[id];
+            const data = contentData[id];
+            if(!data) return;
+
             const overlay = document.getElementById('modalOverlay');
-            const title = document.getElementById('modalTitle');
-            const body = document.getElementById('modalBody');
-
-            title.innerText = data.title;
-
-            if (id === 'salesforce') {
-                // Special Tree Structure for Salesforce
-                body.innerHTML = `
-                    <p>Cœur référentiel du système d'information. Architecture objet :</p>
-                    <div class="tree-container">
-                        <div class="tree-item">
-                            <div class="tree-label"><i class="fa-solid fa-sitemap"></i> Niveau 1 : Agence</div>
-                            <div class="tree-children">
-                                <div class="tree-child">Entité Organisationnelle Régionale</div>
-                            </div>
-                        </div>
-                        <div class="tree-item">
-                            <div class="tree-label"><i class="fa-solid fa-user-tie"></i> Niveau 2 : Compte Gestionnaire</div>
-                            <div class="tree-children">
-                                <div class="tree-child">Syndic de Copropriété</div>
-                                <div class="tree-child">Bailleur Social</div>
-                                <div class="tree-child">Mono-propriétaire</div>
-                            </div>
-                        </div>
-                        <div class="tree-item">
-                            <div class="tree-label"><i class="fa-solid fa-city"></i> Niveau 3 : Patrimoine</div>
-                            <div class="tree-children">
-                                <div class="tree-child">Groupe de Résidences</div>
-                                <div class="tree-child">Résidence unique</div>
-                            </div>
-                        </div>
-                        <div class="tree-item">
-                            <div class="tree-label"><i class="fa-solid fa-cogs"></i> Niveau 4 : Technique</div>
-                            <div class="tree-children">
-                                <div class="tree-child">Bâtiment A, B, C...</div>
-                                <div class="tree-child">Logements / Locaux</div>
-                                <div class="tree-child" style="color: var(--flow-telemetry)"><strong>Points de Mesure (PDL)</strong></div>
-                                <div class="tree-child">Compteurs (Device)</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                body.innerHTML = `<p style="line-height: 1.6; font-size: 1.1rem; color: var(--text-secondary); margin-top: 1rem;">${data.desc}</p>`;
-            }
+            document.getElementById('modalTitle').innerHTML = data.title;
+            document.getElementById('modalSubtitle').innerText = data.subtitle;
+            document.getElementById('modalBody').innerHTML = data.body;
 
             overlay.classList.add('active');
         }
@@ -767,7 +949,7 @@
         themeBtn.addEventListener('click', () => {
             isDark = !isDark;
             document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
-            drawConnections(); // Redraw because colors use variables (CSS vars handled, but good practice)
+            drawConnections(); 
         });
 
         // --- SVG Connection Logic ---
@@ -776,10 +958,7 @@
             const container = document.getElementById('container');
             const containerRect = container.getBoundingClientRect();
             
-            // Clear existing
             svg.innerHTML = '';
-
-            // Set SVG size explicitly to match container scrollHeight to avoid cutoff
             svg.style.height = container.scrollHeight + 'px';
             svg.style.width = container.scrollWidth + 'px';
 
@@ -791,49 +970,46 @@
 
                 const r1 = fromEl.getBoundingClientRect();
                 const r2 = toEl.getBoundingClientRect();
-
-                // Calculate center relative to the container/body
-                // Note: We use offsetLeft/Top logic relative to the container for accuracy inside the Grid
                 
+                // Coord relative to container
                 const x1 = (r1.left + r1.width / 2) - containerRect.left;
                 const y1 = (r1.top + r1.height / 2) - containerRect.top;
                 const x2 = (r2.left + r2.width / 2) - containerRect.left;
                 const y2 = (r2.top + r2.height / 2) - containerRect.top;
 
-                // Path logic
                 let pathD = '';
-                
-                // Detect if Mobile (Stacked) or Desktop (Grid)
                 const isMobile = window.innerWidth <= 1024;
 
                 if (isMobile) {
-                    // Simple lines for vertical stack, maybe slightly curved
-                    pathD = `M ${x1} ${y1} C ${x1} ${y1 + 50}, ${x2} ${y2 - 50}, ${x2} ${y2}`;
+                    pathD = `M ${x1} ${y1} C ${x1} ${y1 + 60}, ${x2} ${y2 - 60}, ${x2} ${y2}`;
                 } else {
-                    // S-Curve for Desktop (Horizontal/Complex flow)
-                    const deltaX = Math.abs(x2 - x1);
-                    const deltaY = Math.abs(y2 - y1);
+                    // Enhanced Curve Logic
+                    const deltaX = x2 - x1;
+                    const deltaY = y2 - y1;
+                    const absDeltaX = Math.abs(deltaX);
+                    const absDeltaY = Math.abs(deltaY);
                     
-                    // Control points curvature
-                    const cpOffset = deltaX * 0.5;
-
-                    if (x2 > x1) {
-                        // Flowing Right
-                        pathD = `M ${x1} ${y1} C ${x1 + cpOffset} ${y1}, ${x2 - cpOffset} ${y2}, ${x2} ${y2}`;
+                    // Adjust curvature based on distance
+                    const cpX = absDeltaX * 0.5; 
+                    
+                    if (absDeltaX > absDeltaY) {
+                        // Horizontal flow dominant
+                         pathD = `M ${x1} ${y1} C ${x1 + cpX} ${y1}, ${x2 - cpX} ${y2}, ${x2} ${y2}`;
                     } else {
-                        // Flowing Left or Vertical
-                        pathD = `M ${x1} ${y1} C ${x1} ${y1 + deltaY/2}, ${x2} ${y2 - deltaY/2}, ${x2} ${y2}`;
+                        // Vertical flow dominant
+                         pathD = `M ${x1} ${y1} C ${x1} ${y1 + absDeltaY/2}, ${x2} ${y2 - absDeltaY/2}, ${x2} ${y2}`;
                     }
                 }
 
-                // 1. The Base Line (Faint)
+                // 1. Base Line
                 const baseLine = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 baseLine.setAttribute("d", pathD);
                 baseLine.setAttribute("stroke", conn.color);
                 baseLine.classList.add("connection-line");
+                if(conn.dashed) baseLine.setAttribute("stroke-dasharray", "5,5");
                 svg.appendChild(baseLine);
 
-                // 2. The Flow Animation (Bright dashes)
+                // 2. Animated Flow Line
                 const flowLine = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 flowLine.setAttribute("d", pathD);
                 flowLine.setAttribute("stroke", conn.color);
@@ -842,16 +1018,16 @@
             });
         }
 
-        // --- Initialization & Events ---
         window.addEventListener('load', drawConnections);
         window.addEventListener('resize', () => {
-            // Debounce resize
             clearTimeout(window.resizeTimer);
             window.resizeTimer = setTimeout(drawConnections, 100);
         });
         
-        // Initial call
-        setTimeout(drawConnections, 100); // Ensure DOM is fully painted
+        // Auto-open Vision modal on first visit (optional simulation)
+        setTimeout(() => {
+            // openModal('vision'); 
+        }, 1000);
 
     </script>
 </body>
