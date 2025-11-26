@@ -36,6 +36,11 @@ Ce dépôt contient une collection d'infographies interactives, créées avec HT
 * **Description :** Cette infographie interactive (ou visuelle) fournit une vue d'ensemble de l'architecture du système d'information (SI), mettant en lumière les flux de données critiques (IoT, Backend, Data Lake, CRM) au sein de Proxiserve / Prox-Hydro.
 * **Accéder à l'infographie :** [Voir l'infographie "SI ARCHITECTURE"](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/si_architecture_flux_critiques/)
 
+### 7. COMMAND CENTER / 2026 : Infrastructure Optimization Protocol
+
+* **Description :** Ce tableau de bord présente les analyses stratégiques et les scénarios d'optimisation de l'infrastructure pour l'année 2026. Il inclut des données sur les systèmes critiques, des scénarios de trésorerie (TCO sur 24 mois), et des opérations tactiques pour des gains projetés.
+* **Accéder à l'infographie :** [Voir l'infographie "COMMAND CENTER / 2026"](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/command_center_2026_infra_optimization/)
+
 ---
 
 ## Mentions légales et Licence
