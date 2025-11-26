@@ -107,7 +107,7 @@
         .view-section {
             display: none;
             height: 100%; width: 100%;
-            grid-template-columns: 320px 1fr 300px;
+            grid-template-columns: 340px 1fr 300px; /* Colonne gauche un peu plus large */
             gap: 20px;
             animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -166,8 +166,23 @@
         }
 
         /* --- CENTER COL: VISUALIZATION --- */
-        .chart-container { flex: 1; position: relative; width: 100%; min-height: 0; }
+        .center-stack { display: flex; flex-direction: column; gap: 20px; height: 100%; }
+        .chart-container { flex: 1.5; min-height: 0; position: relative; width: 100%; }
         
+        /* Analysis Panel Styles */
+        .analysis-panel {
+            flex: 1;
+            background: var(--surface-2);
+            border-top: 1px solid var(--border);
+            padding: 20px;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+        .analysis-title { font-size: 1rem; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .analysis-text { font-size: 0.9rem; line-height: 1.6; color: var(--text-dim); }
+        .highlight { color: var(--text-main); background: rgba(255,255,255,0.05); padding: 2px 5px; border-radius: 4px; font-weight: 500; }
+        .highlight-warn { color: var(--warning); background: rgba(245, 158, 11, 0.1); padding: 2px 5px; border-radius: 4px; }
+
         /* Architecture Diagram Styles */
         .arch-diagram { display: flex; align-items: center; justify-content: space-around; height: 100%; position: relative; }
         .arch-node {
@@ -223,6 +238,12 @@
             box-shadow: 0 50px 100px rgba(0,0,0,0.8);
         }
 
+        /* --- SPEC GRID (Hardware) --- */
+        .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .spec-item { background: var(--surface-3); padding: 10px; border-radius: 6px; }
+        .spec-label { font-size: 0.7rem; color: var(--text-dim); }
+        .spec-val { font-family: 'JetBrains Mono'; font-size: 0.9rem; color: var(--primary); }
+
     </style>
 </head>
 <body>
@@ -254,20 +275,20 @@
                 <!-- COL 1: SCENARIO CONTROLS -->
                 <div class="widget">
                     <div class="widget-header">
-                        <i class="fas fa-sliders-h"></i> Paramètres de Simulation
+                        <i class="fas fa-sliders-h"></i> Paramètres & Hardware
                     </div>
                     <div class="widget-body">
                         
                         <div class="control-group">
                             <div class="control-label">STRATÉGIE MOBILE</div>
-                            <div class="toggle-card active" onclick="toggleScenario('mobile', 12.99)">
+                            <div class="toggle-card active" onclick="toggleScenario('mobile', 12.99, 'mobile')">
                                 <div>
                                     <div style="font-size: 0.9rem; font-weight: bold;">Sosh 90Go 4G</div>
                                     <div style="font-size: 0.7rem; color: var(--text-dim);">12.99€ (avec Watch)</div>
                                 </div>
                                 <div class="toggle-switch"></div>
                             </div>
-                            <div class="toggle-card" onclick="toggleScenario('mobile', 25.99)">
+                            <div class="toggle-card" onclick="toggleScenario('mobile', 25.99, 'mobile')">
                                 <div>
                                     <div style="font-size: 0.9rem;">Status Quo 5G</div>
                                     <div style="font-size: 0.7rem; color: var(--text-dim);">25.99€ (Legacy)</div>
@@ -278,14 +299,14 @@
 
                         <div class="control-group">
                             <div class="control-label">STRATÉGIE BOX</div>
-                            <div class="toggle-card active" onclick="toggleScenario('box', 39.99)">
+                            <div class="toggle-card active" onclick="toggleScenario('box', 39.99, 'box')">
                                 <div>
                                     <div style="font-size: 0.9rem; font-weight: bold;">Ultra Essentiel</div>
                                     <div style="font-size: 0.7rem; color: var(--text-dim);">39.99€ (Pure Fiber)</div>
                                 </div>
                                 <div class="toggle-switch"></div>
                             </div>
-                            <div class="toggle-card" onclick="toggleScenario('box', 49.99)">
+                            <div class="toggle-card" onclick="toggleScenario('box', 49.99, 'box')">
                                 <div>
                                     <div style="font-size: 0.9rem;">Ultra Totale</div>
                                     <div style="font-size: 0.7rem; color: var(--text-dim);">49.99€ (Doublons)</div>
@@ -296,27 +317,45 @@
 
                         <div class="control-group">
                             <div class="control-label">MATÉRIEL (CAPEX)</div>
-                            <div class="toggle-card active" onclick="toggleScenario('nas', 640)">
+                            <div class="toggle-card active" onclick="toggleScenario('nas', 640, 'nas')">
                                 <div>
                                     <div style="font-size: 0.9rem; font-weight: bold;">Achat NAS Syno</div>
                                     <div style="font-size: 0.7rem; color: var(--text-dim);">640€ (One-shot)</div>
                                 </div>
                                 <div class="toggle-switch"></div>
                             </div>
+                            <!-- Mini Specs Display when Active -->
+                            <div id="nas-specs" class="spec-grid" style="display:grid;">
+                                <div class="spec-item"><div class="spec-label">CPU</div><div class="spec-val">Intel J4125</div></div>
+                                <div class="spec-item"><div class="spec-label">RAM</div><div class="spec-val">2GB + Slot</div></div>
+                            </div>
                         </div>
 
                     </div>
                 </div>
 
-                <!-- COL 2: MAIN CHART -->
+                <!-- COL 2: MAIN CHART & ANALYSIS -->
                 <div class="widget">
                     <div class="widget-header">
-                        <i class="fas fa-chart-line"></i> Projection TCO (Total Cost of Ownership)
+                        <i class="fas fa-chart-line"></i> Projection & Analyse Contextuelle
                     </div>
-                    <div class="widget-body" style="display: flex; flex-direction: column;">
-                        <div class="chart-container">
-                            <canvas id="mainChart"></canvas>
+                    <!-- Using Flex Column to stack Chart and Text -->
+                    <div class="widget-body" style="padding:0; display:flex; flex-direction:column;">
+                        
+                        <!-- Top: Chart -->
+                        <div style="flex: 1.5; padding: 20px; min-height: 0;">
+                            <div class="chart-container" style="height: 100%;">
+                                <canvas id="mainChart"></canvas>
+                            </div>
                         </div>
+
+                        <!-- Bottom: Dynamic Text Analysis -->
+                        <div id="analysisPanel" class="analysis-panel">
+                            <!-- Dynamic Content Injected Here -->
+                            <div class="analysis-title"><i class="fas fa-info-circle"></i> SÉLECTIONNEZ UNE STRATÉGIE</div>
+                            <div class="analysis-text">Cliquez sur les options à gauche pour voir l'impact financier et lire l'analyse détaillée extraite des rapports d'audit.</div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -345,6 +384,13 @@
                                 <div>
                                     <div style="font-size: 0.85rem; font-weight: bold;">Remboursement Free</div>
                                     <div style="font-size: 0.7rem; color: var(--text-dim);">Ne pas rater les 100€</div>
+                                </div>
+                            </div>
+                             <div class="action-btn" onclick="openModal('rat')">
+                                <div class="action-icon" style="color: var(--purple);"><i class="fas fa-id-card"></i></div>
+                                <div>
+                                    <div style="font-size: 0.85rem; font-weight: bold;">Activation RAT+</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-dim);">Checklist Identité</div>
                                 </div>
                             </div>
                         </div>
@@ -483,6 +529,43 @@
     </div>
 
     <script>
+        // --- CONTENT DB FOR ANALYSIS ---
+        const analysisDB = {
+            'mobile': {
+                title: 'ANALYSE MOBILE : POURQUOI SOSH 90Go ?',
+                text: `
+                    <p style="margin-bottom:10px;">Selon l'audit technique, <span class="highlight">80% de votre trafic data</span> est délesté sur le Wi-Fi (Domicile et Bureau). Payer pour 200Go en 5G est une inefficience budgétaire majeure.</p>
+                    <ul style="padding-left:20px; margin-bottom:10px;">
+                        <li><strong>Vitesse 4G+ :</strong> Avec l'agrégation de fréquences, Sosh délivre 150-300 Mbps. Le streaming 4K ne demande que 25 Mbps. La 5G n'est pas nécessaire pour vos usages.</li>
+                        <li><strong>Compatibilité Watch :</strong> Sosh supporte l'eSIM Watch (5€/mois), contrairement à Free Mobile. C'est le facteur bloquant qui élimine Free.</li>
+                    </ul>
+                    <p class="highlight-warn"><i class="fas fa-exclamation-triangle"></i> <strong>Critique :</strong> Vous devez activer la VoLTE via le chat AVANT d'activer l'option Montre.</p>
+                `
+            },
+            'box': {
+                title: 'ANALYSE BOX : LE PIÈGE DE L\'OFFRE "TOTALE"',
+                text: `
+                    <p style="margin-bottom:10px;">Le choix de la version "Essentiel" est mathématique. Ne payez pas 10€/mois pour des services dégradés.</p>
+                    <ul style="padding-left:20px;">
+                        <li><strong>Netflix/Disney :</strong> L'offre Totale inclut les versions <span class="highlight-warn">AVEC PUB</span>. Votre stratégie RAT+ inclut les versions sans pub.</li>
+                        <li><strong>Amazon Prime :</strong> Si vous le prenez via Free (Totale), vous perdez le remboursement de votre Amex Gold. En le prenant à part (Essentiel), Amex vous le rembourse.</li>
+                        <li><strong>Débit :</strong> La version Essentiel offre le même 8Gb/s symétrique et le même Wi-Fi 7.</li>
+                    </ul>
+                `
+            },
+            'nas': {
+                title: 'ANALYSE HARDWARE : SOUVERAINETÉ DES DONNÉES',
+                text: `
+                    <p style="margin-bottom:10px;">L'investissement de 640€ (Synology DS224+ avec 2x4To WD Red Plus) n'est pas une dépense à fond perdu, c'est une assurance.</p>
+                    <ul style="padding-left:20px;">
+                        <li><strong>ROI Financier :</strong> Amorti en ~3 ans si vous réduisez votre stockage Google One.</li>
+                        <li><strong>Sécurité :</strong> Protège contre la fermeture de compte Google ou le piratage. Vos photos sont chez vous.</li>
+                        <li><strong>Performance :</strong> Le port Ethernet 2.5Gbps permet des transferts locaux 2x plus rapides que le Cloud.</li>
+                    </ul>
+                `
+            }
+        };
+
         // --- STATE MANAGEMENT ---
         let state = {
             mobile: 12.99, // 12.99 (Sosh) or 25.99 (Status Quo)
@@ -497,6 +580,8 @@
         function init() {
             renderChart();
             updateKPI();
+            // Load default analysis
+            updateAnalysis('mobile');
         }
 
         // --- NAVIGATION ---
@@ -509,17 +594,37 @@
         }
 
         // --- SCENARIO LOGIC ---
-        function toggleScenario(type, value) {
-            // UI Toggle Logic would go here (simplified for demo)
+        function toggleScenario(type, value, analysisKey) {
             state[type] = value;
             
-            // Visual feedback on cards (Simple class toggle simulation)
+            // Visual feedback on cards
             const cards = event.currentTarget.parentElement.querySelectorAll('.toggle-card');
             cards.forEach(c => c.classList.remove('active'));
             event.currentTarget.classList.add('active');
 
+            // Show/Hide Specs if NAS
+            if(type === 'nas') {
+                document.getElementById('nas-specs').style.display = (value > 0) ? 'grid' : 'none';
+            }
+
             renderChart();
             updateKPI();
+            if(analysisKey) updateAnalysis(analysisKey);
+        }
+
+        function updateAnalysis(key) {
+            const panel = document.getElementById('analysisPanel');
+            const data = analysisDB[key];
+            
+            // Simple fade animation
+            panel.style.opacity = 0.5;
+            setTimeout(() => {
+                panel.innerHTML = `
+                    <div class="analysis-title">${data.title}</div>
+                    <div class="analysis-text">${data.text}</div>
+                `;
+                panel.style.opacity = 1;
+            }, 150);
         }
 
         function updateKPI() {
@@ -626,6 +731,16 @@
                         <li>Uploadez le PDF.</li>
                         <li style="color:#ef4444; margin-top:10px;"><strong>ATTENTION : Vous avez 60 jours max après l'activation.</strong></li>
                     </ol>
+                `;
+            } else if (type === 'rat') {
+                title.innerText = "Checklist RAT+";
+                content.innerHTML = `
+                    <ul style="padding-left:20px;">
+                        <li>S'assurer d'avoir la CNI de votre sœur (-26 ans).</li>
+                        <li>Utiliser un RIB à votre nom est possible.</li>
+                        <li>L'offre inclut Paramount+, Netflix Standard, Disney+ Standard, Apple TV+, et Max Standard.</li>
+                        <li>Résilier immédiatement l'ancien Canal+ une fois RAT+ actif.</li>
+                    </ul>
                 `;
             }
             modal.style.display = 'flex';
