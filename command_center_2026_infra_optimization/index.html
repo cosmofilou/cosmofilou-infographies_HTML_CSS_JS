@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COMMAND CENTER 2026 // ULTIMATE DECISION OS</title>
+    <title>MASTER PLAN 2026 // UNIVERSAL DASHBOARD</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -12,746 +12,463 @@
         :root {
             --bg-dark: #050505;
             --surface-1: #0f1115;
-            --surface-2: #14171c;
-            --surface-3: #1a1e24;
-            --primary: #3b82f6;     /* Bleu Tech */
-            --primary-dim: rgba(59, 130, 246, 0.1);
-            --success: #10b981;     /* Vert Gain */
-            --danger: #ef4444;      /* Rouge Perte */
-            --warning: #f59e0b;     /* Orange Action */
-            --purple: #8b5cf6;      /* RAT+ Strat */
-            --text-main: #ffffff;
-            --text-dim: #9ca3af;
-            --border: rgba(255,255,255,0.08);
-            --neon-glow: 0 0 10px rgba(59, 130, 246, 0.3);
+            --surface-2: #161b22;
+            --surface-3: #21262d;
+            --primary: #3b82f6;     
+            --success: #10b981;     
+            --danger: #ef4444;      
+            --warning: #f59e0b;     
+            --purple: #8b5cf6;      
+            --text-main: #f0f6fc;
+            --text-dim: #8b949e;
+            --border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* --- GLOBAL RESET & SCROLL HIDING --- */
-        * { -ms-overflow-style: none; scrollbar-width: none; box-sizing: border-box; margin: 0; padding: 0; outline: none; }
-        *::-webkit-scrollbar { display: none; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
         
         body {
             background-color: var(--bg-dark);
             color: var(--text-main);
             font-family: 'Space Grotesk', sans-serif;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
+            overflow-x: hidden; /* Empêche le scroll horizontal */
             display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* --- SIDEBAR --- */
+        /* --- LAYOUT RESPONSIVE --- */
+        .app-container {
+            display: flex;
+            flex: 1;
+        }
+
+        /* SIDEBAR (PC) / BOTTOM BAR (MOBILE) */
         .sidebar {
-            width: 70px;
+            width: 80px;
             background: var(--surface-1);
-            border-right: 1px solid var(--border);
+            border-right: var(--border);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px 0;
+            padding-top: 20px;
+            position: fixed;
+            height: 100vh;
             z-index: 100;
-            flex-shrink: 0;
         }
-        .nav-item {
-            width: 44px; height: 44px;
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 15px;
-            color: var(--text-dim);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-        .nav-item:hover { background: var(--surface-2); color: var(--text-main); }
-        .nav-item.active { background: var(--primary-dim); color: var(--primary); box-shadow: var(--neon-glow); }
-        .nav-item.active::after { content: ''; position: absolute; left: -13px; top: 12px; width: 3px; height: 20px; background: var(--primary); border-radius: 0 2px 2px 0; }
 
-        /* --- MAIN LAYOUT --- */
         .main-content {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: radial-gradient(circle at 90% 10%, rgba(59, 130, 246, 0.03), transparent 40%),
-                        radial-gradient(circle at 10% 90%, rgba(16, 185, 129, 0.03), transparent 40%);
-            height: 100%;
+            margin-left: 80px; /* Espace pour la sidebar PC */
+            padding: 30px;
+            max-width: 1600px;
         }
 
-        .top-bar {
-            height: 60px;
-            padding: 0 25px;
+        /* HEADER */
+        .header-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border);
-            background: rgba(5, 5, 5, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 90;
-            flex-shrink: 0;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: var(--border);
         }
 
         .status-pill {
-            font-family: 'JetBrains Mono'; font-size: 0.75rem;
-            padding: 4px 12px; border-radius: 100px;
-            background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--danger);
-            display: flex; gap: 8px; align-items: center;
+            background: rgba(16, 185, 129, 0.1); 
+            border: 1px solid rgba(16, 185, 129, 0.3); 
+            color: var(--success);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: flex; align-items: center; gap: 8px;
         }
 
-        /* --- VIEW CONTAINER --- */
-        .view-container {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            padding: 20px;
+        /* GRID SYSTEM */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr 350px;
+            gap: 25px;
+            align-items: start;
         }
 
-        .view-section {
-            display: none;
-            height: 100%; width: 100%;
-            grid-template-columns: 340px 1fr 300px; /* Colonne gauche un peu plus large */
-            gap: 20px;
-            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .view-section.active { display: grid; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- WIDGET STYLES --- */
+        /* WIDGETS */
         .widget {
             background: var(--surface-1);
-            border: 1px solid var(--border);
+            border: var(--border);
             border-radius: 16px;
-            display: flex; flex-direction: column;
             overflow: hidden;
-            position: relative;
+            display: flex;
+            flex-direction: column;
         }
+
         .widget-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim);
-            display: flex; justify-content: space-between; align-items: center;
             background: var(--surface-2);
+            padding: 15px 20px;
+            border-bottom: var(--border);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            display: flex; justify-content: space-between; align-items: center;
         }
+
         .widget-body {
             padding: 20px;
-            flex: 1;
-            overflow-y: auto;
-            position: relative;
         }
 
-        /* --- LEFT COL: CONTROLS --- */
-        .control-group { margin-bottom: 25px; }
-        .control-label { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 10px; display: flex; justify-content: space-between; }
-        
+        /* INTERACTIVE CARDS */
         .toggle-card {
             background: var(--surface-2);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
+            border: var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
             cursor: pointer;
-            display: flex; align-items: center; justify-content: space-between;
             transition: all 0.2s;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .toggle-card:hover { border-color: var(--text-dim); }
-        .toggle-card.active { background: rgba(59, 130, 246, 0.1); border-color: var(--primary); }
-        .toggle-card.active .toggle-switch { background: var(--primary); border-color: var(--primary); }
-        .toggle-card.active .toggle-switch::after { transform: translateX(10px); background: white; }
-
-        .toggle-switch {
-            width: 26px; height: 16px; border-radius: 10px; border: 1px solid var(--text-dim);
-            position: relative; transition: all 0.2s;
+        .toggle-card:hover { border-color: var(--text-dim); transform: translateY(-2px); }
+        .toggle-card.active { 
+            background: rgba(59, 130, 246, 0.1); 
+            border-color: var(--primary); 
         }
-        .toggle-switch::after {
-            content:''; position: absolute; left: 2px; top: 2px; width: 10px; height: 10px;
-            border-radius: 50%; background: var(--text-dim); transition: all 0.2s;
-        }
-
-        /* --- CENTER COL: VISUALIZATION --- */
-        .center-stack { display: flex; flex-direction: column; gap: 20px; height: 100%; }
-        .chart-container { flex: 1.5; min-height: 0; position: relative; width: 100%; }
         
-        /* Analysis Panel Styles */
-        .analysis-panel {
-            flex: 1;
-            background: var(--surface-2);
-            border-top: 1px solid var(--border);
+        /* CHART CONTAINER */
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* KPI BOX */
+        .kpi-box {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
             padding: 20px;
-            overflow-y: auto;
-            animation: fadeIn 0.3s ease;
-        }
-        .analysis-title { font-size: 1rem; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-        .analysis-text { font-size: 0.9rem; line-height: 1.6; color: var(--text-dim); }
-        .highlight { color: var(--text-main); background: rgba(255,255,255,0.05); padding: 2px 5px; border-radius: 4px; font-weight: 500; }
-        .highlight-warn { color: var(--warning); background: rgba(245, 158, 11, 0.1); padding: 2px 5px; border-radius: 4px; }
-
-        /* Architecture Diagram Styles */
-        .arch-diagram { display: flex; align-items: center; justify-content: space-around; height: 100%; position: relative; }
-        .arch-node {
-            width: 100px; height: 100px;
-            background: var(--surface-3); border: 1px solid var(--border); border-radius: 16px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 2; position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .arch-node i { font-size: 2rem; margin-bottom: 10px; color: var(--text-main); }
-        .arch-node span { font-size: 0.7rem; color: var(--text-dim); }
-        .arch-link {
-            position: absolute; height: 2px; background: var(--border);
-            top: 50%; z-index: 1;
-        }
-        .arch-link.active { background: var(--success); box-shadow: 0 0 10px var(--success); animation: flow 1s infinite linear; }
-        .arch-badge {
-            position: absolute; top: -10px; right: -10px;
-            background: var(--primary); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        /* --- RIGHT COL: KPI & ACTIONS --- */
-        .kpi-big { font-family: 'JetBrains Mono'; font-size: 2.2rem; font-weight: 700; color: var(--success); margin-bottom: 5px; }
-        .action-list { display: flex; flex-direction: column; gap: 10px; height: 100%; }
+        /* ACTIONS */
         .action-btn {
-            background: var(--surface-2); border: 1px solid var(--border);
-            padding: 15px; border-radius: 8px; cursor: pointer;
-            display: flex; align-items: center; gap: 12px;
-            transition: all 0.2s;
+            background: var(--surface-2);
+            border: var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 15px;
+            transition: 0.2s;
         }
-        .action-btn:hover { background: var(--surface-3); transform: translateY(-2px); border-color: var(--text-dim); }
-        .action-icon { width: 32px; height: 32px; border-radius: 6px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; }
-
-        /* --- CONTENT MATRIX TABLE --- */
-        .matrix-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        .matrix-table th { text-align: left; color: var(--text-dim); padding: 10px; border-bottom: 1px solid var(--border); }
-        .matrix-table td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); }
-        .check-ok { color: var(--success); }
-        .check-no { color: var(--danger); opacity: 0.5; }
-        .tag-rat { background: rgba(139, 92, 246, 0.2); color: var(--purple); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
-
-        /* --- MODAL --- */
-        .modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
-            z-index: 200; display: none; justify-content: center; align-items: center;
-        }
-        .modal-box {
-            background: #0b0d10; border: 1px solid var(--border);
-            width: 800px; max-width: 90%; max-height: 85vh;
-            border-radius: 24px; padding: 40px;
-            position: relative; overflow-y: auto;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+        .action-btn:hover { background: var(--surface-3); border-color: var(--primary); }
+        .icon-box {
+            width: 40px; height: 40px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
         }
 
-        /* --- SPEC GRID (Hardware) --- */
-        .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .spec-item { background: var(--surface-3); padding: 10px; border-radius: 6px; }
-        .spec-label { font-size: 0.7rem; color: var(--text-dim); }
-        .spec-val { font-family: 'JetBrains Mono'; font-size: 0.9rem; color: var(--primary); }
+        /* ANALYSIS TEXT */
+        .analysis-content {
+            background: var(--surface-2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* MEDIA QUERIES (MOBILE) */
+        @media (max-width: 1100px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr; /* Une seule colonne */
+            }
+            .sidebar {
+                width: 100%;
+                height: 60px;
+                bottom: 0;
+                top: auto;
+                flex-direction: row;
+                justify-content: space-around;
+                border-right: none;
+                border-top: var(--border);
+                padding-top: 0;
+            }
+            .main-content {
+                margin-left: 0;
+                margin-bottom: 70px; /* Espace pour la barre du bas */
+                padding: 15px;
+            }
+            .header-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            color: var(--text-dim);
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .nav-icon.active { color: var(--primary); background: rgba(59, 130, 246, 0.1); }
 
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR -->
+    <!-- NAVIGATION (Sidebar PC / Bottom Mobile) -->
     <div class="sidebar">
-        <div class="nav-item active" onclick="switchView('dashboard')" title="Simulateur Financier"><i class="fas fa-chart-pie"></i></div>
-        <div class="nav-item" onclick="switchView('architecture')" title="Architecture Réseau & TV"><i class="fas fa-network-wired"></i></div>
-        <div class="nav-item" onclick="switchView('content')" title="Matrice des Contenus"><i class="fas fa-th-list"></i></div>
+        <div class="nav-icon active" onclick="scrollToSection('dashboard')" title="Tableau de Bord"><i class="fas fa-chart-pie"></i></div>
+        <div class="nav-icon" onclick="scrollToSection('analysis')" title="Analyse Détaillée"><i class="fas fa-file-alt"></i></div>
+        <div class="nav-icon" onclick="scrollToSection('actions')" title="Actions"><i class="fas fa-check-square"></i></div>
     </div>
 
     <!-- MAIN APP -->
     <div class="main-content">
-        <!-- TOP BAR -->
-        <div class="top-bar">
+        
+        <!-- HEADER -->
+        <div class="header-bar">
             <div>
-                <h1 style="font-size: 1.2rem; letter-spacing: -0.5px; font-weight: 700;">COMMAND CENTER <span style="color: var(--primary)">//</span> ULTIMATE</h1>
+                <h1 style="font-size: 1.5rem; letter-spacing: -1px;">COMMAND CENTER <span style="color: var(--primary)">//</span> V4</h1>
+                <div style="font-size: 0.9rem; color: var(--text-dim);">INFRASTRUCTURE OPTIMIZATION PROTOCOL</div>
             </div>
-            <div class="status-pill" id="globalStatus">
-                <i class="fas fa-circle" style="font-size: 0.5rem;"></i> MODE: SIMULATION ACTIVE
+            <div class="status-pill">
+                <i class="fas fa-check-circle"></i> PLAN OPTIMISÉ ACTIF
             </div>
         </div>
 
-        <div class="view-container">
-            
-            <!-- VIEW 1: FINANCIAL SIMULATOR -->
-            <div id="view-dashboard" class="view-section active">
-                
-                <!-- COL 1: SCENARIO CONTROLS -->
-                <div class="widget">
-                    <div class="widget-header">
-                        <i class="fas fa-sliders-h"></i> Paramètres & Hardware
+        <!-- GRID LAYOUT -->
+        <div class="dashboard-grid">
+
+            <!-- COL 1: SCENARIOS (Gauche) -->
+            <div class="widget" id="dashboard">
+                <div class="widget-header"><i class="fas fa-sliders-h"></i> Configuration</div>
+                <div class="widget-body">
+                    
+                    <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 10px; text-transform: uppercase;">Mobile</p>
+                    <div class="toggle-card active" onclick="updateScenario('mobile', 12.99, this)">
+                        <div>
+                            <div style="font-weight: bold; color: var(--warning);">Sosh 90Go 4G</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim);">12.99 € (Avec Watch)</div>
+                        </div>
+                        <i class="fas fa-check-circle" style="color: var(--success);"></i>
                     </div>
-                    <div class="widget-body">
-                        
-                        <div class="control-group">
-                            <div class="control-label">STRATÉGIE MOBILE</div>
-                            <div class="toggle-card active" onclick="toggleScenario('mobile', 12.99, 'mobile')">
-                                <div>
-                                    <div style="font-size: 0.9rem; font-weight: bold;">Sosh 90Go 4G</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-dim);">12.99€ (avec Watch)</div>
-                                </div>
-                                <div class="toggle-switch"></div>
-                            </div>
-                            <div class="toggle-card" onclick="toggleScenario('mobile', 25.99, 'mobile')">
-                                <div>
-                                    <div style="font-size: 0.9rem;">Status Quo 5G</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-dim);">25.99€ (Legacy)</div>
-                                </div>
-                                <div class="toggle-switch"></div>
-                            </div>
+                    <div class="toggle-card" onclick="updateScenario('mobile', 25.99, this)">
+                        <div>
+                            <div style="font-weight: bold;">Status Quo 5G</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim);">25.99 €</div>
                         </div>
-
-                        <div class="control-group">
-                            <div class="control-label">STRATÉGIE BOX</div>
-                            <div class="toggle-card active" onclick="toggleScenario('box', 39.99, 'box')">
-                                <div>
-                                    <div style="font-size: 0.9rem; font-weight: bold;">Ultra Essentiel</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-dim);">39.99€ (Pure Fiber)</div>
-                                </div>
-                                <div class="toggle-switch"></div>
-                            </div>
-                            <div class="toggle-card" onclick="toggleScenario('box', 49.99, 'box')">
-                                <div>
-                                    <div style="font-size: 0.9rem;">Ultra Totale</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-dim);">49.99€ (Doublons)</div>
-                                </div>
-                                <div class="toggle-switch"></div>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <div class="control-label">MATÉRIEL (CAPEX)</div>
-                            <div class="toggle-card active" onclick="toggleScenario('nas', 640, 'nas')">
-                                <div>
-                                    <div style="font-size: 0.9rem; font-weight: bold;">Achat NAS Syno</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-dim);">640€ (One-shot)</div>
-                                </div>
-                                <div class="toggle-switch"></div>
-                            </div>
-                            <!-- Mini Specs Display when Active -->
-                            <div id="nas-specs" class="spec-grid" style="display:grid;">
-                                <div class="spec-item"><div class="spec-label">CPU</div><div class="spec-val">Intel J4125</div></div>
-                                <div class="spec-item"><div class="spec-label">RAM</div><div class="spec-val">2GB + Slot</div></div>
-                            </div>
-                        </div>
-
                     </div>
+
+                    <p style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 10px; margin-top: 20px; text-transform: uppercase;">Internet Fixe</p>
+                    <div class="toggle-card active" onclick="updateScenario('box', 39.99, this)">
+                        <div>
+                            <div style="font-weight: bold; color: var(--primary);">Ultra Essentiel</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim);">39.99 € (Pure Fibre)</div>
+                        </div>
+                        <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                    </div>
+                    <div class="toggle-card" onclick="updateScenario('box', 49.99, this)">
+                        <div>
+                            <div style="font-weight: bold;">Ultra Totale</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim);">49.99 € (Doublons Pub)</div>
+                        </div>
+                    </div>
+
                 </div>
-
-                <!-- COL 2: MAIN CHART & ANALYSIS -->
-                <div class="widget">
-                    <div class="widget-header">
-                        <i class="fas fa-chart-line"></i> Projection & Analyse Contextuelle
-                    </div>
-                    <!-- Using Flex Column to stack Chart and Text -->
-                    <div class="widget-body" style="padding:0; display:flex; flex-direction:column;">
-                        
-                        <!-- Top: Chart -->
-                        <div style="flex: 1.5; padding: 20px; min-height: 0;">
-                            <div class="chart-container" style="height: 100%;">
-                                <canvas id="mainChart"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- Bottom: Dynamic Text Analysis -->
-                        <div id="analysisPanel" class="analysis-panel">
-                            <!-- Dynamic Content Injected Here -->
-                            <div class="analysis-title"><i class="fas fa-info-circle"></i> SÉLECTIONNEZ UNE STRATÉGIE</div>
-                            <div class="analysis-text">Cliquez sur les options à gauche pour voir l'impact financier et lire l'analyse détaillée extraite des rapports d'audit.</div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- COL 3: KPI & ACTIONS -->
-                <div class="widget">
-                    <div class="widget-header">
-                        <i class="fas fa-flag-checkered"></i> Impact & Actions
-                    </div>
-                    <div class="widget-body">
-                        <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: rgba(16, 185, 129, 0.05); border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.1);">
-                            <div style="font-size: 0.8rem; color: var(--success); margin-bottom: 5px;">GAIN ANNUEL NET</div>
-                            <div class="kpi-big" id="annualSaving">+420 €</div>
-                            <div style="font-size: 0.7rem; color: var(--text-dim);">Vs Situation Actuelle</div>
-                        </div>
-
-                        <div class="action-list">
-                            <div class="action-btn" onclick="openModal('sosh')">
-                                <div class="action-icon" style="color: var(--warning);"><i class="fas fa-comment-alt"></i></div>
-                                <div>
-                                    <div style="font-size: 0.85rem; font-weight: bold;">Script Chat Sosh</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-dim);">Pour activer l'Apple Watch</div>
-                                </div>
-                            </div>
-                            <div class="action-btn" onclick="openModal('odr')">
-                                <div class="action-icon" style="color: var(--primary);"><i class="fas fa-file-invoice-dollar"></i></div>
-                                <div>
-                                    <div style="font-size: 0.85rem; font-weight: bold;">Remboursement Free</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-dim);">Ne pas rater les 100€</div>
-                                </div>
-                            </div>
-                             <div class="action-btn" onclick="openModal('rat')">
-                                <div class="action-icon" style="color: var(--purple);"><i class="fas fa-id-card"></i></div>
-                                <div>
-                                    <div style="font-size: 0.85rem; font-weight: bold;">Activation RAT+</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-dim);">Checklist Identité</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
-            <!-- VIEW 2: ARCHITECTURE (Answer to TV/Server question) -->
-            <div id="view-architecture" class="view-section">
-                <!-- COL 1: DIAGRAM -->
-                <div class="widget" style="grid-column: span 2;">
-                    <div class="widget-header"><i class="fas fa-sitemap"></i> Schéma de Connexion Domestique</div>
-                    <div class="widget-body">
-                        <div class="arch-diagram">
-                            <!-- Fibre In -->
-                            <div style="position: absolute; left: 20px; color: var(--text-dim); font-size: 0.8rem;">
-                                <i class="fas fa-arrow-right"></i> FIBRE 8Gb/s
-                            </div>
-                            
-                            <!-- Server -->
-                            <div class="arch-node" style="border-color: var(--primary);">
-                                <div class="arch-badge">SERVER ULTRA</div>
-                                <i class="fas fa-server" style="color: var(--primary);"></i>
-                                <span>Entrée / Salon</span>
-                            </div>
-
-                            <!-- Link Wi-Fi -->
-                            <div class="arch-link active" style="left: 20%; width: 60%; top: 50%;"></div>
-                            <div style="position: absolute; top: 40%; left: 50%; transform: translateX(-50%); background: #0b0d10; padding: 5px; font-size: 0.7rem; color: var(--success); border-radius: 4px; border: 1px solid var(--success);">
-                                <i class="fas fa-wifi"></i> WI-FI 7 (Sans Fil)
-                            </div>
-
-                            <!-- TV -->
-                            <div class="arch-node" style="border-color: var(--purple);">
-                                <div class="arch-badge">SAMSUNG TV</div>
-                                <i class="fas fa-tv" style="color: var(--purple);"></i>
-                                <span>Salon / Chambre</span>
-                            </div>
-                        </div>
+            <!-- COL 2: CHART & DETAILS (Centre) -->
+            <div class="widget" id="analysis">
+                <div class="widget-header"><i class="fas fa-chart-line"></i> Projection Financière</div>
+                <div class="widget-body">
+                    <div class="chart-wrapper">
+                        <canvas id="mainChart"></canvas>
                     </div>
-                </div>
 
-                <!-- COL 2: EXPLANATION -->
-                <div class="widget">
-                    <div class="widget-header"><i class="fas fa-info-circle"></i> Notes Techniques</div>
-                    <div class="widget-body">
-                        <h3 style="color: var(--primary); margin-bottom: 10px;">Connexion Serveur -> TV</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 20px;">
-                            Non, vous n'êtes pas obligé de relier physiquement le serveur à la TV.
+                    <div class="analysis-content">
+                        <h3 style="color: var(--primary); margin-bottom: 10px;"><i class="fas fa-info-circle"></i> Analyse de l'Architecte</h3>
+                        <p style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.6;">
+                            <strong style="color: white;">Pourquoi ce choix ?</strong><br>
+                            L'audit révèle que <strong>80% de votre data</strong> passe par le Wi-Fi. Payer pour de la 5G 200Go est inutile. <br><br>
+                            <strong style="color: white;">Le Hack RAT+ :</strong><br>
+                            En combinant la <strong>Freebox Ultra Essentiel</strong> (39€) avec l'offre <strong>RAT+</strong> (19€ via votre sœur), vous obtenez Netflix/Disney SANS PUB et tout Canal+. C'est 10€ moins cher que l'offre Freebox Totale qui impose la pub.
                         </p>
-                        <ul style="list-style: none; padding: 0;">
-                            <li style="margin-bottom: 15px; padding-left: 15px; border-left: 2px solid var(--success);">
-                                <strong style="color:white; display:block;">Option A : Wi-Fi 7 (Recommandé)</strong>
-                                <span style="font-size:0.85rem; color:var(--text-dim);">La Freebox Ultra diffuse un Wi-Fi assez puissant pour streamer de la 4K sans câble. Votre TV Samsung se connecte comme un téléphone.</span>
-                            </li>
-                            <li style="margin-bottom: 15px; padding-left: 15px; border-left: 2px solid var(--text-dim);">
-                                <strong style="color:white; display:block;">Option B : Câble Ethernet</strong>
-                                <span style="font-size:0.85rem; color:var(--text-dim);">Uniquement si le serveur est juste sous la TV. Offre une stabilité absolue (0 latence).</span>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- VIEW 3: CONTENT MATRIX (Answer to Content question) -->
-            <div id="view-content" class="view-section">
-                <div class="widget" style="grid-column: span 3;">
-                    <div class="widget-header"><i class="fas fa-th"></i> Comparatif des Contenus : Ce que vous allez voir</div>
-                    <div class="widget-body">
-                        <table class="matrix-table">
-                            <thead>
-                                <tr>
-                                    <th>Contenu / Chaîne</th>
-                                    <th>Freebox Ultra "Totale" (59€)</th>
-                                    <th>Ultra Essentiel + RAT+ (59€)</th>
-                                    <th>Verdict</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Canal+ (Direct)</td>
-                                    <td><i class="fas fa-check check-ok"></i> Oui</td>
-                                    <td><i class="fas fa-check check-ok"></i> Oui</td>
-                                    <td>Égalité</td>
-                                </tr>
-                                <tr>
-                                    <td>Canal+ (Films à la demande)</td>
-                                    <td><i class="fas fa-times check-no"></i> Non</td>
-                                    <td><i class="fas fa-check check-ok"></i> <span class="tag-rat">MYCANAL</span></td>
-                                    <td style="color: var(--success);">Victoire RAT+</td>
-                                </tr>
-                                <tr>
-                                    <td>Start-Over (Revenir au début)</td>
-                                    <td><i class="fas fa-times check-no"></i> Non</td>
-                                    <td><i class="fas fa-check check-ok"></i> Oui</td>
-                                    <td style="color: var(--success);">Victoire RAT+</td>
-                                </tr>
-                                <tr>
-                                    <td>Netflix</td>
-                                    <td>Standard <span style="color:var(--danger)">AVEC PUB</span></td>
-                                    <td>Standard <span style="color:var(--success)">SANS PUB</span></td>
-                                    <td style="color: var(--success);">Victoire RAT+</td>
-                                </tr>
-                                <tr>
-                                    <td>Disney+</td>
-                                    <td>Standard <span style="color:var(--danger)">AVEC PUB</span></td>
-                                    <td>Standard <span style="color:var(--success)">SANS PUB</span></td>
-                                    <td style="color: var(--success);">Victoire RAT+</td>
-                                </tr>
-                                <tr>
-                                    <td>Apple TV+</td>
-                                    <td><i class="fas fa-times check-no"></i> Non</td>
-                                    <td><i class="fas fa-check check-ok"></i> Inclus</td>
-                                    <td style="color: var(--success);">Victoire RAT+</td>
-                                </tr>
-                                <tr>
-                                    <td>YouTube Premium</td>
-                                    <td colspan="3" style="text-align:center; color: var(--text-dim); font-style:italic;">Géré via votre compte Google (Indépendant de la Box)</td>
-                                </tr>
-                            </tbody>
-                        </table>
+            <!-- COL 3: ACTIONS (Droite) -->
+            <div class="widget" id="actions">
+                <div class="widget-header"><i class="fas fa-tasks"></i> Plan d'Action</div>
+                <div class="widget-body">
+                    
+                    <div class="kpi-box">
+                        <div style="font-size: 0.8rem; color: var(--success);">ÉCONOMIE ANNUELLE</div>
+                        <div style="font-family: 'JetBrains Mono'; font-size: 2.5rem; font-weight: bold; color: var(--text-main);" id="savingsVal">+432 €</div>
+                        <div style="font-size: 0.7rem; color: var(--text-dim);">Matériel NAS déduit</div>
                     </div>
+
+                    <div class="action-btn" onclick="alert('Script Chat Sosh:\n\nBonjour, je souhaite activer l\'option eSIM Watch. Pouvez-vous vérifier IMPÉRATIVEMENT que la VoLTE et la VoWiFi sont actives sur ma ligne avant activation ?')">
+                        <div class="icon-box" style="color: var(--warning);"><i class="fas fa-comment-dots"></i></div>
+                        <div>
+                            <div style="font-weight: bold;">Script Chat Sosh</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim);">Copier le texte</div>
+                        </div>
+                    </div>
+
+                    <div class="action-btn" onclick="alert('Procédure ODR Free:\n\n1. Attendre facture de clôture (Sosh/RED).\n2. Aller sur moncompte.free.fr > ODR.\n3. Uploader le PDF.\n\nATTENTION: Délai max 60 jours !')">
+                        <div class="icon-box" style="color: var(--primary);"><i class="fas fa-file-invoice-dollar"></i></div>
+                        <div>
+                            <div style="font-weight: bold;">Remboursement 100€</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim);">Procédure ODR</div>
+                        </div>
+                    </div>
+
+                    <div class="action-btn">
+                        <div class="icon-box" style="color: var(--purple);"><i class="fas fa-id-card"></i></div>
+                        <div>
+                            <div style="font-weight: bold;">Checklist RAT+</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim);">CNI Sœur -26 ans requise</div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
         </div>
-    </div>
 
-    <!-- MODAL OVERLAY -->
-    <div id="modal" class="modal" onclick="closeModal(event)">
-        <div class="modal-box">
-            <h2 id="modal-title" style="color: var(--primary); margin-bottom: 20px;">Titre</h2>
-            <div id="modal-content" style="color: var(--text-dim); line-height: 1.6;">Contenu</div>
+        <!-- HARDWARE SECTION -->
+        <div class="widget" style="margin-top: 25px;">
+            <div class="widget-header"><i class="fas fa-server"></i> Hardware & Architecture</div>
+            <div class="widget-body" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                
+                <div style="background: var(--surface-2); padding: 20px; border-radius: 12px;">
+                    <h3 style="color: var(--success); margin-bottom: 10px;"><i class="fas fa-hdd"></i> NAS Synology DS224+</h3>
+                    <ul style="color: var(--text-dim); font-size: 0.9rem; list-style: none;">
+                        <li style="margin-bottom: 8px;">• <strong>CPU :</strong> Intel J4125 (Docker OK)</li>
+                        <li style="margin-bottom: 8px;">• <strong>RAM :</strong> 2Go + Slot libre</li>
+                        <li style="margin-bottom: 8px;">• <strong>Disques :</strong> 2x 4To WD Red Plus (Miroir)</li>
+                        <li>• <strong>Rôle :</strong> Backup Google Photos & Drive</li>
+                    </ul>
+                </div>
+
+                <div style="background: var(--surface-2); padding: 20px; border-radius: 12px;">
+                    <h3 style="color: var(--primary); margin-bottom: 10px;"><i class="fas fa-tv"></i> Connexion TV</h3>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">
+                        Pas besoin de câble entre le serveur et la TV Samsung.
+                        <br><br>
+                        Le <strong>Wi-Fi 7</strong> de la Freebox Ultra est suffisant pour streamer de la 4K. Utilisez l'app <strong>OQEE</strong> ou <strong>MyCanal</strong> directement sur la TV.
+                    </p>
+                </div>
+
+            </div>
         </div>
+
     </div>
 
     <script>
-        // --- CONTENT DB FOR ANALYSIS ---
-        const analysisDB = {
-            'mobile': {
-                title: 'ANALYSE MOBILE : POURQUOI SOSH 90Go ?',
-                text: `
-                    <p style="margin-bottom:10px;">Selon l'audit technique, <span class="highlight">80% de votre trafic data</span> est délesté sur le Wi-Fi (Domicile et Bureau). Payer pour 200Go en 5G est une inefficience budgétaire majeure.</p>
-                    <ul style="padding-left:20px; margin-bottom:10px;">
-                        <li><strong>Vitesse 4G+ :</strong> Avec l'agrégation de fréquences, Sosh délivre 150-300 Mbps. Le streaming 4K ne demande que 25 Mbps. La 5G n'est pas nécessaire pour vos usages.</li>
-                        <li><strong>Compatibilité Watch :</strong> Sosh supporte l'eSIM Watch (5€/mois), contrairement à Free Mobile. C'est le facteur bloquant qui élimine Free.</li>
-                    </ul>
-                    <p class="highlight-warn"><i class="fas fa-exclamation-triangle"></i> <strong>Critique :</strong> Vous devez activer la VoLTE via le chat AVANT d'activer l'option Montre.</p>
-                `
-            },
-            'box': {
-                title: 'ANALYSE BOX : LE PIÈGE DE L\'OFFRE "TOTALE"',
-                text: `
-                    <p style="margin-bottom:10px;">Le choix de la version "Essentiel" est mathématique. Ne payez pas 10€/mois pour des services dégradés.</p>
-                    <ul style="padding-left:20px;">
-                        <li><strong>Netflix/Disney :</strong> L'offre Totale inclut les versions <span class="highlight-warn">AVEC PUB</span>. Votre stratégie RAT+ inclut les versions sans pub.</li>
-                        <li><strong>Amazon Prime :</strong> Si vous le prenez via Free (Totale), vous perdez le remboursement de votre Amex Gold. En le prenant à part (Essentiel), Amex vous le rembourse.</li>
-                        <li><strong>Débit :</strong> La version Essentiel offre le même 8Gb/s symétrique et le même Wi-Fi 7.</li>
-                    </ul>
-                `
-            },
-            'nas': {
-                title: 'ANALYSE HARDWARE : SOUVERAINETÉ DES DONNÉES',
-                text: `
-                    <p style="margin-bottom:10px;">L'investissement de 640€ (Synology DS224+ avec 2x4To WD Red Plus) n'est pas une dépense à fond perdu, c'est une assurance.</p>
-                    <ul style="padding-left:20px;">
-                        <li><strong>ROI Financier :</strong> Amorti en ~3 ans si vous réduisez votre stockage Google One.</li>
-                        <li><strong>Sécurité :</strong> Protège contre la fermeture de compte Google ou le piratage. Vos photos sont chez vous.</li>
-                        <li><strong>Performance :</strong> Le port Ethernet 2.5Gbps permet des transferts locaux 2x plus rapides que le Cloud.</li>
-                    </ul>
-                `
-            }
-        };
-
-        // --- STATE MANAGEMENT ---
-        let state = {
-            mobile: 12.99, // 12.99 (Sosh) or 25.99 (Status Quo)
-            box: 39.99,    // 39.99 (Essentiel) or 49.99 (Totale)
-            nas: 640       // 640 (Yes) or 0 (No)
-        };
-
-        const chartCtx = document.getElementById('mainChart').getContext('2d');
-        let mainChart;
-
-        // --- INIT ---
-        function init() {
-            renderChart();
-            updateKPI();
-            // Load default analysis
-            updateAnalysis('mobile');
-        }
-
-        // --- NAVIGATION ---
-        function switchView(viewName) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('view-' + viewName).classList.add('active');
-            
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        // --- NAVIGATION MOBILE ---
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Update active icon
+            document.querySelectorAll('.nav-icon').forEach(el => el.classList.remove('active'));
             event.currentTarget.classList.add('active');
         }
 
-        // --- SCENARIO LOGIC ---
-        function toggleScenario(type, value, analysisKey) {
-            state[type] = value;
-            
-            // Visual feedback on cards
-            const cards = event.currentTarget.parentElement.querySelectorAll('.toggle-card');
-            cards.forEach(c => c.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+        // --- CHART & LOGIC ---
+        let state = { mobile: 12.99, box: 39.99 };
+        let chartInstance = null;
 
-            // Show/Hide Specs if NAS
-            if(type === 'nas') {
-                document.getElementById('nas-specs').style.display = (value > 0) ? 'grid' : 'none';
-            }
+        function initChart() {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+            gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
 
-            renderChart();
-            updateKPI();
-            if(analysisKey) updateAnalysis(analysisKey);
-        }
-
-        function updateAnalysis(key) {
-            const panel = document.getElementById('analysisPanel');
-            const data = analysisDB[key];
-            
-            // Simple fade animation
-            panel.style.opacity = 0.5;
-            setTimeout(() => {
-                panel.innerHTML = `
-                    <div class="analysis-title">${data.title}</div>
-                    <div class="analysis-text">${data.text}</div>
-                `;
-                panel.style.opacity = 1;
-            }, 150);
-        }
-
-        function updateKPI() {
-            const currentMonthly = 112; // As-Is
-            const newMonthly = state.mobile + state.box + 19.99; // + RAT+ fixed
-            const savingMonthly = currentMonthly - newMonthly;
-            const savingAnnual = (savingMonthly * 12) - (state.nas / 3); // Amortissement NAS sur 3 ans
-
-            document.getElementById('annualSaving').innerText = (savingAnnual > 0 ? '+' : '') + Math.round(savingAnnual) + ' €';
-            
-            const pill = document.getElementById('globalStatus');
-            if(savingAnnual > 0) {
-                pill.style.color = 'var(--success)';
-                pill.style.background = 'rgba(16, 185, 129, 0.1)';
-                pill.style.borderColor = 'rgba(16, 185, 129, 0.3)';
-                pill.innerHTML = '<i class="fas fa-check-circle"></i> STRATÉGIE RENTABLE';
-            } else {
-                pill.style.color = 'var(--danger)';
-                pill.style.background = 'rgba(239, 68, 68, 0.1)';
-                pill.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-                pill.innerHTML = '<i class="fas fa-exclamation-triangle"></i> DÉFICITAIRE';
-            }
-        }
-
-        // --- CHART ---
-        function renderChart() {
-            if (mainChart) mainChart.destroy();
-
-            // Data Generation
-            const labels = ['Start', 'Mois 6', 'Mois 12', 'Mois 18', 'Mois 24'];
-            const monthlyCost = state.mobile + state.box + 19.99; // RAT+ is constant in optimized plan
-            
-            const dataOptimized = labels.map((_, i) => {
-                const months = i * 6;
-                return state.nas + (monthlyCost * months);
-            });
-
-            const dataLegacy = labels.map((_, i) => {
-                return 112 * (i * 6); // 112€/mois constant
-            });
-
-            // Gradient
-            const gradientGreen = chartCtx.createLinearGradient(0, 0, 0, 400);
-            gradientGreen.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
-            gradientGreen.addColorStop(1, 'rgba(16, 185, 129, 0)');
-
-            mainChart = new Chart(chartCtx, {
+            chartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: ['Start', '6 Mois', '12 Mois', '18 Mois', '24 Mois'],
                     datasets: [
                         {
-                            label: 'Legacy (Actuel)',
-                            data: dataLegacy,
-                            borderColor: '#ef4444',
-                            borderWidth: 2,
-                            tension: 0.4,
-                            pointRadius: 0
+                            label: 'Coût Cumulé (Optimisé)',
+                            data: [640, 1100, 1600, 2100, 2600], // Fake data updated by calc
+                            borderColor: '#10b981',
+                            backgroundColor: gradient,
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
                         },
                         {
-                            label: 'Simulé (Optimisé)',
-                            data: dataOptimized,
-                            borderColor: '#10b981',
-                            backgroundColor: gradientGreen,
-                            borderWidth: 3,
-                            tension: 0.4,
-                            fill: true
+                            label: 'Coût Cumulé (Actuel)',
+                            data: [0, 672, 1344, 2016, 2688], // ~112€/mois
+                            borderColor: '#ef4444',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.4
                         }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: { mode: 'index', intersect: false },
-                    plugins: { legend: { labels: { color: '#9ca3af', font: {family: 'Space Grotesk'} } } },
+                    plugins: { legend: { labels: { color: '#8b949e', font: {family: 'Space Grotesk'} } } },
                     scales: {
-                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#6b7280' } },
-                        x: { grid: { display: false }, ticks: { color: '#6b7280' } }
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b949e' } },
+                        x: { grid: { display: false }, ticks: { color: '#8b949e' } }
                     }
                 }
             });
+            updateCalc();
         }
 
-        // --- MODALS ---
-        function openModal(type) {
-            const modal = document.getElementById('modal');
-            const title = document.getElementById('modal-title');
-            const content = document.getElementById('modal-content');
+        function updateScenario(type, val, element) {
+            state[type] = val;
+            
+            // UI Toggle
+            const siblings = element.parentElement.querySelectorAll('.toggle-card');
+            siblings.forEach(el => {
+                el.classList.remove('active');
+                const icon = el.querySelector('.fa-check-circle');
+                if(icon) icon.remove();
+            });
+            element.classList.add('active');
+            element.innerHTML += '<i class="fas fa-check-circle" style="color: var(--success);"></i>';
 
-            if(type === 'sosh') {
-                title.innerText = "Script Chat Sosh (Critique)";
-                content.innerHTML = `
-                    <p>Pour éviter que l'activation de l'Apple Watch échoue :</p>
-                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:8px; margin-top:10px; font-family:'JetBrains Mono'; color:#fbbf24;">
-                        "Bonjour, je viens de souscrire. Je souhaite activer l'option eSIM Watch. Pouvez-vous vérifier impérativement que les services VoLTE et VoWiFi sont bien actifs sur ma ligne avant que je tente l'activation ?"
-                    </div>
-                `;
-            } else if (type === 'odr') {
-                title.innerText = "Remboursement Free (100€)";
-                content.innerHTML = `
-                    <ol style="padding-left:20px;">
-                        <li>Attendez la <strong>dernière facture</strong> de votre ancien opérateur (frais de résiliation inclus).</li>
-                        <li>Allez sur <strong>moncompte.free.fr</strong> > Rubrique "Offre de Remboursement".</li>
-                        <li>Uploadez le PDF.</li>
-                        <li style="color:#ef4444; margin-top:10px;"><strong>ATTENTION : Vous avez 60 jours max après l'activation.</strong></li>
-                    </ol>
-                `;
-            } else if (type === 'rat') {
-                title.innerText = "Checklist RAT+";
-                content.innerHTML = `
-                    <ul style="padding-left:20px;">
-                        <li>S'assurer d'avoir la CNI de votre sœur (-26 ans).</li>
-                        <li>Utiliser un RIB à votre nom est possible.</li>
-                        <li>L'offre inclut Paramount+, Netflix Standard, Disney+ Standard, Apple TV+, et Max Standard.</li>
-                        <li>Résilier immédiatement l'ancien Canal+ une fois RAT+ actif.</li>
-                    </ul>
-                `;
-            }
-            modal.style.display = 'flex';
+            updateCalc();
         }
 
-        function closeModal(e) {
-            if(e.target.id === 'modal') document.getElementById('modal').style.display = 'none';
+        function updateCalc() {
+            const monthlyOptimized = state.mobile + state.box + 19.99; // RAT+ fixed
+            const nasPrice = 640;
+            
+            // Update Chart Data
+            const newData = [
+                nasPrice, 
+                nasPrice + (monthlyOptimized * 6),
+                nasPrice + (monthlyOptimized * 12),
+                nasPrice + (monthlyOptimized * 18),
+                nasPrice + (monthlyOptimized * 24)
+            ];
+            
+            chartInstance.data.datasets[0].data = newData;
+            chartInstance.update();
+
+            // Update Savings Text
+            const currentMonthly = 112;
+            const savingMonthly = currentMonthly - monthlyOptimized;
+            const savingAnnual = (savingMonthly * 12) - (nasPrice / 3); // Amorti 3 ans
+            
+            document.getElementById('savingsVal').innerText = "+" + Math.round(savingAnnual) + " €";
         }
 
-        // Start
-        init();
+        window.onload = initChart;
 
     </script>
 </body>
