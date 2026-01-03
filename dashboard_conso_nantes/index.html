@@ -56,7 +56,7 @@
         .dpe-cursor { 
             position: absolute; top: -12px; width: 4px; height: calc(100% + 24px); 
             background: #1e293b; border-radius: 2px;
-            transform: translateX(-50%); transition: left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); /* Faster transition */
+            transform: translateX(-50%); transition: left 1s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 0 10px rgba(0,0,0,0.3); z-index: 10;
         }
         @media (prefers-color-scheme: dark) { .dpe-cursor { background: #f8fafc; } }
@@ -423,10 +423,26 @@
                     const year = 2026;
                     const dateObj = new Date(year, m, 1);
                     
-                    const weightsGaz = [0.18, 0.16, 0.12, 0.08, 0.03, 0, 0, 0, 0.02, 0.07, 0.14, 0.20];
+                    // Pondération Climatique Gaz (Incluant ECS base ~2-3% par mois l'été)
+                    const weightsGaz = [0.16, 0.15, 0.12, 0.08, 0.04, 0.02, 0.02, 0.02, 0.03, 0.07, 0.13, 0.16];
                     const annualGazEst = 3700;
-                    let monthlyGaz = annualGazEst * weightsGaz[m] * heatingFactor;
                     
+                    const baseECS = 0.02; // Part ECS mensuelle (approx)
+                    let weight = weightsGaz[m];
+                    let monthlyGaz;
+                    
+                    // Appliquer la réduction thermostat SEULEMENT sur la part chauffage
+                    if (weight <= baseECS) {
+                         // Principalement ECS, pas d'effet thermostat
+                         monthlyGaz = annualGazEst * weight;
+                    } else {
+                         // Chauffage + ECS
+                         let heatingPart = (weight - baseECS) * annualGazEst * heatingFactor;
+                         let ecsPart = baseECS * annualGazEst;
+                         monthlyGaz = heatingPart + ecsPart;
+                    }
+
+                    // Pondération Elec
                     const weightsElec = [0.11, 0.10, 0.09, 0.08, 0.07, 0.06, 0.06, 0.06, 0.07, 0.08, 0.10, 0.12];
                     const annualElecEst = 1600;
                     let monthlyElec = annualElecEst * weightsElec[m];
@@ -594,7 +610,7 @@
                     badge.className = `px-4 py-2 rounded-xl text-2xl font-black shadow-sm border border-slate-200 dark:border-slate-700 ${colors[g]}`;
                 }
 
-                // --- GAIN CALCULATION (Adaptive) ---
+                // --- CALCUL DES ÉCONOMIES (Adaptive) ---
                 let gainTitle = "Gain 2026 Estimé";
                 let gainSubtitle = "vs Engie 2025";
                 let totalSavings = 0;
