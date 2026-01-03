@@ -138,12 +138,12 @@
                 </div>
             </div>
 
-            <!-- Tuile 2 : Performance DPE -->
+            <!-- Tuile 2 : Performance DPE (Projected 2026) -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden justify-between border-t-4 border-slate-400 dark:border-slate-600">
                 <div class="absolute top-0 right-0 p-4 opacity-10"><i data-lucide="leaf" class="w-24 h-24"></i></div>
                 <div class="flex justify-between items-end mb-4 relative z-10">
                     <div>
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Performance</h3>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Performance (2026)</h3>
                         <div class="flex items-baseline gap-2">
                             <span id="dpe-value" class="text-3xl font-extrabold text-slate-900 dark:text-white">--</span>
                             <span class="text-sm font-medium text-slate-500">kWh/m²/an</span>
@@ -546,12 +546,19 @@
                 }
 
                 // Standard Analysis Logic
-                const realData = data.filter(d => !d.isProjection);
-                const workingData = realData.length > 0 ? realData : data;
-                let factor = workingData.length > 20 ? 3 : (workingData.length > 6 ? 1 : 0.5); 
-                const gaz = workingData.filter(d=>d.type==='Gaz').reduce((a,b)=>a+b.conso,0) / factor;
-                const elec = workingData.filter(d=>d.type==='Electricité').reduce((a,b)=>a+b.conso,0) / factor;
+                // IMPORTANT: Use allData for reference calculations if viewing 2026 to have history context
+                // But for displaying gauges, we use the 'data' passed (which is filtered)
+                // If data is projection, we compare to benchmarks.
+                
+                let factor = data.length > 20 ? 3 : (data.length > 6 ? 1 : 0.5); 
+                const gaz = data.filter(d=>d.type==='Gaz').reduce((a,b)=>a+b.conso,0) / factor;
+                const elec = data.filter(d=>d.type==='Electricité').reduce((a,b)=>a+b.conso,0) / factor;
+                
+                // DPE is always annual estimate based on ALL data or current selection extended
+                // For DPE, we use ALL real data + projection to get a "Current Status"
+                // Or if viewing a specific year, that year's DPE.
                 const dpe = Math.round((gaz+elec)/CONFIG.surface);
+                
                 if (document.getElementById('dpe-value')) document.getElementById('dpe-value').innerText = dpe;
                 
                 let g = 'G', p = 92;
@@ -565,7 +572,7 @@
                     badge.className = `px-4 py-2 rounded-xl text-2xl font-black shadow-sm border border-slate-200 dark:border-slate-700 ${colors[g]}`;
                 }
 
-                // --- CALCUL DES ÉCONOMIES ---
+                // --- CALCUL DES ÉCONOMIES (Toujours basé sur 2026) ---
                 const proj2026 = allData.filter(d => d.year === 2026);
                 const volGaz2026 = proj2026.filter(d => d.type === 'Gaz').reduce((a, b) => a + b.conso, 0);
                 const volElec2026 = proj2026.filter(d => d.type === 'Electricité').reduce((a, b) => a + b.conso, 0);
