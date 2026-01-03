@@ -187,7 +187,7 @@
                 </div>
                 <div>
                     <p class="text-3xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-1" id="savings-value">Calcul...</p>
-                    <p class="text-xs text-emerald-600/80 dark:text-emerald-400/80 font-medium">vs ancien contrat Engie</p>
+                    <p class="text-xs text-emerald-600/80 dark:text-emerald-400/80 font-medium">vs ancien contrat Engie (Base annuelle)</p>
                 </div>
                 <div class="mt-4 pt-3 border-t border-emerald-100 dark:border-emerald-800/30 flex justify-between text-xs">
                     <span class="text-emerald-600 dark:text-emerald-400">Élec: <strong id="gain-elec">...</strong></span>
@@ -347,8 +347,8 @@
 
             function generateProjection2026(historicalData) {
                 const projections = [];
-                // Projection Dec 2025 (ENGIE) - Facture théorique Janvier
-                const relevantPastDec = historicalData.filter(d => d.date.getMonth() === 11); // Month 11 is Dec
+                // Projection Dec 2025 (ENGIE)
+                const relevantPastDec = historicalData.filter(d => d.date.getMonth() === 11); 
                 const getAvg = (t) => {
                     const f = relevantPastDec.filter(d => d.type === t);
                     return f.length ? f.reduce((a,b)=>a+b.conso,0)/f.length : (t==='Gaz'?800:300);
@@ -369,7 +369,7 @@
                     temp: 6.5, isProjection: true
                 });
 
-                // 2026 OHM PROJECTIONS (Bimestriel)
+                // 2026 OHM PROJECTIONS
                 const periods = [
                     { m: 1, label: '01/02/2026', range: '01/01 - 28/02', month_range: [1,2] },
                     { m: 3, label: '01/04/2026', range: '01/03 - 30/04', month_range: [3,4] },
