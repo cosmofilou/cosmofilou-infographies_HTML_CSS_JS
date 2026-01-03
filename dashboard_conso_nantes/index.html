@@ -347,41 +347,27 @@
 
             function generateProjection2026(historicalData) {
                 const projections = [];
-                // ADDING LATE 2025 PROJECTION WITH ENGIE
-                // Facture probable de Dec 2025 (couvrant Dec/Jan ou Nov/Dec selon cycle)
-                // Dernier réel est 03/12/2025 couvrant Oct/Nov (approx).
-                // Prochaine facture serait Février 2026 couvrant Dec 25 / Jan 26.
-                // MAIS l'utilisateur veut voir "fin 2025 avec contrat ENGIE".
-                // On va simuler une facture "virtuelle" de fin d'année pour combler.
-                // Disons une projection pour Décembre 2025 seul ou période restante.
-                // Simplification : On projette Janvier 2026 (facture Février) comme étant la première OHM.
-                // Et on ajoute une projection "Fin 2025" si trou.
-                // Le dernier réel s'arrête au 30/11/2025 et 02/12/2025.
-                // Donc il manque Décembre 2025.
-                
                 // Projection Dec 2025 (ENGIE) - Facture théorique Janvier
                 const relevantPastDec = historicalData.filter(d => d.date.getMonth() === 11); // Month 11 is Dec
                 const getAvg = (t) => {
                     const f = relevantPastDec.filter(d => d.type === t);
                     return f.length ? f.reduce((a,b)=>a+b.conso,0)/f.length : (t==='Gaz'?800:300);
                 };
-                // Projection Dec 2025 (1 mois) -> div 2 car factures bimestrielles usuelles
                 const avgGazDec = getAvg('Gaz') / 2; 
                 const avgElecDec = getAvg('Electricité') / 2;
                 
                 projections.push({
                     date: new Date(2025, 11, 1), endDate: new Date(2025, 11, 31),
                     dateStr: '01/01/2026', rangeStr: '01/12 - 31/12 (Est. Engie)', year: 2025, type: 'Gaz', conso: avgGazDec,
-                    cost: (avgGazDec * CONFIG.tariffs.engie.gas.kwh) + (CONFIG.tariffs.engie.gas.sub_m), // 1 mois abo
+                    cost: (avgGazDec * CONFIG.tariffs.engie.gas.kwh) + (CONFIG.tariffs.engie.gas.sub_m), 
                     temp: 6.5, isProjection: true
                 });
                 projections.push({
                     date: new Date(2025, 11, 1), endDate: new Date(2025, 11, 31),
                     dateStr: '01/01/2026', rangeStr: '01/12 - 31/12 (Est. Engie)', year: 2025, type: 'Electricité', conso: avgElecDec,
-                    cost: (avgElecDec * CONFIG.tariffs.engie.elec.kwh) + (CONFIG.tariffs.engie.elec.sub_m), // 1 mois abo
+                    cost: (avgElecDec * CONFIG.tariffs.engie.elec.kwh) + (CONFIG.tariffs.engie.elec.sub_m), 
                     temp: 6.5, isProjection: true
                 });
-
 
                 // 2026 OHM PROJECTIONS (Bimestriel)
                 const periods = [
@@ -555,7 +541,7 @@
                 sorted.forEach(d => {
                     const isGaz = d.type === 'Gaz';
                     const color = isGaz ? 'text-orange-600 bg-orange-50' : 'text-blue-600 bg-blue-50';
-                    const rowClass = d.isProjection ? 'bg-slate-50/50 dark:bg-slate-800/30 text-slate-500' : 'hover:bg-slate-50 dark:hover:bg-slate-800'; // Removed italic
+                    const rowClass = d.isProjection ? 'bg-slate-50/50 dark:bg-slate-800/30 text-slate-500' : 'hover:bg-slate-50 dark:hover:bg-slate-800'; 
                     const costDisplay = d.isProjection ? `~${d.cost.toFixed(0)} €` : `${d.cost.toFixed(2)} €`;
                     const provider = d.year >= 2026 ? 'Ohm' : 'Engie';
                     const providerClass = d.year >= 2026 ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800';
@@ -631,16 +617,57 @@
                     data: {
                         labels: arr.map(d=>d.label),
                         datasets: [
-                            { label:'Gaz', data:arr.map(d=>d.gaz), backgroundColor: bgGaz, borderColor: borderGaz, borderWidth: borderWidth, borderSkipped: false, borderRadius:4, stack:'0' },
-                            { label:'Élec', data:arr.map(d=>d.elec), backgroundColor: bgElec, borderColor: '#3b82f6', borderWidth: borderWidth, borderSkipped: false, borderRadius:4, stack:'0' },
-                            { label:'Temp', data:arr.map(d=>d.temp), type:'line', borderDash: [5, 5], borderColor: isDark ? '#94a3b8':'#475569', pointBackgroundColor: isDark ? '#94a3b8':'#475569', borderWidth:2, yAxisID:'y1' }
+                            { 
+                                label:'Gaz', 
+                                data:arr.map(d=>d.gaz), 
+                                backgroundColor: bgGaz, 
+                                borderColor: borderGaz, 
+                                borderWidth: borderWidth, 
+                                borderSkipped: false, 
+                                borderRadius:4, 
+                                stack:'Stack 0' // Explicit Stack ID
+                            },
+                            { 
+                                label:'Élec', 
+                                data:arr.map(d=>d.elec), 
+                                backgroundColor: bgElec, 
+                                borderColor: '#3b82f6', 
+                                borderWidth: borderWidth, 
+                                borderSkipped: false, 
+                                borderRadius:4, 
+                                stack:'Stack 0' // Same Stack ID for true stacking
+                            },
+                            { 
+                                label:'Temp', 
+                                data:arr.map(d=>d.temp), 
+                                type:'line', 
+                                borderDash: [5, 5], 
+                                borderColor: isDark ? '#94a3b8':'#475569', 
+                                pointBackgroundColor: isDark ? '#94a3b8':'#475569', 
+                                borderWidth:2, 
+                                yAxisID:'y1' 
+                            }
                         ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: { legend: { position:'bottom', labels: { color: isDark ? '#cbd5e1':'#334155', usePointStyle:true } }, tooltip: { callbacks: { title: (items) => { const item = items[0]; const p = arr[item.dataIndex].provider; return `${arr[item.dataIndex].fullRange} (${p})`; }, label: (context) => { let label = context.dataset.label || ''; if (label) label += ': '; if (context.parsed.y !== null) label += Math.round(context.parsed.y) + (context.dataset.type === 'line' ? ' °C' : ' kWh'); if (arr[context.dataIndex].isProjection && context.dataset.type !== 'line') label += ' (Est.)'; return label; } } } },
-                        scales: { x: { grid:{display:false}, ticks:{color: isDark ? '#94a3b8':'#64748b'} }, y: { display:false }, y1: { display:false, reverse:true } }
+                        scales: { 
+                            x: { 
+                                grid:{display:false}, 
+                                ticks:{color: isDark ? '#94a3b8':'#64748b'},
+                                stacked: true // Force Stacking X
+                            }, 
+                            y: { 
+                                display:false,
+                                stacked: true // Force Stacking Y
+                            }, 
+                            y1: { 
+                                display:false, 
+                                reverse:true 
+                            } 
+                        }
                     }
                 });
             }
