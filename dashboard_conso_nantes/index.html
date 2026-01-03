@@ -225,14 +225,14 @@
 
             <!-- Analyse (1/3) -->
             <div class="glass-card rounded-2xl p-6 xl:col-span-1 border-t-4 border-slate-900 dark:border-slate-600">
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
+                <h3 id="analysis-title" class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
                     <i data-lucide="stethoscope" class="text-indigo-500"></i> Analyse 2026
                 </h3>
                 
                 <div class="space-y-8">
                     <div>
                         <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-2 text-orange-600 dark:text-orange-400 font-bold text-sm">
+                            <div id="analysis-gaz-label" class="flex items-center gap-2 text-orange-600 dark:text-orange-400 font-bold text-sm">
                                 <i data-lucide="flame" class="w-4 h-4"></i> Gaz (0,134€/kWh)
                             </div>
                             <span id="badge-gaz" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">...</span>
@@ -248,7 +248,7 @@
 
                     <div>
                         <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
+                            <div id="analysis-elec-label" class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
                                 <i data-lucide="zap" class="w-4 h-4"></i> Élec (0,179€/kWh)
                             </div>
                             <span id="badge-elec" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">...</span>
@@ -524,6 +524,28 @@
             }
 
             function updateAnalysis(data) {
+                // Determine context
+                let displayYear = currentYearFilter === 'all' ? '2026' : currentYearFilter;
+                let isProjContext = parseInt(displayYear) >= 2026;
+                let displayProvider = isProjContext ? 'Ohm' : 'Engie';
+
+                // Update Title
+                if(document.getElementById('analysis-title')) {
+                    document.getElementById('analysis-title').innerHTML = `<i data-lucide="stethoscope" class="text-indigo-500"></i> Analyse ${displayYear === 'all' ? 'Globale' : displayYear}`;
+                }
+                
+                // Update Labels & Prices based on context
+                let priceGaz = isProjContext ? CONFIG.tariffs.ohm.gas.kwh : CONFIG.tariffs.engie.gas.kwh;
+                let priceElec = isProjContext ? CONFIG.tariffs.ohm.elec.kwh : CONFIG.tariffs.engie.elec.kwh;
+                
+                if(document.getElementById('analysis-gaz-label')) {
+                    document.getElementById('analysis-gaz-label').innerHTML = `<i data-lucide="flame" class="w-4 h-4"></i> Gaz (${priceGaz.toFixed(3)}€/kWh)`;
+                }
+                if(document.getElementById('analysis-elec-label')) {
+                    document.getElementById('analysis-elec-label').innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i> Élec (${priceElec.toFixed(3)}€/kWh)`;
+                }
+
+                // Standard Analysis Logic
                 const realData = data.filter(d => !d.isProjection);
                 const workingData = realData.length > 0 ? realData : data;
                 let factor = workingData.length > 20 ? 3 : (workingData.length > 6 ? 1 : 0.5); 
@@ -592,6 +614,8 @@
                     else if(rE < 1.3) { elE.innerText = "Dans la moyenne nationale."; bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700"; bgE.innerText = "Standard"; barE.style.width = "50%"; } 
                     else { elE.innerText = "Consommation importante."; bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-700"; bgE.innerText = "Haut"; barE.style.width = "85%"; }
                 }
+
+                if(typeof lucide !== 'undefined') lucide.createIcons();
             }
 
             function renderTable(data) {
