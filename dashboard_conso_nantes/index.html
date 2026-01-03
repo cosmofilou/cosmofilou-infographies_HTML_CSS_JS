@@ -24,7 +24,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* Base & Glassmorphism */
         body { -webkit-tap-highlight-color: transparent; }
         
         .glass-card {
@@ -44,11 +43,9 @@
             }
         }
 
-        /* Ergonomie Mobile */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Filtres Actifs */
         .filter-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; }
         .filter-btn.active { 
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
@@ -56,7 +53,6 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); transform: scale(1.05);
         }
 
-        /* DPE Styles */
         .dpe-cursor { 
             position: absolute; top: -12px; width: 4px; height: calc(100% + 24px); 
             background: #1e293b; border-radius: 2px;
@@ -65,7 +61,6 @@
         }
         @media (prefers-color-scheme: dark) { .dpe-cursor { background: #f8fafc; } }
 
-        /* Jauges */
         .gauge-fill { height: 100%; border-radius: 9999px; transition: width 1s ease-out; position: relative; overflow: hidden; }
         .gauge-fill::after {
             content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -78,7 +73,6 @@
     <!-- En-tête -->
     <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md sticky top-0 z-30 border-b border-slate-200 dark:border-slate-800 shadow-sm w-full">
         <div class="px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4 w-full">
-            
             <div class="flex items-center justify-between w-full md:w-auto">
                 <div class="flex items-center gap-3">
                     <div class="p-2.5 bg-indigo-600 rounded-xl text-white shadow-lg shadow-indigo-500/30 flex-shrink-0">
@@ -95,17 +89,14 @@
                         </div>
                     </div>
                 </div>
-
                 <button onclick="exportToCSV()" class="md:hidden p-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">
                     <i data-lucide="download" class="w-5 h-5"></i>
                 </button>
             </div>
-
             <div class="flex items-center gap-3 w-full md:w-auto overflow-hidden justify-end">
                 <div class="overflow-x-auto hide-scrollbar flex-grow md:flex-grow-0">
                     <div class="flex gap-2" id="yearFilters"></div>
                 </div>
-
                 <button onclick="exportToCSV()" class="hidden md:flex p-2 md:px-3 md:py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300 items-center gap-2 flex-shrink-0">
                     <i data-lucide="download" class="w-4 h-4"></i>
                     <span class="text-xs font-semibold">Export CSV</span>
@@ -116,7 +107,7 @@
 
     <main class="w-full px-4 py-6 space-y-6 flex-grow">
         
-        <!-- ROW 1: 3 Tuiles Alignées (Fiche Logement | Performance | Gain) -->
+        <!-- ROW 1: 3 Tuiles Alignées -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
             
             <!-- Tuile 1 : Fiche Logement -->
@@ -187,7 +178,7 @@
                 </div>
                 <div>
                     <p class="text-3xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-1" id="savings-value">Calcul...</p>
-                    <p class="text-xs text-emerald-600/80 dark:text-emerald-400/80 font-medium">vs ancien contrat Engie (Base annuelle)</p>
+                    <p class="text-xs text-emerald-600/80 dark:text-emerald-400/80 font-medium">vs si resté chez Engie (An)</p>
                 </div>
                 <div class="mt-4 pt-3 border-t border-emerald-100 dark:border-emerald-800/30 flex justify-between text-xs">
                     <span class="text-emerald-600 dark:text-emerald-400">Élec: <strong id="gain-elec">...</strong></span>
@@ -196,52 +187,9 @@
             </div>
         </div>
 
-        <!-- ROW 2: DIAGNOSTIC DÉTAILLÉ & CHART -->
+        <!-- ROW 2: CHART & DETAILS -->
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 w-full">
             
-            <!-- Analyse Consommation (1/3) -->
-            <div class="glass-card rounded-2xl p-6 xl:col-span-1 border-t-4 border-slate-900 dark:border-slate-600">
-                <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
-                    <i data-lucide="stethoscope" class="text-indigo-500"></i> Diagnostic Conso
-                </h3>
-                
-                <div class="space-y-8">
-                    <!-- Gaz -->
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-2 text-orange-600 dark:text-orange-400 font-bold text-sm">
-                                <i data-lucide="flame" class="w-4 h-4"></i> Chauffage (Gaz)
-                            </div>
-                            <span id="badge-gaz" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">...</span>
-                        </div>
-                        <div class="relative pt-1">
-                            <div class="overflow-hidden h-2 mb-1 text-xs flex rounded-full bg-slate-200 dark:bg-slate-700">
-                                <div id="gauge-gaz" class="gauge-fill bg-gradient-to-r from-orange-400 to-orange-600" style="width: 0%"></div>
-                            </div>
-                            <div class="flex justify-between text-[10px] font-semibold text-slate-400"><span>Éco</span><span>Moyen</span><span>Haut</span></div>
-                        </div>
-                        <p id="analysis-gaz-text" class="text-xs text-slate-500 dark:text-slate-400 mt-2 italic leading-tight">...</p>
-                    </div>
-
-                    <!-- Elec -->
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
-                                <i data-lucide="zap" class="w-4 h-4"></i> Élec. Courante
-                            </div>
-                            <span id="badge-elec" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">...</span>
-                        </div>
-                        <div class="relative pt-1">
-                            <div class="overflow-hidden h-2 mb-1 text-xs flex rounded-full bg-slate-200 dark:bg-slate-700">
-                                <div id="gauge-elec" class="gauge-fill bg-gradient-to-r from-blue-400 to-blue-600" style="width: 0%"></div>
-                            </div>
-                            <div class="flex justify-between text-[10px] font-semibold text-slate-400"><span>Éco</span><span>Moyen</span><span>Haut</span></div>
-                        </div>
-                        <p id="analysis-elec-text" class="text-xs text-slate-500 dark:text-slate-400 mt-2 italic leading-tight">...</p>
-                    </div>
-                </div>
-            </div>
-
             <!-- Graphique & KPIs (2/3) -->
             <div class="glass-card rounded-2xl p-0 xl:col-span-2 overflow-hidden flex flex-col">
                 <div class="p-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 flex justify-between items-center">
@@ -261,9 +209,50 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-4 flex-grow min-h-[300px]">
+                <div class="p-4 flex-grow min-h-[350px]">
                     <div class="h-full w-full relative">
                         <canvas id="energyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analyse (1/3) -->
+            <div class="glass-card rounded-2xl p-6 xl:col-span-1 border-t-4 border-slate-900 dark:border-slate-600">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
+                    <i data-lucide="stethoscope" class="text-indigo-500"></i> Analyse 2026
+                </h3>
+                
+                <div class="space-y-8">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center gap-2 text-orange-600 dark:text-orange-400 font-bold text-sm">
+                                <i data-lucide="flame" class="w-4 h-4"></i> Gaz (0,134€/kWh)
+                            </div>
+                            <span id="badge-gaz" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">...</span>
+                        </div>
+                        <div class="relative pt-1">
+                            <div class="overflow-hidden h-2 mb-1 text-xs flex rounded-full bg-slate-200 dark:bg-slate-700">
+                                <div id="gauge-gaz" class="gauge-fill bg-gradient-to-r from-orange-400 to-orange-600" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-[10px] font-semibold text-slate-400"><span>Éco</span><span>Moyen</span><span>Haut</span></div>
+                        </div>
+                        <p id="analysis-gaz-text" class="text-xs text-slate-500 dark:text-slate-400 mt-2 italic leading-tight">...</p>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
+                                <i data-lucide="zap" class="w-4 h-4"></i> Élec (0,179€/kWh)
+                            </div>
+                            <span id="badge-elec" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">...</span>
+                        </div>
+                        <div class="relative pt-1">
+                            <div class="overflow-hidden h-2 mb-1 text-xs flex rounded-full bg-slate-200 dark:bg-slate-700">
+                                <div id="gauge-elec" class="gauge-fill bg-gradient-to-r from-blue-400 to-blue-600" style="width: 0%"></div>
+                            </div>
+                            <div class="flex justify-between text-[10px] font-semibold text-slate-400"><span>Éco</span><span>Moyen</span><span>Haut</span></div>
+                        </div>
+                        <p id="analysis-elec-text" class="text-xs text-slate-500 dark:text-slate-400 mt-2 italic leading-tight">...</p>
                     </div>
                 </div>
             </div>
@@ -347,12 +336,13 @@
 
             function generateProjection2026(historicalData) {
                 const projections = [];
-                // Projection Dec 2025 (ENGIE)
+                // ADDING LATE 2025 PROJECTION WITH ENGIE (1 month)
                 const relevantPastDec = historicalData.filter(d => d.date.getMonth() === 11); 
                 const getAvg = (t) => {
                     const f = relevantPastDec.filter(d => d.type === t);
                     return f.length ? f.reduce((a,b)=>a+b.conso,0)/f.length : (t==='Gaz'?800:300);
                 };
+                // Projection Dec 2025 (1 mois) -> div 2
                 const avgGazDec = getAvg('Gaz') / 2; 
                 const avgElecDec = getAvg('Electricité') / 2;
                 
@@ -369,7 +359,7 @@
                     temp: 6.5, isProjection: true
                 });
 
-                // 2026 OHM PROJECTIONS
+                // 2026 OHM PROJECTIONS (Bimestriel)
                 const periods = [
                     { m: 1, label: '01/02/2026', range: '01/01 - 28/02', month_range: [1,2] },
                     { m: 3, label: '01/04/2026', range: '01/03 - 30/04', month_range: [3,4] },
@@ -625,7 +615,7 @@
                                 borderWidth: borderWidth, 
                                 borderSkipped: false, 
                                 borderRadius:4, 
-                                stack:'Stack 0' // Explicit Stack ID
+                                stack:'Stack 0' // Explicit Stack ID for true stacking
                             },
                             { 
                                 label:'Élec', 
@@ -635,7 +625,7 @@
                                 borderWidth: borderWidth, 
                                 borderSkipped: false, 
                                 borderRadius:4, 
-                                stack:'Stack 0' // Same Stack ID for true stacking
+                                stack:'Stack 0' // Same Stack ID to enforce stacking
                             },
                             { 
                                 label:'Temp', 
