@@ -44,7 +44,7 @@ Ce dépôt contient une collection d'infographies interactives, créées avec HT
 ### 8. Côté Parc : Visualisation Consommation Énergétique
 
 * **Description :** Tableau de bord de suivi énergétique pour le logement "Côté Parc" à Nantes. Il présente la performance énergétique (DPE), le diagnostic de consommation pour le chauffage et l'électricité courante, ainsi que l'historique annuel.
-* **Accéder à l'infographie :** [Voir l'infographie "Dashboard Conso Nantes"]((https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/dashboard_conso_nantes/index.html)
+* **Accéder à l'infographie :** [Voir l'infographie "Dashboard Conso Nantes"](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/dashboard_conso_nantes/index.html)
 
 ---
 
