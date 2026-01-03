@@ -138,12 +138,12 @@
                 </div>
             </div>
 
-            <!-- Tuile 2 : Performance DPE (Projected 2026) -->
+            <!-- Tuile 2 : Performance DPE (Dynamique) -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden justify-between border-t-4 border-slate-400 dark:border-slate-600">
                 <div class="absolute top-0 right-0 p-4 opacity-10"><i data-lucide="leaf" class="w-24 h-24"></i></div>
                 <div class="flex justify-between items-end mb-4 relative z-10">
                     <div>
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Performance (2026)</h3>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1" id="dpe-title">Performance</h3>
                         <div class="flex items-baseline gap-2">
                             <span id="dpe-value" class="text-3xl font-extrabold text-slate-900 dark:text-white">--</span>
                             <span class="text-sm font-medium text-slate-500">kWh/m²/an</span>
@@ -171,7 +171,7 @@
             <!-- Tuile 3 : Simulateur & Gain -->
             <div class="glass-card rounded-2xl p-5 border-l-4 border-emerald-500 flex flex-col justify-between bg-emerald-50/50 dark:bg-emerald-900/10">
                 <div class="flex justify-between items-start mb-2">
-                    <h3 class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Gain 2026 Estimé</h3>
+                    <h3 class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest" id="gain-title">Gain Estimé</h3>
                     <div class="bg-emerald-100 dark:bg-emerald-800 p-1.5 rounded-full text-emerald-600 dark:text-emerald-300">
                         <i data-lucide="trending-down" class="w-4 h-4"></i>
                     </div>
@@ -189,7 +189,7 @@
 
                 <div>
                     <p class="text-3xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-1" id="savings-value">Calcul...</p>
-                    <p class="text-xs text-emerald-600/80 dark:text-emerald-400/80 font-medium">vs Engie 2025 (+ Bonus Sobriété)</p>
+                    <p class="text-xs text-emerald-600/80 dark:text-emerald-400/80 font-medium" id="savings-subtitle">vs Engie</p>
                 </div>
             </div>
         </div>
@@ -226,14 +226,14 @@
             <!-- Analyse (1/3) -->
             <div class="glass-card rounded-2xl p-6 xl:col-span-1 border-t-4 border-slate-900 dark:border-slate-600">
                 <h3 id="analysis-title" class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
-                    <i data-lucide="stethoscope" class="text-indigo-500"></i> Analyse 2026
+                    <i data-lucide="stethoscope" class="text-indigo-500"></i> Analyse
                 </h3>
                 
                 <div class="space-y-8">
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <div id="analysis-gaz-label" class="flex items-center gap-2 text-orange-600 dark:text-orange-400 font-bold text-sm">
-                                <i data-lucide="flame" class="w-4 h-4"></i> Gaz (0,134€/kWh)
+                                <i data-lucide="flame" class="w-4 h-4"></i> Gaz
                             </div>
                             <span id="badge-gaz" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">...</span>
                         </div>
@@ -249,7 +249,7 @@
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <div id="analysis-elec-label" class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
-                                <i data-lucide="zap" class="w-4 h-4"></i> Élec (0,179€/kWh)
+                                <i data-lucide="zap" class="w-4 h-4"></i> Élec
                             </div>
                             <span id="badge-elec" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">...</span>
                         </div>
@@ -356,10 +356,8 @@
                     const conso = parseFrFloat(c[6]);
                     const cost = parseFrFloat(c[8]);
                     
-                    // Filter out 2022 if any slip in
                     if(d1.getFullYear() < 2023) return;
 
-                    // Répartition simplifiée
                     let startM = d1.getMonth();
                     let startY = d1.getFullYear();
                     let endM = d2.getMonth();
@@ -396,13 +394,12 @@
 
             function generateProjection2026(historicalData) {
                 const projections = [];
-                
                 // ADDING LATE 2025 PROJECTION WITH ENGIE (DEC 2025)
                 const hasDec25 = historicalData.some(d => d.year === 2025 && d.date.getMonth() === 11);
                 
                 if (!hasDec25) {
-                    const avgGazDec = 1500 / 2; // Est. 750
-                    const avgElecDec = 300 / 2; // Est. 150
+                    const avgGazDec = 1500 / 2; 
+                    const avgElecDec = 300 / 2;
                     
                     projections.push({
                         date: new Date(2025, 11, 1), endDate: new Date(2025, 11, 31),
@@ -458,7 +455,6 @@
                 const rows = csvData.trim().split('\n').slice(1);
                 let historyMonthly = processMonthlyHistory(rows);
                 const proj = generateProjection2026(historyMonthly);
-                
                 allData = [...historyMonthly, ...proj].sort((a,b) => a.date - b.date);
 
                 const realData = allData.filter(d => !d.isProjection);
@@ -534,33 +530,34 @@
                     document.getElementById('analysis-title').innerHTML = `<i data-lucide="stethoscope" class="text-indigo-500"></i> Analyse ${displayYear === 'all' ? 'Globale' : displayYear}`;
                 }
                 
-                // Update Labels & Prices based on context
+                // Update Labels
                 let priceGaz = isProjContext ? CONFIG.tariffs.ohm.gas.kwh : CONFIG.tariffs.engie.gas.kwh;
                 let priceElec = isProjContext ? CONFIG.tariffs.ohm.elec.kwh : CONFIG.tariffs.engie.elec.kwh;
-                
-                if(document.getElementById('analysis-gaz-label')) {
-                    document.getElementById('analysis-gaz-label').innerHTML = `<i data-lucide="flame" class="w-4 h-4"></i> Gaz (${priceGaz.toFixed(3)}€/kWh)`;
-                }
-                if(document.getElementById('analysis-elec-label')) {
-                    document.getElementById('analysis-elec-label').innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i> Élec (${priceElec.toFixed(3)}€/kWh)`;
-                }
+                if(document.getElementById('analysis-gaz-label')) document.getElementById('analysis-gaz-label').innerHTML = `<i data-lucide="flame" class="w-4 h-4"></i> Gaz (${priceGaz.toFixed(3)}€/kWh)`;
+                if(document.getElementById('analysis-elec-label')) document.getElementById('analysis-elec-label').innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i> Élec (${priceElec.toFixed(3)}€/kWh)`;
 
-                // Standard Analysis Logic
-                // IMPORTANT: Use allData for reference calculations if viewing 2026 to have history context
-                // But for displaying gauges, we use the 'data' passed (which is filtered)
-                // If data is projection, we compare to benchmarks.
+                // DPE Calculation Correction for Single Year Selection
+                const realData = data.filter(d => !d.isProjection);
+                // If single year selected (data has ~24 monthly entries for 2 energies), factor should be 1
+                // If 'all' (data has many years), factor should be number of years
+                let factor = 1;
+                if (currentYearFilter === 'all') {
+                     // Count distinct years in data
+                     const uniqueYears = new Set(data.map(d => d.year)).size;
+                     factor = uniqueYears > 0 ? uniqueYears : 1;
+                } else {
+                    factor = 1;
+                }
                 
-                let factor = data.length > 20 ? 3 : (data.length > 6 ? 1 : 0.5); 
+                // Working data is the filtered data passed to the function
                 const gaz = data.filter(d=>d.type==='Gaz').reduce((a,b)=>a+b.conso,0) / factor;
                 const elec = data.filter(d=>d.type==='Electricité').reduce((a,b)=>a+b.conso,0) / factor;
                 
-                // DPE is always annual estimate based on ALL data or current selection extended
-                // For DPE, we use ALL real data + projection to get a "Current Status"
-                // Or if viewing a specific year, that year's DPE.
                 const dpe = Math.round((gaz+elec)/CONFIG.surface);
                 
                 if (document.getElementById('dpe-value')) document.getElementById('dpe-value').innerText = dpe;
-                
+                if(document.getElementById('dpe-title')) document.getElementById('dpe-title').innerText = `Performance ${displayYear}`;
+
                 let g = 'G', p = 92;
                 if(dpe<=70){g='A';p=7} else if(dpe<=110){g='B';p=21} else if(dpe<=180){g='C';p=35}
                 else if(dpe<=250){g='D';p=50} else if(dpe<=330){g='E';p=64} else if(dpe<=420){g='F';p=78}
@@ -572,36 +569,73 @@
                     badge.className = `px-4 py-2 rounded-xl text-2xl font-black shadow-sm border border-slate-200 dark:border-slate-700 ${colors[g]}`;
                 }
 
-                // --- CALCUL DES ÉCONOMIES (Toujours basé sur 2026) ---
-                const proj2026 = allData.filter(d => d.year === 2026);
-                const volGaz2026 = proj2026.filter(d => d.type === 'Gaz').reduce((a, b) => a + b.conso, 0);
-                const volElec2026 = proj2026.filter(d => d.type === 'Electricité').reduce((a, b) => a + b.conso, 0);
+                // --- GAIN CALCULATION (Adaptive) ---
+                let gainTitle = "Gain 2026 Estimé";
+                let gainSubtitle = "vs Engie 2025";
+                let totalSavings = 0;
+                let gainSupplier = 0;
+                let gainThermo = 0;
 
-                const costOhm = 
-                    (volElec2026 * CONFIG.tariffs.ohm.elec.kwh + CONFIG.tariffs.ohm.elec.sub_m * 12) +
-                    (volGaz2026 * CONFIG.tariffs.ohm.gas.kwh + CONFIG.tariffs.ohm.gas.sub_m * 12);
+                if (parseInt(displayYear) < 2026 && displayYear !== 'all') {
+                    // RETROSPECTIVE MODE: What if I had Ohm in the past?
+                    gainTitle = `Gain Virtuel ${displayYear}`;
+                    gainSubtitle = "Si vous aviez été chez Ohm";
+                    
+                    const actualCost = data.reduce((sum, d) => sum + d.cost, 0);
+                    
+                    // Reconstitution du coût simulé Ohm sur la consommation réelle affichée
+                    const volGazYear = data.filter(d=>d.type==='Gaz').reduce((a,b)=>a+b.conso,0);
+                    const volElecYear = data.filter(d=>d.type==='Electricité').reduce((a,b)=>a+b.conso,0);
+                    
+                    // On assume que 'data' contient 12 mois si année complète
+                    const monthsCount = new Set(data.map(d => d.date.getMonth())).size || 12;
+                    
+                    const simCostOhm = (volElecYear * CONFIG.tariffs.ohm.elec.kwh + monthsCount * CONFIG.tariffs.ohm.elec.sub_m) + 
+                                       (volGazYear * CONFIG.tariffs.ohm.gas.kwh + monthsCount * CONFIG.tariffs.ohm.gas.sub_m);
+                    
+                    totalSavings = actualCost - simCostOhm;
+                    gainSupplier = totalSavings; // All diff is supplier
+                } else {
+                    // PROJECTION MODE (2026 or All)
+                    const proj2026 = allData.filter(d => d.year === 2026);
+                    const volGaz2026 = proj2026.filter(d => d.type === 'Gaz').reduce((a, b) => a + b.conso, 0);
+                    const volElec2026 = proj2026.filter(d => d.type === 'Electricité').reduce((a, b) => a + b.conso, 0);
 
-                const factorThermo = 1 / (1 - (currentThermostatDrop * 0.07)); 
-                const volGazRef = volGaz2026 * factorThermo;
-                
-                const costEngieRef = 
-                    (volElec2026 * CONFIG.tariffs.engie.elec.kwh + CONFIG.tariffs.engie.elec.sub_m * 12) +
-                    (volGazRef * CONFIG.tariffs.engie.gas.kwh + CONFIG.tariffs.engie.gas.sub_m * 12);
+                    const costOhm = 
+                        (volElec2026 * CONFIG.tariffs.ohm.elec.kwh + CONFIG.tariffs.ohm.elec.sub_m * 12) +
+                        (volGaz2026 * CONFIG.tariffs.ohm.gas.kwh + CONFIG.tariffs.ohm.gas.sub_m * 12);
 
-                const totalSavings = costEngieRef - costOhm;
+                    const reductionFactor = currentThermostatDrop * 0.07;
+                    const factorThermo = 1 - reductionFactor > 0 ? 1 / (1 - reductionFactor) : 1; 
+                    const volGazRef = volGaz2026 * factorThermo;
+                    
+                    const costEngieRef = 
+                        (volElec2026 * CONFIG.tariffs.engie.elec.kwh + CONFIG.tariffs.engie.elec.sub_m * 12) +
+                        (volGazRef * CONFIG.tariffs.engie.gas.kwh + CONFIG.tariffs.engie.gas.sub_m * 12);
+
+                    totalSavings = costEngieRef - costOhm;
+                    
+                    const costOhmBase = (volElec2026 * CONFIG.tariffs.ohm.elec.kwh + CONFIG.tariffs.ohm.elec.sub_m * 12) + (volGazRef * CONFIG.tariffs.ohm.gas.kwh + CONFIG.tariffs.ohm.gas.sub_m * 12);
+                    gainSupplier = costEngieRef - costOhmBase;
+                    gainThermo = costOhmBase - costOhm;
+                }
+
+                if(document.getElementById('gain-title')) document.getElementById('gain-title').innerText = gainTitle;
+                if(document.getElementById('savings-subtitle')) document.getElementById('savings-subtitle').innerText = gainSubtitle;
 
                 const savingsEl = document.getElementById('savings-value');
                 if (savingsEl) {
-                    savingsEl.innerText = `${Math.round(totalSavings)} € / an`;
-                    savingsEl.className = totalSavings > 0 ? "text-3xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-1" : "text-3xl font-extrabold text-red-700 dark:text-red-300 mb-1";
+                    if (isNaN(totalSavings)) {
+                         savingsEl.innerText = "...";
+                    } else {
+                        const sign = totalSavings > 0 ? '+' : '';
+                        savingsEl.innerText = `${sign}${Math.round(totalSavings)} € / an`;
+                        savingsEl.className = totalSavings >= 0 ? "text-3xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-1" : "text-3xl font-extrabold text-red-700 dark:text-red-300 mb-1";
+                    }
                 }
                 
-                const costOhmBase = (volElec2026 * CONFIG.tariffs.ohm.elec.kwh + CONFIG.tariffs.ohm.elec.sub_m * 12) + (volGazRef * CONFIG.tariffs.ohm.gas.kwh + CONFIG.tariffs.ohm.gas.sub_m * 12);
-                const gainSupplier = costEngieRef - costOhmBase;
-                const gainThermo = costOhmBase - costOhm;
-
-                if (document.getElementById('gain-elec')) document.getElementById('gain-elec').innerHTML = `Offre: <strong>${Math.round(gainSupplier)} €</strong>`;
-                if (document.getElementById('gain-gaz')) document.getElementById('gain-gaz').innerHTML = `Sobriété: <strong>${Math.round(gainThermo)} €</strong>`;
+                if (document.getElementById('gain-elec')) document.getElementById('gain-elec').innerHTML = `Offre: <strong>${gainSupplier > 0 ? '+' : ''}${Math.round(gainSupplier)} €</strong>`;
+                if (document.getElementById('gain-gaz')) document.getElementById('gain-gaz').innerHTML = `Sobriété: <strong>${gainThermo > 0 ? '+' : ''}${Math.round(gainThermo)} €</strong>`;
 
                 const rG = gaz / (CONFIG.benchmarks.gaz.avg * 1.15); 
                 const elG = document.getElementById('analysis-gaz-text');
@@ -704,114 +738,37 @@
                 const ctx = document.getElementById('energyChart');
                 if (!ctx) return;
                 const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                
-                // Group by Month (YYYY-MM) to ensure smooth timeline
                 const groups = {};
-                
-                // Sort by date to fill timeline
                 data.sort((a,b) => a.date - b.date);
-                
                 data.forEach(d => {
-                    // Use start date as key for monthly bars
-                    // Note: d.dateStr is DD/MM/YYYY
-                    const k = d.date.toISOString().slice(0,7); // YYYY-MM
-                    
+                    const k = d.date.toISOString().slice(0,7);
                     if(!groups[k]) {
-                        groups[k] = { 
-                            label: d.date.toLocaleDateString('fr',{month:'short', year:'2-digit'}), 
-                            fullRange: d.rangeStr, // Simplified for chart tooltip
-                            gaz:0, elec:0, temp:d.temp, sort: d.date,
-                            isProjection: d.isProjection,
-                            provider: d.provider
-                        };
+                        groups[k] = { label: d.date.toLocaleDateString('fr',{month:'short', year:'2-digit'}), fullRange: d.rangeStr, gaz:0, elec:0, temp:d.temp, sort: d.date, isProjection: d.isProjection, provider: d.provider };
                     }
                     if(d.type==='Gaz') groups[k].gaz += d.conso; 
                     else groups[k].elec += d.conso;
                 });
-                
                 const arr = Object.values(groups).sort((a,b)=>a.sort-b.sort);
-
                 if(chartInstance) chartInstance.destroy();
-                
                 const bgGaz = arr.map(d => d.isProjection ? 'rgba(249, 115, 22, 0.4)' : '#f97316');
                 const bgElec = arr.map(d => d.isProjection ? 'rgba(59, 130, 246, 0.4)' : '#3b82f6');
                 const borderGaz = arr.map(d => d.isProjection ? '#f97316' : '#f97316');
                 const borderWidth = arr.map(d => d.isProjection ? 2 : 0);
-
                 chartInstance = new Chart(ctx.getContext('2d'), {
                     type: 'bar',
                     data: {
                         labels: arr.map(d=>d.label),
                         datasets: [
-                            { 
-                                label:'Gaz', 
-                                data:arr.map(d=>d.gaz), 
-                                backgroundColor: bgGaz, 
-                                borderColor: borderGaz, 
-                                borderWidth: borderWidth, 
-                                borderSkipped: false, 
-                                borderRadius:4, 
-                                stack:'Stack 0' 
-                            },
-                            { 
-                                label:'Élec', 
-                                data:arr.map(d=>d.elec), 
-                                backgroundColor: bgElec, 
-                                borderColor: '#3b82f6', 
-                                borderWidth: borderWidth, 
-                                borderSkipped: false, 
-                                borderRadius:4, 
-                                stack:'Stack 0' 
-                            },
-                            { 
-                                label:'Temp', 
-                                data:arr.map(d=>d.temp), 
-                                type:'line', 
-                                borderDash: [5, 5], 
-                                borderColor: isDark ? '#94a3b8':'#475569', 
-                                pointBackgroundColor: isDark ? '#94a3b8':'#475569', 
-                                borderWidth:2, 
-                                yAxisID:'y1' 
-                            }
+                            { label:'Gaz', data:arr.map(d=>d.gaz), backgroundColor: bgGaz, borderColor: borderGaz, borderWidth: borderWidth, borderSkipped: false, borderRadius:4, stack:'Stack 0' },
+                            { label:'Élec', data:arr.map(d=>d.elec), backgroundColor: bgElec, borderColor: '#3b82f6', borderWidth: borderWidth, borderSkipped: false, borderRadius:4, stack:'Stack 0' },
+                            { label:'Temp', data:arr.map(d=>d.temp), type:'line', borderDash: [5, 5], borderColor: isDark ? '#94a3b8':'#475569', pointBackgroundColor: isDark ? '#94a3b8':'#475569', borderWidth:2, yAxisID:'y1' }
                         ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { 
-                            legend: { position:'bottom', labels: { color: isDark ? '#cbd5e1':'#334155', usePointStyle:true } }, 
-                            tooltip: { 
-                                callbacks: { 
-                                    title: (items) => { 
-                                        const item = items[0]; 
-                                        const p = arr[item.dataIndex].provider; 
-                                        return `${arr[item.dataIndex].fullRange} (${p})`; 
-                                    }, 
-                                    label: (context) => { 
-                                        let label = context.dataset.label || ''; 
-                                        if (label) label += ': '; 
-                                        if (context.parsed.y !== null) label += Math.round(context.parsed.y) + (context.dataset.type === 'line' ? ' °C' : ' kWh'); 
-                                        if (arr[context.dataIndex].isProjection && context.dataset.type !== 'line') label += ' (Est.)'; 
-                                        return label; 
-                                    } 
-                                } 
-                            } 
-                        },
-                        scales: { 
-                            x: { 
-                                grid:{display:false}, 
-                                ticks:{color: isDark ? '#94a3b8':'#64748b'},
-                                stacked: true // Force Stacking X
-                            }, 
-                            y: { 
-                                display:false,
-                                stacked: true // Force Stacking Y
-                            }, 
-                            y1: { 
-                                display:false, 
-                                reverse:true 
-                            } 
-                        }
+                        plugins: { legend: { position:'bottom', labels: { color: isDark ? '#cbd5e1':'#334155', usePointStyle:true } }, tooltip: { callbacks: { title: (items) => { const item = items[0]; const p = arr[item.dataIndex].provider; return `${arr[item.dataIndex].fullRange} (${p})`; }, label: (context) => { let label = context.dataset.label || ''; if (label) label += ': '; if (context.parsed.y !== null) label += Math.round(context.parsed.y) + (context.dataset.type === 'line' ? ' °C' : ' kWh'); if (arr[context.dataIndex].isProjection && context.dataset.type !== 'line') label += ' (Est.)'; return label; } } } },
+                        scales: { x: { grid:{display:false}, ticks:{color: isDark ? '#94a3b8':'#64748b'}, stacked: true }, y: { display:false, stacked: true }, y1: { display:false, reverse:true } }
                     }
                 });
             }
