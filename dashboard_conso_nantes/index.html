@@ -68,6 +68,11 @@
             content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
         }
+        
+        /* Projection Badge */
+        .badge-proj {
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.2) 5px, rgba(255,255,255,0.2) 10px);
+        }
     </style>
 </head>
 <body class="bg-[#f0f4f8] text-slate-800 dark:bg-[#0f172a] dark:text-slate-200 antialiased flex flex-col min-h-screen">
@@ -250,6 +255,11 @@
             benchmarks: {
                 gaz: { avg: 110 * 42, max: 150 * 42 },
                 elec: { avg: 1800, max: 3000 }
+            },
+            tariffs2026: {
+                // Ohm Energie Extra Eco Fixe
+                elec: { kwh: 0.1794, sub_m: 16.79 }, // 6kVA
+                gas: { kwh: 0.1340, sub_m: 10.95 }   // Plage B0
             }
         };
 
@@ -303,46 +313,127 @@
         // FORMAT DATE SHORT (JJ/MM)
         const formatDateShort = (d) => d.toLocaleDateString('fr',{day:'2-digit', month:'2-digit'});
 
+        // GENERATE PROJECTION 2026
+        function generateProjection2026(historicalData) {
+            const projections = [];
+            // Periods to generate: Feb, Apr, Jun, Aug, Oct, Dec 2026
+            const periods = [
+                { m: 1, label: '01/02/2026', range: '01/12 - 31/01', month_range: [12,1] }, // Facture Février (Conso Déc/Jan)
+                { m: 3, label: '01/04/2026', range: '01/02 - 31/03', month_range: [2,3] },
+                { m: 5, label: '01/06/2026', range: '01/04 - 31/05', month_range: [4,5] },
+                { m: 7, label: '01/08/2026', range: '01/06 - 31/07', month_range: [6,7] },
+                { m: 9, label: '01/10/2026', range: '01/08 - 30/09', month_range: [8,9] },
+                { m: 11, label: '01/12/2026', range: '01/10 - 30/11', month_range: [10,11] }
+            ];
+
+            periods.forEach(p => {
+                // Find average consumption for this period in past years
+                // We map periods roughly by month of invoice
+                const relevantPastData = historicalData.filter(d => d.date.getMonth() === p.m || d.date.getMonth() === p.m - 1 || d.date.getMonth() === p.m + 1);
+                
+                // Helper to avg
+                const getAvgConso = (type) => {
+                    const filtered = relevantPastData.filter(d => d.type === type);
+                    if(filtered.length === 0) return type === 'Gaz' ? 200 : 250; // Fallback
+                    const sum = filtered.reduce((a, b) => a + b.conso, 0);
+                    return sum / filtered.length;
+                };
+
+                const avgGaz = getAvgConso('Gaz');
+                const avgElec = getAvgConso('Electricité');
+                
+                // Calc Temp
+                const temp = (tempNantesMap[p.month_range[0]] + tempNantesMap[p.month_range[1]]) / 2;
+
+                // Create Gas Object
+                projections.push({
+                    date: parseFrDate(p.label), 
+                    endDate: parseFrDate(p.label), // Dummy end date for sort
+                    dateStr: p.label,
+                    rangeStr: p.range + ' (Proj.)',
+                    year: 2026,
+                    type: 'Gaz',
+                    conso: avgGaz,
+                    cost: (avgGaz * CONFIG.tariffs2026.gas.kwh) + (CONFIG.tariffs2026.gas.sub_m * 2),
+                    temp: temp,
+                    isProjection: true
+                });
+
+                // Create Elec Object
+                projections.push({
+                    date: parseFrDate(p.label),
+                    endDate: parseFrDate(p.label),
+                    dateStr: p.label,
+                    rangeStr: p.range + ' (Proj.)',
+                    year: 2026,
+                    type: 'Electricité',
+                    conso: avgElec,
+                    cost: (avgElec * CONFIG.tariffs2026.elec.kwh) + (CONFIG.tariffs2026.elec.sub_m * 2),
+                    temp: temp,
+                    isProjection: true
+                });
+            });
+            return projections;
+        }
+
         function initData() {
             const rows = csvData.trim().split('\n').slice(1);
-            allData = rows.map(r => {
+            let parsed = rows.map(r => {
                 const c = r.split(';');
                 const d1 = parseFrDate(c[1]), d2 = parseFrDate(c[2]);
                 const t1 = tempNantesMap[d1.getMonth()+1], t2 = tempNantesMap[d2.getMonth()+1];
                 return {
                     date: d1, endDate: d2, dateStr: c[1],
-                    rangeStr: `${formatDateShort(d1)} - ${formatDateShort(d2)}`, // Période lisible
+                    rangeStr: `${formatDateShort(d1)} - ${formatDateShort(d2)}`,
                     year: d1.getFullYear(),
                     type: c[3],
                     conso: parseFrFloat(c[6]),
                     cost: parseFrFloat(c[8]),
-                    temp: (t1+t2)/2
+                    temp: (t1+t2)/2,
+                    isProjection: false
                 };
-            }).sort((a,b) => a.date - b.date);
+            });
 
-            if(allData.length) {
-                const max = new Date(Math.max(...allData.map(e=>e.endDate)));
+            // Add Projection 2026
+            const proj = generateProjection2026(parsed);
+            allData = [...parsed, ...proj].sort((a,b) => a.date - b.date);
+
+            // Update Last Date (Only real data)
+            const realData = allData.filter(d => !d.isProjection);
+            if(realData.length) {
+                const max = new Date(Math.max(...realData.map(e=>e.endDate)));
                 document.getElementById('last-updated-date').innerText = max.toLocaleDateString('fr-FR');
             }
         }
 
         function exportToCSV() {
-            const h = "Date Début;Date Fin;Type;kWh;Euro;Temp\n";
-            const r = allData.map(d => `${d.date.toLocaleDateString()};${d.endDate.toLocaleDateString()};${d.type};${d.conso};${d.cost.toFixed(2)};${d.temp.toFixed(1)}`).join("\n");
+            const h = "Date;Période;Type;kWh;Euro;Temp;Statut\n";
+            const r = allData.map(d => `${d.date.toLocaleDateString()};${d.rangeStr};${d.type};${d.conso.toFixed(0)};${d.cost.toFixed(2)};${d.temp.toFixed(1)};${d.isProjection?'Projection':'Réel'}`).join("\n");
             const blob = new Blob(["\uFEFF"+h+r], {type:'text/csv;charset=utf-8;'});
             const url = URL.createObjectURL(blob);
-            const a = document.createElement("a"); a.href=url; a.download=`releves_coteduparc_${new Date().toISOString().slice(0,10)}.csv`;
+            const a = document.createElement("a"); a.href=url; a.download=`releves_coteduparc_proj2026_${new Date().toISOString().slice(0,10)}.csv`;
             a.click();
         }
 
         function renderDashboard(year) {
             const data = year === 'all' ? allData : allData.filter(d => d.year == year);
             
-            document.querySelectorAll('#yearFilters button').forEach(b => {
-                b.className = `filter-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm ${b.dataset.year === year 
+            // Generate buttons if not exist or update
+            const years = [...new Set(allData.map(d=>d.year))].sort();
+            const fContainer = document.getElementById('yearFilters');
+            fContainer.innerHTML = '';
+            
+            const mkBtn = (lbl, val) => {
+                const b = document.createElement('button');
+                b.innerText=lbl; b.dataset.year=val; 
+                b.className = `filter-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm ${val == year 
                     ? 'active ring-2 ring-blue-500 ring-offset-2' 
                     : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50'}`;
-            });
+                b.onclick=()=>renderDashboard(val);
+                fContainer.appendChild(b);
+            };
+            mkBtn('Tout', 'all');
+            years.forEach(y => mkBtn(y, y));
 
             const sum = (t) => Math.round(data.filter(d=>d.type===t).reduce((a,b)=>a+b.conso,0));
             const cost = Math.round(data.reduce((a,b)=>a+b.cost,0));
@@ -356,9 +447,14 @@
         }
 
         function updateAnalysis(data) {
-            let factor = data.length > 20 ? 3 : 1; 
-            const gaz = data.filter(d=>d.type==='Gaz').reduce((a,b)=>a+b.conso,0) / factor;
-            const elec = data.filter(d=>d.type==='Electricité').reduce((a,b)=>a+b.conso,0) / factor;
+            // Only use REAL data for DPE/Analysis to avoid skewing with estimates
+            const realData = data.filter(d => !d.isProjection);
+            // If viewing 2026 only, use projection data for analysis but warn
+            const workingData = realData.length > 0 ? realData : data;
+            
+            let factor = workingData.length > 20 ? 3 : (workingData.length > 6 ? 1 : 0.5); 
+            const gaz = workingData.filter(d=>d.type==='Gaz').reduce((a,b)=>a+b.conso,0) / factor;
+            const elec = workingData.filter(d=>d.type==='Electricité').reduce((a,b)=>a+b.conso,0) / factor;
             
             const dpe = Math.round((gaz+elec)/CONFIG.surface);
             document.getElementById('dpe-value').innerText = dpe;
@@ -436,11 +532,14 @@
             sorted.forEach(d => {
                 const isGaz = d.type === 'Gaz';
                 const color = isGaz ? 'text-orange-600 bg-orange-50' : 'text-blue-600 bg-blue-50';
+                const rowClass = d.isProjection ? 'bg-slate-50/50 dark:bg-slate-800/30 italic text-slate-500' : 'hover:bg-slate-50 dark:hover:bg-slate-800';
+                const costDisplay = d.isProjection ? `~${d.cost.toFixed(0)} €` : `${d.cost.toFixed(2)} €`;
                 
                 html += `
-                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                <tr class="${rowClass} transition-colors">
                     <td class="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">
                         ${d.rangeStr}
+                        ${d.isProjection ? '<span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-800">PROJ</span>' : ''}
                     </td>
                     <td class="px-6 py-4">
                         <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${color}">
@@ -448,7 +547,7 @@
                         </span>
                     </td>
                     <td class="px-6 py-4 text-sm font-bold text-slate-700 dark:text-slate-200">${Math.round(d.conso)} kWh</td>
-                    <td class="px-6 py-4 text-right text-sm font-mono text-slate-600 dark:text-slate-400">${d.cost.toFixed(2)} €</td>
+                    <td class="px-6 py-4 text-right text-sm font-mono text-slate-600 dark:text-slate-400">${costDisplay}</td>
                 </tr>`;
             });
             html += `</tbody></table>`;
@@ -460,9 +559,11 @@
                 const icon = isGaz ? 'flame' : 'zap';
                 const colorClass = isGaz ? 'text-orange-600' : 'text-blue-600';
                 const borderClass = isGaz ? 'border-l-4 border-orange-500' : 'border-l-4 border-blue-500';
+                const opacityClass = d.isProjection ? 'opacity-75 border-l-2 border-dashed' : '';
+                const costDisplay = d.isProjection ? `~${d.cost.toFixed(0)} €` : `${d.cost.toFixed(2)} €`;
 
                 html += `
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm ${borderClass} flex justify-between items-center">
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm ${borderClass} ${opacityClass} flex justify-between items-center">
                     <div>
                         <p class="text-xs text-slate-400 font-semibold mb-1">${d.rangeStr}</p>
                         <div class="flex items-center gap-2 ${colorClass} font-bold text-sm">
@@ -473,7 +574,7 @@
                     </div>
                     <div class="text-right">
                         <p class="text-lg font-bold text-slate-800 dark:text-white">${Math.round(d.conso)} <span class="text-xs font-normal">kWh</span></p>
-                        <p class="text-sm font-mono text-slate-600 dark:text-slate-400">${d.cost.toFixed(2)} €</p>
+                        <p class="text-sm font-mono text-slate-600 dark:text-slate-400">${costDisplay}</p>
                     </div>
                 </div>`;
             });
@@ -493,8 +594,9 @@
                 const k = d.date.toISOString().slice(0,7);
                 if(!groups[k]) groups[k] = { 
                     label: d.date.toLocaleDateString('fr',{month:'short', year:'2-digit'}), 
-                    fullRange: `${d.rangeStr}`, // Pour Tooltip
-                    gaz:0, elec:0, temp:d.temp, sort: d.date 
+                    fullRange: `${d.rangeStr}`, 
+                    gaz:0, elec:0, temp:d.temp, sort: d.date,
+                    isProjection: d.isProjection
                 };
                 if(d.type==='Gaz') groups[k].gaz += d.conso; else groups[k].elec += d.conso;
             });
@@ -502,14 +604,49 @@
 
             if(chartInstance) chartInstance.destroy();
             
+            // Patterns for Projection bars
+            // Note: Chart.js patterns require more setup, using simple color opacity for now
+            const bgGaz = arr.map(d => d.isProjection ? 'rgba(249, 115, 22, 0.4)' : '#f97316');
+            const bgElec = arr.map(d => d.isProjection ? 'rgba(59, 130, 246, 0.4)' : '#3b82f6');
+            const borderGaz = arr.map(d => d.isProjection ? '#f97316' : '#f97316'); // Border keep solid
+            const borderWidth = arr.map(d => d.isProjection ? 2 : 0);
+
             chartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: arr.map(d=>d.label),
                     datasets: [
-                        { label:'Gaz', data:arr.map(d=>d.gaz), backgroundColor:'#f97316', borderRadius:4, stack:'0' },
-                        { label:'Élec', data:arr.map(d=>d.elec), backgroundColor:'#3b82f6', borderRadius:4, stack:'0' },
-                        { label:'Temp', data:arr.map(d=>d.temp), type:'line', borderColor: isDark ? '#94a3b8':'#475569', pointBackgroundColor: isDark ? '#94a3b8':'#475569', borderWidth:2, yAxisID:'y1' }
+                        { 
+                            label:'Gaz', 
+                            data:arr.map(d=>d.gaz), 
+                            backgroundColor: bgGaz, 
+                            borderColor: borderGaz,
+                            borderWidth: borderWidth,
+                            borderSkipped: false, // Full border for projection
+                            borderRadius:4, 
+                            stack:'0' 
+                        },
+                        { 
+                            label:'Élec', 
+                            data:arr.map(d=>d.elec), 
+                            backgroundColor: bgElec,
+                            borderColor: '#3b82f6',
+                            borderWidth: borderWidth,
+                            borderSkipped: false,
+                            borderRadius:4, 
+                            stack:'0' 
+                        },
+                        { 
+                            label:'Temp', 
+                            data:arr.map(d=>d.temp), 
+                            type:'line', 
+                            borderDash: [5, 5], // Dashed line for everything or check if projection? 
+                            // Simplifying: dashed line for projection part is complex in one dataset. Keeping solid.
+                            borderColor: isDark ? '#94a3b8':'#475569', 
+                            pointBackgroundColor: isDark ? '#94a3b8':'#475569', 
+                            borderWidth:2, 
+                            yAxisID:'y1' 
+                        }
                     ]
                 },
                 options: {
@@ -522,6 +659,13 @@
                                 title: (items) => {
                                     const item = items[0];
                                     return arr[item.dataIndex].fullRange;
+                                },
+                                label: (context) => {
+                                    let label = context.dataset.label || '';
+                                    if (label) label += ': ';
+                                    if (context.parsed.y !== null) label += Math.round(context.parsed.y) + (context.dataset.type === 'line' ? ' °C' : ' kWh');
+                                    if (arr[context.dataIndex].isProjection && context.dataset.type !== 'line') label += ' (Est.)';
+                                    return label;
                                 }
                             }
                         }
@@ -536,18 +680,6 @@
         }
 
         initData();
-        
-        const years = [...new Set(allData.map(d=>d.year))].sort();
-        const fContainer = document.getElementById('yearFilters');
-        const mkBtn = (lbl, val) => {
-            const b = document.createElement('button');
-            b.innerText=lbl; b.dataset.year=val; 
-            b.onclick=()=>renderDashboard(val);
-            fContainer.appendChild(b);
-        };
-        mkBtn('Tout', 'all');
-        years.forEach(y => mkBtn(y, y));
-        
         renderDashboard('all');
 
     </script>
