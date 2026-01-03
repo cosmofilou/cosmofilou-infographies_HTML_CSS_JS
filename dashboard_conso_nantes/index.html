@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord Énergétique - Côté Parc</title>
+    
+    <!-- Tailwind CSS Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'media',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: { slate: { 850: '#151e2e' } }
+                }
+            }
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base & Glassmorphism */
+        body { -webkit-tap-highlight-color: transparent; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        @media (prefers-color-scheme: dark) {
+            .glass-card {
+                background: rgba(30, 41, 59, 0.85);
+                border-color: rgba(51, 65, 85, 0.8);
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        /* Ergonomie Mobile */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Filtres Actifs */
+        .filter-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; }
+        .filter-btn.active { 
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
+            color: white; border-color: transparent; 
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); transform: scale(1.05);
+        }
+
+        /* DPE Styles */
+        .dpe-cursor { 
+            position: absolute; top: -12px; width: 4px; height: calc(100% + 24px); 
+            background: #1e293b; border-radius: 2px;
+            transform: translateX(-50%); transition: left 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3); z-index: 10;
+        }
+        @media (prefers-color-scheme: dark) { .dpe-cursor { background: #f8fafc; } }
+
+        /* Jauges */
+        .gauge-fill { height: 100%; border-radius: 9999px; transition: width 1s ease-out; position: relative; overflow: hidden; }
+        .gauge-fill::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+        }
+    </style>
+</head>
+<body class="bg-[#f0f4f8] text-slate-800 dark:bg-[#0f172a] dark:text-slate-200 antialiased flex flex-col min-h-screen">
+
+    <!-- En-tête Corrigé (Plus de chevauchement) -->
+    <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md sticky top-0 z-30 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            <!-- Partie Gauche : Titre + Export Mobile -->
+            <div class="flex items-center justify-between w-full md:w-auto">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-indigo-600 rounded-xl text-white shadow-lg shadow-indigo-500/30 flex-shrink-0">
+                        <i data-lucide="home" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-extrabold text-slate-900 dark:text-white leading-tight">Côté Parc</h1>
+                        <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
+                            <span>42m² • RDC</span>
+                            <span class="text-slate-300 dark:text-slate-700">|</span>
+                            <span class="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                                <i data-lucide="check-circle" class="w-3 h-3"></i> MAJ <span id="last-updated-date">--/--</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Bouton (Visible uniquement sur Mobile) -->
+                <button onclick="exportToCSV()" class="md:hidden p-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">
+                    <i data-lucide="download" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Partie Droite : Filtres + Export Desktop -->
+            <div class="flex items-center gap-3 w-full md:w-auto overflow-hidden">
+                <!-- Filtres (Scrollable) -->
+                <div class="overflow-x-auto hide-scrollbar flex-grow md:flex-grow-0">
+                    <div class="flex gap-2" id="yearFilters"></div>
+                </div>
+
+                <!-- Export Bouton (Visible uniquement sur Desktop) -->
+                <button onclick="exportToCSV()" class="hidden md:flex p-2 md:px-3 md:py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300 items-center gap-2 flex-shrink-0">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    <span class="text-xs font-semibold">Export CSV</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 flex-grow">
+        
+        <!-- SECTION 1: DPE -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="glass-card rounded-2xl p-5 border-l-4 border-indigo-500 flex flex-col justify-center">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Le Logement</h3>
+                    <i data-lucide="map-pin" class="w-4 h-4 text-indigo-500"></i>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-indigo-50 dark:bg-slate-800 p-3 rounded-xl">
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">Surface</p>
+                        <p class="text-lg font-bold text-indigo-900 dark:text-indigo-300">42 <span class="text-xs">m²</span></p>
+                    </div>
+                    <div class="bg-blue-50 dark:bg-slate-800 p-3 rounded-xl">
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold">Expo</p>
+                        <p class="text-lg font-bold text-blue-900 dark:text-blue-300">Nord-Est</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-5 lg:col-span-2 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10"><i data-lucide="leaf" class="w-24 h-24"></i></div>
+                <div class="flex justify-between items-end mb-4 relative z-10">
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Performance Énergétique</h3>
+                        <div class="flex items-baseline gap-2">
+                            <span id="dpe-value" class="text-3xl font-extrabold text-slate-900 dark:text-white">--</span>
+                            <span class="text-sm font-medium text-slate-500">kWh/m²/an</span>
+                        </div>
+                    </div>
+                    <div id="dpe-grade-badge" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-2xl font-black text-slate-800 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">-</div>
+                </div>
+                <div class="h-4 flex rounded-full overflow-hidden shadow-inner mt-2">
+                    <div class="bg-emerald-500 w-[14%]"></div>
+                    <div class="bg-emerald-400 w-[14%]"></div>
+                    <div class="bg-emerald-200 w-[14%]"></div>
+                    <div class="bg-yellow-400 w-[14%]"></div>
+                    <div class="bg-orange-400 w-[14%]"></div>
+                    <div class="bg-orange-600 w-[14%]"></div>
+                    <div class="bg-red-600 w-[16%]"></div>
+                </div>
+                <div class="relative h-4 mt-1">
+                    <div id="dpe-cursor" class="dpe-cursor"></div>
+                    <div class="flex justify-between text-[10px] font-bold text-slate-400 px-1 mt-1"><span>A</span><span>D</span><span>G</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: VERDICT -->
+        <div class="glass-card rounded-2xl p-6 border-t-4 border-slate-900 dark:border-slate-600">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <i data-lucide="stethoscope" class="text-indigo-500"></i> Diagnostic Consommation
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-700">
+                <div class="pt-4 md:pt-0 md:pr-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center gap-2 text-orange-600 dark:text-orange-400 font-bold">
+                            <div class="p-1.5 bg-orange-100 dark:bg-orange-900/30 rounded-lg"><i data-lucide="flame" class="w-4 h-4"></i></div>
+                            Chauffage
+                        </div>
+                        <span id="badge-gaz" class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600">...</span>
+                    </div>
+                    <p id="analysis-gaz-text" class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed min-h-[40px] mb-4">...</p>
+                    <div class="relative pt-1">
+                        <div class="flex mb-2 items-center justify-between text-xs font-semibold text-slate-400"><span>Éco</span><span>Moyen</span><span>Haut</span></div>
+                        <div class="overflow-hidden h-2 mb-4 text-xs flex rounded-full bg-slate-200 dark:bg-slate-700">
+                            <div id="gauge-gaz" class="gauge-fill bg-gradient-to-r from-orange-400 to-orange-600" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-4 md:pt-0 md:pl-8">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold">
+                            <div class="p-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-lg"><i data-lucide="zap" class="w-4 h-4"></i></div>
+                            Élec. Courante
+                        </div>
+                        <span id="badge-elec" class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600">...</span>
+                    </div>
+                    <p id="analysis-elec-text" class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed min-h-[40px] mb-4">...</p>
+                    <div class="relative pt-1">
+                        <div class="flex mb-2 items-center justify-between text-xs font-semibold text-slate-400"><span>Éco</span><span>Moyen</span><span>Haut</span></div>
+                        <div class="overflow-hidden h-2 mb-4 text-xs flex rounded-full bg-slate-200 dark:bg-slate-700">
+                            <div id="gauge-elec" class="gauge-fill bg-gradient-to-r from-blue-400 to-blue-600" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: CHART & KPIs -->
+        <div class="flex flex-col lg:flex-row gap-6">
+            <div class="grid grid-cols-3 lg:grid-cols-1 gap-4 lg:w-48 flex-shrink-0">
+                <div class="glass-card p-4 rounded-xl flex flex-col justify-center items-center lg:items-start text-center lg:text-left border-b-4 lg:border-b-0 lg:border-l-4 border-blue-500">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Élec</span>
+                    <span class="text-lg lg:text-2xl font-bold text-slate-800 dark:text-white" id="kpi-elec">...</span>
+                </div>
+                <div class="glass-card p-4 rounded-xl flex flex-col justify-center items-center lg:items-start text-center lg:text-left border-b-4 lg:border-b-0 lg:border-l-4 border-orange-500">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Gaz</span>
+                    <span class="text-lg lg:text-2xl font-bold text-slate-800 dark:text-white" id="kpi-gaz">...</span>
+                </div>
+                <div class="glass-card p-4 rounded-xl flex flex-col justify-center items-center lg:items-start text-center lg:text-left border-b-4 lg:border-b-0 lg:border-l-4 border-emerald-500">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Coût</span>
+                    <span class="text-lg lg:text-2xl font-bold text-slate-800 dark:text-white" id="kpi-cost">...</span>
+                </div>
+            </div>
+            <div class="glass-card p-4 rounded-2xl flex-grow">
+                <div class="h-64 md:h-80 w-full relative">
+                    <canvas id="energyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: RECORDS (Mobile Cards / Desktop Table) -->
+        <div class="glass-card rounded-2xl overflow-hidden">
+            <div class="px-6 py-4 bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
+                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Détail des factures</h3>
+            </div>
+            <div id="records-container" class="p-0"></div>
+        </div>
+
+    </main>
+
+    <footer class="mt-auto py-6 text-center border-t border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50">
+        <p class="text-xs text-slate-500">© 2026 • Données Personnelles • Généré par IA</p>
+    </footer>
+
+    <script>
+        // CONFIG
+        const CONFIG = {
+            surface: 42,
+            benchmarks: {
+                gaz: { avg: 110 * 42, max: 150 * 42 },
+                elec: { avg: 1800, max: 3000 }
+            }
+        };
+
+        // CSV DATA
+        const csvData = `Date_Facture;Période_Debut;Période_Fin;Type_Energie;Index_Debut;Index_Fin;Conso_kWh;Prix_Unitaire_HT;Montant_TTC;Type_Estime_Reel
+03/12/2025;01/10/2025;30/11/2025;Gaz;3102;3143;462;0,04608;112,66;Réel
+03/12/2025;03/10/2025;02/12/2025;Electricité;9379;9648;269;0,10281;88,67;Réel
+03/10/2025;01/08/2025;30/09/2025;Gaz;3085;3102;194;0,04608;82,88;Réel
+03/10/2025;03/08/2025;02/10/2025;Electricité;9161;9379;218;0,10281;70,57;Réel
+03/08/2025;01/06/2025;31/07/2025;Gaz;3068;3085;192;0,04608;82,35;Réel
+03/08/2025;03/06/2025;02/08/2025;Electricité;8924;9161;237;0,10281;74,64;Réel
+03/06/2025;01/04/2025;31/05/2025;Gaz;3037;3068;346;0,04608;89,21;Réel
+03/06/2025;03/04/2025;02/06/2025;Electricité;8688;8924;236;0,10281;71,77;Réel
+03/04/2025;01/02/2025;31/03/2025;Gaz;2951;3037;962;0,04608;154,23;Réel
+03/04/2025;03/02/2025;02/04/2025;Electricité;8421;8688;267;0,10281;94,87;Réel
+03/02/2025;01/12/2024;31/01/2025;Gaz;2818;2951;1500;0,04608;205,07;Réel
+03/02/2025;03/12/2024;02/02/2025;Electricité;8180;8421;241;0,10281;75,34;Réel
+03/12/2024;26/09/2024;30/11/2024;Gaz;2737;2818;919;0,06548;141,72;Réel
+03/12/2024;03/10/2024;02/12/2024;Electricité;7947;8180;233;0,12701;68,56;Réel
+03/10/2024;01/08/2024;25/09/2024;Gaz;2717;2737;226;0,06548;71,70;Réel
+03/10/2024;03/08/2024;02/10/2024;Electricité;7743;7947;204;0,12701;61,72;Réel
+04/08/2024;01/06/2024;31/07/2024;Gaz;2689;2717;311;0,06548;83,37;Réel
+04/08/2024;03/06/2024;02/08/2024;Electricité;7512;7743;231;0,12701;66,52;Réel
+04/06/2024;01/04/2024;31/05/2024;Gaz;2625;2689;714;0,06548;112,25;Réel
+04/06/2024;03/04/2024;02/06/2024;Electricité;7297;7512;215;0,12701;62,88;Réel
+03/04/2024;01/02/2024;31/03/2024;Gaz;2534;2625;1010;0,06548;141,21;Estimé
+03/04/2024;03/02/2024;02/04/2024;Electricité;7064;7297;233;0,12701;68,31;Réel
+04/02/2024;30/11/2023;31/01/2024;Gaz;2397;2534;1542;0,06548;185,74;Réel
+04/02/2024;03/12/2023;02/02/2024;Electricité;6816;7064;248;0,12701;64,95;Réel
+03/12/2023;01/10/2023;29/11/2023;Gaz;2341;2397;625;0,06548;97,99;Réel
+03/12/2023;03/10/2023;02/12/2023;Electricité;6574;6816;242;0,12701;64,56;Réel
+04/10/2023;01/08/2023;30/09/2023;Gaz;2316;2341;283;0,06548;67,20;Réel
+04/10/2023;03/08/2023;02/10/2023;Electricité;6342;6574;232;0,12701;62,63;Réel
+04/08/2023;31/05/2023;31/07/2023;Gaz;2295;2316;235;0,06548;63,48;Estimé
+04/08/2023;03/06/2023;02/08/2023;Electricité;6111;6342;231;0,12701;62,33;Réel
+04/06/2023;01/04/2023;30/05/2023;Gaz;2223;2295;808;0,06548;112,33;Réel
+04/06/2023;03/04/2023;02/06/2023;Electricité;5832;6111;279;0,12701;69,17;Réel
+03/04/2023;01/02/2023;31/03/2023;Gaz;2071;2223;1706;0,06548;191,83;Réel
+03/04/2023;03/02/2023;02/04/2023;Electricité;5524;5832;308;0,12701;70,96;Réel
+03/02/2023;01/12/2022;31/01/2023;Gaz;1926;2071;1619;0,06548;183,29;Réel
+03/02/2023;03/12/2022;02/02/2023;Electricité;5212;5524;312;0,12701;73,46;Réel`;
+
+        const tempNantesMap = { 1:6.0, 2:6.5, 3:9.0, 4:11.5, 5:15.0, 6:18.5, 7:20.5, 8:20.5, 9:17.5, 10:14.0, 11:9.5, 12:6.5 };
+
+        let allData = [];
+        let chartInstance = null;
+
+        const parseFrFloat = (s) => parseFloat(s.replace(',', '.'));
+        const parseFrDate = (s) => { const p = s.split('/'); return new Date(p[2], p[1]-1, p[0]); };
+        
+        // FORMAT DATE SHORT (JJ/MM)
+        const formatDateShort = (d) => d.toLocaleDateString('fr',{day:'2-digit', month:'2-digit'});
+
+        function initData() {
+            const rows = csvData.trim().split('\n').slice(1);
+            allData = rows.map(r => {
+                const c = r.split(';');
+                const d1 = parseFrDate(c[1]), d2 = parseFrDate(c[2]);
+                const t1 = tempNantesMap[d1.getMonth()+1], t2 = tempNantesMap[d2.getMonth()+1];
+                return {
+                    date: d1, endDate: d2, dateStr: c[1],
+                    rangeStr: `${formatDateShort(d1)} - ${formatDateShort(d2)}`, // Période lisible
+                    year: d1.getFullYear(),
+                    type: c[3],
+                    conso: parseFrFloat(c[6]),
+                    cost: parseFrFloat(c[8]),
+                    temp: (t1+t2)/2
+                };
+            }).sort((a,b) => a.date - b.date);
+
+            if(allData.length) {
+                const max = new Date(Math.max(...allData.map(e=>e.endDate)));
+                document.getElementById('last-updated-date').innerText = max.toLocaleDateString('fr-FR');
+            }
+        }
+
+        function exportToCSV() {
+            const h = "Date Début;Date Fin;Type;kWh;Euro;Temp\n";
+            const r = allData.map(d => `${d.date.toLocaleDateString()};${d.endDate.toLocaleDateString()};${d.type};${d.conso};${d.cost.toFixed(2)};${d.temp.toFixed(1)}`).join("\n");
+            const blob = new Blob(["\uFEFF"+h+r], {type:'text/csv;charset=utf-8;'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a"); a.href=url; a.download=`releves_coteduparc_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+        }
+
+        function renderDashboard(year) {
+            const data = year === 'all' ? allData : allData.filter(d => d.year == year);
+            
+            document.querySelectorAll('#yearFilters button').forEach(b => {
+                b.className = `filter-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm ${b.dataset.year === year 
+                    ? 'active ring-2 ring-blue-500 ring-offset-2' 
+                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50'}`;
+            });
+
+            const sum = (t) => Math.round(data.filter(d=>d.type===t).reduce((a,b)=>a+b.conso,0));
+            const cost = Math.round(data.reduce((a,b)=>a+b.cost,0));
+            document.getElementById('kpi-elec').innerText = sum('Electricité');
+            document.getElementById('kpi-gaz').innerText = sum('Gaz');
+            document.getElementById('kpi-cost').innerText = cost + ' €';
+
+            updateAnalysis(data);
+            renderTable(data);
+            renderChart(data);
+        }
+
+        function updateAnalysis(data) {
+            let factor = data.length > 20 ? 3 : 1; 
+            const gaz = data.filter(d=>d.type==='Gaz').reduce((a,b)=>a+b.conso,0) / factor;
+            const elec = data.filter(d=>d.type==='Electricité').reduce((a,b)=>a+b.conso,0) / factor;
+            
+            const dpe = Math.round((gaz+elec)/CONFIG.surface);
+            document.getElementById('dpe-value').innerText = dpe;
+            
+            let g = 'G', p = 92;
+            if(dpe<=70){g='A';p=7} else if(dpe<=110){g='B';p=21} else if(dpe<=180){g='C';p=35}
+            else if(dpe<=250){g='D';p=50} else if(dpe<=330){g='E';p=64} else if(dpe<=420){g='F';p=78}
+            
+            const cursor = document.getElementById('dpe-cursor');
+            cursor.style.left = p+'%';
+            const badge = document.getElementById('dpe-grade-badge');
+            badge.innerText = g;
+            
+            const colors = { A:'text-green-600 bg-green-50', B:'text-green-500 bg-green-50', C:'text-green-400 bg-green-50', D:'text-yellow-600 bg-yellow-50', E:'text-orange-500 bg-orange-50', F:'text-orange-600 bg-orange-50', G:'text-red-600 bg-red-50' };
+            badge.className = `px-4 py-2 rounded-xl text-2xl font-black shadow-sm border border-slate-200 dark:border-slate-700 ${colors[g]}`;
+
+            // Analyse Gaz
+            const rG = gaz / (CONFIG.benchmarks.gaz.avg * 1.15); 
+            const elG = document.getElementById('analysis-gaz-text');
+            const bgG = document.getElementById('badge-gaz');
+            const barG = document.getElementById('gauge-gaz');
+            
+            if(rG < 0.8) { 
+                elG.innerText = "Excellente performance thermique pour un RDC. Isolation efficace."; 
+                bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"; bgG.innerText = "Économe";
+                barG.style.width = "15%"; 
+            } else if(rG < 1.1) {
+                elG.innerText = "Consommation cohérente avec l'exposition Nord. Rien d'anormal.";
+                bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700"; bgG.innerText = "Normal";
+                barG.style.width = "50%";
+            } else {
+                elG.innerText = "Attention, consommation élevée. L'isolation du sol (parking) peut être en cause.";
+                bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700"; bgG.innerText = "Élevé";
+                barG.style.width = "85%";
+            }
+
+            // Analyse Elec
+            const rE = elec / CONFIG.benchmarks.elec.avg;
+            const elE = document.getElementById('analysis-elec-text');
+            const bgE = document.getElementById('badge-elec');
+            const barE = document.getElementById('gauge-elec');
+            
+            if(rE < 0.9) {
+                elE.innerText = "Très sobre. Appareils récents ou usage modéré.";
+                bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"; bgE.innerText = "Sobre";
+                barE.style.width = "15%";
+            } else if(rE < 1.3) {
+                elE.innerText = "Dans la moyenne nationale pour 1-2 personnes.";
+                bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700"; bgE.innerText = "Standard";
+                barE.style.width = "50%";
+            } else {
+                elE.innerText = "Consommation de base importante. Vérifiez vos veilles ou vieux frigos.";
+                bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-700"; bgE.innerText = "Haut";
+                barE.style.width = "85%";
+            }
+        }
+
+        function renderTable(data) {
+            const container = document.getElementById('records-container');
+            const sorted = [...data].sort((a,b)=>b.date-a.date);
+            
+            let html = `
+            <table class="w-full hidden md:table">
+                <thead class="bg-slate-50 dark:bg-slate-800">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Période</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Énergie</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Volume</th>
+                        <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase">Coût</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-700 bg-white dark:bg-slate-900">
+            `;
+            
+            sorted.forEach(d => {
+                const isGaz = d.type === 'Gaz';
+                const color = isGaz ? 'text-orange-600 bg-orange-50' : 'text-blue-600 bg-blue-50';
+                
+                html += `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    <td class="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">
+                        ${d.rangeStr}
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${color}">
+                            ${d.type}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm font-bold text-slate-700 dark:text-slate-200">${Math.round(d.conso)} kWh</td>
+                    <td class="px-6 py-4 text-right text-sm font-mono text-slate-600 dark:text-slate-400">${d.cost.toFixed(2)} €</td>
+                </tr>`;
+            });
+            html += `</tbody></table>`;
+
+            // Mobile Cards View
+            html += `<div class="md:hidden space-y-3 p-4 bg-slate-50 dark:bg-slate-900/50">`;
+            sorted.forEach(d => {
+                const isGaz = d.type === 'Gaz';
+                const icon = isGaz ? 'flame' : 'zap';
+                const colorClass = isGaz ? 'text-orange-600' : 'text-blue-600';
+                const borderClass = isGaz ? 'border-l-4 border-orange-500' : 'border-l-4 border-blue-500';
+
+                html += `
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm ${borderClass} flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-slate-400 font-semibold mb-1">${d.rangeStr}</p>
+                        <div class="flex items-center gap-2 ${colorClass} font-bold text-sm">
+                            <i data-lucide="${icon}" class="w-4 h-4"></i>
+                            <span>${d.type}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1">${d.temp.toFixed(1)}°C ext.</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-lg font-bold text-slate-800 dark:text-white">${Math.round(d.conso)} <span class="text-xs font-normal">kWh</span></p>
+                        <p class="text-sm font-mono text-slate-600 dark:text-slate-400">${d.cost.toFixed(2)} €</p>
+                    </div>
+                </div>`;
+            });
+            html += `</div>`;
+
+            container.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function renderChart(data) {
+            const ctx = document.getElementById('energyChart').getContext('2d');
+            const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Group Data
+            const groups = {};
+            data.forEach(d => {
+                const k = d.date.toISOString().slice(0,7);
+                if(!groups[k]) groups[k] = { 
+                    label: d.date.toLocaleDateString('fr',{month:'short', year:'2-digit'}), 
+                    fullRange: `${d.rangeStr}`, // Pour Tooltip
+                    gaz:0, elec:0, temp:d.temp, sort: d.date 
+                };
+                if(d.type==='Gaz') groups[k].gaz += d.conso; else groups[k].elec += d.conso;
+            });
+            const arr = Object.values(groups).sort((a,b)=>a.sort-b.sort);
+
+            if(chartInstance) chartInstance.destroy();
+            
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: arr.map(d=>d.label),
+                    datasets: [
+                        { label:'Gaz', data:arr.map(d=>d.gaz), backgroundColor:'#f97316', borderRadius:4, stack:'0' },
+                        { label:'Élec', data:arr.map(d=>d.elec), backgroundColor:'#3b82f6', borderRadius:4, stack:'0' },
+                        { label:'Temp', data:arr.map(d=>d.temp), type:'line', borderColor: isDark ? '#94a3b8':'#475569', pointBackgroundColor: isDark ? '#94a3b8':'#475569', borderWidth:2, yAxisID:'y1' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position:'bottom', labels: { color: isDark ? '#cbd5e1':'#334155', usePointStyle:true } },
+                        tooltip: {
+                            callbacks: {
+                                title: (items) => {
+                                    const item = items[0];
+                                    return arr[item.dataIndex].fullRange;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid:{display:false}, ticks:{color: isDark ? '#94a3b8':'#64748b'} },
+                        y: { display:false },
+                        y1: { display:false, reverse:true }
+                    }
+                }
+            });
+        }
+
+        initData();
+        
+        const years = [...new Set(allData.map(d=>d.year))].sort();
+        const fContainer = document.getElementById('yearFilters');
+        const mkBtn = (lbl, val) => {
+            const b = document.createElement('button');
+            b.innerText=lbl; b.dataset.year=val; 
+            b.onclick=()=>renderDashboard(val);
+            fContainer.appendChild(b);
+        };
+        mkBtn('Tout', 'all');
+        years.forEach(y => mkBtn(y, y));
+        
+        renderDashboard('all');
+
+    </script>
+</body>
+</html>
