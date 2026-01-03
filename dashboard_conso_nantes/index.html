@@ -168,21 +168,28 @@
                 </div>
             </div>
 
-            <!-- Tuile 3 : Gain Estimé -->
-            <div class="glass-card rounded-2xl p-5 border-l-4 border-emerald-500 flex flex-col justify-center bg-emerald-50/50 dark:bg-emerald-900/10">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Gain Est. 2026</h3>
+            <!-- Tuile 3 : Simulateur & Gain -->
+            <div class="glass-card rounded-2xl p-5 border-l-4 border-emerald-500 flex flex-col justify-between bg-emerald-50/50 dark:bg-emerald-900/10">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Gain 2026 Estimé</h3>
                     <div class="bg-emerald-100 dark:bg-emerald-800 p-1.5 rounded-full text-emerald-600 dark:text-emerald-300">
                         <i data-lucide="trending-down" class="w-4 h-4"></i>
                     </div>
                 </div>
+                
+                <!-- Simulateur Thermostat -->
+                <div class="mb-3">
+                    <label class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1 block">Objectif Thermostat</label>
+                    <div class="flex bg-white dark:bg-slate-800 rounded-lg p-1 border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <button onclick="updateThermostat(0)" class="thermostat-btn flex-1 py-1 text-xs font-bold rounded-md transition-colors text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 active" data-val="0">Actuel</button>
+                        <button onclick="updateThermostat(1)" class="thermostat-btn flex-1 py-1 text-xs font-bold rounded-md transition-colors text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30" data-val="1">-1°C</button>
+                        <button onclick="updateThermostat(2)" class="thermostat-btn flex-1 py-1 text-xs font-bold rounded-md transition-colors text-emerald-700 hover:bg-emerald-100 dark:hover:bg-emerald-900/50" data-val="2">-2°C</button>
+                    </div>
+                </div>
+
                 <div>
                     <p class="text-3xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-1" id="savings-value">Calcul...</p>
-                    <p class="text-xs text-emerald-600/80 dark:text-emerald-400/80 font-medium">vs si resté chez Engie (An)</p>
-                </div>
-                <div class="mt-4 pt-3 border-t border-emerald-100 dark:border-emerald-800/30 flex justify-between text-xs">
-                    <span class="text-emerald-600 dark:text-emerald-400">Élec: <strong id="gain-elec">...</strong></span>
-                    <span class="text-emerald-600 dark:text-emerald-400">Gaz: <strong id="gain-gaz">...</strong></span>
+                    <p class="text-xs text-emerald-600/80 dark:text-emerald-400/80 font-medium">vs Engie 2025 (+ Bonus Sobriété)</p>
                 </div>
             </div>
         </div>
@@ -274,6 +281,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // GLOBAL STATE
+            let currentThermostatDrop = 0; // 0, 1, or 2 degrees
+            let currentYearFilter = 'all';
+
             // CONFIG & TARIFS
             const CONFIG = {
                 surface: 42,
@@ -369,6 +380,9 @@
                     { m: 11, label: '01/12/2026', range: '01/11 - 31/12', month_range: [11,12] }
                 ];
 
+                // Factor for thermostat: -1°C = -7% consumption on heating (Gaz)
+                const heatingFactor = 1 - (currentThermostatDrop * 0.07);
+
                 periods.forEach(p => {
                     const relevantPastData = historicalData.filter(d => d.date.getMonth() === p.m || d.date.getMonth() === p.m - 1 || d.date.getMonth() === p.m + 1);
                     const getAvgConso = (type) => {
@@ -377,8 +391,13 @@
                         const sum = filtered.reduce((a, b) => a + b.conso, 0);
                         return sum / filtered.length;
                     };
-                    const avgGaz = getAvgConso('Gaz');
-                    const avgElec = getAvgConso('Electricité');
+                    
+                    let avgGaz = getAvgConso('Gaz');
+                    let avgElec = getAvgConso('Electricité');
+
+                    // Apply Thermostat Reduction on 2026
+                    avgGaz = avgGaz * heatingFactor;
+
                     const temp = (tempNantesMap[p.month_range[0]] + tempNantesMap[p.month_range[1]]) / 2;
 
                     projections.push({
@@ -426,7 +445,25 @@
                 a.click();
             }
 
+            window.updateThermostat = function(drop) {
+                currentThermostatDrop = drop;
+                // Update buttons UI
+                document.querySelectorAll('.thermostat-btn').forEach(btn => {
+                    if (parseInt(btn.dataset.val) === drop) {
+                        btn.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+                        btn.classList.remove('text-slate-500', 'hover:bg-slate-50');
+                    } else {
+                        btn.classList.remove('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+                        btn.classList.add('text-slate-500', 'hover:bg-slate-50');
+                    }
+                });
+                // Re-init data with new projection
+                initData();
+                renderDashboard(currentYearFilter);
+            }
+
             function renderDashboard(year) {
+                currentYearFilter = year;
                 const data = year === 'all' ? allData : allData.filter(d => d.year == year);
                 const years = [...new Set(allData.map(d=>d.year))].sort();
                 const fContainer = document.getElementById('yearFilters');
@@ -475,21 +512,45 @@
                     badge.className = `px-4 py-2 rounded-xl text-2xl font-black shadow-sm border border-slate-200 dark:border-slate-700 ${colors[g]}`;
                 }
 
-                const annualCostOhmElec = (elec * CONFIG.tariffs.ohm.elec.kwh) + (CONFIG.tariffs.ohm.elec.sub_m * 12);
-                const annualCostEngieElec = (elec * CONFIG.tariffs.engie.elec.kwh) + (CONFIG.tariffs.engie.elec.sub_m * 12);
-                const savingElec = annualCostEngieElec - annualCostOhmElec;
-                const annualCostOhmGas = (gaz * CONFIG.tariffs.ohm.gas.kwh) + (CONFIG.tariffs.ohm.gas.sub_m * 12);
-                const annualCostEngieGas = (gaz * CONFIG.tariffs.engie.gas.kwh) + (CONFIG.tariffs.engie.gas.sub_m * 12);
-                const savingGas = annualCostEngieGas - annualCostOhmGas; 
-                const totalSavings = savingElec + savingGas;
+                // --- CALCUL DES ÉCONOMIES ---
+                // 1. Calculer le volume 2026 PROJETÉ (avec réduction thermostat appliquée)
+                const proj2026 = allData.filter(d => d.year === 2026);
+                const volGaz2026 = proj2026.filter(d => d.type === 'Gaz').reduce((a, b) => a + b.conso, 0);
+                const volElec2026 = proj2026.filter(d => d.type === 'Electricité').reduce((a, b) => a + b.conso, 0);
+
+                // 2. Coût avec OHM (Tarifs 2026)
+                const costOhm = 
+                    (volElec2026 * CONFIG.tariffs.ohm.elec.kwh + CONFIG.tariffs.ohm.elec.sub_m * 12) +
+                    (volGaz2026 * CONFIG.tariffs.ohm.gas.kwh + CONFIG.tariffs.ohm.gas.sub_m * 12);
+
+                // 3. Coût hypothétique avec ENGIE (Base conso SANS réduction thermostat pour comparer l'effort total)
+                // Pour être juste sur l'économie "Thermostat", on doit comparer par rapport à une situation de référence.
+                // Situation de référence = Conso Habitudelle chez Engie.
+                const factorThermo = 1 / (1 - (currentThermostatDrop * 0.07)); // Retrouver le volume "avant effort"
+                const volGazRef = volGaz2026 * factorThermo;
+                
+                const costEngieRef = 
+                    (volElec2026 * CONFIG.tariffs.engie.elec.kwh + CONFIG.tariffs.engie.elec.sub_m * 12) +
+                    (volGazRef * CONFIG.tariffs.engie.gas.kwh + CONFIG.tariffs.engie.gas.sub_m * 12);
+
+                const totalSavings = costEngieRef - costOhm;
 
                 const savingsEl = document.getElementById('savings-value');
                 if (savingsEl) {
                     savingsEl.innerText = `${Math.round(totalSavings)} € / an`;
                     savingsEl.className = totalSavings > 0 ? "text-3xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-1" : "text-3xl font-extrabold text-red-700 dark:text-red-300 mb-1";
                 }
-                if (document.getElementById('gain-elec')) document.getElementById('gain-elec').innerText = `${savingElec > 0 ? '+' : ''}${Math.round(savingElec)} €`;
-                if (document.getElementById('gain-gaz')) document.getElementById('gain-gaz').innerText = `${savingGas > 0 ? '+' : ''}${Math.round(savingGas)} €`;
+                
+                // Details Gain Breakdown
+                // Gain from Supplier Switch (Price diff on BASE volume)
+                const costOhmBase = (volElec2026 * CONFIG.tariffs.ohm.elec.kwh + CONFIG.tariffs.ohm.elec.sub_m * 12) + (volGazRef * CONFIG.tariffs.ohm.gas.kwh + CONFIG.tariffs.ohm.gas.sub_m * 12);
+                const gainSupplier = costEngieRef - costOhmBase;
+                
+                // Gain from Thermostat (Volume diff on OHM price)
+                const gainThermo = costOhmBase - costOhm;
+
+                if (document.getElementById('gain-elec')) document.getElementById('gain-elec').innerHTML = `Offre: <strong>${Math.round(gainSupplier)} €</strong>`;
+                if (document.getElementById('gain-gaz')) document.getElementById('gain-gaz').innerHTML = `Sobriété: <strong>${Math.round(gainThermo)} €</strong>`;
 
                 const rG = gaz / (CONFIG.benchmarks.gaz.avg * 1.15); 
                 const elG = document.getElementById('analysis-gaz-text');
