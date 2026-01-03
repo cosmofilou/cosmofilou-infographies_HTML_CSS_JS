@@ -191,18 +191,27 @@
             </div>
         </div>
 
-        <!-- SECTION 2: VERDICT & TARIFS -->
+        <!-- SECTION 2: VERDICT & TARIFS & ÉCONOMIES -->
         <div class="glass-card rounded-2xl p-6 border-t-4 border-slate-900 dark:border-slate-600">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <i data-lucide="stethoscope" class="text-indigo-500"></i> Diagnostic & Offre 2026
+                    <i data-lucide="stethoscope" class="text-indigo-500"></i> Diagnostic & Projection 2026
                 </h3>
-                <div class="flex items-center gap-2 text-xs font-medium bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-3 py-1.5 rounded-lg border border-green-100 dark:border-green-800">
-                    <i data-lucide="arrow-right-left" class="w-3 h-3"></i> Migration: Engie > Ohm Énergie
+                
+                <!-- Badge Economie -->
+                <div class="flex items-center gap-3 bg-emerald-50 dark:bg-emerald-900/20 px-4 py-2 rounded-xl border border-emerald-100 dark:border-emerald-800">
+                    <div class="bg-emerald-100 dark:bg-emerald-800 p-1.5 rounded-full text-emerald-600 dark:text-emerald-300">
+                        <i data-lucide="trending-down" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] uppercase font-bold text-emerald-600 dark:text-emerald-400 tracking-wider">Économie Estimée 2026</p>
+                        <p class="text-lg font-extrabold text-emerald-700 dark:text-emerald-300" id="savings-value">Calcul...</p>
+                    </div>
                 </div>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-700">
+                <!-- Gaz -->
                 <div class="pt-4 md:pt-0 md:pr-4">
                     <div class="flex justify-between items-center mb-3">
                         <div class="flex items-center gap-2 text-orange-600 dark:text-orange-400 font-bold">
@@ -211,23 +220,32 @@
                         </div>
                         <span id="badge-gaz" class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600">...</span>
                     </div>
-                    <p id="analysis-gaz-text" class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed min-h-[40px] mb-4">...</p>
+                    
+                    <!-- Comparateur Tarifaire -->
+                    <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 mb-4 text-xs space-y-2">
+                        <div class="flex justify-between items-center text-slate-400 dark:text-slate-500">
+                            <span>Ancien (Engie)</span>
+                            <span>~0,1082 €/kWh + 21€/m</span>
+                        </div>
+                        <div class="flex justify-between items-center font-bold text-slate-700 dark:text-slate-200">
+                            <span>Nouveau (Ohm)</span>
+                            <span>0,1340 €/kWh + 10,95€/m</span>
+                        </div>
+                        <div class="border-t border-slate-200 dark:border-slate-700 pt-2 flex justify-between text-emerald-600 font-semibold">
+                            <span>Gain annuel estimé</span>
+                            <span id="gain-gaz">...</span>
+                        </div>
+                    </div>
+
                     <div class="relative pt-1">
                         <div class="flex mb-2 items-center justify-between text-xs font-semibold text-slate-400"><span>Éco</span><span>Moyen</span><span>Haut</span></div>
                         <div class="overflow-hidden h-2 mb-4 text-xs flex rounded-full bg-slate-200 dark:bg-slate-700">
                             <div id="gauge-gaz" class="gauge-fill bg-gradient-to-r from-orange-400 to-orange-600" style="width: 0%"></div>
                         </div>
                     </div>
-                    <div class="text-xs text-slate-400 mt-2 flex flex-col gap-1">
-                        <div class="flex justify-between">
-                            <span>Ancien (Engie): <strong>~0,1082 €/kWh</strong></span> <!-- Approx Engie Duo Ref 2023-24 -->
-                        </div>
-                        <div class="flex justify-between font-semibold text-slate-600 dark:text-slate-300">
-                            <span>Nouveau (Ohm): <strong>0,1340 €/kWh</strong></span>
-                            <span>Abo: <strong>10,95 €/m</strong></span>
-                        </div>
-                    </div>
                 </div>
+
+                <!-- Elec -->
                 <div class="pt-4 md:pt-0 md:pl-8">
                     <div class="flex justify-between items-center mb-3">
                         <div class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold">
@@ -236,20 +254,27 @@
                         </div>
                         <span id="badge-elec" class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600">...</span>
                     </div>
-                    <p id="analysis-elec-text" class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed min-h-[40px] mb-4">...</p>
+
+                    <!-- Comparateur Tarifaire -->
+                    <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 mb-4 text-xs space-y-2">
+                        <div class="flex justify-between items-center text-slate-400 dark:text-slate-500">
+                            <span>Ancien (Engie)</span>
+                            <span>~0,2276 €/kWh + 13€/m</span>
+                        </div>
+                        <div class="flex justify-between items-center font-bold text-slate-700 dark:text-slate-200">
+                            <span>Nouveau (Ohm)</span>
+                            <span>0,1794 €/kWh + 16,79€/m</span>
+                        </div>
+                        <div class="border-t border-slate-200 dark:border-slate-700 pt-2 flex justify-between text-emerald-600 font-semibold">
+                            <span>Gain annuel estimé</span>
+                            <span id="gain-elec">...</span>
+                        </div>
+                    </div>
+
                     <div class="relative pt-1">
                         <div class="flex mb-2 items-center justify-between text-xs font-semibold text-slate-400"><span>Éco</span><span>Moyen</span><span>Haut</span></div>
                         <div class="overflow-hidden h-2 mb-4 text-xs flex rounded-full bg-slate-200 dark:bg-slate-700">
                             <div id="gauge-elec" class="gauge-fill bg-gradient-to-r from-blue-400 to-blue-600" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="text-xs text-slate-400 mt-2 flex flex-col gap-1">
-                        <div class="flex justify-between">
-                            <span>Ancien (Engie): <strong>~0,2276 €/kWh</strong></span> <!-- Approx Engie Duo Ref 2023-24 -->
-                        </div>
-                        <div class="flex justify-between font-semibold text-slate-600 dark:text-slate-300">
-                            <span>Nouveau (Ohm): <strong>0,1794 €/kWh</strong></span>
-                            <span>Abo: <strong>16,79 €/m</strong></span>
                         </div>
                     </div>
                 </div>
@@ -294,22 +319,30 @@
     </footer>
 
     <script>
-        // CONFIG
-        const CONFIG = {
-            surface: 42,
-            benchmarks: {
-                gaz: { avg: 110 * 42, max: 150 * 42 },
-                elec: { avg: 1800, max: 3000 }
-            },
-            tariffs2026: {
-                // Ohm Energie Extra Eco Fixe
-                elec: { kwh: 0.1794, sub_m: 16.79 }, // 6kVA
-                gas: { kwh: 0.1340, sub_m: 10.95 }   // Plage B0
-            }
-        };
+        document.addEventListener('DOMContentLoaded', () => {
+            // CONFIG & TARIFS
+            const CONFIG = {
+                surface: 42,
+                benchmarks: {
+                    gaz: { avg: 110 * 42, max: 150 * 42 },
+                    elec: { avg: 1800, max: 3000 }
+                },
+                tariffs: {
+                    // Tarifs Estimés Anciens (Engie Duo Ref 2024)
+                    engie: {
+                        elec: { kwh: 0.2276, sub_m: 13.00 }, 
+                        gas: { kwh: 0.1082, sub_m: 21.00 }
+                    },
+                    // Tarifs Nouveaux (Ohm Energie Extra Eco 2026)
+                    ohm: {
+                        elec: { kwh: 0.1794, sub_m: 16.79 }, 
+                        gas: { kwh: 0.1340, sub_m: 10.95 }
+                    }
+                }
+            };
 
-        // CSV DATA
-        const csvData = `Date_Facture;Période_Debut;Période_Fin;Type_Energie;Index_Debut;Index_Fin;Conso_kWh;Prix_Unitaire_HT;Montant_TTC;Type_Estime_Reel
+            // CSV DATA
+            const csvData = `Date_Facture;Période_Debut;Période_Fin;Type_Energie;Index_Debut;Index_Fin;Conso_kWh;Prix_Unitaire_HT;Montant_TTC;Type_Estime_Reel
 03/12/2025;01/10/2025;30/11/2025;Gaz;3102;3143;462;0,04608;112,66;Réel
 03/12/2025;03/10/2025;02/12/2025;Electricité;9379;9648;269;0,10281;88,67;Réel
 03/10/2025;01/08/2025;30/09/2025;Gaz;3085;3102;194;0,04608;82,88;Réel
@@ -347,370 +380,389 @@
 03/02/2023;01/12/2022;31/01/2023;Gaz;1926;2071;1619;0,06548;183,29;Réel
 03/02/2023;03/12/2022;02/02/2023;Electricité;5212;5524;312;0,12701;73,46;Réel`;
 
-        const tempNantesMap = { 1:6.0, 2:6.5, 3:9.0, 4:11.5, 5:15.0, 6:18.5, 7:20.5, 8:20.5, 9:17.5, 10:14.0, 11:9.5, 12:6.5 };
+            const tempNantesMap = { 1:6.0, 2:6.5, 3:9.0, 4:11.5, 5:15.0, 6:18.5, 7:20.5, 8:20.5, 9:17.5, 10:14.0, 11:9.5, 12:6.5 };
 
-        let allData = [];
-        let chartInstance = null;
+            let allData = [];
+            let chartInstance = null;
 
-        const parseFrFloat = (s) => parseFloat(s.replace(',', '.'));
-        const parseFrDate = (s) => { const p = s.split('/'); return new Date(p[2], p[1]-1, p[0]); };
-        const formatDateShort = (d) => d.toLocaleDateString('fr',{day:'2-digit', month:'2-digit'});
+            const parseFrFloat = (s) => parseFloat(s.replace(',', '.'));
+            const parseFrDate = (s) => { const p = s.split('/'); return new Date(p[2], p[1]-1, p[0]); };
+            const formatDateShort = (d) => d.toLocaleDateString('fr',{day:'2-digit', month:'2-digit'});
 
-        // GENERATE PROJECTION 2026
-        function generateProjection2026(historicalData) {
-            const projections = [];
-            // Periods: Feb, Apr, Jun, Aug, Oct, Dec 2026
-            const periods = [
-                { m: 1, label: '01/02/2026', range: '01/12 - 31/01', month_range: [12,1] },
-                { m: 3, label: '01/04/2026', range: '01/02 - 31/03', month_range: [2,3] },
-                { m: 5, label: '01/06/2026', range: '01/04 - 31/05', month_range: [4,5] },
-                { m: 7, label: '01/08/2026', range: '01/06 - 31/07', month_range: [6,7] },
-                { m: 9, label: '01/10/2026', range: '01/08 - 30/09', month_range: [8,9] },
-                { m: 11, label: '01/12/2026', range: '01/10 - 30/11', month_range: [10,11] }
-            ];
+            // GENERATE PROJECTION 2026
+            function generateProjection2026(historicalData) {
+                const projections = [];
+                // Periods: Feb, Apr, Jun, Aug, Oct, Dec 2026
+                const periods = [
+                    { m: 1, label: '01/02/2026', range: '01/12 - 31/01', month_range: [12,1] },
+                    { m: 3, label: '01/04/2026', range: '01/02 - 31/03', month_range: [2,3] },
+                    { m: 5, label: '01/06/2026', range: '01/04 - 31/05', month_range: [4,5] },
+                    { m: 7, label: '01/08/2026', range: '01/06 - 31/07', month_range: [6,7] },
+                    { m: 9, label: '01/10/2026', range: '01/08 - 30/09', month_range: [8,9] },
+                    { m: 11, label: '01/12/2026', range: '01/10 - 30/11', month_range: [10,11] }
+                ];
 
-            periods.forEach(p => {
-                const relevantPastData = historicalData.filter(d => d.date.getMonth() === p.m || d.date.getMonth() === p.m - 1 || d.date.getMonth() === p.m + 1);
-                
-                const getAvgConso = (type) => {
-                    const filtered = relevantPastData.filter(d => d.type === type);
-                    if(filtered.length === 0) return type === 'Gaz' ? 200 : 250;
-                    const sum = filtered.reduce((a, b) => a + b.conso, 0);
-                    return sum / filtered.length;
-                };
+                periods.forEach(p => {
+                    const relevantPastData = historicalData.filter(d => d.date.getMonth() === p.m || d.date.getMonth() === p.m - 1 || d.date.getMonth() === p.m + 1);
+                    
+                    const getAvgConso = (type) => {
+                        const filtered = relevantPastData.filter(d => d.type === type);
+                        if(filtered.length === 0) return type === 'Gaz' ? 200 : 250;
+                        const sum = filtered.reduce((a, b) => a + b.conso, 0);
+                        return sum / filtered.length;
+                    };
 
-                const avgGaz = getAvgConso('Gaz');
-                const avgElec = getAvgConso('Electricité');
-                const temp = (tempNantesMap[p.month_range[0]] + tempNantesMap[p.month_range[1]]) / 2;
+                    const avgGaz = getAvgConso('Gaz');
+                    const avgElec = getAvgConso('Electricité');
+                    const temp = (tempNantesMap[p.month_range[0]] + tempNantesMap[p.month_range[1]]) / 2;
 
-                projections.push({
-                    date: parseFrDate(p.label), 
-                    endDate: parseFrDate(p.label),
-                    dateStr: p.label,
-                    rangeStr: p.range + ' (Proj.)',
-                    year: 2026,
-                    type: 'Gaz',
-                    conso: avgGaz,
-                    cost: (avgGaz * CONFIG.tariffs2026.gas.kwh) + (CONFIG.tariffs2026.gas.sub_m * 2),
-                    temp: temp,
-                    isProjection: true
+                    projections.push({
+                        date: parseFrDate(p.label), 
+                        endDate: parseFrDate(p.label),
+                        dateStr: p.label,
+                        rangeStr: p.range + ' (Proj.)',
+                        year: 2026,
+                        type: 'Gaz',
+                        conso: avgGaz,
+                        cost: (avgGaz * CONFIG.tariffs.ohm.gas.kwh) + (CONFIG.tariffs.ohm.gas.sub_m * 2), // NEW: OHM
+                        temp: temp,
+                        isProjection: true
+                    });
+
+                    projections.push({
+                        date: parseFrDate(p.label),
+                        endDate: parseFrDate(p.label),
+                        dateStr: p.label,
+                        rangeStr: p.range + ' (Proj.)',
+                        year: 2026,
+                        type: 'Electricité',
+                        conso: avgElec,
+                        cost: (avgElec * CONFIG.tariffs.ohm.elec.kwh) + (CONFIG.tariffs.ohm.elec.sub_m * 2), // NEW: OHM
+                        temp: temp,
+                        isProjection: true
+                    });
+                });
+                return projections;
+            }
+
+            function initData() {
+                const rows = csvData.trim().split('\n').slice(1);
+                let parsed = rows.map(r => {
+                    const c = r.split(';');
+                    const d1 = parseFrDate(c[1]), d2 = parseFrDate(c[2]);
+                    const t1 = tempNantesMap[d1.getMonth()+1], t2 = tempNantesMap[d2.getMonth()+1];
+                    return {
+                        date: d1, endDate: d2, dateStr: c[1],
+                        rangeStr: `${formatDateShort(d1)} - ${formatDateShort(d2)}`,
+                        year: d1.getFullYear(),
+                        type: c[3],
+                        conso: parseFrFloat(c[6]),
+                        cost: parseFrFloat(c[8]),
+                        temp: (t1+t2)/2,
+                        isProjection: false
+                    };
                 });
 
-                projections.push({
-                    date: parseFrDate(p.label),
-                    endDate: parseFrDate(p.label),
-                    dateStr: p.label,
-                    rangeStr: p.range + ' (Proj.)',
-                    year: 2026,
-                    type: 'Electricité',
-                    conso: avgElec,
-                    cost: (avgElec * CONFIG.tariffs2026.elec.kwh) + (CONFIG.tariffs2026.elec.sub_m * 2),
-                    temp: temp,
-                    isProjection: true
-                });
-            });
-            return projections;
-        }
+                const proj = generateProjection2026(parsed);
+                allData = [...parsed, ...proj].sort((a,b) => a.date - b.date);
 
-        function initData() {
-            const rows = csvData.trim().split('\n').slice(1);
-            let parsed = rows.map(r => {
-                const c = r.split(';');
-                const d1 = parseFrDate(c[1]), d2 = parseFrDate(c[2]);
-                const t1 = tempNantesMap[d1.getMonth()+1], t2 = tempNantesMap[d2.getMonth()+1];
-                return {
-                    date: d1, endDate: d2, dateStr: c[1],
-                    rangeStr: `${formatDateShort(d1)} - ${formatDateShort(d2)}`,
-                    year: d1.getFullYear(),
-                    type: c[3],
-                    conso: parseFrFloat(c[6]),
-                    cost: parseFrFloat(c[8]),
-                    temp: (t1+t2)/2,
-                    isProjection: false
-                };
-            });
-
-            const proj = generateProjection2026(parsed);
-            allData = [...parsed, ...proj].sort((a,b) => a.date - b.date);
-
-            const realData = allData.filter(d => !d.isProjection);
-            if(realData.length) {
-                const max = new Date(Math.max(...realData.map(e=>e.endDate)));
-                document.getElementById('last-updated-date').innerText = max.toLocaleDateString('fr-FR');
-            }
-        }
-
-        function exportToCSV() {
-            const h = "Date;Période;Type;kWh;Euro;Temp;Statut\n";
-            const r = allData.map(d => `${d.date.toLocaleDateString()};${d.rangeStr};${d.type};${d.conso.toFixed(0)};${d.cost.toFixed(2)};${d.temp.toFixed(1)};${d.isProjection?'Projection':'Réel'}`).join("\n");
-            const blob = new Blob(["\uFEFF"+h+r], {type:'text/csv;charset=utf-8;'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a"); a.href=url; a.download=`releves_coteduparc_proj2026_${new Date().toISOString().slice(0,10)}.csv`;
-            a.click();
-        }
-
-        function renderDashboard(year) {
-            const data = year === 'all' ? allData : allData.filter(d => d.year == year);
-            
-            const years = [...new Set(allData.map(d=>d.year))].sort();
-            const fContainer = document.getElementById('yearFilters');
-            fContainer.innerHTML = '';
-            
-            const mkBtn = (lbl, val) => {
-                const b = document.createElement('button');
-                b.innerText=lbl; b.dataset.year=val; 
-                b.className = `filter-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm ${val == year 
-                    ? 'active ring-2 ring-blue-500 ring-offset-2' 
-                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50'}`;
-                b.onclick=()=>renderDashboard(val);
-                fContainer.appendChild(b);
-            };
-            mkBtn('Tout', 'all');
-            years.forEach(y => mkBtn(y, y));
-
-            const sum = (t) => Math.round(data.filter(d=>d.type===t).reduce((a,b)=>a+b.conso,0));
-            const cost = Math.round(data.reduce((a,b)=>a+b.cost,0));
-            document.getElementById('kpi-elec').innerText = sum('Electricité');
-            document.getElementById('kpi-gaz').innerText = sum('Gaz');
-            document.getElementById('kpi-cost').innerText = cost + ' €';
-
-            updateAnalysis(data);
-            renderTable(data);
-            renderChart(data);
-        }
-
-        function updateAnalysis(data) {
-            const realData = data.filter(d => !d.isProjection);
-            const workingData = realData.length > 0 ? realData : data;
-            
-            let factor = workingData.length > 20 ? 3 : (workingData.length > 6 ? 1 : 0.5); 
-            const gaz = workingData.filter(d=>d.type==='Gaz').reduce((a,b)=>a+b.conso,0) / factor;
-            const elec = workingData.filter(d=>d.type==='Electricité').reduce((a,b)=>a+b.conso,0) / factor;
-            
-            const dpe = Math.round((gaz+elec)/CONFIG.surface);
-            document.getElementById('dpe-value').innerText = dpe;
-            
-            let g = 'G', p = 92;
-            if(dpe<=70){g='A';p=7} else if(dpe<=110){g='B';p=21} else if(dpe<=180){g='C';p=35}
-            else if(dpe<=250){g='D';p=50} else if(dpe<=330){g='E';p=64} else if(dpe<=420){g='F';p=78}
-            
-            const cursor = document.getElementById('dpe-cursor');
-            cursor.style.left = p+'%';
-            const badge = document.getElementById('dpe-grade-badge');
-            badge.innerText = g;
-            
-            const colors = { A:'text-green-600 bg-green-50', B:'text-green-500 bg-green-50', C:'text-green-400 bg-green-50', D:'text-yellow-600 bg-yellow-50', E:'text-orange-500 bg-orange-50', F:'text-orange-600 bg-orange-50', G:'text-red-600 bg-red-50' };
-            badge.className = `px-4 py-2 rounded-xl text-2xl font-black shadow-sm border border-slate-200 dark:border-slate-700 ${colors[g]}`;
-
-            const rG = gaz / (CONFIG.benchmarks.gaz.avg * 1.15); 
-            const elG = document.getElementById('analysis-gaz-text');
-            const bgG = document.getElementById('badge-gaz');
-            const barG = document.getElementById('gauge-gaz');
-            
-            if(rG < 0.8) { 
-                elG.innerText = "Excellente performance thermique pour un RDC. Isolation efficace."; 
-                bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"; bgG.innerText = "Économe";
-                barG.style.width = "15%"; 
-            } else if(rG < 1.1) {
-                elG.innerText = "Consommation cohérente avec l'exposition Nord. Rien d'anormal.";
-                bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700"; bgG.innerText = "Normal";
-                barG.style.width = "50%";
-            } else {
-                elG.innerText = "Attention, consommation élevée. L'isolation du sol (parking) peut être en cause.";
-                bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700"; bgG.innerText = "Élevé";
-                barG.style.width = "85%";
+                const realData = allData.filter(d => !d.isProjection);
+                if(realData.length) {
+                    const max = new Date(Math.max(...realData.map(e=>e.endDate)));
+                    if (document.getElementById('last-updated-date'))
+                        document.getElementById('last-updated-date').innerText = max.toLocaleDateString('fr-FR');
+                }
             }
 
-            const rE = elec / CONFIG.benchmarks.elec.avg;
-            const elE = document.getElementById('analysis-elec-text');
-            const bgE = document.getElementById('badge-elec');
-            const barE = document.getElementById('gauge-elec');
-            
-            if(rE < 0.9) {
-                elE.innerText = "Très sobre. Appareils récents ou usage modéré.";
-                bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"; bgE.innerText = "Sobre";
-                barE.style.width = "15%";
-            } else if(rE < 1.3) {
-                elE.innerText = "Dans la moyenne nationale pour 1-2 personnes.";
-                bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700"; bgE.innerText = "Standard";
-                barE.style.width = "50%";
-            } else {
-                elE.innerText = "Consommation de base importante. Vérifiez vos veilles ou vieux frigos.";
-                bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-700"; bgE.innerText = "Haut";
-                barE.style.width = "85%";
+            // Expose function globally for button onclick
+            window.exportToCSV = function() {
+                const h = "Date;Période;Type;kWh;Euro;Temp;Statut\n";
+                const r = allData.map(d => `${d.date.toLocaleDateString()};${d.rangeStr};${d.type};${d.conso.toFixed(0)};${d.cost.toFixed(2)};${d.temp.toFixed(1)};${d.isProjection?'Projection':'Réel'}`).join("\n");
+                const blob = new Blob(["\uFEFF"+h+r], {type:'text/csv;charset=utf-8;'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a"); a.href=url; a.download=`releves_coteduparc_proj2026_${new Date().toISOString().slice(0,10)}.csv`;
+                a.click();
             }
-        }
 
-        function renderTable(data) {
-            const container = document.getElementById('records-container');
-            const sorted = [...data].sort((a,b)=>b.date-a.date);
-            
-            let html = `
-            <table class="w-full hidden md:table">
-                <thead class="bg-slate-50 dark:bg-slate-800">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Période</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Énergie</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Volume</th>
-                        <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase">Coût</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-700 bg-white dark:bg-slate-900">
-            `;
-            
-            sorted.forEach(d => {
-                const isGaz = d.type === 'Gaz';
-                const color = isGaz ? 'text-orange-600 bg-orange-50' : 'text-blue-600 bg-blue-50';
-                const rowClass = d.isProjection ? 'bg-slate-50/50 dark:bg-slate-800/30 italic text-slate-500' : 'hover:bg-slate-50 dark:hover:bg-slate-800';
-                const costDisplay = d.isProjection ? `~${d.cost.toFixed(0)} €` : `${d.cost.toFixed(2)} €`;
+            function renderDashboard(year) {
+                const data = year === 'all' ? allData : allData.filter(d => d.year == year);
                 
-                html += `
-                <tr class="${rowClass} transition-colors">
-                    <td class="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">
-                        ${d.rangeStr}
-                        ${d.isProjection ? '<span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-800">PROJ</span>' : ''}
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${color}">
-                            ${d.type}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 text-sm font-bold text-slate-700 dark:text-slate-200">${Math.round(d.conso)} kWh</td>
-                    <td class="px-6 py-4 text-right text-sm font-mono text-slate-600 dark:text-slate-400">${costDisplay}</td>
-                </tr>`;
-            });
-            html += `</tbody></table>`;
+                const years = [...new Set(allData.map(d=>d.year))].sort();
+                const fContainer = document.getElementById('yearFilters');
+                fContainer.innerHTML = '';
+                
+                const mkBtn = (lbl, val) => {
+                    const b = document.createElement('button');
+                    b.innerText=lbl; b.dataset.year=val; 
+                    b.className = `filter-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm ${val == year 
+                        ? 'active ring-2 ring-blue-500 ring-offset-2' 
+                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50'}`;
+                    b.onclick=()=>renderDashboard(val);
+                    fContainer.appendChild(b);
+                };
+                mkBtn('Tout', 'all');
+                years.forEach(y => mkBtn(y, y));
 
-            // Mobile Cards View
-            html += `<div class="md:hidden space-y-3 p-4 bg-slate-50 dark:bg-slate-900/50">`;
-            sorted.forEach(d => {
-                const isGaz = d.type === 'Gaz';
-                const icon = isGaz ? 'flame' : 'zap';
-                const colorClass = isGaz ? 'text-orange-600' : 'text-blue-600';
-                const borderClass = isGaz ? 'border-l-4 border-orange-500' : 'border-l-4 border-blue-500';
-                const opacityClass = d.isProjection ? 'opacity-75 border-l-2 border-dashed' : '';
-                const costDisplay = d.isProjection ? `~${d.cost.toFixed(0)} €` : `${d.cost.toFixed(2)} €`;
+                const sum = (t) => Math.round(data.filter(d=>d.type===t).reduce((a,b)=>a+b.conso,0));
+                const cost = Math.round(data.reduce((a,b)=>a+b.cost,0));
+                
+                if (document.getElementById('kpi-elec')) document.getElementById('kpi-elec').innerText = sum('Electricité');
+                if (document.getElementById('kpi-gaz')) document.getElementById('kpi-gaz').innerText = sum('Gaz');
+                if (document.getElementById('kpi-cost')) document.getElementById('kpi-cost').innerText = cost + ' €';
 
-                html += `
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm ${borderClass} ${opacityClass} flex justify-between items-center">
-                    <div>
-                        <p class="text-xs text-slate-400 font-semibold mb-1">${d.rangeStr}</p>
-                        <div class="flex items-center gap-2 ${colorClass} font-bold text-sm">
-                            <i data-lucide="${icon}" class="w-4 h-4"></i>
-                            <span>${d.type}</span>
+                updateAnalysis(data);
+                renderTable(data);
+                renderChart(data);
+            }
+
+            function updateAnalysis(data) {
+                const realData = data.filter(d => !d.isProjection);
+                const workingData = realData.length > 0 ? realData : data;
+                
+                let factor = workingData.length > 20 ? 3 : (workingData.length > 6 ? 1 : 0.5); 
+                const gaz = workingData.filter(d=>d.type==='Gaz').reduce((a,b)=>a+b.conso,0) / factor;
+                const elec = workingData.filter(d=>d.type==='Electricité').reduce((a,b)=>a+b.conso,0) / factor;
+                
+                const dpe = Math.round((gaz+elec)/CONFIG.surface);
+                if (document.getElementById('dpe-value')) document.getElementById('dpe-value').innerText = dpe;
+                
+                let g = 'G', p = 92;
+                if(dpe<=70){g='A';p=7} else if(dpe<=110){g='B';p=21} else if(dpe<=180){g='C';p=35}
+                else if(dpe<=250){g='D';p=50} else if(dpe<=330){g='E';p=64} else if(dpe<=420){g='F';p=78}
+                
+                if (document.getElementById('dpe-cursor')) document.getElementById('dpe-cursor').style.left = p+'%';
+                const badge = document.getElementById('dpe-grade-badge');
+                if (badge) {
+                    badge.innerText = g;
+                    const colors = { A:'text-green-600 bg-green-50', B:'text-green-500 bg-green-50', C:'text-green-400 bg-green-50', D:'text-yellow-600 bg-yellow-50', E:'text-orange-500 bg-orange-50', F:'text-orange-600 bg-orange-50', G:'text-red-600 bg-red-50' };
+                    badge.className = `px-4 py-2 rounded-xl text-2xl font-black shadow-sm border border-slate-200 dark:border-slate-700 ${colors[g]}`;
+                }
+
+                // --- CALCUL DES ÉCONOMIES (Comparaison Tarif Ohm vs Engie sur le volume annuel estimé) ---
+                const annualCostOhmElec = (elec * CONFIG.tariffs.ohm.elec.kwh) + (CONFIG.tariffs.ohm.elec.sub_m * 12);
+                const annualCostEngieElec = (elec * CONFIG.tariffs.engie.elec.kwh) + (CONFIG.tariffs.engie.elec.sub_m * 12);
+                const savingElec = annualCostEngieElec - annualCostOhmElec;
+
+                const annualCostOhmGas = (gaz * CONFIG.tariffs.ohm.gas.kwh) + (CONFIG.tariffs.ohm.gas.sub_m * 12);
+                const annualCostEngieGas = (gaz * CONFIG.tariffs.engie.gas.kwh) + (CONFIG.tariffs.engie.gas.sub_m * 12);
+                const savingGas = annualCostEngieGas - annualCostOhmGas; 
+
+                const totalSavings = savingElec + savingGas;
+
+                const savingsEl = document.getElementById('savings-value');
+                if (savingsEl) {
+                    savingsEl.innerText = `${Math.round(totalSavings)} € / an`;
+                    savingsEl.className = totalSavings > 0 ? "text-lg font-extrabold text-emerald-700 dark:text-emerald-300" : "text-lg font-extrabold text-red-700 dark:text-red-300";
+                }
+
+                if (document.getElementById('gain-elec')) document.getElementById('gain-elec').innerText = `${savingElec > 0 ? '+' : ''}${Math.round(savingElec)} €`;
+                if (document.getElementById('gain-gaz')) document.getElementById('gain-gaz').innerText = `${savingGas > 0 ? '+' : ''}${Math.round(savingGas)} €`;
+
+                const rG = gaz / (CONFIG.benchmarks.gaz.avg * 1.15); 
+                const elG = document.getElementById('analysis-gaz-text');
+                const bgG = document.getElementById('badge-gaz');
+                const barG = document.getElementById('gauge-gaz');
+                if (elG && bgG && barG) {
+                    if(rG < 0.8) { elG.innerText = "Excellente performance thermique."; bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"; bgG.innerText = "Économe"; barG.style.width = "15%"; } 
+                    else if(rG < 1.1) { elG.innerText = "Consommation cohérente."; bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700"; bgG.innerText = "Normal"; barG.style.width = "50%"; } 
+                    else { elG.innerText = "Attention, consommation élevée."; bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700"; bgG.innerText = "Élevé"; barG.style.width = "85%"; }
+                }
+
+                const rE = elec / CONFIG.benchmarks.elec.avg;
+                const elE = document.getElementById('analysis-elec-text');
+                const bgE = document.getElementById('badge-elec');
+                const barE = document.getElementById('gauge-elec');
+                if (elE && bgE && barE) {
+                    if(rE < 0.9) { elE.innerText = "Très sobre."; bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"; bgE.innerText = "Sobre"; barE.style.width = "15%"; } 
+                    else if(rE < 1.3) { elE.innerText = "Dans la moyenne nationale."; bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700"; bgE.innerText = "Standard"; barE.style.width = "50%"; } 
+                    else { elE.innerText = "Consommation importante."; bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-700"; bgE.innerText = "Haut"; barE.style.width = "85%"; }
+                }
+            }
+
+            function renderTable(data) {
+                const container = document.getElementById('records-container');
+                if (!container) return;
+                const sorted = [...data].sort((a,b)=>b.date-a.date);
+                
+                let html = `
+                <table class="w-full hidden md:table">
+                    <thead class="bg-slate-50 dark:bg-slate-800">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Période</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Fournisseur</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Énergie</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Volume</th>
+                            <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase">Coût</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-700 bg-white dark:bg-slate-900">
+                `;
+                
+                sorted.forEach(d => {
+                    const isGaz = d.type === 'Gaz';
+                    const color = isGaz ? 'text-orange-600 bg-orange-50' : 'text-blue-600 bg-blue-50';
+                    const rowClass = d.isProjection ? 'bg-slate-50/50 dark:bg-slate-800/30 italic text-slate-500' : 'hover:bg-slate-50 dark:hover:bg-slate-800';
+                    const costDisplay = d.isProjection ? `~${d.cost.toFixed(0)} €` : `${d.cost.toFixed(2)} €`;
+                    const provider = d.year >= 2026 ? 'Ohm' : 'Engie';
+                    const providerClass = d.year >= 2026 ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800';
+                    
+                    html += `
+                    <tr class="${rowClass} transition-colors">
+                        <td class="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">
+                            ${d.rangeStr}
+                            ${d.isProjection ? '<span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-800">PROJ</span>' : ''}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold ${providerClass}">
+                                ${provider}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${color}">
+                                ${d.type}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-sm font-bold text-slate-700 dark:text-slate-200">${Math.round(d.conso)} kWh</td>
+                        <td class="px-6 py-4 text-right text-sm font-mono text-slate-600 dark:text-slate-400">${costDisplay}</td>
+                    </tr>`;
+                });
+                html += `</tbody></table>`;
+
+                // Mobile Cards View
+                html += `<div class="md:hidden space-y-3 p-4 bg-slate-50 dark:bg-slate-900/50">`;
+                sorted.forEach(d => {
+                    const isGaz = d.type === 'Gaz';
+                    const icon = isGaz ? 'flame' : 'zap';
+                    const colorClass = isGaz ? 'text-orange-600' : 'text-blue-600';
+                    const borderClass = isGaz ? 'border-l-4 border-orange-500' : 'border-l-4 border-blue-500';
+                    const opacityClass = d.isProjection ? 'opacity-75 border-l-2 border-dashed' : '';
+                    const costDisplay = d.isProjection ? `~${d.cost.toFixed(0)} €` : `${d.cost.toFixed(2)} €`;
+                    const provider = d.year >= 2026 ? 'Ohm' : 'Engie';
+                    const providerClass = d.year >= 2026 ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800';
+
+                    html += `
+                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm ${borderClass} ${opacityClass} flex justify-between items-center">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <p class="text-xs text-slate-400 font-semibold">${d.rangeStr}</p>
+                                <span class="text-[10px] px-1.5 py-0.5 rounded font-bold ${providerClass}">${provider}</span>
+                            </div>
+                            <div class="flex items-center gap-2 ${colorClass} font-bold text-sm">
+                                <i data-lucide="${icon}" class="w-4 h-4"></i>
+                                <span>${d.type}</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">${d.temp.toFixed(1)}°C ext.</p>
                         </div>
-                        <p class="text-xs text-slate-500 mt-1">${d.temp.toFixed(1)}°C ext.</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-lg font-bold text-slate-800 dark:text-white">${Math.round(d.conso)} <span class="text-xs font-normal">kWh</span></p>
-                        <p class="text-sm font-mono text-slate-600 dark:text-slate-400">${costDisplay}</p>
-                    </div>
-                </div>`;
-            });
-            html += `</div>`;
+                        <div class="text-right">
+                            <p class="text-lg font-bold text-slate-800 dark:text-white">${Math.round(d.conso)} <span class="text-xs font-normal">kWh</span></p>
+                            <p class="text-sm font-mono text-slate-600 dark:text-slate-400">${costDisplay}</p>
+                        </div>
+                    </div>`;
+                });
+                html += `</div>`;
 
-            container.innerHTML = html;
-            lucide.createIcons();
-        }
+                container.innerHTML = html;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
 
-        function renderChart(data) {
-            const ctx = document.getElementById('energyChart').getContext('2d');
-            const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            
-            // Group Data
-            const groups = {};
-            data.forEach(d => {
-                const k = d.date.toISOString().slice(0,7);
-                if(!groups[k]) groups[k] = { 
-                    label: d.date.toLocaleDateString('fr',{month:'short', year:'2-digit'}), 
-                    fullRange: `${d.rangeStr}`, 
-                    gaz:0, elec:0, temp:d.temp, sort: d.date,
-                    isProjection: d.isProjection
-                };
-                if(d.type==='Gaz') groups[k].gaz += d.conso; else groups[k].elec += d.conso;
-            });
-            const arr = Object.values(groups).sort((a,b)=>a.sort-b.sort);
+            function renderChart(data) {
+                const ctx = document.getElementById('energyChart');
+                if (!ctx) return;
+                
+                const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                
+                const groups = {};
+                data.forEach(d => {
+                    const k = d.date.toISOString().slice(0,7);
+                    if(!groups[k]) groups[k] = { 
+                        label: d.date.toLocaleDateString('fr',{month:'short', year:'2-digit'}), 
+                        fullRange: `${d.rangeStr}`, 
+                        gaz:0, elec:0, temp:d.temp, sort: d.date,
+                        isProjection: d.isProjection,
+                        provider: d.year >= 2026 ? 'Ohm' : 'Engie'
+                    };
+                    if(d.type==='Gaz') groups[k].gaz += d.conso; else groups[k].elec += d.conso;
+                });
+                const arr = Object.values(groups).sort((a,b)=>a.sort-b.sort);
 
-            if(chartInstance) chartInstance.destroy();
-            
-            // Patterns for Projection bars
-            // Note: Chart.js patterns require more setup, using simple color opacity for now
-            const bgGaz = arr.map(d => d.isProjection ? 'rgba(249, 115, 22, 0.4)' : '#f97316');
-            const bgElec = arr.map(d => d.isProjection ? 'rgba(59, 130, 246, 0.4)' : '#3b82f6');
-            const borderGaz = arr.map(d => d.isProjection ? '#f97316' : '#f97316'); // Border keep solid
-            const borderWidth = arr.map(d => d.isProjection ? 2 : 0);
+                if(chartInstance) chartInstance.destroy();
+                
+                const bgGaz = arr.map(d => d.isProjection ? 'rgba(249, 115, 22, 0.4)' : '#f97316');
+                const bgElec = arr.map(d => d.isProjection ? 'rgba(59, 130, 246, 0.4)' : '#3b82f6');
+                const borderGaz = arr.map(d => d.isProjection ? '#f97316' : '#f97316');
+                const borderWidth = arr.map(d => d.isProjection ? 2 : 0);
 
-            chartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: arr.map(d=>d.label),
-                    datasets: [
-                        { 
-                            label:'Gaz', 
-                            data:arr.map(d=>d.gaz), 
-                            backgroundColor: bgGaz, 
-                            borderColor: borderGaz,
-                            borderWidth: borderWidth,
-                            borderSkipped: false, // Full border for projection
-                            borderRadius:4, 
-                            stack:'0' 
-                        },
-                        { 
-                            label:'Élec', 
-                            data:arr.map(d=>d.elec), 
-                            backgroundColor: bgElec,
-                            borderColor: '#3b82f6',
-                            borderWidth: borderWidth,
-                            borderSkipped: false,
-                            borderRadius:4, 
-                            stack:'0' 
-                        },
-                        { 
-                            label:'Temp', 
-                            data:arr.map(d=>d.temp), 
-                            type:'line', 
-                            borderDash: [5, 5], // Dashed line for everything or check if projection? 
-                            // Simplifying: dashed line for projection part is complex in one dataset. Keeping solid.
-                            borderColor: isDark ? '#94a3b8':'#475569', 
-                            pointBackgroundColor: isDark ? '#94a3b8':'#475569', 
-                            borderWidth:2, 
-                            yAxisID:'y1' 
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { 
-                        legend: { position:'bottom', labels: { color: isDark ? '#cbd5e1':'#334155', usePointStyle:true } },
-                        tooltip: {
-                            callbacks: {
-                                title: (items) => {
-                                    const item = items[0];
-                                    return arr[item.dataIndex].fullRange;
-                                },
-                                label: (context) => {
-                                    let label = context.dataset.label || '';
-                                    if (label) label += ': ';
-                                    if (context.parsed.y !== null) label += Math.round(context.parsed.y) + (context.dataset.type === 'line' ? ' °C' : ' kWh');
-                                    if (arr[context.dataIndex].isProjection && context.dataset.type !== 'line') label += ' (Est.)';
-                                    return label;
+                chartInstance = new Chart(ctx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: arr.map(d=>d.label),
+                        datasets: [
+                            { 
+                                label:'Gaz', 
+                                data:arr.map(d=>d.gaz), 
+                                backgroundColor: bgGaz, 
+                                borderColor: borderGaz,
+                                borderWidth: borderWidth,
+                                borderSkipped: false, 
+                                borderRadius:4, 
+                                stack:'0' 
+                            },
+                            { 
+                                label:'Élec', 
+                                data:arr.map(d=>d.elec), 
+                                backgroundColor: bgElec,
+                                borderColor: '#3b82f6',
+                                borderWidth: borderWidth,
+                                borderSkipped: false,
+                                borderRadius:4, 
+                                stack:'0' 
+                            },
+                            { 
+                                label:'Temp', 
+                                data:arr.map(d=>d.temp), 
+                                type:'line', 
+                                borderDash: [5, 5], 
+                                borderColor: isDark ? '#94a3b8':'#475569', 
+                                pointBackgroundColor: isDark ? '#94a3b8':'#475569', 
+                                borderWidth:2, 
+                                yAxisID:'y1' 
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { position:'bottom', labels: { color: isDark ? '#cbd5e1':'#334155', usePointStyle:true } },
+                            tooltip: {
+                                callbacks: {
+                                    title: (items) => {
+                                        const item = items[0];
+                                        const p = arr[item.dataIndex].provider;
+                                        return `${arr[item.dataIndex].fullRange} (${p})`;
+                                    },
+                                    label: (context) => {
+                                        let label = context.dataset.label || '';
+                                        if (label) label += ': ';
+                                        if (context.parsed.y !== null) label += Math.round(context.parsed.y) + (context.dataset.type === 'line' ? ' °C' : ' kWh');
+                                        if (arr[context.dataIndex].isProjection && context.dataset.type !== 'line') label += ' (Est.)';
+                                        return label;
+                                    }
                                 }
                             }
+                        },
+                        scales: {
+                            x: { grid:{display:false}, ticks:{color: isDark ? '#94a3b8':'#64748b'} },
+                            y: { display:false },
+                            y1: { display:false, reverse:true }
                         }
-                    },
-                    scales: {
-                        x: { grid:{display:false}, ticks:{color: isDark ? '#94a3b8':'#64748b'} },
-                        y: { display:false },
-                        y1: { display:false, reverse:true }
                     }
-                }
-            });
-        }
+                });
+            }
 
-        initData();
-        renderDashboard('all');
-
+            initData();
+            renderDashboard('all');
+        });
     </script>
 </body>
 </html>
