@@ -13,14 +13,21 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
-                    colors: { slate: { 850: '#151e2e' } }
+                    colors: { slate: { 850: '#151e2e' } },
+                    animation: { 'spin-slow': 'spin 3s linear infinite' }
                 }
             }
         }
     </script>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Plugin Chart.js pour les lignes d'annotation -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+    
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- CountUp.js pour les animations de chiffres -->
+    <script src="https://cdn.jsdelivr.net/npm/countup.js@2.0.7/dist/countUp.umd.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -34,7 +41,13 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
         @media (prefers-color-scheme: dark) {
             .glass-card {
                 background: rgba(30, 41, 59, 0.85);
@@ -53,18 +66,69 @@
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); transform: scale(1.05);
         }
 
-        .dpe-cursor { 
-            position: absolute; top: -12px; width: 4px; height: calc(100% + 24px); 
-            background: #1e293b; border-radius: 2px;
-            transform: translateX(-50%); transition: left 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 0 10px rgba(0,0,0,0.3); z-index: 10;
+        /* Jauge Circulaire CSS */
+        .gauge-container { position: relative; width: 100%; height: 120px; overflow: hidden; display: flex; justify-content: center; align-items: flex-end; }
+        .gauge-body {
+            width: 200px; height: 100px;
+            background: conic-gradient(from 180deg at 50% 100%, 
+                #16a34a 0deg 30deg,   /* A */
+                #4ade80 30deg 60deg,  /* B */
+                #bef264 60deg 90deg,  /* C */
+                #facc15 90deg 120deg, /* D */
+                #fb923c 120deg 145deg,/* E */
+                #ea580c 145deg 165deg,/* F */
+                #dc2626 165deg 180deg /* G */
+            );
+            border-top-left-radius: 100px; border-top-right-radius: 100px;
+            position: relative; 
         }
-        @media (prefers-color-scheme: dark) { .dpe-cursor { background: #f8fafc; } }
+        /* Masque central pour créer l'arc */
+        .gauge-body::before {
+            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 140px; height: 70px; 
+            background: rgba(255, 255, 255, 0.9); /* Fallback light */
+            border-top-left-radius: 70px; border-top-right-radius: 70px;
+            z-index: 5;
+        }
+        @media (prefers-color-scheme: dark) {
+            .gauge-body::before { background: rgba(30, 41, 59, 1); } /* Match dark card bg */
+        }
+
+        .gauge-needle {
+            width: 4px; height: 90px; background: #1e293b;
+            position: absolute; bottom: 0; left: 50%; transform-origin: bottom center;
+            transform: translateX(-50%) rotate(0deg); transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 2px; z-index: 10;
+        }
+        .gauge-center {
+            width: 16px; height: 16px; background: #1e293b; border-radius: 50%;
+            position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); z-index: 11;
+        }
+        @media (prefers-color-scheme: dark) { 
+            .gauge-needle, .gauge-center { background: #f8fafc; } 
+        }
 
         .gauge-fill { height: 100%; border-radius: 9999px; transition: width 1s ease-out; position: relative; overflow: hidden; }
         .gauge-fill::after {
             content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+        }
+
+        /* Fix Value Display */
+        .dpe-value-container {
+            position: absolute;
+            bottom: -5px; /* Ajustement bas */
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 20; /* Force au premier plan */
+            background-color: rgba(255,255,255,0.8); /* Fond semi-transparent pour lisibilité */
+            padding: 2px 8px;
+            border-radius: 12px;
+            backdrop-filter: blur(4px);
+        }
+        @media (prefers-color-scheme: dark) {
+            .dpe-value-container { background-color: rgba(30,41,59,0.8); }
         }
     </style>
 </head>
@@ -93,10 +157,21 @@
                     <i data-lucide="download" class="w-5 h-5"></i>
                 </button>
             </div>
-            <div class="flex items-center gap-3 w-full md:w-auto overflow-hidden justify-end">
-                <div class="overflow-x-auto hide-scrollbar flex-grow md:flex-grow-0">
+            
+            <!-- Contrôles Droite -->
+            <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                <!-- Mobile Select Menu -->
+                <div class="md:hidden w-full">
+                    <select id="yearFilterSelect" onchange="renderDashboard(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                        <!-- Options injected via JS -->
+                    </select>
+                </div>
+
+                <!-- Desktop Buttons -->
+                <div class="hidden md:flex overflow-x-auto hide-scrollbar flex-grow md:flex-grow-0">
                     <div class="flex gap-2" id="yearFilters"></div>
                 </div>
+
                 <button onclick="exportToCSV()" class="hidden md:flex p-2 md:px-3 md:py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300 items-center gap-2 flex-shrink-0">
                     <i data-lucide="download" class="w-4 h-4"></i>
                     <span class="text-xs font-semibold">Export CSV</span>
@@ -138,33 +213,25 @@
                 </div>
             </div>
 
-            <!-- Tuile 2 : Performance DPE (Dynamique) -->
+            <!-- Tuile 2 : Performance DPE (Jauge Circulaire) -->
             <div class="glass-card rounded-2xl p-5 relative overflow-hidden justify-between border-t-4 border-slate-400 dark:border-slate-600">
-                <div class="absolute top-0 right-0 p-4 opacity-10"><i data-lucide="leaf" class="w-24 h-24"></i></div>
-                <div class="flex justify-between items-end mb-4 relative z-10">
-                    <div>
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1" id="dpe-title">Performance</h3>
-                        <div class="flex items-baseline gap-2">
-                            <span id="dpe-value" class="text-3xl font-extrabold text-slate-900 dark:text-white">--</span>
-                            <span class="text-sm font-medium text-slate-500">kWh/m²/an</span>
-                        </div>
-                    </div>
-                    <div id="dpe-grade-badge" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-2xl font-black text-slate-800 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">-</div>
+                <div class="flex justify-between items-start mb-2 relative z-10">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1" id="dpe-title">Performance</h3>
+                    <div id="dpe-grade-badge" class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xl font-black text-slate-800 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">-</div>
                 </div>
-                <div>
-                    <!-- Barre DPE avec 7 segments -->
-                    <div class="h-4 flex rounded-full overflow-hidden shadow-inner mt-2">
-                        <div class="bg-emerald-500 w-[14.28%]"></div>
-                        <div class="bg-emerald-400 w-[14.28%]"></div>
-                        <div class="bg-emerald-200 w-[14.28%]"></div>
-                        <div class="bg-yellow-400 w-[14.28%]"></div>
-                        <div class="bg-orange-400 w-[14.28%]"></div>
-                        <div class="bg-orange-600 w-[14.28%]"></div>
-                        <div class="bg-red-600 w-[14.32%]"></div>
+                
+                <div class="flex flex-col items-center justify-end h-full relative" style="min-height: 140px;">
+                    <div class="gauge-container">
+                        <div class="gauge-body"></div>
+                        <div class="gauge-needle" id="dpe-needle"></div>
+                        <div class="gauge-center"></div>
                     </div>
-                    <div class="relative h-4 mt-1">
-                        <div id="dpe-cursor" class="dpe-cursor"></div>
-                        <div class="flex justify-between text-[10px] font-bold text-slate-400 px-1 mt-1"><span>A</span><span>D</span><span>G</span></div>
+                    <!-- Correction Affichage Valeur : Z-Index augmenté et position ajustée -->
+                    <div class="dpe-value-container shadow-sm border border-slate-100 dark:border-slate-700">
+                        <div class="flex items-baseline gap-1 justify-center">
+                            <span id="dpe-value" class="text-2xl font-extrabold text-slate-900 dark:text-white">--</span>
+                            <span class="text-[10px] font-medium text-slate-500 uppercase">kWh/m²</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -423,26 +490,21 @@
                     const year = 2026;
                     const dateObj = new Date(year, m, 1);
                     
-                    // Pondération Climatique Gaz (Incluant ECS base ~2-3% par mois l'été)
-                    const weightsGaz = [0.16, 0.15, 0.12, 0.08, 0.04, 0.02, 0.02, 0.02, 0.03, 0.07, 0.13, 0.16];
+                    const weightsGaz = [0.18, 0.16, 0.12, 0.08, 0.03, 0, 0, 0, 0.02, 0.07, 0.14, 0.20];
                     const annualGazEst = 3700;
                     
-                    const baseECS = 0.02; // Part ECS mensuelle (approx)
+                    const baseECS = 0.02; // Part ECS (2%)
                     let weight = weightsGaz[m];
                     let monthlyGaz;
-                    
-                    // Appliquer la réduction thermostat SEULEMENT sur la part chauffage
+
                     if (weight <= baseECS) {
-                         // Principalement ECS, pas d'effet thermostat
-                         monthlyGaz = annualGazEst * weight;
+                         monthlyGaz = annualGazEst * 0.02; // Minimum ECS Summer
                     } else {
-                         // Chauffage + ECS
                          let heatingPart = (weight - baseECS) * annualGazEst * heatingFactor;
                          let ecsPart = baseECS * annualGazEst;
                          monthlyGaz = heatingPart + ecsPart;
                     }
 
-                    // Pondération Elec
                     const weightsElec = [0.11, 0.10, 0.09, 0.08, 0.07, 0.06, 0.06, 0.06, 0.07, 0.08, 0.10, 0.12];
                     const annualElecEst = 1600;
                     let monthlyElec = annualElecEst * weightsElec[m];
@@ -473,7 +535,36 @@
                 let historyMonthly = processMonthlyHistory(rows);
                 const proj = generateProjection2026(historyMonthly);
                 allData = [...historyMonthly, ...proj].sort((a,b) => a.date - b.date);
+                // Setup filters
+                const years = [...new Set(allData.map(d=>d.year))].sort();
+                const fContainer = document.getElementById('yearFilters');
+                const mSelect = document.getElementById('yearFilterSelect');
+                if(fContainer) {
+                    fContainer.innerHTML = '';
+                    mSelect.innerHTML = '';
+                    
+                    // Desktop Buttons
+                    const mkBtn = (lbl, val) => {
+                        const b = document.createElement('button');
+                        b.innerText=lbl; b.dataset.year=val; 
+                        b.className = `filter-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm ${val == currentYearFilter 
+                            ? 'active ring-2 ring-blue-500 ring-offset-2' 
+                            : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50'}`;
+                        b.onclick=()=>renderDashboard(val);
+                        fContainer.appendChild(b);
+                    };
+                    mkBtn('Tout', 'all');
+                    years.forEach(y => mkBtn(y, y));
 
+                    // Mobile Select
+                    const optAll = document.createElement('option'); optAll.value='all'; optAll.text='Tout l\'historique';
+                    mSelect.appendChild(optAll);
+                    years.forEach(y => {
+                        const opt = document.createElement('option'); opt.value=y; opt.text=y;
+                        mSelect.appendChild(opt);
+                    });
+                }
+                
                 const realData = allData.filter(d => !d.isProjection);
                 if(realData.length) {
                     const max = new Date(Math.max(...realData.map(e=>e.endDate)));
@@ -502,34 +593,38 @@
                         btn.classList.add('text-slate-500', 'hover:bg-slate-50');
                     }
                 });
-                initData();
+                initData(); // Re-generate projection based on new thermostat
                 renderDashboard(currentYearFilter);
             }
 
-            function renderDashboard(year) {
+            // Expose renderDashboard global
+            window.renderDashboard = function(year) {
                 currentYearFilter = year;
-                const data = year === 'all' ? allData : allData.filter(d => d.year == year);
-                const years = [...new Set(allData.map(d=>d.year))].sort();
-                const fContainer = document.getElementById('yearFilters');
-                fContainer.innerHTML = '';
                 
-                const mkBtn = (lbl, val) => {
-                    const b = document.createElement('button');
-                    b.innerText=lbl; b.dataset.year=val; 
-                    b.className = `filter-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm ${val == year 
+                // Update Desktop Buttons
+                document.querySelectorAll('#yearFilters button').forEach(b => {
+                     b.className = `filter-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm ${b.dataset.year == year 
                         ? 'active ring-2 ring-blue-500 ring-offset-2' 
                         : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50'}`;
-                    b.onclick=()=>renderDashboard(val);
-                    fContainer.appendChild(b);
-                };
-                mkBtn('Tout', 'all');
-                years.forEach(y => mkBtn(y, y));
+                });
+                
+                // Update Mobile Select
+                document.getElementById('yearFilterSelect').value = year;
+
+                const data = year === 'all' ? allData : allData.filter(d => d.year == year);
 
                 const sum = (t) => Math.round(data.filter(d=>d.type===t).reduce((a,b)=>a+b.conso,0));
                 const cost = Math.round(data.reduce((a,b)=>a+b.cost,0));
                 if (document.getElementById('kpi-elec')) document.getElementById('kpi-elec').innerText = sum('Electricité');
                 if (document.getElementById('kpi-gaz')) document.getElementById('kpi-gaz').innerText = sum('Gaz');
                 if (document.getElementById('kpi-cost')) document.getElementById('kpi-cost').innerText = cost + ' €';
+                
+                // Animate Numbers
+                if(window.CountUp) {
+                   new CountUp('kpi-elec', sum('Electricité')).start();
+                   new CountUp('kpi-gaz', sum('Gaz')).start();
+                   new CountUp('kpi-cost', cost).start();
+                }
 
                 updateAnalysis(data);
                 renderTable(data);
@@ -553,109 +648,87 @@
                 if(document.getElementById('analysis-gaz-label')) document.getElementById('analysis-gaz-label').innerHTML = `<i data-lucide="flame" class="w-4 h-4"></i> Gaz (${priceGaz.toFixed(3)}€/kWh)`;
                 if(document.getElementById('analysis-elec-label')) document.getElementById('analysis-elec-label').innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i> Élec (${priceElec.toFixed(3)}€/kWh)`;
 
-                // DPE Calculation Correction for Single Year Selection
+                // DPE Calculation Correction
                 const realData = data.filter(d => !d.isProjection);
-                // If single year selected (data has ~24 monthly entries for 2 energies), factor should be 1
-                // If 'all' (data has many years), factor should be number of years
+                // If single year selected, factor is 1. If 'all', factor is number of years available
                 let factor = 1;
                 if (currentYearFilter === 'all') {
-                     // Count distinct years in data
                      const uniqueYears = new Set(data.map(d => d.year)).size;
                      factor = uniqueYears > 0 ? uniqueYears : 1;
-                } else {
-                    factor = 1;
                 }
                 
-                // Working data is the filtered data passed to the function
                 const gaz = data.filter(d=>d.type==='Gaz').reduce((a,b)=>a+b.conso,0) / factor;
                 const elec = data.filter(d=>d.type==='Electricité').reduce((a,b)=>a+b.conso,0) / factor;
-                
                 const dpe = Math.round((gaz+elec)/CONFIG.surface);
                 
-                if (document.getElementById('dpe-value')) document.getElementById('dpe-value').innerText = dpe;
-                if(document.getElementById('dpe-title')) document.getElementById('dpe-title').innerText = `Performance ${displayYear}`;
+                if (document.getElementById('dpe-value')) {
+                     // Animate DPE Value
+                     if(window.CountUp) new CountUp('dpe-value', dpe).start();
+                     else document.getElementById('dpe-value').innerText = dpe;
+                }
+                if(document.getElementById('dpe-title')) document.getElementById('dpe-title').innerText = `Performance ${displayYear === 'all' ? 'Moyenne' : displayYear}`;
 
                 let g = 'G', p = 92;
                 if(dpe<=70){g='A';p=7} else if(dpe<=110){g='B';p=21} else if(dpe<=180){g='C';p=35}
                 else if(dpe<=250){g='D';p=50} else if(dpe<=330){g='E';p=64} else if(dpe<=420){g='F';p=78}
                 
-                // Calculate Continuous Position
-                let pContinuous = 0;
-                const ranges = [0, 70, 110, 180, 250, 330, 420];
-                const widthPerSegment = 14.28; // 100/7
-                
-                if (dpe <= 70) {
-                    pContinuous = (dpe / 70) * widthPerSegment;
-                } else if (dpe > 420) {
-                    pContinuous = 85.71 + Math.min((dpe - 420) / 100, 1) * 14.28; // Cap at end
-                } else {
-                    for (let i = 0; i < ranges.length - 1; i++) {
-                        if (dpe > ranges[i] && dpe <= ranges[i+1]) {
-                             const rangeWidth = ranges[i+1] - ranges[i];
-                             const progressInRange = (dpe - ranges[i]) / rangeWidth;
-                             pContinuous = (i * widthPerSegment) + (progressInRange * widthPerSegment);
-                             break;
-                        }
-                    }
+                // Jauge Circulaire Animation
+                const maxDPE = 450; 
+                let deg = -90 + (Math.min(dpe, maxDPE) / maxDPE) * 180;
+                if(document.getElementById('dpe-needle')) {
+                    document.getElementById('dpe-needle').style.transform = `translateX(-50%) rotate(${deg}deg)`;
                 }
-                // Adjust for visually nicer centering (optional, but 0-100 logic is fine)
-                pContinuous = Math.max(0, Math.min(100, pContinuous));
 
-                if (document.getElementById('dpe-cursor')) document.getElementById('dpe-cursor').style.left = pContinuous+'%';
-                
                 const badge = document.getElementById('dpe-grade-badge');
                 if (badge) {
                     badge.innerText = g;
                     const colors = { A:'text-green-600 bg-green-50', B:'text-green-500 bg-green-50', C:'text-green-400 bg-green-50', D:'text-yellow-600 bg-yellow-50', E:'text-orange-500 bg-orange-50', F:'text-orange-600 bg-orange-50', G:'text-red-600 bg-red-50' };
-                    badge.className = `px-4 py-2 rounded-xl text-2xl font-black shadow-sm border border-slate-200 dark:border-slate-700 ${colors[g]}`;
+                    badge.className = `px-3 py-1 rounded-lg text-xl font-black shadow-sm border border-slate-200 dark:border-slate-700 ${colors[g]}`;
                 }
 
-                // --- CALCUL DES ÉCONOMIES (Adaptive) ---
+                // --- CALCUL DES ÉCONOMIES ---
                 let gainTitle = "Gain 2026 Estimé";
                 let gainSubtitle = "vs Engie 2025";
                 let totalSavings = 0;
                 let gainSupplier = 0;
                 let gainThermo = 0;
 
+                // Calculation Reference is always annual projection 2026 for FUTURE gains
+                const proj2026 = allData.filter(d => d.year === 2026);
+                const volGaz2026 = proj2026.filter(d => d.type === 'Gaz').reduce((a, b) => a + b.conso, 0);
+                const volElec2026 = proj2026.filter(d => d.type === 'Electricité').reduce((a, b) => a + b.conso, 0);
+
+                // Cost OHM 2026 (Real projected cost)
+                const costOhm = 
+                    (volElec2026 * CONFIG.tariffs.ohm.elec.kwh + CONFIG.tariffs.ohm.elec.sub_m * 12) +
+                    (volGaz2026 * CONFIG.tariffs.ohm.gas.kwh + CONFIG.tariffs.ohm.gas.sub_m * 12);
+
+                // Reference: Engie based on same volume (before thermostat reduction)
+                const factorThermo = 1 / (1 - (currentThermostatDrop * 0.07)); 
+                const volGazRef = volGaz2026 * factorThermo;
+                
+                const costEngieRef = 
+                    (volElec2026 * CONFIG.tariffs.engie.elec.kwh + CONFIG.tariffs.engie.elec.sub_m * 12) +
+                    (volGazRef * CONFIG.tariffs.engie.gas.kwh + CONFIG.tariffs.engie.gas.sub_m * 12);
+
                 if (parseInt(displayYear) < 2026 && displayYear !== 'all') {
-                    // RETROSPECTIVE MODE: What if I had Ohm in the past?
+                    // RETROSPECTIVE GAIN
                     gainTitle = `Gain Virtuel ${displayYear}`;
                     gainSubtitle = "Si vous aviez été chez Ohm";
                     
-                    const actualCost = data.reduce((sum, d) => sum + d.cost, 0);
-                    
-                    // Reconstitution du coût simulé Ohm sur la consommation réelle affichée
                     const volGazYear = data.filter(d=>d.type==='Gaz').reduce((a,b)=>a+b.conso,0);
                     const volElecYear = data.filter(d=>d.type==='Electricité').reduce((a,b)=>a+b.conso,0);
+                    const costReal = data.reduce((a,b)=>a+b.cost,0);
                     
-                    // On assume que 'data' contient 12 mois si année complète
-                    const monthsCount = new Set(data.map(d => d.date.getMonth())).size || 12;
+                    const costOhmSim = (volElecYear * CONFIG.tariffs.ohm.elec.kwh + 12 * CONFIG.tariffs.ohm.elec.sub_m) +
+                                       (volGazYear * CONFIG.tariffs.ohm.gas.kwh + 12 * CONFIG.tariffs.ohm.gas.sub_m);
                     
-                    const simCostOhm = (volElecYear * CONFIG.tariffs.ohm.elec.kwh + monthsCount * CONFIG.tariffs.ohm.elec.sub_m) + 
-                                       (volGazYear * CONFIG.tariffs.ohm.gas.kwh + monthsCount * CONFIG.tariffs.ohm.gas.sub_m);
-                    
-                    totalSavings = actualCost - simCostOhm;
-                    gainSupplier = totalSavings; // All diff is supplier
+                    totalSavings = costReal - costOhmSim;
+                    gainSupplier = totalSavings;
+                    gainThermo = 0; // Past can't change thermostat
                 } else {
-                    // PROJECTION MODE (2026 or All)
-                    const proj2026 = allData.filter(d => d.year === 2026);
-                    const volGaz2026 = proj2026.filter(d => d.type === 'Gaz').reduce((a, b) => a + b.conso, 0);
-                    const volElec2026 = proj2026.filter(d => d.type === 'Electricité').reduce((a, b) => a + b.conso, 0);
-
-                    const costOhm = 
-                        (volElec2026 * CONFIG.tariffs.ohm.elec.kwh + CONFIG.tariffs.ohm.elec.sub_m * 12) +
-                        (volGaz2026 * CONFIG.tariffs.ohm.gas.kwh + CONFIG.tariffs.ohm.gas.sub_m * 12);
-
-                    const reductionFactor = currentThermostatDrop * 0.07;
-                    const factorThermo = 1 - reductionFactor > 0 ? 1 / (1 - reductionFactor) : 1; 
-                    const volGazRef = volGaz2026 * factorThermo;
-                    
-                    const costEngieRef = 
-                        (volElec2026 * CONFIG.tariffs.engie.elec.kwh + CONFIG.tariffs.engie.elec.sub_m * 12) +
-                        (volGazRef * CONFIG.tariffs.engie.gas.kwh + CONFIG.tariffs.engie.gas.sub_m * 12);
-
+                    // FUTURE GAIN
                     totalSavings = costEngieRef - costOhm;
-                    
                     const costOhmBase = (volElec2026 * CONFIG.tariffs.ohm.elec.kwh + CONFIG.tariffs.ohm.elec.sub_m * 12) + (volGazRef * CONFIG.tariffs.ohm.gas.kwh + CONFIG.tariffs.ohm.gas.sub_m * 12);
                     gainSupplier = costEngieRef - costOhmBase;
                     gainThermo = costOhmBase - costOhm;
@@ -670,7 +743,8 @@
                          savingsEl.innerText = "...";
                     } else {
                         const sign = totalSavings > 0 ? '+' : '';
-                        savingsEl.innerText = `${sign}${Math.round(totalSavings)} € / an`;
+                        if(window.CountUp) new CountUp('savings-value', Math.round(totalSavings), { prefix: sign, suffix: ' €' }).start();
+                        else savingsEl.innerText = `${sign}${Math.round(totalSavings)} €`;
                         savingsEl.className = totalSavings >= 0 ? "text-3xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-1" : "text-3xl font-extrabold text-red-700 dark:text-red-300 mb-1";
                     }
                 }
@@ -683,9 +757,9 @@
                 const bgG = document.getElementById('badge-gaz');
                 const barG = document.getElementById('gauge-gaz');
                 if (elG && bgG && barG) {
-                    if(rG < 0.8) { elG.innerText = "Excellente performance thermique."; bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"; bgG.innerText = "Économe"; barG.style.width = "15%"; } 
+                    if(rG < 0.8) { elG.innerText = "Excellent."; bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"; bgG.innerText = "Économe"; barG.style.width = "15%"; } 
                     else if(rG < 1.1) { elG.innerText = "Consommation cohérente."; bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700"; bgG.innerText = "Normal"; barG.style.width = "50%"; } 
-                    else { elG.innerText = "Attention, consommation élevée."; bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700"; bgG.innerText = "Élevé"; barG.style.width = "85%"; }
+                    else { elG.innerText = "Consommation élevée."; bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700"; bgG.innerText = "Élevé"; barG.style.width = "85%"; }
                 }
                 const rE = elec / CONFIG.benchmarks.elec.avg;
                 const elE = document.getElementById('analysis-elec-text');
@@ -693,7 +767,7 @@
                 const barE = document.getElementById('gauge-elec');
                 if (elE && bgE && barE) {
                     if(rE < 0.9) { elE.innerText = "Très sobre."; bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"; bgE.innerText = "Sobre"; barE.style.width = "15%"; } 
-                    else if(rE < 1.3) { elE.innerText = "Dans la moyenne nationale."; bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700"; bgE.innerText = "Standard"; barE.style.width = "50%"; } 
+                    else if(rE < 1.3) { elE.innerText = "Dans la moyenne."; bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700"; bgE.innerText = "Standard"; barE.style.width = "50%"; } 
                     else { elE.innerText = "Consommation importante."; bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-700"; bgE.innerText = "Haut"; barE.style.width = "85%"; }
                 }
 
@@ -795,21 +869,106 @@
                 const bgElec = arr.map(d => d.isProjection ? 'rgba(59, 130, 246, 0.4)' : '#3b82f6');
                 const borderGaz = arr.map(d => d.isProjection ? '#f97316' : '#f97316');
                 const borderWidth = arr.map(d => d.isProjection ? 2 : 0);
+                
+                // Budget Line Annotation
+                const budgetLine = {
+                    type: 'line',
+                    yMin: 1000, // Monthly budget goal in kWh (approx 100€)
+                    yMax: 1000,
+                    borderColor: 'rgba(255, 99, 132, 0.5)',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    label: {
+                        content: 'Budget Cible (~100€)',
+                        enabled: true,
+                        position: 'end'
+                    }
+                };
+                
+                // Moyenne Voisinage (Dataset)
+                // Approx 800 kWh/month for 42m2 (Gaz+Elec)
+                const neighborhoodData = arr.map(() => 800); 
+
                 chartInstance = new Chart(ctx.getContext('2d'), {
                     type: 'bar',
                     data: {
                         labels: arr.map(d=>d.label),
                         datasets: [
-                            { label:'Gaz', data:arr.map(d=>d.gaz), backgroundColor: bgGaz, borderColor: borderGaz, borderWidth: borderWidth, borderSkipped: false, borderRadius:4, stack:'Stack 0' },
-                            { label:'Élec', data:arr.map(d=>d.elec), backgroundColor: bgElec, borderColor: '#3b82f6', borderWidth: borderWidth, borderSkipped: false, borderRadius:4, stack:'Stack 0' },
-                            { label:'Temp', data:arr.map(d=>d.temp), type:'line', borderDash: [5, 5], borderColor: isDark ? '#94a3b8':'#475569', pointBackgroundColor: isDark ? '#94a3b8':'#475569', borderWidth:2, yAxisID:'y1' }
+                            { 
+                                label:'Gaz', 
+                                data:arr.map(d=>d.gaz), 
+                                backgroundColor: bgGaz, 
+                                borderColor: borderGaz, 
+                                borderWidth: borderWidth, 
+                                borderSkipped: false, 
+                                borderRadius:4, 
+                                stack:'Stack 0' 
+                            },
+                            { 
+                                label:'Élec', 
+                                data:arr.map(d=>d.elec), 
+                                backgroundColor: bgElec, 
+                                borderColor: '#3b82f6', 
+                                borderWidth: borderWidth, 
+                                borderSkipped: false, 
+                                borderRadius:4, 
+                                stack:'Stack 0' 
+                            },
+                            {
+                                label: 'Moyenne Voisinage',
+                                data: neighborhoodData,
+                                type: 'line',
+                                borderColor: isDark ? '#475569' : '#cbd5e1',
+                                borderDash: [2, 2],
+                                pointRadius: 0,
+                                borderWidth: 1,
+                                fill: false,
+                                order: 10
+                            }
                         ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { position:'bottom', labels: { color: isDark ? '#cbd5e1':'#334155', usePointStyle:true } }, tooltip: { callbacks: { title: (items) => { const item = items[0]; const p = arr[item.dataIndex].provider; return `${arr[item.dataIndex].fullRange} (${p})`; }, label: (context) => { let label = context.dataset.label || ''; if (label) label += ': '; if (context.parsed.y !== null) label += Math.round(context.parsed.y) + (context.dataset.type === 'line' ? ' °C' : ' kWh'); if (arr[context.dataIndex].isProjection && context.dataset.type !== 'line') label += ' (Est.)'; return label; } } } },
-                        scales: { x: { grid:{display:false}, ticks:{color: isDark ? '#94a3b8':'#64748b'}, stacked: true }, y: { display:false, stacked: true }, y1: { display:false, reverse:true } }
+                        plugins: { 
+                            legend: { position:'bottom', labels: { color: isDark ? '#cbd5e1':'#334155', usePointStyle:true } }, 
+                            annotation: {
+                                annotations: {
+                                    line1: budgetLine
+                                }
+                            },
+                            tooltip: { 
+                                callbacks: { 
+                                    title: (items) => { 
+                                        const item = items[0]; 
+                                        const p = arr[item.dataIndex].provider; 
+                                        return `${arr[item.dataIndex].fullRange} (${p})`; 
+                                    }, 
+                                    label: (context) => { 
+                                        let label = context.dataset.label || ''; 
+                                        if (label) label += ': '; 
+                                        if (context.parsed.y !== null) label += Math.round(context.parsed.y) + (context.dataset.type === 'line' ? ' °C' : ' kWh'); 
+                                        if (arr[context.dataIndex].isProjection && context.dataset.type !== 'line' && context.dataset.label !== 'Moyenne Voisinage') label += ' (Est.)'; 
+                                        return label; 
+                                    } 
+                                } 
+                            } 
+                        },
+                        scales: { 
+                            x: { 
+                                grid:{display:false}, 
+                                ticks:{color: isDark ? '#94a3b8':'#64748b'},
+                                stacked: true // Force Stacking X
+                            }, 
+                            y: { 
+                                display:false,
+                                stacked: true // Force Stacking Y
+                            }, 
+                            y1: { 
+                                display:false, 
+                                reverse:true 
+                            } 
+                        }
                     }
                 });
             }
