@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suivi & Projection Énergétique 2026 - Côté Parc</title>
+    <title>Dashboard Énergie 2026 - Côté Parc</title>
     
-    <!-- Tailwind CSS Config -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -13,345 +13,363 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
-                    colors: { slate: { 850: '#151e2e' } },
-                    animation: { 'spin-slow': 'spin 3s linear infinite' }
+                    colors: { 
+                        slate: { 850: '#151e2e', 900: '#0f172a' },
+                        primary: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb' }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(59, 130, 246, 0.15)',
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.05)',
+                    }
                 }
             }
         }
     </script>
     
+    <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Plugin Chart.js pour les lignes d'annotation -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0/dist/chartjs-plugin-annotation.min.js"></script>
-    
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- CountUp.js pour les animations de chiffres -->
     <script src="https://cdn.jsdelivr.net/npm/countup.js@2.0.7/dist/countUp.umd.js"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        body { -webkit-tap-highlight-color: transparent; }
-        
+        body { 
+            -webkit-tap-highlight-color: transparent; 
+            /* Fond avec gradient subtil */
+            background: radial-gradient(circle at top left, #f1f5f9, #e2e8f0);
+        }
+        @media (prefers-color-scheme: dark) {
+            body { background: radial-gradient(circle at top left, #1e293b, #0f172a); }
+        }
+
+        /* Modern Glass Card */
         .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .glass-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            border-color: rgba(255, 255, 255, 0.8);
         }
 
         @media (prefers-color-scheme: dark) {
             .glass-card {
-                background: rgba(30, 41, 59, 0.85);
-                border-color: rgba(51, 65, 85, 0.8);
+                background: rgba(30, 41, 59, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.08);
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            }
+            .glass-card:hover {
+                background: rgba(30, 41, 59, 0.6);
+                border-color: rgba(255, 255, 255, 0.15);
             }
         }
 
+        /* Hide Scrollbar */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .filter-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; }
+        /* Modern Filter Button */
+        .filter-btn { 
+            transition: all 0.2s ease; 
+            position: relative;
+            overflow: hidden;
+        }
+        .filter-btn::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
+            background: transparent; transition: background 0.2s;
+        }
         .filter-btn.active { 
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
-            color: white; border-color: transparent; 
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); transform: scale(1.05);
+            background: #fff; color: #0f172a; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .filter-btn.active::after { background: #3b82f6; }
+
+        @media (prefers-color-scheme: dark) {
+            .filter-btn.active { background: #1e293b; color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         }
 
-        /* Jauge Circulaire CSS */
-        .gauge-container { position: relative; width: 100%; height: 120px; overflow: hidden; display: flex; justify-content: center; align-items: flex-end; }
-        .gauge-body {
-            width: 200px; height: 100px;
+        /* Gauge Styling */
+        .gauge-container { position: relative; width: 100%; height: 100px; display: flex; justify-content: center; align-items: flex-end; overflow: visible; }
+        .gauge-arc {
+            width: 180px; height: 90px;
             background: conic-gradient(from 180deg at 50% 100%, 
-                #16a34a 0deg 30deg,   /* A */
-                #4ade80 30deg 60deg,  /* B */
-                #bef264 60deg 90deg,  /* C */
-                #facc15 90deg 120deg, /* D */
-                #fb923c 120deg 145deg,/* E */
-                #ea580c 145deg 165deg,/* F */
-                #dc2626 165deg 180deg /* G */
+                #22c55e 0deg 45deg,   /* Good */
+                #eab308 45deg 90deg,  /* Mid */
+                #f97316 90deg 135deg, /* Warning */
+                #ef4444 135deg 180deg /* Bad */
             );
             border-top-left-radius: 100px; border-top-right-radius: 100px;
-            position: relative; 
+            opacity: 0.9;
+            mask-image: radial-gradient(circle at 50% 100%, transparent 60%, black 61%);
+            -webkit-mask-image: radial-gradient(circle at 50% 100%, transparent 60%, black 61%);
         }
-        /* Masque central pour créer l'arc */
-        .gauge-body::before {
-            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 140px; height: 70px; 
-            background: rgba(255, 255, 255, 0.9); /* Fallback light */
-            border-top-left-radius: 70px; border-top-right-radius: 70px;
-            z-index: 5;
-        }
-        @media (prefers-color-scheme: dark) {
-            .gauge-body::before { background: rgba(30, 41, 59, 1); } /* Match dark card bg */
-        }
-
         .gauge-needle {
-            width: 4px; height: 90px; background: #1e293b;
-            position: absolute; bottom: 0; left: 50%; transform-origin: bottom center;
-            transform: translateX(-50%) rotate(0deg); transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border-radius: 2px; z-index: 10;
+            width: 4px; height: 85px; background: #334155;
+            position: absolute; bottom: 0; left: 50%;
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(-90deg);
+            transition: transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 4px; z-index: 10;
         }
         .gauge-center {
-            width: 16px; height: 16px; background: #1e293b; border-radius: 50%;
-            position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); z-index: 11;
+            width: 12px; height: 12px; background: #334155; border-radius: 50%;
+            position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); z-index: 11;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
         }
         @media (prefers-color-scheme: dark) { 
-            .gauge-needle, .gauge-center { background: #f8fafc; } 
+            .gauge-needle, .gauge-center { background: #e2e8f0; } 
         }
 
-        .gauge-fill { height: 100%; border-radius: 9999px; transition: width 1s ease-out; position: relative; overflow: hidden; }
-        .gauge-fill::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
-        }
-
-        /* Fix Value Display */
-        .dpe-value-container {
-            position: absolute;
-            bottom: -5px; /* Ajustement bas */
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            z-index: 20; /* Force au premier plan */
-            background-color: rgba(255,255,255,0.8); /* Fond semi-transparent pour lisibilité */
-            padding: 2px 8px;
-            border-radius: 12px;
-            backdrop-filter: blur(4px);
-        }
-        @media (prefers-color-scheme: dark) {
-            .dpe-value-container { background-color: rgba(30,41,59,0.8); }
-        }
+        /* Chart Tooltip Customization */
+        #chartjs-tooltip { opacity: 1; position: absolute; background: rgba(0, 0, 0, 0.7); color: white; border-radius: 3px; pointer-events: none; transform: translate(-50%, 0); transition: all .1s ease; }
     </style>
 </head>
-<body class="bg-[#f0f4f8] text-slate-800 dark:bg-[#0f172a] dark:text-slate-200 antialiased flex flex-col min-h-screen">
+<body class="text-slate-600 dark:text-slate-400 antialiased flex flex-col min-h-screen selection:bg-indigo-500 selection:text-white pb-10">
 
-    <!-- En-tête -->
-    <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md sticky top-0 z-30 border-b border-slate-200 dark:border-slate-800 shadow-sm w-full">
-        <div class="px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4 w-full">
-            <div class="flex items-center justify-between w-full md:w-auto">
-                <div class="flex items-center gap-3">
-                    <div class="p-2.5 bg-indigo-600 rounded-xl text-white shadow-lg shadow-indigo-500/30 flex-shrink-0">
-                        <i data-lucide="home" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-lg font-extrabold text-slate-900 dark:text-white leading-tight">Résidence Côté Parc</h1>
-                        <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-                            <span>Suivi & Projection 2026</span>
-                            <span class="text-slate-300 dark:text-slate-700">|</span>
-                            <span class="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                                <i data-lucide="check-circle" class="w-3 h-3"></i> MAJ <span id="last-updated-date">--/--</span>
+    <!-- Background Orbs (Decorative) -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-400/20 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-emerald-400/20 rounded-full blur-[100px]"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-4 z-50 px-4 md:px-8 mb-6">
+        <div class="glass-card rounded-2xl px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-4 max-w-7xl mx-auto border border-white/40 dark:border-white/10 shadow-lg shadow-black/5">
+            <div class="flex items-center gap-4 w-full md:w-auto">
+                <div class="bg-gradient-to-br from-indigo-500 to-blue-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-slate-900 dark:text-white tracking-tight">Résidence Côté Parc</h1>
+                    <div class="flex items-center gap-2 text-xs font-medium">
+                        <span class="text-slate-500 dark:text-slate-400">Projection 2026</span>
+                        <span class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
+                        <span class="text-emerald-500 flex items-center gap-1">
+                            <span class="relative flex h-2 w-2">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                             </span>
-                        </div>
+                            MAJ <span id="last-updated-date">--/--</span>
+                        </span>
                     </div>
                 </div>
-                <button onclick="exportToCSV()" class="md:hidden p-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300">
-                    <i data-lucide="download" class="w-5 h-5"></i>
-                </button>
             </div>
-            
-            <!-- Contrôles Droite -->
-            <div class="flex items-center gap-3 w-full md:w-auto justify-end">
-                <!-- Mobile Select Menu -->
-                <div class="md:hidden w-full">
-                    <select id="yearFilterSelect" onchange="renderDashboard(this.value)" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
-                        <!-- Options injected via JS -->
-                    </select>
-                </div>
 
-                <!-- Desktop Buttons -->
-                <div class="hidden md:flex overflow-x-auto hide-scrollbar flex-grow md:flex-grow-0">
-                    <div class="flex gap-2" id="yearFilters"></div>
+            <!-- Controls -->
+            <div class="flex items-center gap-3 w-full md:w-auto overflow-x-auto hide-scrollbar pb-1 md:pb-0">
+                <div class="flex bg-slate-100/50 dark:bg-slate-800/50 p-1 rounded-xl" id="yearFilters">
+                    <!-- Buttons injected via JS -->
                 </div>
-
-                <button onclick="exportToCSV()" class="hidden md:flex p-2 md:px-3 md:py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300 items-center gap-2 flex-shrink-0">
+                <button onclick="exportToCSV()" class="p-2.5 rounded-xl bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 hover:text-indigo-500 transition-colors shadow-sm ml-auto md:ml-0" title="Export CSV">
                     <i data-lucide="download" class="w-4 h-4"></i>
-                    <span class="text-xs font-semibold">Export CSV</span>
                 </button>
+                <!-- Mobile Select Fallback (Hidden on Desktop) -->
+                <select id="yearFilterSelect" onchange="renderDashboard(this.value)" class="md:hidden sr-only"></select> 
             </div>
         </div>
     </header>
 
-    <main class="w-full px-4 py-6 space-y-6 flex-grow">
+    <main class="w-full max-w-7xl mx-auto px-4 md:px-8 space-y-6 flex-grow">
         
-        <!-- ROW 1: 3 Tuiles Alignées -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+        <!-- BENTO GRID LAYOUT -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
             
-            <!-- Tuile 1 : Fiche Logement -->
-            <div class="glass-card rounded-2xl p-5 border-l-4 border-indigo-500 justify-center">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Fiche Logement</h3>
-                    <i data-lucide="map-pin" class="w-4 h-4 text-indigo-500"></i>
+            <!-- Tuile 1 : Fiche Logement (Col-span 3) -->
+            <div class="lg:col-span-3 glass-card rounded-3xl p-6 flex flex-col justify-between group">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform duration-300">
+                        <i data-lucide="home" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 border border-slate-200 dark:border-slate-700 px-2 py-1 rounded-full">Infos</span>
                 </div>
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                            <i data-lucide="maximize" class="w-4 h-4 text-slate-400"></i> <span class="text-sm font-medium">Surface</span>
-                        </div>
-                        <span class="font-bold text-slate-900 dark:text-white">42 m² (T2)</span>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">Surface & Type</p>
+                        <p class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">42 m² <span class="text-sm text-slate-400 font-normal">/ T2</span></p>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                            <i data-lucide="arrow-down-to-line" class="w-4 h-4 text-slate-400"></i> <span class="text-sm font-medium">Position</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl">
+                            <p class="text-[10px] text-slate-400 uppercase font-bold">Pos.</p>
+                            <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">RDC</p>
                         </div>
-                        <span class="text-xs font-bold px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-slate-600 dark:text-slate-300">RDC sur Parking</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                            <i data-lucide="compass" class="w-4 h-4 text-slate-400"></i> <span class="text-sm font-medium">Orientation</span>
+                        <div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl">
+                            <p class="text-[10px] text-slate-400 uppercase font-bold">Orient.</p>
+                            <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">N-Est</p>
                         </div>
-                        <span class="text-xs font-bold px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded border border-blue-100 dark:border-blue-800">Nord-Est</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Tuile 2 : Performance DPE (Jauge Circulaire) -->
-            <div class="glass-card rounded-2xl p-5 relative overflow-hidden justify-between border-t-4 border-slate-400 dark:border-slate-600">
-                <div class="flex justify-between items-start mb-2 relative z-10">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1" id="dpe-title">Performance</h3>
-                    <div id="dpe-grade-badge" class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xl font-black text-slate-800 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">-</div>
-                </div>
+            <!-- Tuile 2 : Performance DPE (Col-span 3) -->
+            <div class="lg:col-span-3 glass-card rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-yellow-500 to-red-500"></div>
                 
-                <div class="flex flex-col items-center justify-end h-full relative" style="min-height: 140px;">
-                    <div class="gauge-container">
-                        <div class="gauge-body"></div>
+                <div class="w-full flex justify-between items-center z-10 mb-4">
+                    <h3 class="text-sm font-bold text-slate-700 dark:text-slate-200" id="dpe-title">Performance</h3>
+                    <div id="dpe-grade-badge" class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-black shadow-lg transition-colors duration-300">-</div>
+                </div>
+
+                <div class="flex flex-col items-center justify-center w-full flex-grow">
+                    <!-- Gauge -->
+                    <div class="gauge-container scale-110 mb-6"> 
+                        <div class="gauge-arc"></div>
                         <div class="gauge-needle" id="dpe-needle"></div>
                         <div class="gauge-center"></div>
                     </div>
-                    <!-- Correction Affichage Valeur : Z-Index augmenté et position ajustée -->
-                    <div class="dpe-value-container shadow-sm border border-slate-100 dark:border-slate-700">
-                        <div class="flex items-baseline gap-1 justify-center">
-                            <span id="dpe-value" class="text-2xl font-extrabold text-slate-900 dark:text-white">--</span>
-                            <span class="text-[10px] font-medium text-slate-500 uppercase">kWh/m²</span>
-                        </div>
+                    
+                    <!-- Value Bar -->
+                    <div class="w-full bg-slate-100 dark:bg-slate-800/80 rounded-2xl p-3 flex items-center justify-between shadow-inner border border-slate-200/50 dark:border-slate-700/50">
+                         <div class="flex items-center gap-2">
+                            <div class="p-1.5 bg-white dark:bg-slate-700 rounded-lg text-slate-400 shadow-sm border border-slate-100 dark:border-slate-600">
+                                <i data-lucide="activity" class="w-4 h-4"></i>
+                            </div>
+                            <span class="text-[10px] font-bold uppercase text-slate-400 leading-tight">Conso.<br>Moyenne</span>
+                         </div>
+                         <div class="text-right">
+                            <span id="dpe-value" class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">--</span>
+                            <span class="text-[10px] font-bold text-slate-500">kWh/m²</span>
+                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tuile 3 : Simulateur & Gain -->
-            <div class="glass-card rounded-2xl p-5 border-l-4 border-emerald-500 flex flex-col justify-between bg-emerald-50/50 dark:bg-emerald-900/10">
-                <div class="flex justify-between items-start mb-2">
-                    <h3 class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest" id="gain-title">Gain Estimé</h3>
-                    <div class="bg-emerald-100 dark:bg-emerald-800 p-1.5 rounded-full text-emerald-600 dark:text-emerald-300">
-                        <i data-lucide="trending-down" class="w-4 h-4"></i>
+            <!-- Tuile 3 : Simulateur (Col-span 6) -->
+            <div class="lg:col-span-6 glass-card rounded-3xl p-6 bg-gradient-to-br from-white to-emerald-50/50 dark:from-slate-800 dark:to-emerald-900/10 border-l-4 border-l-emerald-500 relative">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="piggy-bank" class="w-5 h-5 text-emerald-500"></i>
+                            <span id="gain-title">Gain Estimé</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400" id="savings-subtitle">Comparatif vs Historique</p>
+                    </div>
+                    <div class="bg-white dark:bg-slate-900 p-1 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex">
+                         <button onclick="updateThermostat(0)" class="thermostat-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all" data-val="0">Actuel</button>
+                         <button onclick="updateThermostat(1)" class="thermostat-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all" data-val="1">-1°C</button>
+                         <button onclick="updateThermostat(2)" class="thermostat-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all" data-val="2">-2°C</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 items-end">
+                    <div class="col-span-2 md:col-span-1">
+                        <p class="text-4xl md:text-5xl font-black text-emerald-600 dark:text-emerald-400 tracking-tighter" id="savings-value">...</p>
+                        <p class="text-xs font-semibold text-emerald-600/60 dark:text-emerald-400/60 mt-1">Économie Potentielle</p>
+                    </div>
+                    
+                    <!-- Details Sub-cards -->
+                    <div class="bg-white/60 dark:bg-slate-900/60 rounded-xl p-3 border border-emerald-100 dark:border-emerald-900/30">
+                        <div class="flex items-center gap-2 mb-1">
+                            <div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                            <span class="text-[10px] uppercase font-bold text-slate-400">Offre</span>
+                        </div>
+                        <div class="text-sm text-slate-700 dark:text-slate-200" id="gain-elec">...</div>
+                    </div>
+                    
+                    <div class="bg-white/60 dark:bg-slate-900/60 rounded-xl p-3 border border-emerald-100 dark:border-emerald-900/30">
+                        <div class="flex items-center gap-2 mb-1">
+                            <div class="w-1.5 h-1.5 rounded-full bg-orange-500"></div>
+                            <span class="text-[10px] uppercase font-bold text-slate-400">Sobriété</span>
+                        </div>
+                        <div class="text-sm text-slate-700 dark:text-slate-200" id="gain-gaz">...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHART SECTION (Col-span 8) -->
+            <div class="lg:col-span-8 glass-card rounded-3xl p-6 flex flex-col min-h-[400px]">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-slate-800 dark:text-slate-200">Consommation & Coûts</h3>
+                    
+                    <div class="flex gap-4">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-[10px] uppercase font-bold text-slate-400">Élec</p>
+                            <p class="text-sm font-bold text-blue-600 dark:text-blue-400" id="kpi-elec">...</p>
+                        </div>
+                        <div class="text-right hidden sm:block">
+                            <p class="text-[10px] uppercase font-bold text-slate-400">Gaz</p>
+                            <p class="text-sm font-bold text-orange-500 dark:text-orange-400" id="kpi-gaz">...</p>
+                        </div>
+                        <div class="text-right pl-4 border-l border-slate-200 dark:border-slate-700">
+                            <p class="text-[10px] uppercase font-bold text-slate-400">Total</p>
+                            <p class="text-lg font-black text-slate-900 dark:text-white" id="kpi-cost">...</p>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Simulateur Thermostat -->
-                <div class="mb-3">
-                    <label class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1 block">Objectif Thermostat</label>
-                    <div class="flex bg-white dark:bg-slate-800 rounded-lg p-1 border border-slate-200 dark:border-slate-700 shadow-sm">
-                        <button onclick="updateThermostat(0)" class="thermostat-btn flex-1 py-1 text-xs font-bold rounded-md transition-colors text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 active" data-val="0">Actuel</button>
-                        <button onclick="updateThermostat(1)" class="thermostat-btn flex-1 py-1 text-xs font-bold rounded-md transition-colors text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30" data-val="1">-1°C</button>
-                        <button onclick="updateThermostat(2)" class="thermostat-btn flex-1 py-1 text-xs font-bold rounded-md transition-colors text-emerald-700 hover:bg-emerald-100 dark:hover:bg-emerald-900/50" data-val="2">-2°C</button>
-                    </div>
+                <div class="flex-grow w-full relative">
+                    <canvas id="energyChart"></canvas>
                 </div>
+            </div>
+
+            <!-- ANALYSE DETAILS (Col-span 4) -->
+            <div class="lg:col-span-4 glass-card rounded-3xl p-6 flex flex-col justify-center gap-6">
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <div id="analysis-gaz-label" class="flex items-center gap-2 text-orange-600 dark:text-orange-400 font-bold text-sm">
+                            <i data-lucide="flame" class="w-4 h-4"></i> Gaz
+                        </div>
+                        <span id="badge-gaz" class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600">...</span>
+                    </div>
+                    <div class="h-3 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden relative">
+                         <div id="gauge-gaz" class="h-full bg-gradient-to-r from-orange-300 to-orange-600 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                    </div>
+                    <p id="analysis-gaz-text" class="text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium">...</p>
+                </div>
+
+                <div class="w-full h-px bg-slate-100 dark:bg-slate-700/50"></div>
 
                 <div>
-                    <p class="text-3xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-1" id="savings-value">Calcul...</p>
-                    <p class="text-xs text-emerald-600/80 dark:text-emerald-400/80 font-medium" id="savings-subtitle">vs Engie</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ROW 2: CHART & DETAILS -->
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 w-full">
-            
-            <!-- Graphique & KPIs (2/3) -->
-            <div class="glass-card rounded-2xl p-0 xl:col-span-2 overflow-hidden flex flex-col">
-                <div class="p-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 flex justify-between items-center">
-                    <h3 class="font-bold text-slate-700 dark:text-slate-200 text-sm">Historique & Projection</h3>
-                    <div class="flex gap-4 text-xs">
-                        <div class="flex flex-col items-end">
-                            <span class="text-slate-400 font-bold uppercase tracking-wider">Élec</span>
-                            <span class="font-bold text-blue-600 dark:text-blue-400" id="kpi-elec">...</span>
+                    <div class="flex justify-between items-center mb-2">
+                        <div id="analysis-elec-label" class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
+                            <i data-lucide="zap" class="w-4 h-4"></i> Élec
                         </div>
-                        <div class="flex flex-col items-end">
-                            <span class="text-slate-400 font-bold uppercase tracking-wider">Gaz</span>
-                            <span class="font-bold text-orange-600 dark:text-orange-400" id="kpi-gaz">...</span>
-                        </div>
-                        <div class="flex flex-col items-end border-l border-slate-200 dark:border-slate-700 pl-4">
-                            <span class="text-slate-400 font-bold uppercase tracking-wider">Total</span>
-                            <span class="font-bold text-emerald-600 dark:text-emerald-400" id="kpi-cost">...</span>
-                        </div>
+                        <span id="badge-elec" class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600">...</span>
                     </div>
-                </div>
-                <div class="p-4 flex-grow min-h-[350px]">
-                    <div class="h-full w-full relative">
-                        <canvas id="energyChart"></canvas>
+                    <div class="h-3 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden relative">
+                         <div id="gauge-elec" class="h-full bg-gradient-to-r from-blue-300 to-blue-600 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
                     </div>
+                    <p id="analysis-elec-text" class="text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium">...</p>
                 </div>
-            </div>
-
-            <!-- Analyse (1/3) -->
-            <div class="glass-card rounded-2xl p-6 xl:col-span-1 border-t-4 border-slate-900 dark:border-slate-600">
-                <h3 id="analysis-title" class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
-                    <i data-lucide="stethoscope" class="text-indigo-500"></i> Analyse
-                </h3>
                 
-                <div class="space-y-8">
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <div id="analysis-gaz-label" class="flex items-center gap-2 text-orange-600 dark:text-orange-400 font-bold text-sm">
-                                <i data-lucide="flame" class="w-4 h-4"></i> Gaz
-                            </div>
-                            <span id="badge-gaz" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">...</span>
-                        </div>
-                        <div class="relative pt-1">
-                            <div class="overflow-hidden h-2 mb-1 text-xs flex rounded-full bg-slate-200 dark:bg-slate-700">
-                                <div id="gauge-gaz" class="gauge-fill bg-gradient-to-r from-orange-400 to-orange-600" style="width: 0%"></div>
-                            </div>
-                            <div class="flex justify-between text-[10px] font-semibold text-slate-400"><span>Éco</span><span>Moyen</span><span>Haut</span></div>
-                        </div>
-                        <p id="analysis-gaz-text" class="text-xs text-slate-500 dark:text-slate-400 mt-2 italic leading-tight">...</p>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <div id="analysis-elec-label" class="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
-                                <i data-lucide="zap" class="w-4 h-4"></i> Élec
-                            </div>
-                            <span id="badge-elec" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">...</span>
-                        </div>
-                        <div class="relative pt-1">
-                            <div class="overflow-hidden h-2 mb-1 text-xs flex rounded-full bg-slate-200 dark:bg-slate-700">
-                                <div id="gauge-elec" class="gauge-fill bg-gradient-to-r from-blue-400 to-blue-600" style="width: 0%"></div>
-                            </div>
-                            <div class="flex justify-between text-[10px] font-semibold text-slate-400"><span>Éco</span><span>Moyen</span><span>Haut</span></div>
-                        </div>
-                        <p id="analysis-elec-text" class="text-xs text-slate-500 dark:text-slate-400 mt-2 italic leading-tight">...</p>
-                    </div>
+                <div class="mt-2 bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-xl border border-indigo-100 dark:border-indigo-800/30">
+                    <p class="text-xs text-indigo-800 dark:text-indigo-200 font-semibold flex gap-2">
+                        <i data-lucide="info" class="w-4 h-4 shrink-0"></i>
+                        Le chauffage représente ~65% de la facture. Chaque degré en moins = 7% d'économie.
+                    </p>
                 </div>
             </div>
-        </div>
 
-        <!-- ROW 3: RECORDS -->
-        <div class="glass-card rounded-2xl overflow-hidden w-full">
-            <div class="px-6 py-4 bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
-                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Détail des factures</h3>
+            <!-- TABLE (Full Width) -->
+            <div class="lg:col-span-12 glass-card rounded-3xl overflow-hidden">
+                 <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700/50 bg-slate-50/30 dark:bg-slate-800/30 backdrop-blur-sm flex justify-between items-center">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Détail des factures</h3>
+                    <div class="flex gap-2">
+                         <span class="w-2 h-2 rounded-full bg-green-500"></span> <span class="text-[10px] text-slate-400">Réel</span>
+                         <span class="w-2 h-2 rounded-full bg-slate-300 ml-2"></span> <span class="text-[10px] text-slate-400">Estimé</span>
+                    </div>
+                </div>
+                <div id="records-container"></div>
             </div>
-            <div id="records-container" class="p-0"></div>
+            
         </div>
-
     </main>
 
-    <footer class="mt-auto py-6 text-center border-t border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 w-full">
-        <p class="text-xs text-slate-500 font-medium">© 2026 | Données Personnelles | Généré par IA | Licence MIT: Utilisation libre et gratuite.</p>
-        <p class="text-[10px] text-slate-400 mt-1">Ne pas reproduire sans autorisation. Les estimations sont fournies à titre indicatif.</p>
+    <footer class="mt-8 py-8 text-center border-t border-slate-200/50 dark:border-slate-700/50 bg-white/30 dark:bg-slate-900/30 backdrop-blur-lg w-full">
+        <p class="text-xs text-slate-500 font-medium">© 2026 | Données Personnelles | Côté Parc</p>
+        <p class="text-[10px] text-slate-400 mt-1">Design Moderne &bull; Généré par IA</p>
     </footer>
 
+    <!-- Logic Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // GLOBAL STATE
-            let currentThermostatDrop = 0; // 0, 1, or 2 degrees
+            let currentThermostatDrop = 0; 
             let currentYearFilter = 'all';
 
             // CONFIG & TARIFS
@@ -367,7 +385,7 @@
                 }
             };
 
-            // DATA 2023-2025 ONLY
+            // DATA 2023-2025
             const csvData = `Date_Facture;Période_Debut;Période_Fin;Type_Energie;Index_Debut;Index_Fin;Conso_kWh;Prix_Unitaire_HT;Montant_TTC;Type_Estime_Reel
 03/12/2025;01/10/2025;30/11/2025;Gaz;3102;3143;462;0,04608;112,66;Réel
 03/12/2025;03/10/2025;02/12/2025;Electricité;9379;9648;269;0,10281;88,67;Réel
@@ -402,7 +420,7 @@
 04/06/2023;01/04/2023;30/05/2023;Gaz;2223;2295;808;0,06548;112,33;Réel
 04/06/2023;03/04/2023;02/06/2023;Electricité;5832;6111;279;0,12701;69,17;Réel
 03/04/2023;01/02/2023;31/03/2023;Gaz;2071;2223;1706;0,06548;191,83;Réel
-03/04/2023;03/02/2023;02/04/2023;Electricité;5524;5832;308;0,12701;70,96;Réel`; // 2022 Removed
+03/04/2023;03/02/2023;02/04/2023;Electricité;5524;5832;308;0,12701;70,96;Réel`;
 
             const tempNantesMap = { 1:6.0, 2:6.5, 3:9.0, 4:11.5, 5:15.0, 6:18.5, 7:20.5, 8:20.5, 9:17.5, 10:14.0, 11:9.5, 12:6.5 };
 
@@ -411,11 +429,9 @@
 
             const parseFrFloat = (s) => parseFloat(s.replace(',', '.'));
             const parseFrDate = (s) => { const p = s.split('/'); return new Date(p[2], p[1]-1, p[0]); };
-            const formatDateShort = (d) => d.toLocaleDateString('fr',{day:'2-digit', month:'2-digit'});
 
             function processMonthlyHistory(rows) {
                 const monthlyData = [];
-                
                 rows.forEach(r => {
                     const c = r.split(';');
                     const d1 = parseFrDate(c[1]);
@@ -462,7 +478,6 @@
 
             function generateProjection2026(historicalData) {
                 const projections = [];
-                // ADDING LATE 2025 PROJECTION WITH ENGIE (DEC 2025)
                 const hasDec25 = historicalData.some(d => d.year === 2025 && d.date.getMonth() === 11);
                 
                 if (!hasDec25) {
@@ -483,7 +498,6 @@
                     });
                 }
 
-                // 2026 OHM PROJECTIONS (MENSUELLES)
                 const heatingFactor = 1 - (currentThermostatDrop * 0.07);
 
                 for (let m = 0; m < 12; m++) {
@@ -493,12 +507,12 @@
                     const weightsGaz = [0.18, 0.16, 0.12, 0.08, 0.03, 0, 0, 0, 0.02, 0.07, 0.14, 0.20];
                     const annualGazEst = 3700;
                     
-                    const baseECS = 0.02; // Part ECS (2%)
+                    const baseECS = 0.02;
                     let weight = weightsGaz[m];
                     let monthlyGaz;
 
                     if (weight <= baseECS) {
-                         monthlyGaz = annualGazEst * 0.02; // Minimum ECS Summer
+                         monthlyGaz = annualGazEst * 0.02;
                     } else {
                          let heatingPart = (weight - baseECS) * annualGazEst * heatingFactor;
                          let ecsPart = baseECS * annualGazEst;
@@ -513,7 +527,7 @@
 
                     projections.push({
                         date: dateObj, endDate: new Date(year, m + 1, 0),
-                        dateStr: dateObj.toLocaleDateString('fr'), rangeStr: dateObj.toLocaleDateString('fr', {month:'long', year:'numeric'}) + ' (Proj.)', 
+                        dateStr: dateObj.toLocaleDateString('fr'), rangeStr: dateObj.toLocaleDateString('fr', {month:'long', year:'numeric'}), 
                         year: 2026, type: 'Gaz', conso: monthlyGaz,
                         cost: (monthlyGaz * CONFIG.tariffs.ohm.gas.kwh) + (CONFIG.tariffs.ohm.gas.sub_m), 
                         temp: temp, isProjection: true, provider: 'Ohm'
@@ -521,7 +535,7 @@
 
                     projections.push({
                         date: dateObj, endDate: new Date(year, m + 1, 0),
-                        dateStr: dateObj.toLocaleDateString('fr'), rangeStr: dateObj.toLocaleDateString('fr', {month:'long', year:'numeric'}) + ' (Proj.)', 
+                        dateStr: dateObj.toLocaleDateString('fr'), rangeStr: dateObj.toLocaleDateString('fr', {month:'long', year:'numeric'}), 
                         year: 2026, type: 'Electricité', conso: monthlyElec,
                         cost: (monthlyElec * CONFIG.tariffs.ohm.elec.kwh) + (CONFIG.tariffs.ohm.elec.sub_m), 
                         temp: temp, isProjection: true, provider: 'Ohm'
@@ -535,7 +549,8 @@
                 let historyMonthly = processMonthlyHistory(rows);
                 const proj = generateProjection2026(historyMonthly);
                 allData = [...historyMonthly, ...proj].sort((a,b) => a.date - b.date);
-                // Setup filters
+                
+                // Filters
                 const years = [...new Set(allData.map(d=>d.year))].sort();
                 const fContainer = document.getElementById('yearFilters');
                 const mSelect = document.getElementById('yearFilterSelect');
@@ -543,25 +558,19 @@
                     fContainer.innerHTML = '';
                     mSelect.innerHTML = '';
                     
-                    // Desktop Buttons
                     const mkBtn = (lbl, val) => {
                         const b = document.createElement('button');
                         b.innerText=lbl; b.dataset.year=val; 
-                        b.className = `filter-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm ${val == currentYearFilter 
-                            ? 'active ring-2 ring-blue-500 ring-offset-2' 
-                            : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50'}`;
+                        b.className = `filter-btn px-4 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap ${val == currentYearFilter ? 'active' : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'}`;
                         b.onclick=()=>renderDashboard(val);
                         fContainer.appendChild(b);
                     };
                     mkBtn('Tout', 'all');
                     years.forEach(y => mkBtn(y, y));
 
-                    // Mobile Select
-                    const optAll = document.createElement('option'); optAll.value='all'; optAll.text='Tout l\'historique';
-                    mSelect.appendChild(optAll);
+                    const optAll = document.createElement('option'); optAll.value='all'; optAll.text='Tout'; mSelect.appendChild(optAll);
                     years.forEach(y => {
-                        const opt = document.createElement('option'); opt.value=y; opt.text=y;
-                        mSelect.appendChild(opt);
+                        const opt = document.createElement('option'); opt.value=y; opt.text=y; mSelect.appendChild(opt);
                     });
                 }
                 
@@ -578,7 +587,7 @@
                 const r = allData.map(d => `${d.date.toLocaleDateString()};${d.rangeStr};${d.type};${d.conso.toFixed(0)};${d.cost.toFixed(2)};${d.temp.toFixed(1)};${d.isProjection?'Projection':'Réel'}`).join("\n");
                 const blob = new Blob(["\uFEFF"+h+r], {type:'text/csv;charset=utf-8;'});
                 const url = URL.createObjectURL(blob);
-                const a = document.createElement("a"); a.href=url; a.download=`releves_coteduparc_proj2026_${new Date().toISOString().slice(0,10)}.csv`;
+                const a = document.createElement("a"); a.href=url; a.download=`releves_coteduparc_modern_${new Date().toISOString().slice(0,10)}.csv`;
                 a.click();
             }
 
@@ -586,44 +595,32 @@
                 currentThermostatDrop = drop;
                 document.querySelectorAll('.thermostat-btn').forEach(btn => {
                     if (parseInt(btn.dataset.val) === drop) {
-                        btn.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
-                        btn.classList.remove('text-slate-500', 'hover:bg-slate-50');
+                        btn.className = 'thermostat-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-emerald-500 text-white shadow-md shadow-emerald-200 dark:shadow-none';
                     } else {
-                        btn.classList.remove('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
-                        btn.classList.add('text-slate-500', 'hover:bg-slate-50');
+                        btn.className = 'thermostat-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800';
                     }
                 });
-                initData(); // Re-generate projection based on new thermostat
+                initData(); 
                 renderDashboard(currentYearFilter);
             }
 
-            // Expose renderDashboard global
             window.renderDashboard = function(year) {
                 currentYearFilter = year;
-                
-                // Update Desktop Buttons
                 document.querySelectorAll('#yearFilters button').forEach(b => {
-                     b.className = `filter-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow-sm ${b.dataset.year == year 
-                        ? 'active ring-2 ring-blue-500 ring-offset-2' 
-                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50'}`;
+                     b.className = `filter-btn px-4 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap ${b.dataset.year == year ? 'active' : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'}`;
                 });
                 
-                // Update Mobile Select
-                document.getElementById('yearFilterSelect').value = year;
-
                 const data = year === 'all' ? allData : allData.filter(d => d.year == year);
 
                 const sum = (t) => Math.round(data.filter(d=>d.type===t).reduce((a,b)=>a+b.conso,0));
                 const cost = Math.round(data.reduce((a,b)=>a+b.cost,0));
-                if (document.getElementById('kpi-elec')) document.getElementById('kpi-elec').innerText = sum('Electricité');
-                if (document.getElementById('kpi-gaz')) document.getElementById('kpi-gaz').innerText = sum('Gaz');
-                if (document.getElementById('kpi-cost')) document.getElementById('kpi-cost').innerText = cost + ' €';
                 
-                // Animate Numbers
                 if(window.CountUp) {
-                   new CountUp('kpi-elec', sum('Electricité')).start();
-                   new CountUp('kpi-gaz', sum('Gaz')).start();
-                   new CountUp('kpi-cost', cost).start();
+                   new CountUp('kpi-elec', sum('Electricité'), {duration: 1.5}).start();
+                   new CountUp('kpi-gaz', sum('Gaz'), {duration: 1.5}).start();
+                   new CountUp('kpi-cost', cost, {suffix: ' €', duration: 1.5}).start();
+                } else {
+                   document.getElementById('kpi-cost').innerText = cost + ' €';
                 }
 
                 updateAnalysis(data);
@@ -632,25 +629,16 @@
             }
 
             function updateAnalysis(data) {
-                // Determine context
                 let displayYear = currentYearFilter === 'all' ? '2026' : currentYearFilter;
                 let isProjContext = parseInt(displayYear) >= 2026;
                 let displayProvider = isProjContext ? 'Ohm' : 'Engie';
 
-                // Update Title
-                if(document.getElementById('analysis-title')) {
-                    document.getElementById('analysis-title').innerHTML = `<i data-lucide="stethoscope" class="text-indigo-500"></i> Analyse ${displayYear === 'all' ? 'Globale' : displayYear}`;
-                }
-                
-                // Update Labels
                 let priceGaz = isProjContext ? CONFIG.tariffs.ohm.gas.kwh : CONFIG.tariffs.engie.gas.kwh;
                 let priceElec = isProjContext ? CONFIG.tariffs.ohm.elec.kwh : CONFIG.tariffs.engie.elec.kwh;
-                if(document.getElementById('analysis-gaz-label')) document.getElementById('analysis-gaz-label').innerHTML = `<i data-lucide="flame" class="w-4 h-4"></i> Gaz (${priceGaz.toFixed(3)}€/kWh)`;
-                if(document.getElementById('analysis-elec-label')) document.getElementById('analysis-elec-label').innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i> Élec (${priceElec.toFixed(3)}€/kWh)`;
+                
+                if(document.getElementById('analysis-gaz-label')) document.getElementById('analysis-gaz-label').innerHTML = `<i data-lucide="flame" class="w-4 h-4"></i> Gaz (${priceGaz.toFixed(3)}€)`;
+                if(document.getElementById('analysis-elec-label')) document.getElementById('analysis-elec-label').innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i> Élec (${priceElec.toFixed(3)}€)`;
 
-                // DPE Calculation Correction
-                const realData = data.filter(d => !d.isProjection);
-                // If single year selected, factor is 1. If 'all', factor is number of years available
                 let factor = 1;
                 if (currentYearFilter === 'all') {
                      const uniqueYears = new Set(data.map(d => d.year)).size;
@@ -662,17 +650,15 @@
                 const dpe = Math.round((gaz+elec)/CONFIG.surface);
                 
                 if (document.getElementById('dpe-value')) {
-                     // Animate DPE Value
                      if(window.CountUp) new CountUp('dpe-value', dpe).start();
                      else document.getElementById('dpe-value').innerText = dpe;
                 }
-                if(document.getElementById('dpe-title')) document.getElementById('dpe-title').innerText = `Performance ${displayYear === 'all' ? 'Moyenne' : displayYear}`;
+                if(document.getElementById('dpe-title')) document.getElementById('dpe-title').innerText = `Perf. Moyenne (${dpe})`;
 
-                let g = 'G', p = 92;
-                if(dpe<=70){g='A';p=7} else if(dpe<=110){g='B';p=21} else if(dpe<=180){g='C';p=35}
-                else if(dpe<=250){g='D';p=50} else if(dpe<=330){g='E';p=64} else if(dpe<=420){g='F';p=78}
+                let g = 'G';
+                if(dpe<=70) g='A'; else if(dpe<=110) g='B'; else if(dpe<=180) g='C';
+                else if(dpe<=250) g='D'; else if(dpe<=330) g='E'; else if(dpe<=420) g='F';
                 
-                // Jauge Circulaire Animation
                 const maxDPE = 450; 
                 let deg = -90 + (Math.min(dpe, maxDPE) / maxDPE) * 180;
                 if(document.getElementById('dpe-needle')) {
@@ -682,28 +668,25 @@
                 const badge = document.getElementById('dpe-grade-badge');
                 if (badge) {
                     badge.innerText = g;
-                    const colors = { A:'text-green-600 bg-green-50', B:'text-green-500 bg-green-50', C:'text-green-400 bg-green-50', D:'text-yellow-600 bg-yellow-50', E:'text-orange-500 bg-orange-50', F:'text-orange-600 bg-orange-50', G:'text-red-600 bg-red-50' };
-                    badge.className = `px-3 py-1 rounded-lg text-xl font-black shadow-sm border border-slate-200 dark:border-slate-700 ${colors[g]}`;
+                    const colors = { A:'bg-emerald-500', B:'bg-emerald-400', C:'bg-emerald-300', D:'bg-yellow-400', E:'bg-orange-400', F:'bg-orange-500', G:'bg-red-500' };
+                    badge.className = `w-8 h-8 rounded-lg text-white flex items-center justify-center font-black shadow-lg ${colors[g]} transition-colors duration-500`;
                 }
 
-                // --- CALCUL DES ÉCONOMIES ---
+                // ECONOMIES
                 let gainTitle = "Gain 2026 Estimé";
                 let gainSubtitle = "vs Engie 2025";
                 let totalSavings = 0;
                 let gainSupplier = 0;
                 let gainThermo = 0;
 
-                // Calculation Reference is always annual projection 2026 for FUTURE gains
                 const proj2026 = allData.filter(d => d.year === 2026);
                 const volGaz2026 = proj2026.filter(d => d.type === 'Gaz').reduce((a, b) => a + b.conso, 0);
                 const volElec2026 = proj2026.filter(d => d.type === 'Electricité').reduce((a, b) => a + b.conso, 0);
 
-                // Cost OHM 2026 (Real projected cost)
                 const costOhm = 
                     (volElec2026 * CONFIG.tariffs.ohm.elec.kwh + CONFIG.tariffs.ohm.elec.sub_m * 12) +
                     (volGaz2026 * CONFIG.tariffs.ohm.gas.kwh + CONFIG.tariffs.ohm.gas.sub_m * 12);
 
-                // Reference: Engie based on same volume (before thermostat reduction)
                 const factorThermo = 1 / (1 - (currentThermostatDrop * 0.07)); 
                 const volGazRef = volGaz2026 * factorThermo;
                 
@@ -712,7 +695,6 @@
                     (volGazRef * CONFIG.tariffs.engie.gas.kwh + CONFIG.tariffs.engie.gas.sub_m * 12);
 
                 if (parseInt(displayYear) < 2026 && displayYear !== 'all') {
-                    // RETROSPECTIVE GAIN
                     gainTitle = `Gain Virtuel ${displayYear}`;
                     gainSubtitle = "Si vous aviez été chez Ohm";
                     
@@ -725,9 +707,8 @@
                     
                     totalSavings = costReal - costOhmSim;
                     gainSupplier = totalSavings;
-                    gainThermo = 0; // Past can't change thermostat
+                    gainThermo = 0;
                 } else {
-                    // FUTURE GAIN
                     totalSavings = costEngieRef - costOhm;
                     const costOhmBase = (volElec2026 * CONFIG.tariffs.ohm.elec.kwh + CONFIG.tariffs.ohm.elec.sub_m * 12) + (volGazRef * CONFIG.tariffs.ohm.gas.kwh + CONFIG.tariffs.ohm.gas.sub_m * 12);
                     gainSupplier = costEngieRef - costOhmBase;
@@ -739,36 +720,39 @@
 
                 const savingsEl = document.getElementById('savings-value');
                 if (savingsEl) {
-                    if (isNaN(totalSavings)) {
-                         savingsEl.innerText = "...";
+                    const sign = totalSavings > 0 ? '+' : '';
+                    if(window.CountUp) new CountUp('savings-value', Math.round(totalSavings), { prefix: sign, suffix: ' €' }).start();
+                    else savingsEl.innerText = `${sign}${Math.round(totalSavings)} €`;
+                    
+                    if (totalSavings >= 0) {
+                        savingsEl.classList.remove('text-red-500');
+                        savingsEl.classList.add('text-emerald-600', 'dark:text-emerald-400');
                     } else {
-                        const sign = totalSavings > 0 ? '+' : '';
-                        if(window.CountUp) new CountUp('savings-value', Math.round(totalSavings), { prefix: sign, suffix: ' €' }).start();
-                        else savingsEl.innerText = `${sign}${Math.round(totalSavings)} €`;
-                        savingsEl.className = totalSavings >= 0 ? "text-3xl font-extrabold text-emerald-700 dark:text-emerald-300 mb-1" : "text-3xl font-extrabold text-red-700 dark:text-red-300 mb-1";
+                        savingsEl.classList.remove('text-emerald-600', 'dark:text-emerald-400');
+                        savingsEl.classList.add('text-red-500');
                     }
                 }
                 
-                if (document.getElementById('gain-elec')) document.getElementById('gain-elec').innerHTML = `Offre: <strong>${gainSupplier > 0 ? '+' : ''}${Math.round(gainSupplier)} €</strong>`;
-                if (document.getElementById('gain-gaz')) document.getElementById('gain-gaz').innerHTML = `Sobriété: <strong>${gainThermo > 0 ? '+' : ''}${Math.round(gainThermo)} €</strong>`;
+                if (document.getElementById('gain-elec')) document.getElementById('gain-elec').innerHTML = `<span class="font-bold">${gainSupplier > 0 ? '+' : ''}${Math.round(gainSupplier)} €</span>`;
+                if (document.getElementById('gain-gaz')) document.getElementById('gain-gaz').innerHTML = `<span class="font-bold">${gainThermo > 0 ? '+' : ''}${Math.round(gainThermo)} €</span>`;
 
                 const rG = gaz / (CONFIG.benchmarks.gaz.avg * 1.15); 
                 const elG = document.getElementById('analysis-gaz-text');
                 const bgG = document.getElementById('badge-gaz');
                 const barG = document.getElementById('gauge-gaz');
                 if (elG && bgG && barG) {
-                    if(rG < 0.8) { elG.innerText = "Excellent."; bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"; bgG.innerText = "Économe"; barG.style.width = "15%"; } 
-                    else if(rG < 1.1) { elG.innerText = "Consommation cohérente."; bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700"; bgG.innerText = "Normal"; barG.style.width = "50%"; } 
-                    else { elG.innerText = "Consommation élevée."; bgG.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700"; bgG.innerText = "Élevé"; barG.style.width = "85%"; }
+                    if(rG < 0.8) { elG.innerText = "Excellent. Vous êtes très économe."; bgG.innerText = "Top"; bgG.className = "px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700"; barG.style.width = "20%"; barG.className="h-full rounded-full bg-emerald-500"; } 
+                    else if(rG < 1.1) { elG.innerText = "Cohérent avec la surface."; bgG.innerText = "Ok"; bgG.className = "px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-700"; barG.style.width = "50%"; barG.className="h-full rounded-full bg-blue-500"; } 
+                    else { elG.innerText = "Consommation élevée."; bgG.innerText = "Haut"; bgG.className = "px-2 py-0.5 rounded-md text-[10px] font-bold bg-orange-100 text-orange-700"; barG.style.width = "85%"; barG.className="h-full rounded-full bg-orange-500"; }
                 }
                 const rE = elec / CONFIG.benchmarks.elec.avg;
                 const elE = document.getElementById('analysis-elec-text');
                 const bgE = document.getElementById('badge-elec');
                 const barE = document.getElementById('gauge-elec');
                 if (elE && bgE && barE) {
-                    if(rE < 0.9) { elE.innerText = "Très sobre."; bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"; bgE.innerText = "Sobre"; barE.style.width = "15%"; } 
-                    else if(rE < 1.3) { elE.innerText = "Dans la moyenne."; bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700"; bgE.innerText = "Standard"; barE.style.width = "50%"; } 
-                    else { elE.innerText = "Consommation importante."; bgE.className = "px-2.5 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-700"; bgE.innerText = "Haut"; barE.style.width = "85%"; }
+                    if(rE < 0.9) { elE.innerText = "Très sobre."; bgE.innerText = "Top"; bgE.className = "px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700"; barE.style.width = "20%"; barE.className="h-full rounded-full bg-emerald-500"; } 
+                    else if(rE < 1.3) { elE.innerText = "Standard."; bgE.innerText = "Ok"; bgE.className = "px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-700"; barE.style.width = "50%"; barE.className="h-full rounded-full bg-blue-500"; } 
+                    else { elE.innerText = "Élevé."; bgE.innerText = "Haut"; bgE.className = "px-2 py-0.5 rounded-md text-[10px] font-bold bg-orange-100 text-orange-700"; barE.style.width = "85%"; barE.className="h-full rounded-full bg-orange-500"; }
                 }
 
                 if(typeof lucide !== 'undefined') lucide.createIcons();
@@ -779,72 +763,41 @@
                 if (!container) return;
                 const sorted = [...data].sort((a,b)=>b.date-a.date);
                 let html = `
-                <table class="w-full hidden md:table">
-                    <thead class="bg-slate-50 dark:bg-slate-800">
+                <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-slate-50/50 dark:bg-slate-800/50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Période</th>
-                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Fournisseur</th>
-                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Énergie</th>
-                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">Volume</th>
-                            <th class="px-6 py-3 text-right text-xs font-bold text-slate-500 uppercase">Coût</th>
+                            <th class="px-6 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Période</th>
+                            <th class="px-6 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-3 text-right text-[10px] font-bold text-slate-400 uppercase tracking-wider">Vol.</th>
+                            <th class="px-6 py-3 text-right text-[10px] font-bold text-slate-400 uppercase tracking-wider">Coût</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 dark:divide-slate-700 bg-white dark:bg-slate-900">
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-700/50">
                 `;
                 sorted.forEach(d => {
                     const isGaz = d.type === 'Gaz';
-                    const color = isGaz ? 'text-orange-600 bg-orange-50' : 'text-blue-600 bg-blue-50';
-                    const rowClass = d.isProjection ? 'bg-slate-50/50 dark:bg-slate-800/30 text-slate-500' : 'hover:bg-slate-50 dark:hover:bg-slate-800'; 
-                    const costDisplay = d.isProjection ? `~${d.cost.toFixed(0)} €` : `${d.cost.toFixed(2)} €`;
-                    const provider = d.provider || (d.year >= 2026 ? 'Ohm' : 'Engie');
-                    const providerClass = provider === 'Ohm' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800';
+                    const icon = isGaz ? 'flame' : 'zap';
+                    const iconColor = isGaz ? 'text-orange-500' : 'text-blue-500';
+                    const rowClass = d.isProjection ? 'bg-slate-50/30 dark:bg-slate-800/20 italic text-slate-400' : 'hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors'; 
+                    const costDisplay = d.isProjection ? `~${d.cost.toFixed(0)} €` : `<strong>${d.cost.toFixed(2)} €</strong>`;
+                    
                     html += `
-                    <tr class="${rowClass} transition-colors">
-                        <td class="px-6 py-4 text-sm font-medium text-slate-700 dark:text-slate-300">
+                    <tr class="${rowClass}">
+                        <td class="px-6 py-3 text-xs font-medium whitespace-nowrap">
                             ${d.rangeStr}
-                            ${d.isProjection ? '<span class="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-800">PROJ</span>' : ''}
+                            ${d.isProjection ? '<span class="ml-2 px-1.5 py-0.5 rounded text-[9px] bg-slate-200 dark:bg-slate-700 text-slate-500">PROJ</span>' : ''}
                         </td>
-                        <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold ${providerClass}">${provider}</span>
+                        <td class="px-6 py-3">
+                            <div class="flex items-center gap-2 text-xs font-semibold ${iconColor}">
+                                <i data-lucide="${icon}" class="w-3 h-3"></i> ${d.type}
+                            </div>
                         </td>
-                        <td class="px-6 py-4">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${color}">${d.type}</span>
-                        </td>
-                        <td class="px-6 py-4 text-sm font-bold text-slate-700 dark:text-slate-200">${Math.round(d.conso)} kWh</td>
-                        <td class="px-6 py-4 text-right text-sm font-mono text-slate-600 dark:text-slate-400">${costDisplay}</td>
+                        <td class="px-6 py-3 text-right text-xs font-medium text-slate-600 dark:text-slate-300">${Math.round(d.conso)} kWh</td>
+                        <td class="px-6 py-3 text-right text-xs text-slate-700 dark:text-slate-200 font-mono">${costDisplay}</td>
                     </tr>`;
                 });
-                html += `</tbody></table>`;
-                html += `<div class="md:hidden space-y-3 p-4 bg-slate-50 dark:bg-slate-900/50">`;
-                sorted.forEach(d => {
-                    const isGaz = d.type === 'Gaz';
-                    const icon = isGaz ? 'flame' : 'zap';
-                    const colorClass = isGaz ? 'text-orange-600' : 'text-blue-600';
-                    const borderClass = isGaz ? 'border-l-4 border-orange-500' : 'border-l-4 border-blue-500';
-                    const opacityClass = d.isProjection ? 'opacity-75 border-l-2 border-dashed' : '';
-                    const costDisplay = d.isProjection ? `~${d.cost.toFixed(0)} €` : `${d.cost.toFixed(2)} €`;
-                    const provider = d.provider || (d.year >= 2026 ? 'Ohm' : 'Engie');
-                    const providerClass = provider === 'Ohm' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800';
-                    html += `
-                    <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm ${borderClass} ${opacityClass} flex justify-between items-center">
-                        <div>
-                            <div class="flex items-center gap-2 mb-1">
-                                <p class="text-xs text-slate-400 font-semibold">${d.rangeStr}</p>
-                                <span class="text-[10px] px-1.5 py-0.5 rounded font-bold ${providerClass}">${provider}</span>
-                            </div>
-                            <div class="flex items-center gap-2 ${colorClass} font-bold text-sm">
-                                <i data-lucide="${icon}" class="w-4 h-4"></i>
-                                <span>${d.type}</span>
-                            </div>
-                            <p class="text-xs text-slate-500 mt-1">${d.temp.toFixed(1)}°C ext.</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-lg font-bold text-slate-800 dark:text-white">${Math.round(d.conso)} <span class="text-xs font-normal">kWh</span></p>
-                            <p class="text-sm font-mono text-slate-600 dark:text-slate-400">${costDisplay}</p>
-                        </div>
-                    </div>`;
-                });
-                html += `</div>`;
+                html += `</tbody></table></div>`;
                 container.innerHTML = html;
                 if (typeof lucide !== 'undefined') lucide.createIcons();
             }
@@ -865,116 +818,70 @@
                 });
                 const arr = Object.values(groups).sort((a,b)=>a.sort-b.sort);
                 if(chartInstance) chartInstance.destroy();
-                const bgGaz = arr.map(d => d.isProjection ? 'rgba(249, 115, 22, 0.4)' : '#f97316');
-                const bgElec = arr.map(d => d.isProjection ? 'rgba(59, 130, 246, 0.4)' : '#3b82f6');
-                const borderGaz = arr.map(d => d.isProjection ? '#f97316' : '#f97316');
-                const borderWidth = arr.map(d => d.isProjection ? 2 : 0);
+
+                const gradientGaz = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
+                gradientGaz.addColorStop(0, 'rgba(249, 115, 22, 0.9)');
+                gradientGaz.addColorStop(1, 'rgba(249, 115, 22, 0.4)');
+
+                const gradientElec = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
+                gradientElec.addColorStop(0, 'rgba(59, 130, 246, 0.9)');
+                gradientElec.addColorStop(1, 'rgba(59, 130, 246, 0.4)');
                 
-                // Budget Line Annotation
+                // Opacity for projection
+                const bgGaz = arr.map(d => d.isProjection ? 'rgba(249, 115, 22, 0.2)' : gradientGaz);
+                const bgElec = arr.map(d => d.isProjection ? 'rgba(59, 130, 246, 0.2)' : gradientElec);
+                const borders = arr.map(d => d.isProjection ? 2 : 0);
+
                 const budgetLine = {
                     type: 'line',
-                    yMin: 1000, // Monthly budget goal in kWh (approx 100€)
-                    yMax: 1000,
-                    borderColor: 'rgba(255, 99, 132, 0.5)',
-                    borderWidth: 2,
-                    borderDash: [5, 5],
-                    label: {
-                        content: 'Budget Cible (~100€)',
-                        enabled: true,
-                        position: 'end'
-                    }
+                    yMin: 1000, yMax: 1000,
+                    borderColor: 'rgba(239, 68, 68, 0.4)',
+                    borderWidth: 1, borderDash: [4, 4],
+                    label: { content: 'Cible', enabled: true, position: 'start', color: 'rgba(239, 68, 68, 0.7)', font: {size: 10} }
                 };
-                
-                // Moyenne Voisinage (Dataset)
-                // Approx 800 kWh/month for 42m2 (Gaz+Elec)
-                const neighborhoodData = arr.map(() => 800); 
+
+                Chart.defaults.font.family = '"Plus Jakarta Sans", sans-serif';
+                Chart.defaults.color = isDark ? '#94a3b8' : '#64748b';
 
                 chartInstance = new Chart(ctx.getContext('2d'), {
                     type: 'bar',
                     data: {
                         labels: arr.map(d=>d.label),
                         datasets: [
-                            { 
-                                label:'Gaz', 
-                                data:arr.map(d=>d.gaz), 
-                                backgroundColor: bgGaz, 
-                                borderColor: borderGaz, 
-                                borderWidth: borderWidth, 
-                                borderSkipped: false, 
-                                borderRadius:4, 
-                                stack:'Stack 0' 
-                            },
-                            { 
-                                label:'Élec', 
-                                data:arr.map(d=>d.elec), 
-                                backgroundColor: bgElec, 
-                                borderColor: '#3b82f6', 
-                                borderWidth: borderWidth, 
-                                borderSkipped: false, 
-                                borderRadius:4, 
-                                stack:'Stack 0' 
-                            },
-                            {
-                                label: 'Moyenne Voisinage',
-                                data: neighborhoodData,
-                                type: 'line',
-                                borderColor: isDark ? '#475569' : '#cbd5e1',
-                                borderDash: [2, 2],
-                                pointRadius: 0,
-                                borderWidth: 1,
-                                fill: false,
-                                order: 10
-                            }
+                            { label:'Gaz', data:arr.map(d=>d.gaz), backgroundColor: bgGaz, borderRadius: 4, barPercentage: 0.6, stack:'Stack 0', borderColor: '#f97316', borderWidth: borders },
+                            { label:'Élec', data:arr.map(d=>d.elec), backgroundColor: bgElec, borderRadius: 4, barPercentage: 0.6, stack:'Stack 0', borderColor: '#3b82f6', borderWidth: borders }
                         ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
                         plugins: { 
-                            legend: { position:'bottom', labels: { color: isDark ? '#cbd5e1':'#334155', usePointStyle:true } }, 
-                            annotation: {
-                                annotations: {
-                                    line1: budgetLine
-                                }
-                            },
-                            tooltip: { 
+                            legend: { display: false }, 
+                            annotation: { annotations: { line1: budgetLine } },
+                            tooltip: {
+                                backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                                padding: 12,
+                                titleFont: { size: 13, weight: 'bold' },
+                                bodyFont: { size: 12 },
+                                cornerRadius: 8,
+                                displayColors: true,
                                 callbacks: { 
-                                    title: (items) => { 
-                                        const item = items[0]; 
-                                        const p = arr[item.dataIndex].provider; 
-                                        return `${arr[item.dataIndex].fullRange} (${p})`; 
-                                    }, 
-                                    label: (context) => { 
-                                        let label = context.dataset.label || ''; 
-                                        if (label) label += ': '; 
-                                        if (context.parsed.y !== null) label += Math.round(context.parsed.y) + (context.dataset.type === 'line' ? ' °C' : ' kWh'); 
-                                        if (arr[context.dataIndex].isProjection && context.dataset.type !== 'line' && context.dataset.label !== 'Moyenne Voisinage') label += ' (Est.)'; 
-                                        return label; 
-                                    } 
+                                    title: (i) => `${arr[i[0].dataIndex].fullRange}`,
+                                    label: (c) => `${c.dataset.label}: ${Math.round(c.raw)} kWh`
                                 } 
                             } 
                         },
                         scales: { 
-                            x: { 
-                                grid:{display:false}, 
-                                ticks:{color: isDark ? '#94a3b8':'#64748b'},
-                                stacked: true // Force Stacking X
-                            }, 
-                            y: { 
-                                display:false,
-                                stacked: true // Force Stacking Y
-                            }, 
-                            y1: { 
-                                display:false, 
-                                reverse:true 
-                            } 
+                            x: { grid:{display:false}, ticks:{font:{size:10}} }, 
+                            y: { display:false, grid:{display:false} } 
                         }
                     }
                 });
             }
 
             initData();
-            renderDashboard('all');
+            updateThermostat(0);
         });
     </script>
 </body>
