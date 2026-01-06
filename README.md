@@ -46,6 +46,11 @@ Ce dépôt contient une collection d'infographies interactives, créées avec HT
 * **Description :** Tableau de bord de suivi énergétique pour le logement "Côté Parc" à Nantes. Il présente la performance énergétique (DPE), le diagnostic de consommation pour le chauffage et l'électricité courante, ainsi que l'historique annuel.
 * **Accéder à l'infographie :** [Voir l'infographie "Dashboard Conso Nantes"](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/dashboard_conso_nantes/index.html)
 
+### 9. Setup de Manon : Guide Installation Audio
+
+* **Description :** Une infographie personnalisée servant de guide pour la commande et l'installation d'un système audio (Edifier R1280DB). Elle détaille les étapes de la commande à la mise en place du "QG Musical".
+* **Accéder à l'infographie :** [Voir le guide "Setup de Manon"](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/setup_manon_audio/index.html)
+
 ---
 
 ## Mentions légales et Licence
