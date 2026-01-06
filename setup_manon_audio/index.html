@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Super Son de Manon 🎵</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #ec4899, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card {
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .step-number {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+        }
+        .cable-line {
+            stroke-dasharray: 10;
+            animation: dash 30s linear infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 1000;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 pb-20">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+            <h1 class="text-xl font-bold text-slate-800">Setup de <span class="gradient-text">Manon</span></h1>
+            <i data-lucide="music" class="text-pink-500"></i>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-6 pt-8 space-y-12">
+
+        <!-- NEW: Product Order Section -->
+        <section class="bg-white rounded-3xl shadow-xl overflow-hidden border-2 border-purple-100">
+            <div class="bg-gradient-to-r from-purple-600 to-pink-600 p-6 text-white text-center">
+                <h2 class="text-2xl font-bold mb-2">🎁 Étape 1 : La Commande</h2>
+                <p class="opacity-90">On commence par recevoir le matériel !</p>
+            </div>
+            
+            <div class="p-6 md:p-8 grid md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-4">
+                    <div class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-bold tracking-wide">LE CHOIX PARFAIT</div>
+                    <h3 class="text-3xl font-bold text-slate-800">Edifier R1280DB</h3>
+                    <p class="text-slate-500 text-sm">Enceintes actives de bibliothèque avec Bluetooth et double entrée (Idéal pour TV + Vinyle).</p>
+                    
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Son riche et puissant (42W)</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Télécommande incluse</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i> Bluetooth 5.0</li>
+                    </ul>
+
+                    <div class="pt-4 flex items-baseline gap-2">
+                        <span class="text-3xl font-bold text-slate-900">~109€</span>
+                        <span class="text-sm text-slate-400">sur Amazon</span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 rounded-xl p-6 flex flex-col items-center text-center space-y-4 border border-slate-100">
+                    <!-- Generic Speaker Visual -->
+                    <div class="w-full h-40 bg-white rounded-lg flex items-center justify-center border border-slate-200 gap-4 shadow-inner">
+                         <div class="flex flex-col items-center gap-1">
+                            <div class="w-16 h-24 bg-slate-800 rounded flex flex-col items-center justify-around py-2 shadow-lg">
+                                <div class="w-10 h-10 rounded-full bg-slate-700 border-2 border-slate-600"></div>
+                                <div class="w-10 h-10 rounded-full bg-slate-700 border-2 border-slate-600"></div>
+                            </div>
+                            <span class="text-[10px] text-slate-400 font-bold">L</span>
+                         </div>
+                         <div class="flex flex-col items-center gap-1">
+                            <div class="w-16 h-24 bg-slate-800 rounded flex flex-col items-center justify-around py-2 shadow-lg">
+                                <div class="w-10 h-10 rounded-full bg-slate-700 border-2 border-slate-600"></div>
+                                <div class="w-10 h-10 rounded-full bg-slate-700 border-2 border-slate-600"></div>
+                            </div>
+                            <span class="text-[10px] text-slate-400 font-bold">R</span>
+                         </div>
+                    </div>
+                    
+                    <!-- Yellow Banner for Brother -->
+                    <div class="w-full bg-yellow-300 text-yellow-900 p-3 rounded-lg font-extrabold text-sm shadow-md border-2 border-yellow-400 transform -rotate-1 hover:rotate-0 transition-transform cursor-help">
+                        💖 Pour la commande : voir avec ton frère adoré que tu aimes tant !
+                    </div>
+
+                    <div class="w-full bg-blue-50 p-4 rounded-lg border border-blue-100">
+                        <div class="flex items-center justify-center gap-2 text-blue-800 font-bold mb-1">
+                            <i data-lucide="package-check" class="w-5 h-5"></i>
+                            <span>Livraison Prime</span>
+                        </div>
+                        <p class="text-xs text-blue-600 mb-3">Je peux te les commander avec mon compte, ça arrive en 1 jour ! 🚀</p>
+                        <a href="https://www.amazon.fr/Edifier-R1280DB-Enceintes-t%C3%A9l%C3%A9commande-ordinateur/dp/B01NCTNZRC/ref=sr_1_2?__mk_fr_FR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=HXEN3UKIEMPE&dib=eyJ2IjoiMSJ9.d5gCcSV4a_6GbSCySod7Du-itAfxnZePUQhgyjtPTXzEv0KcCOpG52AsQSiZlmPNCddXP4K8iS61DZDY5AeJluX-rYPTwcSFfEnv9vD5fusQyyLufMt7_TtoAMApIainwMUb7vqjJfcVWjlYpDZF1nxkT0r-UIctZLqmePslwzJEI0mNvDs6qTF92fB4SVa3cjS8VHFcejaGInvWsjT554sD9PTZ1-owGIBU4NuK98b72KgRbNS6u_LGjRpJMH1wqHx9j7vnOUOKCec0Z_ljBfwpoEhKrGIpQTbKLY3rvj0.erSDtdcsI1GiwJbhzWLDURvfDxu7_VL2w82ZYbzBgmg&dib_tag=se&keywords=Edifier%2BR1280DB&qid=1767701420&sprefix=edifier%2Br1280db%2Caps%2C221&sr=8-2&ufe=app_do%3Aamzn1.fos.49fccda8-a887-4188-817b-b9a64bb30e43&th=1" target="_blank" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition shadow-md text-sm flex items-center justify-center gap-2">
+                            Voir sur Amazon <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Intro -->
+        <section class="text-center space-y-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold leading-tight">Une fois reçues...<br><span class="gradient-text">Ton QG Musical</span></h2>
+            <p class="text-lg text-slate-600">Fini les câbles à débrancher ! Voici comment installer tes nouvelles enceintes pour profiter de tes vinyles, de tes films et de ton téléphone.</p>
+            
+            <div class="bg-white p-6 rounded-2xl shadow-lg mt-8 flex flex-col md:flex-row items-center justify-center gap-6 border-2 border-purple-100">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-purple-100 rounded-full text-purple-600">
+                        <i data-lucide="tv"></i>
+                    </div>
+                    <span class="font-semibold">Télé</span>
+                </div>
+                <div class="hidden md:block text-slate-300"><i data-lucide="plus"></i></div>
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-pink-100 rounded-full text-pink-600">
+                        <i data-lucide="disc-3"></i>
+                    </div>
+                    <span class="font-semibold">Vinyles</span>
+                </div>
+                <div class="hidden md:block text-slate-300"><i data-lucide="plus"></i></div>
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-blue-100 rounded-full text-blue-600">
+                        <i data-lucide="smartphone"></i>
+                    </div>
+                    <span class="font-semibold">Bluetooth</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 1: Warning -->
+        <section class="bg-yellow-50 border-l-8 border-yellow-400 p-6 rounded-r-xl shadow-sm">
+            <div class="flex items-start gap-4">
+                <div class="mt-1 text-yellow-500 min-w-[24px]">
+                    <i data-lucide="alert-triangle"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-yellow-800 mb-2">Étape 0 : Le bouton secret (Très Important !)</h3>
+                    <p class="text-yellow-700 mb-4">Avant de brancher quoi que ce soit, regarde derrière ton tourne-disque Audio-Technica.</p>
+                    <div class="bg-white p-4 rounded-lg border border-yellow-200 inline-block">
+                        <p class="text-sm font-semibold text-slate-600 mb-2">Il y a un interrupteur PHONO / LINE :</p>
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 line-through decoration-2">PHONO</span>
+                            <i data-lucide="arrow-right" class="text-slate-400"></i>
+                            <span class="text-green-600 font-bold bg-green-100 px-3 py-1 rounded">LINE ✅</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-yellow-700 mt-3 italic">Si tu ne le mets pas sur LINE, le son sera tout petit et bizarre !</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 2: Connections Diagram -->
+        <section>
+            <div class="flex items-center gap-4 mb-6">
+                <span class="step-number w-10 h-10 flex items-center justify-center rounded-full text-white font-bold shadow-lg">1</span>
+                <h3 class="text-2xl font-bold text-slate-800">Les Branchements</h3>
+            </div>
+            
+            <p class="text-slate-600 mb-6">Tes nouvelles enceintes sont magiques : elles ont deux entrées à l'arrière. Tu peux tout laisser branché en même temps !</p>
+
+            <!-- SVG Diagram -->
+            <div class="bg-white p-6 rounded-3xl shadow-xl border border-slate-100 overflow-hidden relative">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-500 to-purple-500"></div>
+                
+                <div class="flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4 relative z-10">
+                    
+                    <!-- Sources Left -->
+                    <div class="flex flex-col gap-12 w-full md:w-1/3">
+                        <!-- TV -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center relative group">
+                            <div class="absolute -right-3 top-1/2 w-3 h-3 bg-slate-300 rounded-full md:block hidden"></div>
+                            <i data-lucide="tv" class="w-8 h-8 mx-auto text-purple-500 mb-2"></i>
+                            <h4 class="font-bold text-slate-700">La Télé</h4>
+                            <p class="text-xs text-slate-500">Prise Casque 🎧</p>
+                        </div>
+
+                        <!-- Vinyl -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center relative group">
+                            <div class="absolute -right-3 top-1/2 w-3 h-3 bg-slate-300 rounded-full md:block hidden"></div>
+                            <i data-lucide="disc-3" class="w-8 h-8 mx-auto text-pink-500 mb-2"></i>
+                            <h4 class="font-bold text-slate-700">Tourne-disque</h4>
+                            <p class="text-xs text-slate-500">Câble noir</p>
+                        </div>
+                    </div>
+
+                    <!-- Cables Visual (Desktop only mainly) -->
+                    <div class="hidden md:flex flex-col gap-12 items-center justify-center w-1/3">
+                        <div class="h-[2px] w-full bg-slate-300 relative">
+                            <span class="absolute top-[-20px] left-1/2 transform -translate-x-1/2 text-xs bg-white px-2 text-slate-400">Câble Jack vers RCA</span>
+                        </div>
+                        <div class="h-[2px] w-full bg-slate-300 relative">
+                            <span class="absolute top-[-20px] left-1/2 transform -translate-x-1/2 text-xs bg-white px-2 text-slate-400">Câble RCA fourni</span>
+                        </div>
+                    </div>
+
+                    <!-- Speaker Right -->
+                    <div class="w-full md:w-1/3">
+                        <div class="bg-slate-800 p-6 rounded-xl border-4 border-slate-700 text-center text-white relative shadow-2xl">
+                            <div class="absolute -left-3 top-1/3 w-3 h-3 bg-red-500 rounded-full md:block hidden"></div>
+                            <div class="absolute -left-3 top-2/3 w-3 h-3 bg-white rounded-full md:block hidden"></div>
+                            
+                            <i data-lucide="speaker" class="w-12 h-12 mx-auto mb-4 text-purple-400"></i>
+                            <h4 class="font-bold text-xl mb-4">Arrière de l'enceinte</h4>
+                            
+                            <div class="space-y-3 text-sm">
+                                <div class="bg-slate-700 p-2 rounded flex justify-between items-center">
+                                    <span>Entrée 1 (PC)</span>
+                                    <span class="text-xs text-purple-300">← Brancher Télé</span>
+                                </div>
+                                <div class="bg-slate-700 p-2 rounded flex justify-between items-center">
+                                    <span>Entrée 2 (AUX)</span>
+                                    <span class="text-xs text-pink-300">← Brancher Vinyle</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-sm text-slate-500 mt-4 text-center">💡 Les câbles sont normalement fournis dans les cartons des appareils !</p>
+        </section>
+
+        <!-- Step 3: Remote -->
+        <section class="grid md:grid-cols-2 gap-8">
+            <div>
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="step-number w-10 h-10 flex items-center justify-center rounded-full text-white font-bold shadow-lg">2</span>
+                    <h3 class="text-2xl font-bold text-slate-800">Comment choisir ?</h3>
+                </div>
+                <p class="text-slate-600 mb-4">Tout se passe avec la petite télécommande (ou les boutons sur le côté de l'enceinte).</p>
+                
+                <div class="space-y-3">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
+                        <div class="w-8 h-8 rounded-full bg-green-500 flex-shrink-0"></div>
+                        <div>
+                            <p class="font-bold text-slate-800">Lumière VERTE</p>
+                            <p class="text-sm text-slate-500">C'est le mode Câble (Télé ou Vinyle). Si tu n'entends rien, appuie encore sur le bouton "Line 1" ou "Line 2".</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center gap-4">
+                        <div class="w-8 h-8 rounded-full bg-blue-500 flex-shrink-0 animate-pulse"></div>
+                        <div>
+                            <p class="font-bold text-slate-800">Lumière BLEUE</p>
+                            <p class="text-sm text-slate-500">C'est le Bluetooth ! Parfait pour Spotify ou Deezer depuis ton téléphone.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bluetooth Bonus -->
+            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-6 text-white shadow-lg flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <i data-lucide="smartphone" class="w-6 h-6"></i>
+                        <h3 class="text-xl font-bold">Connecter ton Tél</h3>
+                    </div>
+                    <ol class="space-y-4 list-decimal list-inside text-blue-100">
+                        <li>Appuie sur le bouton <strong>Bluetooth</strong> de la télécommande.</li>
+                        <li>La lumière de l'enceinte devient <strong>Bleue</strong>.</li>
+                        <li>Sur ton téléphone, cherche "<strong>Edifier R1280DB</strong>".</li>
+                        <li>Clique et connecte-toi. C'est fait ! 🎉</li>
+                    </ol>
+                </div>
+                <div class="mt-6 text-center text-sm bg-white/10 p-2 rounded-lg backdrop-blur-sm">
+                    Astuce : Tu ne peux pas écouter le vinyle et le téléphone en même temps. Il faut choisir !
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center pt-8 border-t border-slate-200">
+            <p class="text-slate-400 font-medium">Bonne écoute Manon ! 🎧</p>
+        </footer>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
