@@ -51,6 +51,11 @@ Ce dépôt contient une collection d'infographies interactives, créées avec HT
 * **Description :** Une infographie personnalisée servant de guide pour la commande et l'installation d'un système audio (Edifier R1280DB). Elle détaille les étapes de la commande à la mise en place du "QG Musical".
 * **Accéder à l'infographie :** [Voir le guide "Setup de Manon"](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/setup_manon_audio/index.html)
 
+### 10. Assistant de Continuité | Proxiserve
+
+* **Description :** Un outil interactif conçu pour la Direction Technique permettant de générer rapidement des messages d'absence (Gmail) selon le contexte : RTT, Congés, Déplacement Pro ou Support Restreint.
+* **Accéder à l'infographie :** [Voir l'Assistant de Continuité](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS//assistant_continuite_proxiserve/index.html)
+
 ---
 
 ## Mentions légales et Licence
