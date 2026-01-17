@@ -254,7 +254,7 @@
             letter-spacing: 0.05em;
             border: 1px solid transparent;
             margin-left: 10px;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
             display: inline-block;
         }
         .status-admin { background-color: #FEF2F2; color: #DC2626; border-color: #FECACA; }
@@ -321,13 +321,20 @@
         <!-- MAIN CONTENT -->
         <div class="content-area">
             <div class="top-bar">
-                <div class="flex items-center gap-2">
-                    <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.6)]"></div>
-                    <span class="text-xs font-bold text-gray-600 uppercase tracking-wide">Système Prêt</span>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.6)]"></div>
+                        <span class="text-xs font-bold text-gray-600 uppercase tracking-wide">Système Prêt</span>
+                    </div>
+                    
+                    <!-- BADGE STATUT DÉPLACÉ ICI -->
+                    <span id="user-status-badge" class="status-badge status-admin text-[0.6rem] py-0.5 px-2">ADMINISTRATEUR</span>
                 </div>
+
                 <div class="flex gap-2">
                     <button class="bg-white border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-all"><i class="fa-brands fa-salesforce text-blue-500"></i> CRM</button>
                     <button class="bg-white border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-all"><i class="fa-solid fa-book-open text-orange-400"></i> Aide</button>
+                    <button class="bg-white border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-all"><i class="fa-solid fa-book-bookmark text-purple-500"></i> Helpjuice</button>
                     <button class="text-gray-400 hover:text-red-500 px-2 transition-all"><i class="fa-solid fa-power-off"></i></button>
                 </div>
             </div>
@@ -339,8 +346,8 @@
                     <div class="mb-3 flex justify-between items-end">
                         <div>
                             <div class="flex items-center">
+                                <!-- Badge retiré d'ici -->
                                 <h2 class="text-2xl font-light text-gray-800">Bonjour, <b id="dashboard-user-name" class="text-blue-600 font-semibold">Aurélien D.</b></h2>
-                                <span id="user-status-badge" class="status-badge status-admin">ADMINISTRATEUR</span>
                             </div>
                             <p class="text-sm text-gray-500 mt-0.5">Actions rapides et suivi des importations.</p>
                         </div>
@@ -369,7 +376,6 @@
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-3 gap-2">
-                                    <!-- Alignement corrigé : Flex-row pour tous les boutons du bas -->
                                     <div class="btn-action h-14 px-3 shadow-sm hover:shadow-md transition-all">
                                         <i class="fa-solid fa-list-ul text-blue-600 text-lg mr-2"></i>
                                         <div class="btn-content"><span class="btn-title text-sm">Multi-Cités</span><span class="btn-sub text-[0.65rem]">Extraction DFLGEST</span></div>
@@ -389,7 +395,6 @@
                             <div class="card shadow-sm">
                                 <div class="card-header"><i class="fa-solid fa-file-import"></i> Imports de Masse</div>
                                 <div class="grid grid-cols-3 gap-2">
-                                    <!-- Ligne 1 : Master -->
                                     <div class="btn-action col-span-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-none shadow-md hover:shadow-lg hover:from-indigo-500 hover:to-purple-500 transition-all cursor-pointer group h-14 relative overflow-hidden">
                                         <div class="absolute top-0 right-0 -mr-4 -mt-4 w-20 h-20 rounded-full bg-white/10 blur-xl"></div>
                                         <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform backdrop-blur-sm border border-white/30">
@@ -402,7 +407,6 @@
                                         <i class="fa-solid fa-chevron-right text-white/50 text-lg ml-auto"></i>
                                     </div>
 
-                                    <!-- Ligne 2 : DFLGEST + Contrats -->
                                     <div class="btn-action col-span-2 border-blue-200 bg-blue-50 hover:bg-blue-100 transition-colors cursor-pointer group h-14">
                                         <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm mr-2 group-hover:scale-110 transition-transform">
                                             <i class="fa-solid fa-cloud-arrow-down text-blue-600 text-lg"></i>
@@ -412,12 +416,12 @@
                                             <span class="btn-sub text-blue-700/70 font-bold text-[0.65rem]">Juste charger DFLGEST</span>
                                         </div>
                                     </div>
+                                    
                                     <div class="btn-action h-14 px-2">
                                         <i class="fa-solid fa-file-shield text-gray-400 text-lg mr-2"></i>
                                         <div class="btn-content"><span class="btn-title text-xs">Contrats</span><span class="btn-sub text-[0.6rem]">DFCGEST</span></div>
                                     </div>
                                     
-                                    <!-- Ligne 3 : Alignement parfait 3 boutons -->
                                     <div class="btn-action h-14 px-2">
                                         <i class="fa-solid fa-desktop text-gray-400 text-lg mr-2"></i>
                                         <div class="btn-content"><span class="btn-title text-xs">Accès Pro</span><span class="btn-sub text-[0.6rem]">Exp. Index</span></div>
@@ -746,12 +750,10 @@
                     </div>
                 </div>
 
-                <!-- PAGE RAPPORTS (C'EST ICI LA MODIF) -->
                 <div id="page-rapports" class="page-content hidden">
                     <h2 class="text-2xl font-light text-gray-800 mb-6">Exports & <b class="text-blue-600 font-semibold">Analyses</b></h2>
                     <div class="grid grid-cols-12 gap-4">
                         <div class="col-span-4 flex flex-col gap-4">
-                            <!-- EXCEL -->
                             <div class="card bg-emerald-50/50 border-emerald-100">
                                 <div class="card-header border-b border-emerald-200 pb-2 mb-2 flex justify-between items-center">
                                     <span class="text-emerald-700"><i class="fa-solid fa-file-excel mr-2"></i> Exports Excel</span>
@@ -765,7 +767,6 @@
                                     <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2"><span class="btn-title text-xs">État de Pose (XLS)</span><i class="fa-solid fa-download text-emerald-300 ml-auto"></i></button>
                                 </div>
                             </div>
-                            <!-- PDF -->
                             <div class="card bg-red-50/50 border-red-100">
                                 <div class="card-header border-b border-red-200 pb-2 mb-2 flex justify-between items-center">
                                     <span class="text-red-700"><i class="fa-solid fa-file-pdf mr-2"></i> Exports PDF</span>
