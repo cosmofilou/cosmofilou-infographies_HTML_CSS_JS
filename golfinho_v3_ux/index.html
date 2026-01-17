@@ -385,7 +385,8 @@
                                     </div>
                                     <div class="btn-action">
                                         <i class="fa-solid fa-file-contract text-blue-600 text-lg"></i>
-                                        <div class="btn-content"><span class="btn-title">Contrats Agence</span><span class="btn-sub">Listing Clients</span></div>
+                                        <!-- Correction: Listing Contrats -->
+                                        <div class="btn-content"><span class="btn-title">Contrats Agence</span><span class="btn-sub">Listing Contrats</span></div>
                                     </div>
                                     <div class="btn-action btn-primary border-blue-200">
                                         <i class="fa-solid fa-database text-blue-700 text-lg"></i>
@@ -398,12 +399,29 @@
                             <div class="card shadow-sm">
                                 <div class="card-header"><i class="fa-solid fa-file-import"></i> Imports de Masse</div>
                                 <div class="grid grid-cols-3 gap-2"> <!-- GAP REDUIT -->
-                                    <div class="btn-action"><i class="fa-solid fa-cloud-arrow-down text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Patrimoine</span><span class="btn-sub">CSV/XLS</span></div></div>
-                                    <div class="btn-action"><i class="fa-solid fa-file-shield text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Contrats</span><span class="btn-sub">Mise à jour</span></div></div>
-                                    <div class="btn-action"><i class="fa-solid fa-desktop text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Accès Pro</span><span class="btn-sub">Import</span></div></div>
                                     
-                                    <div class="btn-action"><i class="fa-solid fa-bell text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Alarmes</span><span class="btn-sub">Journalier</span></div></div>
-                                    <div class="btn-action col-span-2 btn-secondary"><i class="fa-solid fa-satellite-dish text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">MBW / GPRS Brut</span><span class="btn-sub">Données raw</span></div></div>
+                                    <!-- IMPORT PATRIMOINE (MIS EN EVIDENCE) -->
+                                    <div class="btn-action col-span-2 border-blue-200 bg-blue-50 hover:bg-blue-100 transition-colors cursor-pointer group">
+                                        <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm mr-2 group-hover:scale-110 transition-transform">
+                                            <i class="fa-solid fa-cloud-arrow-down text-blue-600 text-lg"></i>
+                                        </div>
+                                        <div class="btn-content">
+                                            <span class="btn-title text-blue-900">Import Patrimoine</span>
+                                            <span class="btn-sub text-blue-700/70 font-bold">Fichier DFLGEST</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Correction: DFCGEST -->
+                                    <div class="btn-action"><i class="fa-solid fa-file-shield text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Contrats</span><span class="btn-sub">DFCGEST</span></div></div>
+                                    
+                                    <!-- Correction: Export des index -->
+                                    <div class="btn-action"><i class="fa-solid fa-desktop text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Accès Pro</span><span class="btn-sub">Exp. Index</span></div></div>
+                                    
+                                    <!-- Correction: Export des alarmes -->
+                                    <div class="btn-action"><i class="fa-solid fa-bell text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Alarmes</span><span class="btn-sub">Exp. Alarmes</span></div></div>
+                                    
+                                    <!-- Correction: Fichiers MBWGPRS format .txt -->
+                                    <div class="btn-action"><i class="fa-solid fa-satellite-dish text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">MBW / GPRS</span><span class="btn-sub">Fichiers .txt</span></div></div>
                                 </div>
                             </div>
                         </div>
