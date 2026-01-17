@@ -45,6 +45,7 @@
             display: flex;
             flex-direction: row;
             overflow: hidden;
+            position: relative;
         }
 
         /* --- SIDEBAR --- */
@@ -128,6 +129,7 @@
             flex-direction: column;
             background-color: var(--bg-app);
             overflow: hidden;
+            position: relative;
         }
 
         .top-bar {
@@ -183,8 +185,6 @@
             position: relative;
         }
         
-        /* Simulation de l'effet "Bouton Enfoncé" de Windows */
-        /* CORRECTION VIGILANCE : Pas de scale, juste couleurs */
         .btn-action:hover { border-color: #BCCCE5; background-color: #F0F5FF; }
         .btn-action:active { background-color: #E0E7FF; transform: translateY(1px); }
 
@@ -208,20 +208,53 @@
             color: #4B5563;
             justify-content: space-between;
         }
+
+        /* --- NOTIFICATIONS & LOADING (MODIFIÉ) --- */
         
-        /* CORRECTION VIGILANCE : Zone de notification ajoutée */
-        .notification-area {
-            height: 24px;
-            background-color: #FFFbeb; /* Jaune pâle défaut */
-            border-top: 1px solid #FEF3C7;
+        /* Zone de Notification (Toast Bar) - Police réduite */
+        .notification-bar {
+            height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            background-color: #F3F4F6;
+            border-top: 0px solid transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
-            color: #92400E;
+            font-size: 0.7rem; /* MODIFICATION : Police plus petite */
             font-weight: 600;
-            display: none; /* Masqué par défaut */
+            width: 100%;
         }
+        .notification-bar.show {
+            height: 28px; /* MODIFICATION : Hauteur légèrement réduite */
+            border-top-width: 1px;
+        }
+        .notif-success { background-color: #ECFDF5; color: #047857; border-color: #A7F3D0; }
+        .notif-error { background-color: #FEF2F2; color: #B91C1C; border-color: #FECACA; }
+        
+        .loading-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(2px);
+            z-index: 50;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .loading-overlay.active { display: flex; }
+        .spinner {
+            width: 40px; height: 40px;
+            border: 4px solid #E2E8F0;
+            border-top: 4px solid #0061F2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .progress-container { width: 300px; height: 6px; background: #E2E8F0; border-radius: 99px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: #0061F2; width: 0%; transition: width 0.2s ease-out; }
 
         .input-excel {
             background: #fff;
@@ -285,6 +318,14 @@
 
     <div class="userform-frame">
         
+        <!-- LOADING OVERLAY -->
+        <div id="loading-overlay" class="loading-overlay">
+            <div class="spinner"></div>
+            <div id="loading-text" class="text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">Traitement en cours...</div>
+            <div class="progress-container"><div id="progress-bar-fill" class="progress-bar-fill"></div></div>
+            <div id="loading-percent" class="text-xs text-gray-500 mt-1 font-mono">0%</div>
+        </div>
+
         <!-- SIDEBAR -->
         <div class="sidebar">
             <div class="sidebar-header">
@@ -297,7 +338,7 @@
                 <!-- Version + Slogan -->
                 <div class="flex flex-col items-center">
                     <div class="text-[0.65rem] text-slate-400 font-bold tracking-widest uppercase">Version 3.0.0</div>
-                    <div class="text-[0.6rem] text-blue-500 italic font-medium mt-1">"Inspiré par l'intelligence du dauphin"</div>
+                    <div class="text-[0.55rem] text-blue-500 italic font-medium mt-1">"Inspiré par l'intelligence du dauphin"</div>
                 </div>
             </div>
 
@@ -343,7 +384,7 @@
                     <span>Contact Support</span>
                 </a>
 
-                <!-- COPYRIGHT PLUS VISIBLE -->
+                <!-- COPYRIGHT -->
                 <div class="text-[0.6rem] text-gray-500 font-bold mt-2 text-center border-t border-gray-100 pt-2">
                     Tous droits réservés © 2023 - 2026
                 </div>
@@ -427,9 +468,9 @@
                             <div class="card shadow-sm">
                                 <div class="card-header"><i class="fa-solid fa-file-import"></i> Imports de Masse</div>
                                 <div class="grid grid-cols-3 gap-2">
-                                    <!-- CORRECTION VIGILANCE : BOUTON SOLIDE (Pas de gradient CSS) -->
-                                    <div class="btn-action col-span-3 bg-indigo-600 text-white border-indigo-700 shadow-md hover:bg-indigo-500 transition-all cursor-pointer group h-14 relative overflow-hidden">
-                                        <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mr-3 border border-white/30">
+                                    <div onclick="simulateLoading('Analyse Patrimoine en cours...', 3000)" class="btn-action col-span-3 bg-indigo-600 text-white border-indigo-700 shadow-md hover:bg-indigo-500 transition-all cursor-pointer group h-14 relative overflow-hidden">
+                                        <div class="absolute top-0 right-0 -mr-4 -mt-4 w-20 h-20 rounded-full bg-white/10 blur-xl"></div>
+                                        <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform backdrop-blur-sm border border-white/30">
                                             <i class="fa-solid fa-wand-magic-sparkles text-white text-base"></i>
                                         </div>
                                         <div class="btn-content">
@@ -845,60 +886,60 @@
                                             </div>
                                         </div>
                                         
-                                        <!-- Paramétrage Fluides (Checkbox Standards) -->
-                                        <div class="flex items-center justify-between gap-2 mb-4 px-1 border-b border-gray-200 pb-3">
-                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-red-600 transition-colors">
-                                                <input type="checkbox" class="accent-red-500 w-3.5 h-3.5 rounded">
-                                                <span class="text-[0.7rem] font-bold text-gray-600">EF</span>
+                                        <!-- Paramétrage Fluides (Checkbox Aérées) -->
+                                        <div class="flex items-center justify-around gap-2 mb-6 px-2 border-b border-gray-200 pb-4">
+                                            <label class="flex items-center gap-2 cursor-pointer hover:text-red-600 transition-colors p-1 hover:bg-white rounded">
+                                                <input type="checkbox" class="accent-red-500 w-4 h-4 rounded">
+                                                <span class="text-xs font-bold text-gray-700">EF</span>
                                             </label>
-                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-red-600 transition-colors">
-                                                <input type="checkbox" class="accent-red-500 w-3.5 h-3.5 rounded">
-                                                <span class="text-[0.7rem] font-bold text-gray-600">EC</span>
+                                            <label class="flex items-center gap-2 cursor-pointer hover:text-red-600 transition-colors p-1 hover:bg-white rounded">
+                                                <input type="checkbox" class="accent-red-500 w-4 h-4 rounded">
+                                                <span class="text-xs font-bold text-gray-700">EC</span>
                                             </label>
-                                            <div class="w-[1px] bg-gray-300 h-3"></div>
-                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-red-600 transition-colors">
-                                                <input type="checkbox" class="accent-red-500 w-3.5 h-3.5 rounded">
-                                                <span class="text-[0.7rem] font-bold text-gray-600">CET</span>
+                                            <div class="w-[1px] bg-gray-300 h-6"></div>
+                                            <label class="flex items-center gap-2 cursor-pointer hover:text-red-600 transition-colors p-1 hover:bg-white rounded">
+                                                <input type="checkbox" class="accent-red-500 w-4 h-4 rounded">
+                                                <span class="text-xs font-bold text-gray-700">CET</span>
                                             </label>
-                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-red-600 transition-colors">
-                                                <input type="checkbox" class="accent-red-500 w-3.5 h-3.5 rounded">
-                                                <span class="text-[0.7rem] font-bold text-gray-600">RFC</span>
+                                            <label class="flex items-center gap-2 cursor-pointer hover:text-red-600 transition-colors p-1 hover:bg-white rounded">
+                                                <input type="checkbox" class="accent-red-500 w-4 h-4 rounded">
+                                                <span class="text-xs font-bold text-gray-700">RFC</span>
                                             </label>
                                             
-                                            <!-- Espaceur flexible -->
-                                            <div class="flex-grow"></div>
+                                            <!-- Espaceur -->
+                                            <div class="w-[1px] bg-gray-300 h-6 mx-2"></div>
                                             
-                                            <!-- Switch tout/rien simplifié -->
-                                            <label class="flex items-center gap-1.5 cursor-pointer">
-                                                <input type="checkbox" class="accent-slate-500 w-3.5 h-3.5 rounded">
-                                                <span class="text-[0.65rem] text-gray-400">Tout Exclure</span>
+                                            <!-- Switch tout/rien -->
+                                            <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-white rounded">
+                                                <input type="checkbox" class="accent-slate-500 w-4 h-4 rounded">
+                                                <span class="text-[0.65rem] text-gray-500 font-medium uppercase">Tout Exclure</span>
                                             </label>
                                         </div>
 
                                         <!-- Actions Grid (4 Blocs Identiques, Hauts) -->
                                         <div class="grid grid-cols-4 gap-3">
                                             <!-- 1-Click EAU -->
-                                            <button class="btn-action bg-white border-blue-200 text-blue-600 flex-col justify-center px-1 hover:bg-blue-50 transition-all h-16 shadow-sm mb-0 group" title="Rapport Eau Standard (EF+EC)">
-                                                <i class="fa-solid fa-droplet text-lg mb-1 group-hover:scale-110 transition-transform"></i>
-                                                <span class="text-[0.6rem] font-bold uppercase tracking-tight">Eau 1-Clic</span>
+                                            <button class="btn-action bg-white border-blue-200 text-blue-600 flex-col justify-center px-1 hover:bg-blue-50 transition-all h-16 shadow-sm mb-0 group">
+                                                <i class="fa-solid fa-droplet text-xl mb-1 group-hover:scale-110 transition-transform"></i>
+                                                <span class="text-[0.65rem] font-bold uppercase tracking-tight">Eau 1-Clic</span>
                                             </button>
                                             
                                             <!-- 1-Click CHAUFFAGE -->
-                                            <button class="btn-action bg-white border-orange-200 text-orange-600 flex-col justify-center px-1 hover:bg-orange-50 transition-all h-16 shadow-sm mb-0 group" title="Rapport Chauffage Standard (CET+RFC)">
-                                                <i class="fa-solid fa-fire text-lg mb-1 group-hover:scale-110 transition-transform"></i>
-                                                <span class="text-[0.6rem] font-bold uppercase tracking-tight">Chauff. 1-Clic</span>
+                                            <button class="btn-action bg-white border-orange-200 text-orange-600 flex-col justify-center px-1 hover:bg-orange-50 transition-all h-16 shadow-sm mb-0 group">
+                                                <i class="fa-solid fa-fire text-xl mb-1 group-hover:scale-110 transition-transform"></i>
+                                                <span class="text-[0.65rem] font-bold uppercase tracking-tight">Chauff. 1-Clic</span>
                                             </button>
 
                                             <!-- Standard (Custom) -->
-                                            <button class="btn-action bg-slate-700 border-slate-800 text-white flex-col justify-center px-1 hover:bg-slate-600 transition-all h-16 shadow-lg mb-0 group" title="Générer selon cases cochées">
+                                            <button class="btn-action bg-slate-700 border-slate-800 text-white flex-col justify-center px-1 hover:bg-slate-600 transition-all h-16 shadow-lg mb-0 group">
                                                 <span class="text-sm font-bold text-white mb-0.5">Standard</span>
-                                                <span class="text-[0.55rem] text-slate-300 uppercase">Selon Filtres</span>
+                                                <span class="text-[0.6rem] text-slate-300 uppercase font-medium">Selon Filtres</span>
                                             </button>
 
                                             <!-- V3 (Custom) -->
-                                            <button class="btn-action bg-white border-purple-200 text-purple-700 flex-col justify-center px-1 hover:bg-purple-50 transition-all h-16 shadow-sm mb-0 group" title="Générer Version 3 (Selon Filtres)">
+                                            <button class="btn-action bg-white border-purple-200 text-purple-700 flex-col justify-center px-1 hover:bg-purple-50 transition-all h-16 shadow-sm mb-0 group">
                                                 <span class="badge bg-purple-100 text-purple-600 border border-purple-200 mb-1 text-[0.65rem] px-2 py-0.5">V3</span>
-                                                <span class="text-[0.6rem] font-bold uppercase tracking-tight">Générer</span>
+                                                <span class="text-[0.65rem] font-bold uppercase tracking-tight">Générer</span>
                                             </button>
                                         </div>
                                     </div>
@@ -932,13 +973,11 @@
                                         <label class="text-[0.65rem] font-bold text-gray-400 uppercase flex items-center gap-1 mb-1"><i class="fa-solid fa-server"></i> Volume Serveur (Système)</label>
                                         <div id="path-server-text" class="text-xs font-mono text-blue-600 font-bold">\\jetform_comptage\prod</div>
                                     </div>
-                                    
-                                    <!-- Toggle Prod/Recette visible seulement ici et pour admin -->
+                                    <i id="server-lock-icon" class="fa-solid fa-lock text-gray-300 hidden"></i>
                                     <div id="server-mode-switch" class="flex bg-white border border-gray-300 rounded overflow-hidden shadow-sm">
                                         <button onclick="setServerMode('prod')" id="btn-mode-prod" class="px-2 py-1 text-[0.6rem] font-bold bg-blue-100 text-blue-700 transition-colors">PROD</button>
                                         <button onclick="setServerMode('sandbox')" id="btn-mode-sandbox" class="px-2 py-1 text-[0.6rem] font-bold text-gray-500 hover:bg-gray-50 transition-colors">RECETTE</button>
                                     </div>
-                                    <i id="server-lock-icon" class="fa-solid fa-lock text-gray-300 hidden"></i>
                                 </div>
                             </div>
                             <div class="p-3 bg-white border border-gray-200 rounded mb-2">
@@ -991,7 +1030,7 @@
             </div>
             
             <!-- Zone de Notification (Masquée par défaut) -->
-            <div id="notification-area" class="notification-area"></div>
+            <div id="notification-area" class="notification-bar"></div>
         </div>
     </div>
 
@@ -1064,8 +1103,38 @@
         function savePath() { 
             const notify = document.getElementById('notification-area');
             notify.textContent = "Chemin Source sauvegardé avec succès.";
-            notify.style.display = "flex";
-            setTimeout(() => { notify.style.display = "none"; }, 3000);
+            notify.className = 'notification-bar show notif-success';
+            setTimeout(() => { notify.className = 'notification-bar'; }, 3000);
+        }
+        
+        function simulateLoading(text, duration) {
+            const overlay = document.getElementById('loading-overlay');
+            const loadingText = document.getElementById('loading-text');
+            const progressBar = document.getElementById('progress-bar-fill');
+            const percentText = document.getElementById('loading-percent');
+            
+            overlay.classList.add('active');
+            loadingText.textContent = text;
+            progressBar.style.width = '0%';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = progress + '%';
+                percentText.textContent = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        overlay.classList.remove('active');
+                        // Show success notification after loading
+                        const notify = document.getElementById('notification-area');
+                        notify.textContent = "Opération terminée avec succès.";
+                        notify.className = 'notification-bar show notif-success';
+                        setTimeout(() => { notify.className = 'notification-bar'; }, 3000);
+                    }, 500);
+                }
+            }, duration / 20);
         }
 
         window.onload = function() { updateUIForUser(users['aurelien']); };
