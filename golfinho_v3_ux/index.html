@@ -96,17 +96,29 @@
         .menu-item:hover { background-color: #F9FAFB; color: var(--primary); }
         .menu-item.active { background-color: #EFF6FF; color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
 
+        /* STYLE SPÉCIAL DASHBOARD (VISIBILITÉ RENFORCÉE) */
         .menu-item.special {
             margin: 0 1rem 0.5rem 1rem;
             border-radius: 0.5rem;
             border-left: none;
             padding-left: 1rem;
             transition: all 0.2s ease;
+            
+            /* Style Inactif (par défaut) */
+            background-color: #F8FAFC; /* Gris très clair pour se détacher du blanc */
+            color: #334155;            /* Gris foncé plus marqué */
+            font-weight: 600;
+            border: 1px solid #E2E8F0; /* Bordure subtile */
         }
-        .menu-item.special:hover { background-color: #E2E8F0; color: #1E293B; }
+        .menu-item.special:hover { 
+            background-color: #E2E8F0; 
+            color: #1E293B; 
+            border-color: #CBD5E1;
+        }
         .menu-item.special.active {
-            background-color: #1E293B;
+            background-color: #1E293B; /* Bleu Nuit */
             color: #FFFFFF;
+            border-color: #1E293B;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             transform: translateY(-1px);
         }
@@ -209,7 +221,7 @@
             justify-content: space-between;
         }
 
-        /* --- NOTIFICATIONS & LOADING (MODIFIÉ) --- */
+        /* --- NOTIFICATIONS & LOADING --- */
         
         /* Zone de Notification (Toast Bar) - Police réduite */
         .notification-bar {
@@ -221,12 +233,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem; /* MODIFICATION : Police plus petite */
+            font-size: 0.7rem;
             font-weight: 600;
             width: 100%;
         }
         .notification-bar.show {
-            height: 28px; /* MODIFICATION : Hauteur légèrement réduite */
+            height: 28px;
             border-top-width: 1px;
         }
         .notif-success { background-color: #ECFDF5; color: #047857; border-color: #A7F3D0; }
@@ -343,7 +355,7 @@
             </div>
 
             <div class="menu-container">
-                <!-- DASHBOARD -->
+                <!-- DASHBOARD (MODIFIÉ : Apparence bouton même inactif) -->
                 <div class="menu-item special active mb-2" onclick="switchPage('accueil', this)">
                     <i class="fa-solid fa-gauge-high"></i> Dashboard
                 </div>
@@ -420,6 +432,7 @@
                     <div class="mb-3 flex justify-between items-end">
                         <div>
                             <div class="flex items-center">
+                                <!-- Badge retiré d'ici -->
                                 <h2 class="text-2xl font-light text-gray-800">Bonjour, <b id="dashboard-user-name" class="text-blue-600 font-semibold">Aurélien D.</b></h2>
                             </div>
                             <p class="text-sm text-gray-500 mt-0.5">Actions rapides et suivi des importations.</p>
@@ -874,6 +887,7 @@
                                     </div>
 
                                     <!-- ZONE ETAT DE POSE AÉRÉE (UNIQUEMENT ICI) -->
+                                    <!-- J'utilise flex-grow et mt-auto pour qu'elle prenne tout l'espace restant -->
                                     <div class="bg-gray-50 rounded-lg border border-gray-200 p-4 mt-auto flex flex-col justify-between" style="min-height: 200px;">
                                         
                                         <!-- Header avec Warning -->
@@ -1063,11 +1077,15 @@
 
         function updateUIForUser(userData) {
             document.getElementById('dashboard-user-name').textContent = userData.firstName + " " + userData.initial;
+            
+            // Mise à jour du badge dans la TOP BAR
             const badge = document.getElementById('user-status-badge');
             badge.textContent = userData.status;
-            badge.className = 'status-badge ' + userData.roleClass + ' text-[0.6rem] py-0.5 px-2'; 
+            badge.className = 'status-badge ' + userData.roleClass + ' text-[0.6rem] py-0.5 px-2'; // Reset classes + spécifique topbar
+            
             document.getElementById('path-server-text').textContent = userData.serverPath;
             document.getElementById('path-source-input').value = userData.sourcePath;
+            
             const switchEl = document.getElementById('server-mode-switch');
             const lockIcon = document.getElementById('server-lock-icon');
             if (userData.isAdmin) {
