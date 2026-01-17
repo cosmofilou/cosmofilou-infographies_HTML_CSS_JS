@@ -58,18 +58,21 @@
         }
 
         .sidebar-header {
-            height: 110px; /* Hauteur augmentée pour le nouveau contenu */
+            height: 130px; /* Agrandit pour contenir le slogan */
             display: flex;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 0 1.5rem;
+            padding: 1rem 1.5rem;
             border-bottom: 1px solid var(--border);
+            text-align: center;
         }
 
         .app-title {
             font-family: 'Agency FB', 'Oswald', sans-serif;
             font-weight: 700;
-            letter-spacing: 0.02em;
-            /* text-transform: uppercase; SUPPRIMÉ POUR GOLFINHO */
+            letter-spacing: 0.03em;
+            /* Pas de uppercase forcé pour Golfinho */
         }
 
         .menu-container {
@@ -111,7 +114,7 @@
         .menu-item i { width: 25px; text-align: center; margin-right: 10px; }
 
         .sidebar-footer {
-            padding: 1.25rem 1.5rem;
+            padding: 1rem 1.5rem;
             border-top: 1px solid var(--border);
             background-color: #F9FAFB;
             display: flex;
@@ -270,13 +273,16 @@
         <!-- SIDEBAR -->
         <div class="sidebar">
             <div class="sidebar-header">
-                <div class="flex items-center gap-3">
-                    <span class="text-5xl text-blue-600 drop-shadow-sm">🐬</span>
-                    <div class="flex flex-col">
-                        <div class="app-title text-5xl leading-none text-slate-800">Golfinho</div>
-                        <div class="text-[0.65rem] text-slate-400 font-bold tracking-widest uppercase mt-0.5 ml-0.5">Version 3.0.0</div>
-                        <div class="text-[0.55rem] text-blue-400 italic font-medium mt-1 leading-tight">"Inspiré par l'intelligence du dauphin"</div>
-                    </div>
+                <!-- Titre + Dauphin -->
+                <div class="flex items-center justify-center gap-2 mb-1">
+                    <span class="text-4xl text-blue-600 drop-shadow-sm">🐬</span>
+                    <div class="app-title text-4xl leading-none text-slate-800 pt-1">Golfinho</div>
+                </div>
+                
+                <!-- Version + Slogan -->
+                <div class="flex flex-col items-center">
+                    <div class="text-[0.65rem] text-slate-400 font-bold tracking-widest uppercase">Version 3.0.0</div>
+                    <div class="text-[0.55rem] text-blue-500 italic font-medium mt-1">"Inspiré par l'intelligence du dauphin"</div>
                 </div>
             </div>
 
@@ -305,7 +311,6 @@
                 <div class="menu-item" onclick="switchPage('outils', this)"><i class="fa-solid fa-gear"></i> Paramètres</div>
             </div>
 
-            <!-- PIED DE PAGE SIDEBAR (SIGNATURE DÉVELOPPEUR) -->
             <div class="sidebar-footer">
                 <div class="text-[0.6rem] text-gray-400 font-bold uppercase tracking-widest text-center mb-1">Conception & Dév.</div>
                 <div class="flex items-center gap-3 justify-center">
@@ -315,15 +320,16 @@
                         <div class="text-[0.6rem] text-blue-600 uppercase font-bold tracking-wide">Direction Technique</div>
                     </div>
                 </div>
-                
-                <!-- BOUTON SUPPORT RAPIDE (NOUVEAU) -->
-                <a href="mailto:aurelien.dacosta@proxiserve.fr?subject=Support%20Golfinho%20V3" class="mt-2 mx-4 py-1.5 rounded-lg border border-blue-100 bg-blue-50/80 text-blue-600 hover:bg-blue-100 hover:text-blue-700 transition-all flex items-center justify-center gap-2 text-[0.65rem] font-bold cursor-pointer group shadow-sm">
-                    <i class="fa-regular fa-paper-plane group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform"></i>
-                    <span>Un souci ? Contactez-moi</span>
+                <div class="text-[0.6rem] text-gray-400 font-medium text-center">Groupe Proxiserve - Prox-Hydro</div>
+
+                <!-- BOUTON SUPPORT RAPIDE (REMIS EN PLACE) -->
+                <a href="mailto:aurelien.dacosta@proxiserve.fr?subject=Support%20Golfinho%20V3" class="mt-2 py-1.5 rounded border border-blue-200 bg-blue-50 text-blue-600 hover:bg-blue-100 transition-all flex items-center justify-center gap-2 text-[0.65rem] font-bold cursor-pointer group shadow-sm mx-2">
+                    <i class="fa-regular fa-paper-plane"></i>
+                    <span>Contact Support</span>
                 </a>
 
-                <div class="text-[0.6rem] text-gray-300 mt-1 text-center border-t border-gray-100 pt-2">
-                    Tous droits réservés © 2026
+                <div class="text-[0.6rem] text-gray-300 mt-2 text-center border-t border-gray-100 pt-2">
+                    Tous droits réservés © 2023 - 2026
                 </div>
             </div>
         </div>
@@ -337,7 +343,7 @@
                         <span class="text-xs font-bold text-gray-600 uppercase tracking-wide">Système Prêt</span>
                     </div>
                     
-                    <!-- BADGE STATUT DÉPLACÉ ICI -->
+                    <!-- BADGE STATUT -->
                     <span id="user-status-badge" class="status-badge status-admin text-[0.6rem] py-0.5 px-2">ADMINISTRATEUR</span>
                 </div>
 
@@ -357,7 +363,6 @@
                     <div class="mb-3 flex justify-between items-end">
                         <div>
                             <div class="flex items-center">
-                                <!-- Badge retiré d'ici -->
                                 <h2 class="text-2xl font-light text-gray-800">Bonjour, <b id="dashboard-user-name" class="text-blue-600 font-semibold">Aurélien D.</b></h2>
                             </div>
                             <p class="text-sm text-gray-500 mt-0.5">Actions rapides et suivi des importations.</p>
@@ -657,10 +662,13 @@
                                 </div>
                             </div>
                             <div class="card">
-                                <div class="card-header">Calibration (MAJPLAN)</div>
+                                <div class="card-header border-b border-gray-100 pb-2 mb-2 flex justify-between items-center">
+                                    <span>Calibration (MAJPLAN)</span>
+                                    <span class="text-[0.55rem] font-bold bg-amber-100 text-amber-700 px-2 py-0.5 rounded border border-amber-200 uppercase tracking-wide">En Dév.</span>
+                                </div>
                                 <div class="flex gap-2">
                                     <div class="btn-action btn-secondary flex-grow mb-0 cursor-pointer p-1"><div class="btn-content items-center"><i class="fa-solid fa-file-excel text-slate-600 mb-1"></i><span class="btn-sub font-bold">Fichier Param.</span></div></div>
-                                    <button class="btn-action border-slate-300 bg-slate-100 text-slate-600 flex-col justify-center px-3 mb-0 hover:bg-slate-200 transition-colors" title="Transfert sur Serveur Jetform"><i class="fa-solid fa-server mb-1"></i><span class="text-[0.6rem] font-bold uppercase">Jetform</span></button>
+                                    <button class="btn-action border-slate-300 bg-slate-100 text-slate-600 flex-col justify-center px-3 mb-0 hover:bg-slate-200 transition-colors" title="Transfert sur Serveur Jetform"><i class="fa-solid fa-upload mb-1"></i><span class="text-[0.6rem] font-bold uppercase">Envoyer</span></button>
                                 </div>
                             </div>
                             <div class="card">
@@ -747,34 +755,13 @@
                                 <div class="card-header border-b border-gray-100 pb-2 mb-3"><span><i class="fa-solid fa-file-code text-blue-500"></i> Outils de Correction</span></div>
                                 <div class="flex flex-col gap-3">
                                     <div class="group border border-gray-100 rounded-lg p-3 hover:border-red-200 hover:bg-red-50/30 transition-all flex items-center justify-between cursor-pointer shadow-sm hover:shadow-md">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-eraser"></i></div>
-                                            <div>
-                                                <div class="text-sm font-bold text-gray-700 group-hover:text-red-600 transition-colors">Nettoyage RFC 999</div>
-                                                <div class="text-xs text-gray-400 mt-0.5">Supprime les lignes relatives aux déposes de compteurs fictifs (999)</div>
-                                            </div>
-                                        </div>
-                                        <button class="px-4 py-1.5 rounded text-xs font-bold border border-red-200 bg-white text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm">LANCER</button>
+                                        <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-eraser"></i></div><div><div class="text-sm font-bold text-gray-700 group-hover:text-red-600 transition-colors">Nettoyage RFC 999</div><div class="text-xs text-gray-400 mt-0.5">Supprime les lignes relatives aux déposes de compteurs fictifs (999)</div></div></div><button class="px-4 py-1.5 rounded text-xs font-bold border border-red-200 bg-white text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm">LANCER</button>
                                     </div>
                                     <div class="group border border-gray-100 rounded-lg p-3 hover:border-blue-200 hover:bg-blue-50/30 transition-all flex items-center justify-between cursor-pointer shadow-sm hover:shadow-md">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-text-width"></i></div>
-                                            <div>
-                                                <div class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Formatage CET (6 Car.)</div>
-                                                <div class="text-xs text-gray-400 mt-0.5">Ajuste l'index sur 6 caractères au lieu de 5</div>
-                                            </div>
-                                        </div>
-                                        <button class="px-4 py-1.5 rounded text-xs font-bold border border-blue-200 bg-white text-blue-500 hover:bg-blue-500 hover:text-white transition-all shadow-sm">LANCER</button>
+                                        <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-text-width"></i></div><div><div class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Formatage CET (6 Car.)</div><div class="text-xs text-gray-400 mt-0.5">Ajuste l'index sur 6 caractères au lieu de 5</div></div></div><button class="px-4 py-1.5 rounded text-xs font-bold border border-blue-200 bg-white text-blue-500 hover:bg-blue-500 hover:text-white transition-all shadow-sm">LANCER</button>
                                     </div>
                                     <div class="group border border-gray-100 rounded-lg p-3 hover:border-gray-300 hover:bg-gray-50 transition-all flex items-center justify-between cursor-pointer shadow-sm hover:shadow-md">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-10 h-10 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-list-check"></i></div>
-                                            <div>
-                                                <div class="text-sm font-bold text-gray-700 group-hover:text-gray-900 transition-colors">Modification Codes IF</div>
-                                                <div class="text-xs text-gray-400 mt-0.5">Modification des codes index fictifs</div>
-                                            </div>
-                                        </div>
-                                        <button class="px-4 py-1.5 rounded text-xs font-bold border border-gray-200 bg-white text-gray-600 hover:bg-gray-600 hover:text-white transition-all shadow-sm">LANCER</button>
+                                        <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-list-check"></i></div><div><div class="text-sm font-bold text-gray-700 group-hover:text-gray-900 transition-colors">Modification Codes IF</div><div class="text-xs text-gray-400 mt-0.5">Modification des codes index fictifs</div></div></div><button class="px-4 py-1.5 rounded text-xs font-bold border border-gray-200 bg-white text-gray-600 hover:bg-gray-600 hover:text-white transition-all shadow-sm">LANCER</button>
                                     </div>
                                 </div>
                             </div>
@@ -1016,11 +1003,15 @@
 
         function updateUIForUser(userData) {
             document.getElementById('dashboard-user-name').textContent = userData.firstName + " " + userData.initial;
+            
+            // Mise à jour du badge dans la TOP BAR
             const badge = document.getElementById('user-status-badge');
             badge.textContent = userData.status;
-            badge.className = 'status-badge ' + userData.roleClass;
+            badge.className = 'status-badge ' + userData.roleClass + ' text-[0.6rem] py-0.5 px-2'; // Reset classes + spécifique topbar
+            
             document.getElementById('path-server-text').textContent = userData.serverPath;
             document.getElementById('path-source-input').value = userData.sourcePath;
+            
             const switchEl = document.getElementById('server-mode-switch');
             const lockIcon = document.getElementById('server-lock-icon');
             if (userData.isAdmin) {
