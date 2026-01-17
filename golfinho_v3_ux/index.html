@@ -3,1286 +3,578 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proposition de Modernisation V3.0 - Golfinho (Final)</title>
-    
-    <!-- Tailwind CSS -->
+    <title>Golfinho V3.0 - Maquette UserForm</title>
+    <!-- Tailwind CSS pour le prototypage rapide -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
-        /* Simulation de la police par défaut d'Office (Segoe UI) */
+        @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap');
+        /* Import d'une police Google "Oswald" pour simuler Agency FB si elle n'est pas installée sur le PC qui visualise la maquette web */
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap');
+
+        :root {
+            --bg-app: #F3F4F6;       /* Gris très clair fond global */
+            --bg-sidebar: #FFFFFF;   /* Blanc pur sidebar */
+            --bg-card: #FFFFFF;      /* Blanc pur cartes */
+            --text-main: #1F2937;    /* Gris très foncé */
+            --text-muted: #6B7280;   /* Gris moyen */
+            --primary: #0061F2;      /* Bleu Proxiserve/Corporate */
+            --border: #E5E7EB;       /* Gris clair bordure */
+        }
+
         body {
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        }
-        
-        /* Application de la police Agency FB pour Golfinho si disponible */
-        .vba-golfinho-title {
-            font-family: "Agency FB", Arial, sans-serif; /* Agency FB, avec des fallbacks */
-        }
-
-        /* --- STRUCTURE V3 (MENU LATÉRAL) --- */
-        .vba-userform {
-            display: flex;
-            height: 720px; 
-            background-color: #F3F4F6; /* gray-100 */
-            border: 1px solid #9CA3AF; /* gray-400 */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
-            border-radius: 0.5rem; /* rounded-lg */
-            overflow: hidden;  
-            /* Ajout pour la barre de statut */
-            flex-direction: column;
-        }
-
-        /* --- MENU LATÉRAL (Simulation ListBox/Frame) --- */
-        .vba-sidebar {
-            width: 260px; /* Largeur fixe pour le menu */
-            flex-shrink: 0;
-            background-color: #111827; /* gray-900 */
-            color: #D1D5DB; /* gray-300 */
-            display: flex;
-            flex-direction: column;
-        }
-        .vba-sidebar-header {
-            padding: 1.5rem; /* p-6 */
-            display: flex;
-            flex-direction: column; 
-            align-items: flex-start; 
-            gap: 0.25rem; 
-            border-bottom: 1px solid #374151; /* gray-700 */
-        }
-
-        .vba-sidebar-menu {
-            flex-grow: 1;
-            padding: 1rem 0.75rem; /* p-4 p-3 */
-            overflow-y: auto;  
-        }
-        .vba-menu-item {
+            font-family: 'Segoe UI', sans-serif; /* Police native Windows/Excel */
+            background-color: #eef2f6;
+            height: 100vh;
+            margin: 0;
             display: flex;
             align-items: center;
-            gap: 0.75rem; /* space-x-3 */
-            padding: 0.75rem 1rem; /* p-3 px-4 */
-            border-radius: 0.375rem; /* rounded-md */
-            font-weight: 500; /* medium */
-            cursor: pointer;
-            transition: background-color 0.2s, color 0.2s;
-        }
-        .vba-menu-item:hover {
-            background-color: #374151; /* gray-700 */
-            color: white;
-        }
-        .vba-menu-item-active {
-            background-color: #2563EB; /* blue-600 */
-            color: white;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-        }
-        .vba-menu-divider {
-            height: 1px;
-            background-color: #374151; /* gray-700 */
-            margin: 0.5rem 1rem; /* my-2 mx-4 */
-        }
-
-        /* Pied de page du menu */
-        .vba-sidebar-footer {
-            flex-shrink: 0; 
-            padding: 1rem 1.5rem; /* p-4 px-6 */
-            border-top: 1px solid #374151; /* border-t border-gray-700 */
-            font-size: 0.75rem; /* text-xs */
-            color: #6B7280; /* gray-500 */
-            text-align: left;
-        }
-
-        /* --- ZONE DE CONTENU (Simulation Frame) --- */
-        .vba-main-wrapper {
-            display: flex;
-            flex-grow: 1; /* Prend l'espace restant */
-            overflow: hidden; /* Gère le débordement */
-        }
-
-        .vba-content-area {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;  
-        }
-        .vba-content-header {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 0.5rem; /* space-x-2 */
-            padding: 0.75rem 1.5rem; /* p-3 px-6 */
-            background-color: white;
-            border-bottom: 1px solid #D1D5DB; /* border-b border-gray-300 */
-            flex-shrink: 0;
-        }
-        /* Page de contenu avec scroll interne */
-        .vba-content-page {
-            padding: 1.5rem; /* p-6 */
-            overflow-y: auto; /* Scroll vertical pour le contenu */
-            height: 100%; /* Prend la hauteur restante */
-            background-color: #F3F4F6; /* gray-100 */
-        }
-
-        /* Styles des contrôles VBA */
-        .vba-frame {
-            border: 1px solid #D1D5DB; /* gray-300 */
-            border-radius: 0.5rem; /* rounded-lg */
-            background-color: #ffffff; /* white */
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-sm */
-            margin-bottom: 1.5rem;  
-        }
-        .vba-frame-title {
-            font-weight: 600;  
-            color: #1F2937; /* gray-800 */
-            background-color: #F9FAFB; /* gray-50 */
-            padding: 0.75rem 1.25rem; /* p-3 px-5 */
-            border-bottom: 1px solid #D1D5DB; /* border-b border-gray-300 */
-            border-top-left-radius: 0.5rem;
-            border-top-right-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem; /* space-x-3 */
-        }
-        .vba-button {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem; /* space-x-3 */
-            background-color: #2563EB; /* blue-600 */
-            color: white;
-            padding: 0.625rem 1rem; /* px-4 py-2.5 */
-            border-radius: 0.375rem; /* rounded-md */
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-            font-weight: 500; /* medium */
             justify-content: center;
-            width: 100%;
-            text-decoration: none; /* Pour les liens-boutons */
-            min-height: 44px; /* Hauteur minimale pour l'accessibilité et l'alignement */
+            overflow: hidden;
+            user-select: none;
         }
-        .vba-button:hover {
-            background-color: #1D4ED8; /* blue-700 */
+
+        /* --- CONTENEUR PRINCIPAL (USERFORM) --- */
+        .userform-frame {
+            width: 1240px;
+            height: 750px;
+            background-color: var(--bg-app);
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 20px 50px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: row; /* Sidebar à gauche, contenu à droite */
+            overflow: hidden;
+            /* En VBA: BorderStyle = fmBorderStyleSingle */
         }
-        .vba-button-secondary {
-            background-color: #4B5563; /* gray-600 */
+
+        /* --- SIDEBAR (Frame Gauche) --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
         }
-        .vba-button-secondary:hover {
-            background-color: #374151; /* gray-700 */
-        }
-        .vba-button-link {
+
+        .sidebar-header {
+            height: 90px; /* Un peu plus haut pour le style Agency FB */
             display: flex;
             align-items: center;
-            gap: 0.5rem; /* space-x-2 */
-            background-color: #F3F4F6; /* gray-100 */
-            color: #374151; /* gray-700 */
-            padding: 0.5rem 0.75rem; /* px-3 py-2 */
-            border-radius: 0.375rem;
-            font-size: 0.875rem; /* text-sm */
+            padding: 0 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* TYPOGRAPHIE TITRE */
+        .app-title {
+            font-family: 'Agency FB', 'Oswald', sans-serif; /* Priorité à Agency FB */
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .menu-container {
+            flex: 1;
+            padding: 1.5rem 0;
+            overflow-y: auto;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
             font-weight: 500;
-            transition: background-color 0.2s;
-            border: 1px solid #D1D5DB; /* border-gray-300 */
+            cursor: pointer;
+            transition: all 0.1s;
+            border-left: 4px solid transparent;
         }
-        .vba-button-link:hover {
-            background-color: #E5E7EB; /* gray-200 */
-            color: black;
+
+        .menu-item:hover {
+            background-color: #F9FAFB;
+            color: var(--primary);
         }
-        .vba-button-nav {
-            background-color: transparent;
-            color: #4B5563; /* gray-600 */
-            padding: 0.5rem;
-            border-radius: 0.375rem;
+
+        .menu-item.active {
+            background-color: #EFF6FF; /* Bleu très pâle */
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: 600;
         }
-        .vba-button-nav:hover {
-            background-color: #F3F4F6; /* gray-100 */
-            color: black;
+
+        .menu-item i { width: 25px; text-align: center; margin-right: 10px; }
+
+        .sidebar-footer {
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid var(--border);
+            background-color: #F9FAFB;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* --- ZONE CONTENU (MultiPage) --- */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-app);
+            overflow: hidden;
+        }
+
+        .top-bar {
+            height: 50px; /* COMPACTÉ: Était 60px */
+            background-color: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem; /* COMPACTÉ */
+        }
+
+        .page-container {
+            flex: 1;
+            padding: 1.5rem; /* COMPACTÉ: Était 2rem */
+            overflow-y: auto;
+        }
+
+        /* --- COMPOSANTS UI (Proxiserve Style) --- */
+        
+        /* En VBA: Frame avec SpecialEffect = fmSpecialEffectFlat + BorderColor */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px; /* VBA: 0px ou image de fond */
+            padding: 1rem; /* COMPACTÉ: Était 1.25rem */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            font-family: 'Agency FB', 'Oswald', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.9rem; /* Un peu plus grand car Agency FB est condensed */
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem; /* COMPACTÉ: Était 1rem */
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* En VBA: CommandButton ou Label avec événement Click */
+        .btn-action {
+            background-color: #FFFFFF;
+            border: 1px solid var(--border);
+            padding: 0.5rem 0.75rem; /* COMPACTÉ: Était 0.75rem 1rem */
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: all 0.1s;
+            position: relative;
         }
         
-        .vba-path-truncate {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: help;  
-            position: relative;  
-            max-width: 150px; /* Force la troncature */
-        }
+        /* Simulation de l'effet "Bouton Enfoncé" de Windows */
+        .btn-action:hover { border-color: #BCCCE5; background-color: #F0F5FF; }
+        .btn-action:active { background-color: #E0E7FF; transform: translateY(1px); }
 
-        /* --- STYLES ACCORDION (V4) --- */
-        .vba-accordion-section {
-            border: 1px solid #D1D5DB; /* gray-300 */
-            border-radius: 0.5rem; /* rounded-lg */
-            background-color: #ffffff; /* white */
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-sm */
-            margin-bottom: 1rem; /* Espace entre les sections */
-            overflow: hidden; /* Pour les coins arrondis */
-        }
-        .vba-accordion-header {
+        .btn-primary { background-color: #EFF6FF; border-color: #BFDBFE; }
+        .btn-danger { background-color: #FEF2F2; border-color: #FECACA; }
+        .btn-danger i { color: #DC2626; }
+        
+        /* Pour les boutons "Secondary" un peu moins visibles */
+        .btn-secondary { border-style: dashed; border-color: #D1D5DB; }
+
+        .btn-content { display: flex; flex-direction: column; flex: 1; }
+        .btn-title { font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
+        .btn-sub { font-size: 0.7rem; color: var(--text-muted); margin-top: 0px; } /* COMPACTÉ */
+
+        .status-bar {
+            height: 30px;
+            background-color: #E5E7EB;
+            border-top: 1px solid #D1D5DB;
             display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            font-size: 0.75rem;
+            color: #4B5563;
             justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 1.25rem; /* p-3 px-5 */
-            font-weight: 600;  
-            color: #1F2937; /* gray-800 */
-            background-color: #F9FAFB; /* gray-50 */
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .vba-accordion-header:hover {
-            background-color: #F3F4F6; /* gray-100 */
-        }
-        .vba-accordion-header .icon-toggle {
-            transition: transform 0.2s ease-in-out;
-        }
-        .vba-accordion-header.open .icon-toggle {
-            transform: rotate(180deg);
-        }
-        .vba-accordion-content {
-            padding: 1.5rem; /* p-6 */
-            border-top: 1px solid #E5E7EB; /* border-t gray-200 */
         }
 
-        /* --- NOUVEAU: Barre de statut V3.final --- */
-        .vba-status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.25rem 1rem; /* py-1 px-4 */
-            background-color: #1F2937; /* gray-800 */
-            color: #D1D5DB; /* gray-300 */
-            font-size: 0.75rem; /* text-xs */
-            flex-shrink: 0;
-            border-top: 1px solid #374151; /* gray-700 */
+        /* Input Style Excel */
+        .input-excel {
+            background: #fff;
+            border: 1px solid #9CA3AF;
+            padding: 2px 8px; /* COMPACTÉ */
+            font-size: 0.9rem;
+            width: 100%;
+            height: 28px; /* COMPACTÉ */
         }
-        .vba-status-bar-group {
-            display: flex;
-            align-items: center;
-            gap: 1rem; /* space-x-4 */
-        }
-        .vba-status-bar-item {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem; /* space-x-1 */
-        }
-        .vba-status-bar-link {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem; /* space-x-1 */
-            padding: 0.25rem 0.5rem; /* py-1 px-2 */
-            border-radius: 0.25rem; /* rounded-sm */
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .vba-status-bar-link:hover {
-            background-color: #374151; /* gray-700 */
-            color: white;
+        .input-excel:focus {
+            border-color: var(--primary);
+            outline: 1px solid var(--primary);
         }
 
-        /* --- STYLES POUR LE GUIDE DE CONSTRUCTION --- */
-        .guide-section {
-            border: 1px solid #D1D5DB;
-            border-radius: 0.5rem;
-            overflow: hidden;
-            margin-bottom: 1.5rem;
-            background-color: #FFFFFF;
+        /* Badges */
+        .badge {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
         }
-        .guide-header {
-            background-color: #F9FAFB;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #D1D5DB;
+        .badge-blue { background: #EFF6FF; color: #1D4ED8; }
+        
+        /* Radio Custom pour VBA simulation (OptionButton) */
+        .radio-vba {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
         }
-        .guide-content {
-            padding: 1.5rem;
-        }
-        .guide-content h4 {
-            font-size: 1.125rem; /* text-lg */
-            font-weight: 600; /* font-semibold */
-            color: #1F2937; /* text-gray-800 */
-            margin-bottom: 0.5rem;
-        }
-        .guide-content p {
-            margin-bottom: 1rem;
-            color: #374151; /* text-gray-700 */
-        }
-        .guide-content ul, .guide-content ol {
-            list-style-position: inside;
-            margin-bottom: 1rem;
-            color: #374151; /* text-gray-700 */
-        }
-        .guide-content li {
-            margin-bottom: 0.5rem;
-        }
-        .guide-content code {
-            background-color: #F3F4F6; /* bg-gray-100 */
-            color: #D6336C; /* text-pink-600 */
-            padding: 0.125rem 0.375rem;
-            border-radius: 0.25rem;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.875rem;
-        }
-        .guide-content pre {
-            background-color: #1F2937; /* bg-gray-800 */
-            color: #E5E7EB; /* text-gray-200 */
-            padding: 1rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.875rem;
-            margin-bottom: 1rem;
-        }
+        .radio-vba input { margin: 0; }
+
     </style>
 </head>
-<body class="bg-gray-200 p-4 md:p-10">
+<body>
 
-    <div class="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
-        <header class="p-6 md:p-10 bg-gray-800 text-white">
-            <h1 class="text-3xl font-bold">Proposition de Modernisation UI/UX (V3.00)</h1>
-            <p class="text-lg text-gray-300">Application VBA "Golfinho" - Workflow Dashboard V3.00</p>
-        </header>
+    <div class="userform-frame">
+        
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl text-blue-600">🐬</span>
+                    <div>
+                        <div class="app-title text-3xl leading-none text-slate-800">Golfinho</div>
+                        <div class="text-[0.65rem] text-slate-400 font-bold tracking-widest uppercase mt-1 pl-0.5">Version 3.0</div>
+                    </div>
+                </div>
+            </div>
 
-        <main class="p-6 md:p-10">
+            <div class="menu-container">
+                <div class="menu-item active" onclick="switchPage('accueil', this)"><i class="fa-solid fa-gauge-high"></i> Dashboard</div>
+                <div class="menu-item" onclick="switchPage('patrimoine', this)"><i class="fa-solid fa-building"></i> Patrimoine</div>
+                <div class="menu-item" onclick="switchPage('interventions', this)"><i class="fa-solid fa-screwdriver-wrench"></i> Maintenance</div>
+                <div class="menu-item" onclick="switchPage('releves', this)"><i class="fa-solid fa-satellite-dish"></i> Relevés</div>
+                <div class="py-2"><div class="border-t border-gray-200 mx-6"></div></div>
+                <div class="menu-item" onclick="switchPage('analyse', this)"><i class="fa-solid fa-chart-pie"></i> Analyses EDI</div>
+                <div class="menu-item" onclick="switchPage('rapports', this)"><i class="fa-solid fa-file-invoice-dollar"></i> Rapports</div>
+                <div class="menu-item" onclick="switchPage('outils', this)"><i class="fa-solid fa-gear"></i> Paramètres</div>
+            </div>
 
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Maquette Visuelle "Golfinho 3.0"</h2>
-            <p class="mb-6 text-gray-700">Cette version finale (V3.00) intègre le Dashboard à 3 étapes et la barre de statut cliquable.</p>
+            <!-- PIED DE PAGE SIDEBAR -->
+            <div class="sidebar-footer">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-sm shadow-sm">AD</div>
+                    <div>
+                        <div class="text-sm font-bold text-gray-800 leading-tight">Aurélien DA COSTA</div>
+                        <div class="text-[0.65rem] text-blue-600 uppercase font-bold tracking-wide">Chef de Projet</div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-200"></div>
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-building-user text-gray-400 text-xs"></i>
+                        <span class="text-xs font-bold text-gray-600 uppercase">Direction Technique</span>
+                    </div>
+                    <div class="text-[0.65rem] text-gray-400 font-medium">Groupe Proxiserve - Prox-Hydro</div>
+                    <div class="text-[0.6rem] text-gray-300 mt-1">Tous droits réservés © 2023 - 2026</div>
+                </div>
+            </div>
+        </div>
 
-            <!-- == MAQUETTE VBA SIMULÉE == -->
-            <div class="vba-userform max-w-6xl mx-auto">
+        <!-- MAIN CONTENT -->
+        <div class="content-area">
+            <!-- TOP BAR -->
+            <div class="top-bar">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.6)]"></div>
+                    <span class="text-xs font-bold text-gray-600 uppercase tracking-wide">Système Prêt</span>
+                </div>
+                <div class="flex gap-2">
+                    <button class="bg-white border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-all"><i class="fa-brands fa-salesforce text-blue-500"></i> CRM</button>
+                    <button class="bg-white border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-all"><i class="fa-solid fa-book-open text-orange-400"></i> Aide</button>
+                    <button class="text-gray-400 hover:text-red-500 px-2 transition-all"><i class="fa-solid fa-power-off"></i></button>
+                </div>
+            </div>
+
+            <!-- PAGES (MULTIPAGE) -->
+            <div class="page-container">
                 
-                <div class="vba-main-wrapper">
-                    <!-- == MENU LATÉRAL (Simulation Frame/ListBox) == -->
-                    <aside class="vba-sidebar">
-                        
-                        <div class="vba-sidebar-header">
-                            <div class="flex items-center gap-3">
-                                <i class="fa-solid fa-dolphin fa-2x text-blue-400"></i>
-                                <div>
-                                    <span class="text-5xl font-bold tracking-wide text-white vba-golfinho-title">Golfinho</span>
-                                    <span class="inline-block bg-blue-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full ml-1">v3.00</span>
-                                </div>
-                            </div>
+                <!-- PAGE 1: DASHBOARD (COMPACTÉ) -->
+                <div id="page-accueil" class="page-content">
+                    <div class="mb-3 flex justify-between items-end"> <!-- MB REDUIT -->
+                        <div>
+                            <h2 class="text-2xl font-light text-gray-800">Bonjour, <b class="text-blue-600 font-semibold">Aurélien.</b></h2>
+                            <p class="text-sm text-gray-500 mt-0.5">Actions rapides et suivi des importations.</p>
                         </div>
+                    </div>
 
-                        <!-- Navigation principale -->
-                        <nav class="vba-sidebar-menu">
-                            <div class="vba-menu-item vba-menu-item-active" data-page="accueil">
-                                <i class="fa-solid fa-house fa-fw w-5"></i>
-                                <span>Dashboard</span>
-                            </div>
-                            <div class="vba-menu-item" data-page="patrimoine">
-                                <i class="fa-solid fa-building-columns fa-fw w-5"></i>
-                                <span>Patrimoine</span>
-                            </div>
-                            <div class="vba-menu-item" data-page="interventions">
-                                <i class="fa-solid fa-person-digging fa-fw w-5"></i>
-                                <span>Interventions</span>
-                            </div>
-                            <div class="vba-menu-item" data-page="releves">
-                                <i class="fa-solid fa-satellite-dish fa-fw w-5"></i>
-                                <span>Relevés</span>
-                            </div>
-                            <div class="vba-menu-divider"></div>
-                            <div class="vba-menu-item" data-page="flux">
-                                <i class="fa-solid fa-file-import fa-fw w-5"></i>
-                                <span>Flux de Fichiers</span>
-                            </div>
-                            <div class="vba-menu-item" data-page="analyse">
-                                <i class="fa-solid fa-chart-pie fa-fw w-5"></i>
-                                <span>Analyse & EDI</span>
-                            </div>
-                            <div class="vba-menu-item" data-page="rapports">
-                                <i class="fa-solid fa-file-invoice fa-fw w-5"></i>
-                                <span>Rapports & Exports</span>
-                            </div>
-                            <div class="vba-menu-divider"></div>
-                            <div class="vba-menu-item" data-page="outils">
-                                <i class="fa-solid fa-cogs fa-fw w-5"></i>
-                                <span>Outils & Paramètres</span>
-                            </div>
-                        </nav>
-
-                        <!-- Pied de page avec Copyright (Conservé) -->
-                        <div class="vba-sidebar-footer">
-                            <span class="block font-semibold">Aurélien DA COSTA</span>
-                            <span class="block">Direction Technique Groupe</span>
-                            <span class="block">Proxiserve - Prox-Hydro</span>
-                            <span class="block mt-2">© 2025 Tous droits réservés.</span>
-                        </div>
-                    </aside>
-
-                    <!-- == ZONE DE CONTENU PRINCIPALE == -->
-                    <main class="vba-content-area">
-                        
-                        <!-- Header -->
-                        <header class="vba-content-header">
-                            <button class="vba-button-link" aria-label="Licorne">
-                                <i class="fa-brands fa-salesforce fa-fw"></i>
-                                <span>Licorne</span>
-                            </button>
-                            <button class="vba-button-link" aria-label="Helpjuice">
-                                <i class="fa-solid fa-book-open fa-fw"></i>
-                                <span>Base de Connaissance</span>
-                            </button>
-                            
-                            <div class="text-sm text-gray-700 font-medium p-2 ml-4">
-                                <i class="fa-solid fa-user-circle text-gray-500 mr-1"></i>
-                                <span>adacosta</span>
-                            </div>
-
-                            <div class="w-px h-6 bg-gray-300 mx-2"></div>
-                            <button class="vba-button-nav" aria-label="Aide">
-                                <i class="fa-solid fa-question-circle fa-lg"></i>
-                            </button>
-                            <button class="vba-button-nav" aria-label="Quitter">
-                                <i class="fa-solid fa-times-circle fa-lg"></i>
-                            </button>
-                        </header>
-
-                        <!-- Contenu de la page (dynamique) -->
-                        <div class="vba-content-page">
-
-                            <!-- Page: Accueil (Dashboard) -->
-                            <div id="page-accueil" class="page-content">
+                    <div class="grid grid-cols-12 gap-4 h-full"> <!-- GAP REDUIT -->
+                        <!-- Left Col -->
+                        <div class="col-span-8 flex flex-col gap-4"> <!-- GAP REDUIT -->
+                            <!-- Card Extraction -->
+                            <div class="card border-l-4 border-l-blue-600 shadow-sm">
+                                <div class="card-header"><i class="fa-solid fa-bolt text-blue-600"></i> Extractions Rapides</div>
                                 
-                                <div class="mb-6 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
-                                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Bienvenue, Aurélien !</h2>
-                                    <p class="text-gray-700">Votre centre de commande Golfinho est prêt. Retrouvez ici toutes les automatisations pour exceller sur Licorne.</p>
+                                <div class="grid grid-cols-2 gap-4 mb-4"> <!-- GAP & MARGE REDUITS -->
+                                    <div class="bg-gray-50 p-2.5 rounded border border-gray-100">
+                                        <label class="text-[0.65rem] font-bold text-gray-400 uppercase block mb-1 tracking-wider">Recherche par Cité</label>
+                                        <div class="flex gap-2">
+                                            <input type="text" class="input-excel" placeholder="4501299">
+                                            <button class="bg-blue-600 text-white px-3 font-bold text-xs hover:bg-blue-700 rounded-sm shadow-sm transition-colors">EXTRAIRE</button>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 p-2.5 rounded border border-gray-100">
+                                        <label class="text-[0.65rem] font-bold text-gray-400 uppercase block mb-1 tracking-wider">Recherche par Client</label>
+                                        <div class="flex gap-2">
+                                            <input type="text" class="input-excel" placeholder="ID Client">
+                                            <button class="bg-blue-600 text-white px-3 font-bold text-xs hover:bg-blue-700 rounded-sm shadow-sm transition-colors">EXTRAIRE</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                
-                                <h2 class="text-2xl font-bold text-gray-800 mb-4">Workflow Principal</h2>
 
-                                <!-- Section 1: Extraire (ouverte par défaut) -->
-                                <div class="vba-accordion-section">
-                                    <div class="vba-accordion-header open" data-target="accordion-workflow-1">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fa-solid fa-download fa-fw text-blue-600"></i>
-                                            <span class="text-lg">Étape 1: Extraire</span>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-down icon-toggle"></i>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="btn-action">
+                                        <i class="fa-solid fa-list-ul text-blue-600 text-lg"></i>
+                                        <div class="btn-content"><span class="btn-title">Multi-Cités</span><span class="btn-sub">Extraction DFLGEST</span></div>
                                     </div>
-                                    <div id="accordion-workflow-1" class="vba-accordion-content">
-                                        <!-- Boutons avec texte court pour hauteur uniforme -->
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"> 
-                                            <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extract. Cité(s)</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extract. Client</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-upload fa-fw w-5"></i><span>PRCGEST (Agence)</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-globe fa-fw w-5"></i><span>DFLGEST Agence</span></div>
-                                        </div>
+                                    <div class="btn-action">
+                                        <i class="fa-solid fa-file-contract text-blue-600 text-lg"></i>
+                                        <div class="btn-content"><span class="btn-title">Contrats Agence</span><span class="btn-sub">Listing Clients</span></div>
                                     </div>
-                                </div>
-                                
-                                <!-- Section 2: Importer -->
-                                <div class="vba-accordion-section">
-                                    <div class="vba-accordion-header" data-target="accordion-workflow-2">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fa-solid fa-file-import fa-fw text-blue-600"></i>
-                                            <span class="text-lg">Étape 2: Importer</span>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                    </div>
-                                    <div id="accordion-workflow-2" class="vba-accordion-content hidden">
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFLGEST</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer Back-Office</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFCGEST</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-satellite-dish fa-fw w-5"></i><span>Importer MBW/GPRS</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Section 3: Analyser -->
-                                <div class="vba-accordion-section">
-                                    <div class="vba-accordion-header" data-target="accordion-workflow-3">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fa-solid fa-play-circle fa-fw text-blue-600"></i>
-                                            <span class="text-lg">Étape 3: Analyser</span>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-down icon-toggle"></i>
-                                    </div>
-                                    <div id="accordion-workflow-3" class="vba-accordion-content hidden">
-                                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-play-circle fa-fw w-5"></i><span>Lancer Analyse MyVoid</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-waveform fa-fw w-5"></i><span>Analyse Cité/MBW</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Rapport d'analyse DFLGEST</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-signature fa-fw w-5"></i><span>Créer un Etat de Pose</span></div>
-                                        </div>
+                                    <div class="btn-action btn-primary border-blue-200">
+                                        <i class="fa-solid fa-database text-blue-700 text-lg"></i>
+                                        <div class="btn-content"><span class="btn-title text-blue-900">Base Patrimoine</span><span class="btn-sub text-blue-800/60">Parc Complet</span></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Page: Patrimoine -->
-                            <div id="page-patrimoine" class="page-content hidden">
-                                <!-- NOUVEAU CONTENU AJOUTÉ -->
-                                <h2 class="text-2xl font-bold text-gray-800 mb-4">Patrimoine</h2>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-building-columns fa-fw text-blue-600"></i>Création Patrimoine</h3>
-                                        <div class="p-4 space-y-3">
-                                            <div class="vba-button"><i class="fa-solid fa-map-marker-alt fa-fw w-5"></i><span>Gérer les Lieux</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-sitemap fa-fw w-5"></i><span>Gérer les P.D.M.</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-exchange-alt fa-fw w-5"></i><span>Transférer Lieux / P.D.M.</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-water fa-fw text-blue-600"></i>Mise à jour Radiateurs</h3>
-                                         <div class="p-4 space-y-3">
-                                            <div class="vba-button"><i class="fa-solid fa-circle-info fa-fw w-5"></i><span>Gérer les Informations</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-exchange-alt fa-fw w-5"></i><span>Transférer Informations</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="vba-frame md:col-span-2">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-database fa-fw text-blue-600"></i>Mise à jour de la Base (Produits, etc.)</h3>
-                                        <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            <div class="vba-button"><i class="fa-solid fa-box-open fa-fw w-5"></i><span>Gérer les Produits</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-wrench fa-fw w-5"></i><span>Gérer Déposé / Posé</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-history fa-fw w-5"></i><span>Gérer Histo. 14</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-exchange-alt fa-fw w-5"></i><span>Tout Transférer</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Page: Interventions -->
-                            <div id="page-interventions" class="page-content hidden">
-                                <!-- NOUVEAU CONTENU AJOUTÉ -->
-                                <h2 class="text-2xl font-bold text-gray-800 mb-4">Interventions (Pose, Entretien, Location)</h2>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-calendar-alt fa-fw text-blue-600"></i>Entretien</h3>
-                                        <div class="p-4 space-y-3">
-                                            <div class="vba-button"><i class="fa-solid fa-calendar-alt fa-fw w-5"></i><span>Accéder au planning</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-box-tissue fa-fw text-blue-600"></i>Location</h3>
-                                        <div class="p-4 space-y-3">
-                                            <p class="font-medium">Statut :</p>
-                                            <div class="flex gap-4"><label><input type="radio" name="location" class="mr-1"> Vierge</label><label><input type="radio" name="location" class="mr-1" checked> Mise à jour</label></div>
-                                        </div>
-                                    </div>
-                                    <div class="vba-frame md:col-span-2">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-file-signature fa-fw text-blue-600"></i>Création d'un CR Chantier (Pose)</h3>
-                                        <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div><label class="block font-medium mb-1">Technicien:</label><input type="text" placeholder="Sélectionner..." class="w-full p-2 border rounded-md"></div>
-                                            <div><label class="block font-medium mb-1">Options:</label><div class="flex gap-4 pt-2"><label><input type="checkbox" class="mr-1"> P1</label><label><input type="checkbox" class="mr-1"> P2</label><label><input type="checkbox" class="mr-1"> P3</label></div></div>
-                                            <div><label class="block font-medium mb-1">Nom de la SDC:</label><input type="text" class="w-full p-2 border rounded-md"></div>
-                                            <div><label class="block font-medium mb-1">Date:</label><input type="date" class="w-full p-2 border rounded-md"></div>
-                                        </div>
-                                    </div>
-                                    <div class="vba-frame md:col-span-2">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-cogs fa-fw text-blue-600"></i>Gestion des CR de Pose</h3>
-                                        <div class="p-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                            <div><label class="block font-medium mb-1">Type de CR:</label><select class="w-full p-2 border rounded-md"><option>EAU/CET v2</option><option>RFC v2</option><option>v3 (bêta)</option></select></div>
-                                            <div class="p-4 bg-gray-50 rounded-lg space-y-2"><div class="vba-button vba-button-secondary"><i class="fa-solid fa-eye fa-fw w-5"></i><span>Vision envoi anomalies</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-copy fa-fw w-5"></i><span>Copier les anomalies</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-paper-plane fa-fw w-5"></i><span>Envoi des EDC</span></div></div>
-                                            <div class="p-4 bg-gray-50 rounded-lg space-y-2"><div class="vba-button vba-button-secondary"><i class="fa-solid fa-box-tissue fa-fw w-5"></i><span>Importer Stock Interv.</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-plus-circle fa-fw w-5"></i><span>Incrémenter DPLTAB</span></div><div class="vba-button vba-button-secondary"><i class="fa-solid fa-broom fa-fw w-5"></i><span>Nettoyage NS</span></div></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Page: Relevés -->
-                            <div id="page-releves" class="page-content hidden">
-                                <!-- NOUVEAU CONTENU AJOUTÉ -->
-                                <h2 class="text-2xl font-bold text-gray-800 mb-4">Relevés (Manuelle & Télérelève)</h2>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-pencil-ruler fa-fw text-blue-600"></i>Relève Manuelle</h3>
-                                        <div class="p-4 space-y-3">
-                                            <p class="font-medium">Support de relevé:</p>
-                                            <div class="vba-button"><i class="fa-solid fa-file-signature fa-fw w-5"></i><span>Générer un support</span></div>
-                                            <div class="flex gap-4 pt-2"><label><input type="radio" name="releve" class="mr-1" checked> RF</label><label><input type="radio" name="releve" class="mr-1"> Bailleur</label></div>
-                                        </div>
-                                    </div>
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-satellite-dish fa-fw text-blue-600"></i>Télérelève</h3>
-                                        <div class="p-4 space-y-3">
-                                            <div class="vba-button"><i class="fa-solid fa-broom fa-fw w-5"></i><span>Nettoyage export Accès Pro</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-triangle-exclamation fa-fw w-5"></i><span>Analyse des alarmes</span></div>
-                                            <hr class="my-3">
-                                            <p class="font-medium">Test / Install</p>
-                                            <div class="vba-button"><i class="fa-solid fa-network-wired fa-fw w-5"></i><span>Erreur réseau GPRS</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-microchip fa-fw w-5"></i><span>Télérelève impos.</span></div>
-                                            <p class="font-medium pt-2">Type radio:</p>
-                                            <div class="grid grid-cols-2 gap-2"><label><input type="checkbox" class="mr-1"> Diehl R4</label><label><input type="checkbox" class="mr-1"> Apator OMS</label><label><input type="checkbox" class="mr-1"> Diehl OMS</label><label><input type="checkbox" class="mr-1"> RFC</label><label><input type="checkbox" class="mr-1"> Apator</label><label><input type="checkbox" class="mr-1"> CET</label></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Page: Flux de Fichiers -->
-                            <div id="page-flux" class="page-content hidden">
-                                <!-- Contenu copié de la maquette -->
-                                <h2 class="text-2xl font-bold text-gray-800 mb-4">Flux de Fichiers (Import / Extraction)</h2>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-download fa-fw text-blue-600"></i>Extraction de Données</h3>
-                                        <div class="p-4 space-y-3">
-                                            <div class="vba-button"><i class="fa-solid fa-download fa-fw w-5"></i><span>Extraction cité(s)</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-user-check fa-fw w-5"></i><span>Extract. Client</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-upload fa-fw w-5"></i><span>PRCGEST (Extract. agence)</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-file-import fa-fw text-blue-600"></i>Importation de Fichiers</h3>
-                                        <div class="p-4 space-y-3">
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFLGEST</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer Back-Office</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer DFCGEST</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-satellite-dish fa-fw w-5"></i><span>Importer MBW/GPRS</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-file-import fa-fw w-5"></i><span>Importer Trame Bâti</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Page: Analyse & EDI -->
-                            <div id="page-analyse" class="page-content hidden">
-                                 <!-- NOUVEAU CONTENU AJOUTÉ -->
-                                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Analyse & EDI</h2>
-                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                     <div class="vba-frame">
-                                         <h3 class="vba-frame-title"><i class="fa-solid fa-chart-pie fa-fw text-blue-600"></i>Analyse de Fichiers</h3>
-                                         <div class="p-4 space-y-3">
-                                             <p class="font-medium text-center">Analyse Cité VS MBW</p>
-                                             <div class="vba-button"><i class="fa-solid fa-code-merge fa-fw w-5"></i><span>Fusion fichiers MBW</span></div>
-                                             <div class="vba-button"><i class="fa-solid fa-file-waveform fa-fw w-5"></i><span>Création fichier d'analyse</span></div>
-                                             <hr>
-                                             <p class="font-medium text-center">MyVoid (Index BPRS)</p>
-                                             <div class="vba-button"><i class="fa-solid fa-play-circle fa-fw w-5"></i><span>Lancer l'analyse MyVoid</span></div>
-                                         </div>
-                                     </div>
-                                     <div class="vba-frame">
-                                         <h3 class="vba-frame-title"><i class="fa-solid fa-file-code fa-fw text-blue-600"></i>Module EDI</h3>
-                                         <div class="p-4 space-y-3">
-                                             <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-code fa-fw w-5"></i><span>EDI CET 8 Car.</span></div>
-                                             <div class="vba-button vba-button-secondary"><i class="fa-solid fa-list-ol fa-fw w-5"></i><span>Codes IF</span></div>
-                                             <div class="vba-button vba-button-secondary"><i class="fa-solid fa-ban fa-fw w-5"></i><span>Suppr. 999</span></div>
-                                         </div>
-                                     </div>
-                                   </div>
-                            </div>
-                            
-                            <!-- Page: Rapports & Exports -->
-                            <div id="page-rapports" class="page-content hidden">
-                                <!-- NOUVEAU CONTENU AJOUTÉ -->
-                                <h2 class="text-2xl font-bold text-gray-800 mb-4">Rapports & Exports</h2>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-file-excel fa-fw text-blue-600"></i>Exports Standards</h3>
-                                        <div class="p-4 space-y-3">
-                                            <div class="vba-button"><i class="fa-solid fa-file-excel fa-fw w-5"></i><span>Exports Excel</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-file-pdf fa-fw w-5"></i><span>Exports PDF</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-file-invoice fa-fw text-blue-600"></i>Rapports Métier</h3>
-                                        <div class="p-4 space-y-3">
-                                            <div class="vba-button"><i class="fa-solid fa-file-export fa-fw w-5"></i><span>Rapport Analyse SDC</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-file-export fa-fw w-5"></i><span>Rapport Analyse Client</span></div>
-                                            <div class="vba-button"><i class="fa-solid fa-file-export fa-fw w-5"></i><span>Rapport Bilan (Bailleur)</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="vba-frame md:col-span-2">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-person-digging fa-fw text-blue-600"></i>Génération Rapports (Pose...)</h3>
-                                         <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            <div class="vba-button"><i class="fa-solid fa-file-invoice fa-fw w-5"></i><span>Créer un rapport</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-excel fa-fw w-5"></i><span>MàJ bâti</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-pdf fa-fw w-5"></i><span>EDC flash en PDF</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-file-pdf fa-fw w-5"></i><span>CR v2 en PDF</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Page: Outils & Paramètres -->
-                            <div id="page-outils" class="page-content hidden">
-                                <!-- Contenu copié de la maquette -->
-                                <h2 class="text-2xl font-bold text-gray-800 mb-4">Outils & Paramètres</h2>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div class="vba-frame md:col-span-2">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-user-cog fa-fw text-blue-600"></i>Configuration Utilisateur</h3>
-                                        <div class="p-4 space-y-3">
-                                            <div>
-                                                <label class="block font-medium mb-1">Alias Utilisateur :</label>
-                                                <div class="flex gap-2">
-                                                    <select class="w-full p-2 border rounded-md bg-gray-50">
-                                                        <option value="adacosta">adacosta (Aurélien DA COSTA)</option>
-                                                        <option value="jdupont">jdupont (Jean Dupont)</option>
-                                                        <option value="msilva">msilva (Maria Silva)</option>
-                                                    </select>
-                                                    <button class="flex-shrink-0 flex items-center justify-center bg-blue-600 text-white rounded-md px-2 py-2 hover:bg-blue-700" title="Sauvegarder le changement d'utilisateur">
-                                                        <i class="fa-solid fa-save"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="vba-frame md:col-span-2">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-folder-open fa-fw text-blue-600"></i>Configuration des Chemins</h3>
-                                        <div class="p-4 space-y-3">
-                                            <div><label class="block font-medium mb-1">Chemin Serveur &nbsp;:</label><div class="flex gap-2">
-                                                <input type="text" value="\\jetform_comptage\Service_Comptage\..." class="w-full p-2 border rounded-md bg-gray-50">
-                                                <button class="flex-shrink-0 flex items-center justify-center bg-blue-600 text-white rounded-md px-2 py-2 hover:bg-blue-700" title="SauvegardDager le chemin Serveur">
-                                                    <i class="fa-solid fa-save"></i>
-                                                </button>
-                                            </div></div>
-                                            <div><label class="block font-medium mb-1">Dossier Source &nbsp;:</label><div class="flex gap-2">
-                                                <input type="text" value="G:\Mon Drive\00_Downloads\Proxiserve\Golfinho" class="w-full p-2 border rounded-md bg-gray-50">
-                                                <button class="flex-shrink-0 flex items-center justify-center bg-blue-600 text-white rounded-md px-2 py-2 hover:bg-blue-700" title="Sauvegarder le dossier Source">
-                                                    <i class="fa-solid fa-save"></i>
-                                                </button>
-                                            </div></div>
-                                        </div>
-                                    </div>
+                            <!-- Card Imports -->
+                            <div class="card shadow-sm">
+                                <div class="card-header"><i class="fa-solid fa-file-import"></i> Imports de Masse</div>
+                                <div class="grid grid-cols-3 gap-2"> <!-- GAP REDUIT -->
+                                    <div class="btn-action"><i class="fa-solid fa-cloud-arrow-down text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Patrimoine</span><span class="btn-sub">CSV/XLS</span></div></div>
+                                    <div class="btn-action"><i class="fa-solid fa-file-shield text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Contrats</span><span class="btn-sub">Mise à jour</span></div></div>
+                                    <div class="btn-action"><i class="fa-solid fa-desktop text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Accès Pro</span><span class="btn-sub">Import</span></div></div>
                                     
-                                    <!-- MODIFICATION: Ajout des nouveaux boutons -->
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-folder fa-fw text-blue-600"></i>Accès Outils & Dossiers</h3>
-                                        <div class="p-4 space-y-3">
-                                            <!-- NOUVEAU -->
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-server fa-fw w-5"></i><span>Ouvrir Serveur Jetform</span></div>
-                                            <!-- NOUVEAU -->
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-folder-tree fa-fw w-5"></i><span>Ouvrir Serveur Demandes</span></div>
-                                            <hr class="my-2 border-gray-300">
-                                            <!-- Existant -->
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-folder fa-fw w-5"></i><span>Ouvrir Dossier Fichiers</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-screwdriver-wrench fa-fw w-5"></i><span>Ouvrir Dossier Utilitaires</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-save fa-fw w-5"></i><span>Ouvrir Dossier Backup</span></div>
-                                        </div>
+                                    <div class="btn-action"><i class="fa-solid fa-bell text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Alarmes</span><span class="btn-sub">Journalier</span></div></div>
+                                    <div class="btn-action col-span-2 btn-secondary"><i class="fa-solid fa-satellite-dish text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">MBW / GPRS Brut</span><span class="btn-sub">Données raw</span></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Col -->
+                        <div class="col-span-4 flex flex-col gap-4">
+                            <div class="card bg-blue-600 text-white border-none shadow-md bg-gradient-to-br from-blue-600 to-blue-500">
+                                <div class="flex justify-between items-start">
+                                    <div class="text-[0.65rem] font-bold opacity-75 uppercase tracking-widest mb-1">Activité du jour</div>
+                                    <i class="fa-solid fa-chart-line opacity-50"></i>
+                                </div>
+                                <div class="text-4xl font-bold mb-1 font-['Agency_FB']">42</div> <!-- REDUIT 5xl -> 4xl -->
+                                <div class="text-sm opacity-90 font-medium">Fichiers traités</div>
+                                <div class="mt-2 h-1 bg-white/20 rounded-full overflow-hidden"><div class="bg-white h-full w-3/4"></div></div>
+                            </div>
+                            
+                            <div class="card flex-grow shadow-sm">
+                                <div class="card-header">Derniers Logs</div>
+                                <div class="space-y-2"> <!-- REDUIT space-y-4 -> space-y-2 -->
+                                    <div class="flex items-center gap-3 border-b border-gray-50 pb-2">
+                                        <div class="w-8 h-8 rounded bg-green-50 flex items-center justify-center text-green-600"><i class="fa-solid fa-check-circle"></i></div>
+                                        <div><div class="text-sm font-bold text-gray-700">Import DFLGEST</div><div class="text-xs text-gray-400">10:42 • Succès</div></div>
                                     </div>
-                                    <!-- ... Autres frames ... -->
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-shield-halved fa-fw text-blue-600"></i>Mode Administrateur</h3>
-                                        <div class="p-4 grid grid-cols-2 gap-3">
-                                            <div class="vba-button"><i class="fa-solid fa-power-off fa-fw w-5"></i><span>Service Mode</span></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-sign-out-alt fa-fw w-5"></i><span>Exit Service</span></div>
-                                        </div>
-                                    </div>
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-sliders-h fa-fw text-blue-600"></i>Paramètres DPLTAB</h3>
-                                        <div class="p-4 space-y-2">
-                                            <p class="font-medium">Paramètres à générer :</p>
-                                            <label><input type="checkbox" class="mr-1"> Tous les CR</label><label><input type="checkbox" class="mr-1"> CP</label><label><input type="checkbox" class="mr-1"> SC</label><label><input type="checkbox" class="mr-1"> NT</label>
-                                        </div>
-                                    </div>
-                                    <div class="vba-frame">
-                                        <h3 class="vba-frame-title"><i class="fa-solid fa-trash fa-fw text-blue-600"></i>Analyse & Suppression (Admin)</h3>
-                                        <div class="p-4 space-y-3">
-                                            <div><p class="font-medium mb-2">Analyse du patrimoine</p><div class="grid grid-cols-2 gap-1"><label><input type="checkbox" class="mr-1"> Pose à l'envers</label><label><input type="checkbox" class="mr-1"> Conso 0</label><label><input type="checkbox" class="mr-1"> Alarmes</label><label><input type="checkbox" class="mr-1"> Observations</label><label><input type="checkbox" class="mr-1"> Périodes</label></div></div>
-                                            <div class="vba-button vba-button-secondary"><i class="fa-solid fa-trash fa-fw w-5"></i><span>Suppr. Rapports / Généraux</span></div>
-                                        </div>
+                                    <div class="flex items-center gap-3 border-b border-gray-50 pb-2">
+                                        <div class="w-8 h-8 rounded bg-blue-50 flex items-center justify-center text-blue-600"><i class="fa-solid fa-info-circle"></i></div>
+                                        <div><div class="text-sm font-bold text-gray-700">Scan Cité 45012</div><div class="text-xs text-gray-400">10:15 • Consult.</div></div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-                    </main>
+                    </div>
                 </div>
 
-                <!-- Barre de statut V3.final -->
-                <footer class="vba-status-bar">
-                    <div class="vba-status-bar-group">
-                        <span class="vba-status-bar-link" data-target-page="outils" title="Modifier le chemin Serveur">
-                            <i class="fa-solid fa-server fa-fw"></i>
-                            <span class="hidden sm:inline">Serveur:</span>
-                            <span>\\jetform_comptage\...</span>
-                        </span>
-                        <span class="vba-status-bar-link" data-target-page="outils" title="Modifier le dossier Source">
-                            <i class="fa-solid fa-folder fa-fw"></i>
-                            <span class="hidden sm:inline">Source:</span>
-                            <span>G:\Mon Drive\00_Downloads\...</span>
-                        </span>
+                <!-- AUTRES PAGES (NON COMPACTÉES MAIS APPLICABLES DE LA MÊME MANIERE) -->
+                <!-- Pour la brièveté, je garde la structure existante pour les autres pages, elles suivront le style global .page-container et .btn-action -->
+
+                <div id="page-patrimoine" class="page-content hidden">
+                    <h2 class="text-2xl font-light text-gray-800 mb-6">Gestion <b class="text-blue-600 font-semibold">Patrimoine</b></h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- LIEUX -->
+                        <div class="card">
+                            <div class="card-header">Lieux (DFCRAPT)</div>
+                            <div class="btn-action"><i class="fa-solid fa-plus-circle text-green-600 text-lg"></i><div class="btn-content"><span class="btn-title">Nouveau Lieu</span><span class="btn-sub">Unitaire</span></div></div>
+                            <div class="btn-action btn-secondary"><i class="fa-solid fa-file-excel text-green-700 text-lg"></i><div class="btn-content"><span class="btn-title">Transfert Masse</span><span class="btn-sub">Import Excel</span></div></div>
+                        </div>
+                        <!-- PDM -->
+                        <div class="card">
+                            <div class="card-header">Points de Mesure (DFCREAPL)</div>
+                            <div class="btn-action"><i class="fa-solid fa-microchip text-purple-600 text-lg"></i><div class="btn-content"><span class="btn-title">Gérer les PDM</span><span class="btn-sub">Modif unitaire</span></div></div>
+                            <div class="btn-action btn-secondary"><i class="fa-solid fa-file-import text-purple-400 text-lg"></i><div class="btn-content"><span class="btn-title">Import Masse</span><span class="btn-sub">Trame CSV</span></div></div>
+                        </div>
+                        <!-- SYNC SALESFORCE (New) -->
+                        <div class="card col-span-2">
+                            <div class="card-header"><i class="fa-brands fa-salesforce text-blue-400"></i> Synchronisation Salesforce</div>
+                            <div class="grid grid-cols-4 gap-3">
+                                <div class="btn-action justify-center"><div class="btn-content text-center items-center"><span class="btn-title">HISTO 14</span><span class="btn-sub">Index</span></div></div>
+                                <div class="btn-action justify-center"><div class="btn-content text-center items-center"><span class="btn-title">RADIATEURS</span><span class="btn-sub">Calibrage</span></div></div>
+                                <div class="btn-action justify-center"><div class="btn-content text-center items-center"><span class="btn-title">COEFF SITU.</span><span class="btn-sub">Calculs</span></div></div>
+                                <div class="btn-action justify-center"><div class="btn-content text-center items-center"><span class="btn-title">INFOS LIEUX</span><span class="btn-sub">Détails</span></div></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="vba-status-bar-group">
-                        <span class="vba-status-bar-item">
-                            <i class="fa-solid fa-check-circle text-green-400"></i>
-                            <span>Prêt</span>
-                        </span>
+                </div>
+
+                <div id="page-interventions" class="page-content hidden">
+                    <h2 class="text-2xl font-light text-gray-800 mb-6">Maintenance & <b class="text-blue-600 font-semibold">Pose</b></h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- PLANNING -->
+                        <div class="card">
+                            <div class="card-header">Planning</div>
+                            <div class="btn-action bg-slate-800 border-none hover:bg-slate-700 h-24 shadow-md group">
+                                <i class="fa-solid fa-users-gear text-blue-400 text-3xl group-hover:text-white transition-colors"></i>
+                                <div class="btn-content pl-2">
+                                    <span class="btn-title text-white text-lg">Planning Techniciens</span>
+                                    <span class="btn-sub text-gray-400 group-hover:text-gray-200">Accès Portail BO</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- MOUVEMENTS -->
+                        <div class="card">
+                            <div class="card-header">Mouvements Produits</div>
+                            <div class="btn-action"><i class="fa-solid fa-screwdriver text-gray-500 text-lg"></i><div class="btn-content"><span class="btn-title">Dépose / Pose</span><span class="btn-sub">Unitaire</span></div></div>
+                            <div class="btn-action btn-secondary"><i class="fa-solid fa-upload text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Transfert DFDEPOSE</span><span class="btn-sub">Masse</span></div></div>
+                        </div>
+                        <!-- COMPTES RENDUS -->
+                        <div class="card col-span-2">
+                            <div class="card-header">Comptes-Rendus</div>
+                            <div class="grid grid-cols-3 gap-3">
+                                <div class="btn-action btn-secondary"><i class="fa-solid fa-eye text-orange-400 text-lg"></i><div class="btn-content"><span class="btn-title">Vision Anomalies</span></div></div>
+                                <div class="btn-action btn-secondary"><i class="fa-solid fa-paper-plane text-blue-400 text-lg"></i><div class="btn-content"><span class="btn-title">Envoi EDC</span></div></div>
+                                <div class="btn-action btn-secondary"><i class="fa-solid fa-broom text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Nettoyage NS</span></div></div>
+                            </div>
+                        </div>
                     </div>
-                </footer>
+                </div>
+
+                <div id="page-releves" class="page-content hidden">
+                    <h2 class="text-2xl font-light text-gray-800 mb-6">Télérelève & <b class="text-blue-600 font-semibold">Diagnostic</b></h2>
+                     <div class="grid grid-cols-12 gap-5">
+                        <!-- SUPPORT MANUEL -->
+                        <div class="col-span-5 card">
+                            <div class="card-header">Support Relève Manuel</div>
+                            <div class="bg-gray-50 border border-gray-200 rounded p-4 mb-4 flex justify-around">
+                                <label class="radio-vba"><input type="radio" name="tr" checked class="accent-blue-600"> RADIO RF</label>
+                                <label class="radio-vba"><input type="radio" name="tr" class="accent-blue-600"> BAILLEUR</label>
+                            </div>
+                            <div class="btn-action justify-center h-20 shadow-sm border-blue-100 bg-blue-50/50">
+                                <i class="fa-solid fa-print text-blue-600 text-2xl"></i>
+                                <div class="btn-content flex-none ml-3"><span class="btn-title text-lg text-blue-800">Générer Support</span></div>
+                            </div>
+                        </div>
+                        <!-- TELE RELEVE -->
+                        <div class="col-span-7 card border-l-4 border-l-purple-500 shadow-sm">
+                            <div class="card-header text-purple-600">Télérelève & Diagnostic</div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="btn-action"><i class="fa-solid fa-shuffle text-purple-600 text-lg"></i><span class="btn-title">Fusion MBW</span></div>
+                                <div class="btn-action"><i class="fa-solid fa-magnifying-glass-chart text-purple-600 text-lg"></i><span class="btn-title">Analyse MBW</span></div>
+                                <div class="btn-action"><i class="fa-solid fa-triangle-exclamation text-orange-500 text-lg"></i><span class="btn-title">Analyse Alarmes</span></div>
+                                <div class="btn-action"><i class="fa-solid fa-vial text-teal-500 text-lg"></i><div class="btn-content"><span class="btn-title">Test Intégration</span><span class="btn-sub">À blanc</span></div></div>
+                                <div class="btn-action col-span-2 border-blue-100 bg-blue-50/30"><i class="fa-solid fa-chart-line text-blue-500 text-lg"></i><div class="btn-content"><span class="btn-title">Analyse Patrimoine</span><span class="btn-sub">Bilan complet</span></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="page-analyse" class="page-content hidden">
+                    <h2 class="text-2xl font-light text-gray-800 mb-6">Outils <b class="text-blue-600 font-semibold">EDI</b></h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="card">
+                            <div class="card-header">Correctifs Fichiers</div>
+                            <div class="btn-action btn-secondary"><i class="fa-solid fa-list-ol text-gray-500 text-lg"></i><span class="btn-title">Codes IF</span></div>
+                            <div class="btn-action btn-secondary"><i class="fa-solid fa-eraser text-red-400 text-lg"></i><span class="btn-title">Suppr. RFC 999</span></div>
+                            <div class="btn-action btn-secondary"><i class="fa-solid fa-file-code text-blue-400 text-lg"></i><span class="btn-title">EDI CET 8 Car.</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="page-rapports" class="page-content hidden">
+                    <h2 class="text-2xl font-light text-gray-800 mb-6">Rapports & <b class="text-blue-600 font-semibold">Audits</b></h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="card">
+                            <div class="card-header">Exports</div>
+                            <div class="btn-action"><i class="fa-solid fa-file-excel text-emerald-600 text-lg"></i><span class="btn-title">Export Excel</span></div>
+                            <div class="btn-action"><i class="fa-solid fa-file-pdf text-red-600 text-lg"></i><span class="btn-title">Export PDF</span></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">Audits Métier</div>
+                            <div class="btn-action"><i class="fa-solid fa-building-user text-blue-600 text-lg"></i><span class="btn-title">Audit Agence</span></div>
+                            <div class="btn-action"><i class="fa-solid fa-signature text-purple-600 text-lg"></i><span class="btn-title">État de Pose</span></div>
+                            <div class="btn-action"><i class="fa-solid fa-file-invoice text-gray-600 text-lg"></i><span class="btn-title">BPRS Bailleur</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="page-outils" class="page-content hidden">
+                    <h2 class="text-2xl font-light text-gray-800 mb-6">Paramètres <b class="text-blue-600 font-semibold">Système</b></h2>
+                    <div class="grid grid-cols-2 gap-5">
+                        <!-- CHEMINS -->
+                        <div class="card">
+                            <div class="card-header">Chemins Réseau</div>
+                            <div class="btn-action btn-secondary"><i class="fa-solid fa-server text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Volume Serveur</span><span class="btn-sub">\\jetform_comptage...</span></div></div>
+                            <div class="btn-action btn-secondary"><i class="fa-solid fa-folder-open text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Dossier Source</span><span class="btn-sub">G:\Mon Drive\...</span></div></div>
+                        </div>
+                        <!-- ADMIN -->
+                        <div class="card border-red-200 bg-red-50">
+                            <div class="card-header text-red-600">ADMINISTRATEUR</div>
+                            <div class="btn-action btn-danger h-20 justify-center"><i class="fa-solid fa-key text-xl"></i><span class="btn-title ml-3 text-lg">Service Mode (Sync)</span></div>
+                            <div class="grid grid-cols-2 gap-3 mt-3">
+                                <div class="btn-action border-red-200 text-red-600 justify-center hover:bg-red-100"><span class="btn-title text-xs">SYNCRO LIEUX</span></div>
+                                <div class="btn-action border-red-200 text-red-600 justify-center hover:bg-red-100"><span class="btn-title text-xs">SYNCRO PDM</span></div>
+                            </div>
+                        </div>
+                        <!-- TABLES -->
+                        <div class="card">
+                            <div class="card-header">Tables de Référence</div>
+                            <div class="btn-action btn-secondary"><i class="fa-solid fa-users text-gray-500 text-lg"></i><span class="btn-title">Utilisateurs</span></div>
+                            <div class="btn-action btn-secondary"><i class="fa-solid fa-building text-gray-500 text-lg"></i><span class="btn-title">Agences</span></div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
-            
-            <!-- == FIN DE LA MAQUETTE == -->
 
-            <section class="mt-10 pt-6 border-t border-gray-300">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">Justification de la V3.00 (Workflow 3 Étapes)</h2>
-                <!-- ... Contenu de la justification ... -->
-            </section>
-
-            <!-- 
-            ====================================================================
-            GUIDE DE CONSTRUCTION VBA (MIS À JOUR)
-            ====================================================================
-            -->
-            <section class="mt-10 pt-6 border-t border-gray-300">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">Guide de Construction VBA (Étape par Étape)</h2>
-                <p class="mb-6 text-gray-700">Suivez ces étapes dans votre éditeur VBA (Alt+F11) pour recréer la maquette ci-dessus.</p>
-
-                <!-- ÉTAPE 1: ThisWorkbook -->
-                <div class="guide-section">
-                    <div class="guide-header">
-                        <h3 class="text-xl font-bold text-gray-900">Partie 1 : Le "Mode Application" (Code `ThisWorkbook`)</h3>
-                    </div>
-                    <div class="guide-content">
-                        <p>Ce code masque Excel au démarrage et lance votre application (y compris votre `frmSplashScreen`).</p>
-                        <ol class="list-decimal">
-                            <li>Ouvrez l'explorateur de projets (Ctrl+R).</li>
-                            <li>Double-cliquez sur <strong>`ThisWorkbook`</strong>.</li>
-                            <li><strong>REMPLACEZ TOUT</strong> le code existant par celui-ci :</li>
-                        </ol>
-                        <pre><code class="language-vba">Option Explicit
-
-' --- DÉMARRAGE EN MODE APPLICATION ---
-' Cache Excel avant même l'ouverture de la fenêtre principale
-Private Sub Auto_Open()
-    Application.Visible = False
-End Sub
-
-' Lance l'application après le chargement du classeur
-Private Sub Workbook_Open()
-    ' 1. Affiche le Splash Screen (non bloquant)
-    '    (Si vous n'en avez pas, commentez la ligne suivante)
-    frmSplashScreen.Show vbModeless
-    
-    ' Force Excel à traiter les événements d'affichage
-    DoEvents
-
-    ' --- Mettez ici vos tâches de démarrage (connexion BD, etc.) ---
-    ' Exemple : Call PKS_Golfinho.Button_ServiceOff_Click
-    
-    ' Pause pour simuler un chargement
-    Application.Wait Now + TimeValue("00:00:02")
-    ' --- Fin des tâches de démarrage ---
-
-    ' 2. Ferme le Splash Screen
-    '    (Si vous n'en avez pas, commentez la ligne suivante)
-    Unload frmSplashScreen
-    
-    ' 3. Affiche l'UserForm principal
-    frmMain.Show
-End Sub
-</code></pre>
-                    </div>
+            <!-- STATUS BAR -->
+            <div class="status-bar">
+                <div class="flex gap-6">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-server text-blue-600"></i> <span class="font-bold text-gray-500 text-[0.65rem] uppercase tracking-wide">Jetform :</span> <span class="text-gray-600">\\jetform_comptage\prod</span></span>
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-folder text-yellow-600"></i> <span class="font-bold text-gray-500 text-[0.65rem] uppercase tracking-wide">Source :</span> <span class="text-gray-600">G:\Mon Drive\Extractions</span></span>
                 </div>
-
-                <!-- ÉTAPE 2: Construction Visuelle -->
-                <div class="guide-section">
-                    <div class="guide-header">
-                        <h3 class="text-xl font-bold text-gray-900">Partie 2 : Construction Visuelle de `frmMain` (La Coquille)</h3>
-                    </div>
-                    <div class="guide-content">
-                        <p>Ouvrez votre `frmMain` vide en mode visuel (pas le code).</p>
-                        
-                        <h4>A. Le `UserForm` (`frmMain`)</h4>
-                        <p>Sélectionnez le `UserForm` et réglez ses <strong>Propriétés</strong> :</p>
-                        <ul>
-                            <li><code>Caption</code>: <strong>Golfinho v3.0</strong></li>
-                            <li><code>Height</code>: <strong>720</strong></li>
-                            <li><code>Width</code>: <strong>1000</strong></li>
-                            <li><code>StartUpPosition</code>: <strong>2 - CenterScreen</strong></li>
-                        </ul>
-
-                        <h4>B. Le Menu (`fraNavigation`)</h4>
-                        <ol class="list-decimal">
-                            <li>Prenez un <code>Frame</code> (Cadre) et dessinez-le sur la gauche.</li>
-                            <li>Réglez ses <strong>Propriétés</strong> :</li>
-                        </ul>
-                        <ul>
-                            <li><code>(Name)</code>: <strong>fraNavigation</strong></li>
-                            <li><code>Caption</code>: (Laissez vide)</li>
-                            <li><code>Top</code>: <strong>0</strong> | <code>Left</code>: <strong>0</strong></li>
-                            <li><code>Height</code>: <strong>720</strong> | <code>Width</code>: <strong>260</strong></li>
-                            <li><code>BackColor</code>: <strong>&amp;H111827&amp;</strong> (Gris foncé)</li>
-                            <li><code>SpecialEffect</code>: <strong>0 - fmSpecialEffectFlat</strong></li>
-                            <li><code>BorderColor</code>: <strong>&amp;H111827&amp;</strong></li>
-                        </ul>
-
-                        <h4>C. Le Contenu (`mpContent`)</h4>
-                        <ol class="list-decimal">
-                            <li>Prenez un <code>MultiPage</code> (Onglets) et dessinez-le à droite du menu.</li>
-                            <li>Réglez ses <strong>Propriétés</strong> :</li>
-                        </ul>
-                        <ul>
-                            <li><code>(Name)</code>: <strong>mpContent</strong></li>
-                            <li><code>Top</code>: <strong>0</strong> | <code>Left</code>: <strong>260</strong></li>
-                            <li><code>Height</code>: <strong>720</strong> | <code>Width</code>: <strong>740</strong></li>
-                            <li><code>Style</code>: <strong>2 - fmTabStyleNone</strong> (TRÈS IMPORTANT)</li>
-                        </ul>
-
-                        <h4>D. Les Pages (dans `mpContent`)</h4>
-                        <ol class="list-decimal">
-                            <li>Sélectionnez le <code>mpContent</code>.</li>
-                            <li>Renommez <code>Page1</code> -> <code>(Name)</code>: <strong>pageDashboard</strong></li>
-                            <li>Renommez <code>Page2</code> -> <code>(Name)</code>: <strong>pagePatrimoine</strong></li>
-                            <li>Faites un clic droit sur "pagePatrimoine" > <code>Nouvelle Page</code>.</li>
-                            <li>Renommez <code>Page3</code> -> <code>(Name)</code>: <strong>pageInterventions</strong></li>
-                            <li>Répétez pour : <code>pageReleves</code>, <code>pageFlux</code>, <code>pageAnalyse</code>, <code>pageRapports</code>, <code>pageOutils</code>.</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <!-- ÉTAPE 3: Les "Boutons" Label -->
-                <div class="guide-section">
-                    <div class="guide-header">
-                        <h3 class="text-xl font-bold text-gray-900">Partie 3 : Construction du Menu (Les "Boutons" `Label`)</h3>
-                    </div>
-                    <div class="guide-content">
-                        <p>Nous utilisons des <code>Label</code> (Étiquettes) pour simuler les boutons modernes.</p>
-                        <ol class="list-decimal">
-                            <li><strong>IMPORTANT :</strong> Cliquez sur <code>fraNavigation</code> (le cadre gris foncé) <em>avant</em> de dessiner.</li>
-                            <li>Prenez un <code>Label</code> (icône 'A') et dessinez-le dans le <code>fraNavigation</code>.</li>
-                            <li>Réglez ses <strong>Propriétés</strong> :</li>
-                        </ul>
-                        <ul>
-                            <li><code>(Name)</code>: <strong>lblNav_Dashboard</strong></li>
-                            <li><code>Caption</code>: <strong>Dashboard</strong></li>
-                            <li><code>Font</code>: <strong>Tahoma, Gras, 10</strong></li>
-                            <li><code>ForeColor</code>: <strong>&amp;H00D1D5DB&amp;</strong> (Gris clair)</li>
-                            <li><code>BackColor</code>: <strong>&amp;H00111827&amp;</strong> (Gris foncé)</li>
-                            <li><code>BackStyle</code>: <strong>0 - fmBackStyleTransparent</strong></li>
-                            <li><code>Height</code>: <strong>40</strong> | <code>Width</code>: <strong>240</strong></li>
-                            <li><code>Left</code>: <strong>10</strong> | <code>Top</code>: <strong>100</strong> (Ajustez la position)</li>
-                            <li><code>MousePointer</code>: <strong>99 - fmMousePointerCustom</strong></li>
-                            <li><code>MouseIcon</code>: (Cliquez sur <code>...</code> et choisissez une icône de "main" (`.cur`))</li>
-                        </ul>
-                        <ol class="list-decimal" start="5">
-                            <li><strong>Copiez-collez</strong> ce <code>Label</code> 7 fois de plus et espacez-les verticalement.</li>
-                            <li>Renommez-les et changez leur <code>Caption</code> (ex: <code>lblNav_Patrimoine</code>, <code>lblNav_Outils</code>, etc.).</li>
-                        </ol>
-                    </div>
-                </div>
-                
-                <!-- ÉTAPE 4: Code frmMain -->
-                <div class="guide-section">
-                    <div class="guide-header">
-                        <h3 class="text-xl font-bold text-gray-900">Partie 4 : Le Code de `frmMain` (La Mécanique)</h3>
-                    </div>
-                    <div class="guide-content">
-                        <p>Ce code gère la navigation et la fermeture de l'application.</p>
-                        <ol class="list-decimal">
-                            <li>Faites un clic droit sur <code>frmMain</code> > <code>Afficher le code</code>.</li>
-                            <li><strong>REMPLACEZ TOUT</strong> le code par celui-ci :</li>
-                        </ol>
-                        <pre><code class="language-vba">Option Explicit
-
-' --- COULEURS POUR LA NAVIGATION ---
-' (Utilisez le &H00...& format pour VBA)
-Private Const COLOR_MENU_ACTIF As Long = &H00EB6325 ' Bleu (blue-600)
-Private Const COLOR_MENU_INACTIF As Long = &H00D1D5DB ' Gris clair (gray-300)
-Private Const COLOR_FOND_INACTIF As Long = &H00111827 ' Fond menu (gray-900)
-Private Const COLOR_FOND_ACTIF As Long = &H00EB6325  ' Fond bleu si on n'utilise pas BackStyle Transparent
-
-' --- CONSTANTES POUR LES PAGES ---
-Private Const PAGE_DASHBOARD As Integer = 0
-Private Const PAGE_PATRIMOINE As Integer = 1
-Private Const PAGE_INTERVENTIONS As Integer = 2
-Private Const PAGE_RELEVES As Integer = 3
-Private Const PAGE_FLUX As Integer = 4
-Private Const PAGE_ANALYSE As Integer = 5
-Private Const PAGE_RAPPORTS As Integer = 6
-Private Const PAGE_OUTILS As Integer = 7
-
-' =================================================================
-' EVENEMENTS DU USERFORM (INITIALISATION ET FERMETURE)
-' =================================================================
-
-Private Sub UserForm_Initialize()
-    ' S'assure que la première page visible est le Dashboard
-    Me.mpContent.Value = PAGE_DASHBOARD
-    ' Met à jour la couleur du premier bouton de menu
-    Call UpdateNavColors(Me.lblNav_Dashboard)
-End Sub
-
-Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
-    ' Gère la fermeture de l'application par le 'X'
-    
-    ' Si l'utilisateur clique sur le 'X'
-    If CloseMode = vbFormControlMenu Then
-        ' 1. (Optionnel) Pose une question de confirmation
-        ' If MsgBox("Êtes-vous sûr de vouloir quitter ?", vbYesNo) = vbNo Then
-        '    Cancel = 1 ' Annule la fermeture
-        '    Exit Sub
-        ' End If
-        
-        ' 2. Rend l'application Excel à nouveau visible
-        Application.Visible = True
-        
-        ' 3. Le UserForm se fermera (car Cancel n'est pas à 1)
-        '    et l'utilisateur retrouvera Excel.
-    End If
-End Sub
-
-' =================================================================
-' NAVIGATION PRINCIPALE (MENU LATÉRAL)
-' =================================================================
-
-Private Sub lblNav_Dashboard_Click()
-    Me.mpContent.Value = PAGE_DASHBOARD
-    Call UpdateNavColors(Me.lblNav_Dashboard)
-End Sub
-
-Private Sub lblNav_Patrimoine_Click()
-    Me.mpContent.Value = PAGE_PATRIMOINE
-    Call UpdateNavColors(Me.lblNav_Patrimoine)
-End Sub
-
-Private Sub lblNav_Interventions_Click()
-    Me.mpContent.Value = PAGE_INTERVENTIONS
-    Call UpdateNavColors(Me.lblNav_Interventions)
-End Sub
-
-Private Sub lblNav_Releves_Click()
-    Me.mpContent.Value = PAGE_RELEVES
-    Call UpdateNavColors(Me.lblNav_Releves)
-End Sub
-
-Private Sub lblNav_Flux_Click()
-    Me.mpContent.Value = PAGE_FLUX
-    Call UpdateNavColors(Me.lblNav_Flux)
-End Sub
-
-Private Sub lblNav_Analyse_Click()
-    Me.mpContent.Value = PAGE_ANALYSE
-    Call UpdateNavColors(Me.lblNav_Analyse)
-End Sub
-
-Private Sub lblNav_Rapports_Click()
-    Me.mpContent.Value = PAGE_RAPPORTS
-    Call UpdateNavColors(Me.lblNav_Rapports)
-End Sub
-
-Private Sub lblNav_Outils_Click()
-    Me.mpContent.Value = PAGE_OUTILS
-    Call UpdateNavColors(Me.lblNav_Outils)
-End Sub
-
-' =================================================================
-' ACTIONS DES PAGES (DASHBOARD, OUTILS, ETC.)
-' =================================================================
-
-' --- Page Outils: Accès Dossiers ---
-' (Assurez-vous que vos boutons s'appellent cmdOpenJetform, cmdOpenDemandes, etc.)
-
-Private Sub cmdOpenJetform_Click()
-    ' Ouvre le serveur Jetform. Mettez votre chemin réseau ici.
-    ' EXEMPLE: "\\SERVEUR\Jetform"
-    Call OpenExplorer("C:\Windows") ' <--- REMPLACEZ PAR VOTRE CHEMIN JETFORM
-End Sub
-
-Private Sub cmdOpenDemandes_Click()
-    ' Ouvre le serveur Demandes. Mettez votre chemin réseau ici.
-    ' EXEMPLE: "\\SERVEUR\Demandes"
-    Call OpenExplorer("C:\Program Files") ' <--- REMPLACEZ PAR VOTRE CHEMIN DEMANDES
-End Sub
-
-' --- Ajoutez ici les _Click pour les autres boutons (ex: Dashboard) ---
-
-' Private Sub cmdExtractCites_Click()
-'    MsgBox "Lancement de l'extraction des cités..."
-'    ' Collez votre ancienne macro ici
-' End Sub
-
-
-' =================================================================
-' UTILITAIRE DE NAVIGATION
-' =================================================================
-
-Private Sub UpdateNavColors(ByVal ActiveLabel As MSForms.Label)
-    ' Réinitialise tous les "boutons" (Labels) du menu
-    ' et met en surbrillance celui qui est actif.
-    
-    Dim ctrl As MSForms.Control
-    
-    ' 1. Parcourt tous les contrôles DANS le Frame de navigation
-    For Each ctrl In Me.fraNavigation.Controls
-        ' 2. Vérifie si c'est un Label (Étiquette)
-        If TypeName(ctrl) = "Label" Then
-            ' 3. Réinitialise sa couleur et son fond
-            With ctrl
-                .ForeColor = COLOR_MENU_INACTIF
-                .BackStyle = fmBackStyleTransparent
-                ' (Le BackColor est ignoré si BackStyle est Transparent)
-            End With
-        End If
-    Next ctrl
-    
-    ' 4. Met en surbrillance le Label actif (Style de la maquette HTML)
-    With ActiveLabel
-        .BackStyle = fmBackStyleOpaque
-        .BackColor = COLOR_FOND_ACTIF
-        .ForeColor = &H00FFFFFF ' Blanc
-    End With
-End Sub
-
-' =================================================================
-' UTILITAIRES GÉNÉRAUX
-' =================================================================
-
-Private Sub OpenExplorer(ByVal sPath As String)
-    ' Ouvre un chemin dans l'Explorateur Windows
-    ' Gère les erreurs si le chemin est invalide
-    On Error Resume Next
-    Shell "explorer.exe """ & sPath & """", vbNormalFocus
-    If Err.Number <> 0 Then
-        MsgBox "Impossible d'ouvrir le chemin :" & vbCrLf & sPath, vbExclamation, "Erreur de chemin"
-    End If
-    On Error GoTo 0
-End Sub
-</code></pre>
-                    </div>
-                </div>
-
-                <!-- ÉTAPE 5: Construction Dashboard -->
-                <div class="guide-section">
-                    <div class="guide-header">
-                        <h3 class="text-xl font-bold text-gray-900">Partie 5 : Construction des Pages de Contenu (Ex: Dashboard)</h3>
-                    </div>
-                    <div class="guide-content">
-                        <p>Maintenant, remplissez les pages une par une.</p>
-                        <ol class="list-decimal">
-                            <li>Ouvrez `frmMain` en visuel.</li>
-                            <li>Cliquez sur le <code>mpContent</code> et assurez-vous que <strong>`pageDashboard`</strong> est sélectionnée.</li>
-                            <li>Dessinez-y les `Frame` et les `CommandButton` (Boutons de commande) en suivant la maquette.</li>
-                        </ol>
-                        
-                        <h4>A. Le `Frame` "Bienvenue" (sur `pageDashboard`)</h4>
-                        <ul>
-                            <li>Propriétés : <code>Caption</code>: (vide), <code>SpecialEffect</code>: 0-Flat, <code>BorderColor</code>: &amp;H00D1D5DB&amp; (Gris clair), <code>BackColor</code>: &amp;H00FFFFFF&amp; (Blanc).</li>
-                            <li>Ajoutez un <code>Label</code> dedans pour le texte "Bienvenue...".</li>
-                        </ul>
-
-                        <h4>B. Le `Frame` "Étape 1: Extraire" (sur `pageDashboard`)</h4>
-                        <ul>
-                            <li>Propriétés : <code>Caption</code>: <strong>Étape 1: Extraire</strong>, <code>Font</code>: Tahoma, Gras, 10.</li>
-                            <li>Mêmes styles que "Bienvenue" pour les bordures et le fond.</li>
-                        </ul>
-
-                        <h4>C. Les Boutons d'Action (ex: `cmdExtractCites`)</h4>
-                        <ol class="list-decimal">
-                            <li>Prenez un <code>CommandButton</code> (Bouton de commande).</li>
-                            <li>Dessinez-le dans le `Frame` "Étape 1".</li>
-                            <li>Réglez ses <strong>Propriétés</strong> :</li>
-                        </ul>
-                        <ul>
-                            <li><code>(Name)</code>: <strong>cmdExtractCites</strong></li>
-                            <li><code>Caption</code>: <strong>Extract. Cité(s)</strong></li>
-                            <li><code>Font</code>: <strong>Tahoma, Gras, 10</strong></li>
-                            <li><code>BackColor</code>: <strong>&amp;H00EB6325&amp;</strong> (Bleu)</li>
-                            <li><code>ForeColor</code>: <strong>&amp;H00FFFFFF&amp;</strong> (Blanc)</li>
-                            <li><code>Height</code>: <strong>40</strong>, <code>Width</code>: <strong>160</strong> (par ex.)</li>
-                        </ul>
-                        <p>Répétez pour tous les boutons (`cmdExtractClient`, `cmdPRCGEST`, etc.) en ajustant <code>BackColor</code> pour les boutons secondaires (<code>&amp;H0063554B&amp;</code> - Gris foncé).</p>
-                        
-                        <h4>D. Page `pagePatrimoine` et suivantes</h4>
-                        <ol class="list-decimal">
-                            <li>Cliquez sur le <code>mpContent</code> et sélectionnez l'onglet <strong>`pagePatrimoine`</strong>.</li>
-                            <li>Dessinez un <code>Frame</code>, nommez-le <code>fraPatrimoineCreation</code>, <code>Caption</code>: <strong>Création Patrimoine</strong>.</li>
-                            <li>Dessinez un <code>CommandButton</code> dedans, nommez-le <code>cmdGererLieux</code>, <code>Caption</code>: <strong>Gérer les Lieux</strong>.</li>
-                            <li>Répétez ce processus pour remplir toutes les pages comme sur la maquette.</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <!-- PARTIE 6: Construction Page Outils -->
-                <div class="guide-section">
-                    <div class="guide-header">
-                        <h3 class="text-xl font-bold text-gray-900">Partie 6 : Construction de la Page "Outils & Paramètres"</h3>
-                    </div>
-                    <div class="guide-content">
-                        <p>Pour ajouter vos boutons d'accès aux serveurs :</p>
-                        <ol class="list-decimal">
-                            <li>Ouvrez `frmMain` en visuel.</li>
-                            <li>Cliquez sur le <code>mpContent</code> et sélectionnez l'onglet <strong>`pageOutils`</strong>.</li>
-                            <li>Prenez un <code>Frame</code> (Cadre) et dessinez-le.</li>
-                            <li>Propriétés : <code>Caption</code>: <strong>Accès Outils & Dossiers</strong>, <code>Font</code>: Tahoma, Gras, 10.</li>
-                            <li>Prenez un <code>CommandButton</code> et dessinez-le *dans* ce `Frame`.</li>
-                            <li>Réglez ses <strong>Propriétés</strong> :</li>
-                        </ul>
-                        <ul>
-                            <li><code>(Name)</code>: <strong>cmdOpenJetform</strong></li>
-                            <li><code>Caption</code>: <strong>Ouvrir Serveur Jetform</strong></li>
-                            <li><code>BackColor</code>: <strong>&amp;H0063554B&amp;</strong> (Gris foncé - secondaire)</li>
-                            <li><code>ForeColor</code>: <strong>&amp;H00FFFFFF&amp;</strong> (Blanc)</li>
-                        </ul>
-                        <ol class="list-decimal" start="7">
-                            <li>Copiez ce bouton et réglez les propriétés pour le second :</li>
-                        </OL>
-                        <ul>
-                            <li><code>(Name)</code>: <strong>cmdOpenDemandes</strong></li>
-                            <li><code>Caption</code>: <strong>Ouvrir Serveur Demandes</strong></li>
-                        </ul>
-                        <p>Le code que vous avez copié dans la **Partie 4** s'occupera déjà de gérer les clics sur ces boutons.</p>
-                    </div>
-                </div>
-
-            </section>
-
-        </main>
+                <div class="text-green-600 font-bold flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-green-500"></div> PRÊT</div>
+            </div>
+        </div>
     </div>
 
-    <!-- SCRIPT ROBUSTE (V3.final) -->
     <script>
-        // ... (Script JS de la maquette, identique à avant) ...
-        document.addEventListener('DOMContentLoaded', () => {
+        function switchPage(pageId, element) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            // Show target
+            document.getElementById('page-' + pageId).classList.remove('hidden');
             
-            // --- Logique V3 (Menu Latéral) ---
-            const menuItems = document.querySelectorAll('.vba-menu-item');
-            const pages = document.querySelectorAll('.page-content');
-            
-            // Vérification de robustesse
-            if (menuItems.length > 0 && pages.length > 0) {
-                menuItems.forEach(item => {
-                    item.addEventListener('click', () => {
-                        const targetId = item.dataset.page;
-                        
-                        // Gérer l'état actif/inactif du menu
-                        menuItems.forEach(i => i.classList.remove('vba-menu-item-active'));
-                        item.classList.add('vba-menu-item-active');
-
-                        // Afficher/masquer le contenu (méthode toggle optimisée)
-                        pages.forEach(page => {
-                            page.classList.toggle('hidden', page.id !== `page-${targetId}`);
-                        });
-                    });
-                });
-            } else {
-                console.error("Erreur: Impossible de trouver les items de menu ou les pages de contenu.");
-            }
-
-            // --- Logique V4 (Accordion) ---
-            const accordionHeaders = document.querySelectorAll('.vba-accordion-header');
-            
-            // Vérification de robustesse
-            if (accordionHeaders.length > 0) {
-                accordionHeaders.forEach(header => {
-                    header.addEventListener('click', () => {
-                        const targetId = header.dataset.target;
-                        const targetContent = document.getElementById(targetId);
-                        
-                        // Vérification de robustesse
-                        if (targetContent) {
-                            targetContent.classList.toggle('hidden');
-                            header.classList.toggle('open');
-                        } else {
-                            console.error(`Erreur: Contenu d'accordéon introuvable pour l'ID: ${targetId}`);
-                        }
-                    });
-                });
-            }
-
-            // --- Logique V3.final (Barre de statut cliquable) ---
-            const statusBarLinks = document.querySelectorAll('.vba-status-bar-link');
-            const toolsPageLink = document.querySelector('[data-page="outils"]'); // Cible l'onglet "Outils"
-            
-            // Vérification de robustesse
-            if (statusBarLinks.length > 0 && toolsPageLink) {
-                statusBarLinks.forEach(link => {
-                    link.addEventListener('click', () => {
-                        toolsPageLink.click(); // Simule un clic
-                    });
-                });
-            } else {
-                if (!toolsPageLink) console.error("Erreur: Lien vers la page 'Outils' introuvable.");
-            }
-        });
+            // Update menu
+            document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+            element.classList.add('active');
+        }
     </script>
-
 </body>
 </html>
