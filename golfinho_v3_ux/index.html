@@ -58,7 +58,7 @@
         }
 
         .sidebar-header {
-            height: 130px;
+            height: 110px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -95,17 +95,28 @@
         .menu-item:hover { background-color: #F9FAFB; color: var(--primary); }
         .menu-item.active { background-color: #EFF6FF; color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
 
+        /* STYLE SPÉCIAL DASHBOARD (MODIFIÉ) */
         .menu-item.special {
             margin: 0 1rem 0.5rem 1rem;
             border-radius: 0.5rem;
             border-left: none;
             padding-left: 1rem;
             transition: all 0.2s ease;
+            /* Style par défaut (même inactif) pour être marqué */
+            background-color: #F1F5F9; /* Gris bleuté clair */
+            color: #475569;            /* Texte gris foncé */
+            font-weight: 600;
+            border: 1px solid #E2E8F0; /* Bordure subtile */
         }
-        .menu-item.special:hover { background-color: #E2E8F0; color: #1E293B; }
+        .menu-item.special:hover { 
+            background-color: #E2E8F0; 
+            color: #1E293B; 
+            border-color: #CBD5E1;
+        }
         .menu-item.special.active {
-            background-color: #1E293B;
+            background-color: #1E293B; /* Bleu nuit actif */
             color: #FFFFFF;
+            border-color: #1E293B;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             transform: translateY(-1px);
         }
@@ -286,8 +297,8 @@
             </div>
 
             <div class="menu-container">
-                <!-- DASHBOARD -->
-                <div class="menu-item special font-bold active mb-2" onclick="switchPage('accueil', this)">
+                <!-- DASHBOARD (MODIFIÉ : Apparence bouton même inactif) -->
+                <div class="menu-item special active mb-2" onclick="switchPage('accueil', this)">
                     <i class="fa-solid fa-gauge-high"></i> Dashboard
                 </div>
                 
@@ -327,7 +338,8 @@
                     <span>Contact Support</span>
                 </a>
 
-                <div class="text-[0.6rem] text-gray-300 mt-2 text-center border-t border-gray-100 pt-2">
+                <!-- COPYRIGHT MODIFIÉ : PLUS SOMBRE -->
+                <div class="text-[0.6rem] text-gray-500 font-bold mt-2 text-center border-t border-gray-100 pt-2">
                     Tous droits réservés © 2023 - 2026
                 </div>
             </div>
@@ -362,6 +374,7 @@
                     <div class="mb-3 flex justify-between items-end">
                         <div>
                             <div class="flex items-center">
+                                <!-- Badge retiré d'ici -->
                                 <h2 class="text-2xl font-light text-gray-800">Bonjour, <b id="dashboard-user-name" class="text-blue-600 font-semibold">Aurélien D.</b></h2>
                             </div>
                             <p class="text-sm text-gray-500 mt-0.5">Actions rapides et suivi des importations.</p>
@@ -1002,15 +1015,11 @@
 
         function updateUIForUser(userData) {
             document.getElementById('dashboard-user-name').textContent = userData.firstName + " " + userData.initial;
-            
-            // Mise à jour du badge dans la TOP BAR
             const badge = document.getElementById('user-status-badge');
             badge.textContent = userData.status;
-            badge.className = 'status-badge ' + userData.roleClass + ' text-[0.6rem] py-0.5 px-2'; // Reset classes + spécifique topbar
-            
+            badge.className = 'status-badge ' + userData.roleClass + ' text-[0.6rem] py-0.5 px-2'; 
             document.getElementById('path-server-text').textContent = userData.serverPath;
             document.getElementById('path-source-input').value = userData.sourcePath;
-            
             const switchEl = document.getElementById('server-mode-switch');
             const lockIcon = document.getElementById('server-lock-icon');
             if (userData.isAdmin) {
