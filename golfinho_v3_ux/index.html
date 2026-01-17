@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golfinho V3.0 - Maquette UserForm</title>
+    <title>Golfinho V3.1 - Maquette UserForm</title>
     <!-- Tailwind CSS pour le prototypage rapide -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
@@ -275,7 +275,7 @@
                     <span class="text-3xl text-blue-600">🐬</span>
                     <div>
                         <div class="app-title text-3xl leading-none text-slate-800">Golfinho</div>
-                        <div class="text-[0.65rem] text-slate-400 font-bold tracking-widest uppercase mt-1 pl-0.5">Version 3.0</div>
+                        <div class="text-[0.65rem] text-slate-400 font-bold tracking-widest uppercase mt-1 pl-0.5">Version 3.1</div>
                     </div>
                 </div>
             </div>
@@ -336,7 +336,7 @@
 
             <div class="page-container">
                 
-                <!-- PAGE 1: DASHBOARD -->
+                <!-- PAGE 1: DASHBOARD (OPTIMISÉ) -->
                 <div id="page-accueil" class="page-content">
                     <div class="mb-3 flex justify-between items-end">
                         <div>
@@ -386,10 +386,11 @@
                                 </div>
                             </div>
 
-                            <!-- Card Imports -->
-                            <div class="card shadow-sm">
+                            <!-- Card Imports (OPTIMISÉ : flex-1 + Boutons regroupés) -->
+                            <div class="card shadow-sm flex-1 flex flex-col">
                                 <div class="card-header"><i class="fa-solid fa-file-import"></i> Imports de Masse</div>
                                 <div class="grid grid-cols-3 gap-2">
+                                    <!-- Ligne 1 -->
                                     <div class="btn-action col-span-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-none shadow-md hover:shadow-lg hover:from-indigo-500 hover:to-purple-500 transition-all cursor-pointer group h-16 relative overflow-hidden">
                                         <div class="absolute top-0 right-0 -mr-4 -mt-4 w-20 h-20 rounded-full bg-white/10 blur-xl"></div>
                                         <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform backdrop-blur-sm border border-white/30">
@@ -402,6 +403,7 @@
                                         <i class="fa-solid fa-chevron-right text-white/50 text-xl ml-auto"></i>
                                     </div>
 
+                                    <!-- Ligne 2 -->
                                     <div class="btn-action col-span-2 border-blue-200 bg-blue-50 hover:bg-blue-100 transition-colors cursor-pointer group">
                                         <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm mr-2 group-hover:scale-110 transition-transform">
                                             <i class="fa-solid fa-cloud-arrow-down text-blue-600 text-lg"></i>
@@ -411,11 +413,12 @@
                                             <span class="btn-sub text-blue-700/70 font-bold">Juste charger DFLGEST</span>
                                         </div>
                                     </div>
-                                    
                                     <div class="btn-action"><i class="fa-solid fa-file-shield text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Contrats</span><span class="btn-sub">DFCGEST</span></div></div>
+
+                                    <!-- Ligne 3 (Compactée) -->
                                     <div class="btn-action"><i class="fa-solid fa-desktop text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Accès Pro</span><span class="btn-sub">Exp. Index</span></div></div>
                                     <div class="btn-action"><i class="fa-solid fa-bell text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Alarmes</span><span class="btn-sub">Exp. Alarmes</span></div></div>
-                                    <div class="btn-action col-span-2 btn-secondary"><i class="fa-solid fa-satellite-dish text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">MBW / GPRS</span><span class="btn-sub">Fichiers .txt</span></div></div>
+                                    <div class="btn-action btn-secondary"><i class="fa-solid fa-satellite-dish text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">MBW / GPRS</span><span class="btn-sub">Fichiers .txt</span></div></div>
                                 </div>
                             </div>
                         </div>
@@ -448,8 +451,8 @@
                                 </div>
                             </div>
                             
-                            <!-- LOGS -->
-                            <div class="card flex-grow shadow-sm">
+                            <!-- LOGS (OPTIMISÉ : flex-1) -->
+                            <div class="card flex-1 shadow-sm flex flex-col">
                                 <div class="card-header">Derniers Logs</div>
                                 <div class="space-y-3">
                                     <div class="flex items-center gap-3 border-b border-gray-50 pb-2">
