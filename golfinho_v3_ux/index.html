@@ -11,6 +11,7 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap');
+        /* Import d'une police Google "Oswald" pour simuler Agency FB */
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap');
 
         :root {
@@ -57,7 +58,7 @@
         }
 
         .sidebar-header {
-            height: 90px;
+            height: 110px; /* Hauteur augmentée pour le nouveau contenu */
             display: flex;
             align-items: center;
             padding: 0 1.5rem;
@@ -67,8 +68,8 @@
         .app-title {
             font-family: 'Agency FB', 'Oswald', sans-serif;
             font-weight: 700;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            /* text-transform: uppercase; SUPPRIMÉ POUR GOLFINHO */
         }
 
         .menu-container {
@@ -254,7 +255,7 @@
             letter-spacing: 0.05em;
             border: 1px solid transparent;
             margin-left: 10px;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
             display: inline-block;
         }
         .status-admin { background-color: #FEF2F2; color: #DC2626; border-color: #FECACA; }
@@ -270,10 +271,11 @@
         <div class="sidebar">
             <div class="sidebar-header">
                 <div class="flex items-center gap-3">
-                    <span class="text-3xl text-blue-600">🐬</span>
-                    <div>
-                        <div class="app-title text-3xl leading-none text-slate-800">Golfinho</div>
-                        <div class="text-[0.65rem] text-slate-400 font-bold tracking-widest uppercase mt-1 pl-0.5">Version 3.0</div>
+                    <span class="text-5xl text-blue-600 drop-shadow-sm">🐬</span>
+                    <div class="flex flex-col">
+                        <div class="app-title text-5xl leading-none text-slate-800">Golfinho</div>
+                        <div class="text-[0.65rem] text-slate-400 font-bold tracking-widest uppercase mt-0.5 ml-0.5">Version 3.0.0</div>
+                        <div class="text-[0.55rem] text-blue-400 italic font-medium mt-1 leading-tight">"Inspiré par l'intelligence du dauphin"</div>
                     </div>
                 </div>
             </div>
@@ -303,17 +305,21 @@
                 <div class="menu-item" onclick="switchPage('outils', this)"><i class="fa-solid fa-gear"></i> Paramètres</div>
             </div>
 
+            <!-- PIED DE PAGE SIDEBAR (SIGNATURE DÉVELOPPEUR) -->
             <div class="sidebar-footer">
-                <div class="text-[0.6rem] text-gray-400 font-bold uppercase tracking-widest text-center mb-1">Conception & Dév.</div>
-                <div class="flex items-center gap-3 justify-center">
-                    <div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs shadow-sm">AD</div>
-                    <div>
-                        <div class="text-sm font-bold text-gray-800 leading-tight">Aurélien DA COSTA</div>
-                        <div class="text-[0.6rem] text-blue-600 uppercase font-bold tracking-wide">Direction Technique</div>
-                    </div>
+                <div class="text-[0.6rem] text-gray-400 font-bold uppercase tracking-widest mb-2">Conception & Dév.</div>
+                
+                <div class="flex flex-col gap-0.5">
+                    <!-- Nom du Dév -->
+                    <div class="text-sm font-bold text-gray-800 leading-tight">Aurélien DA COSTA</div>
+                    <div class="text-[0.6rem] text-blue-600 uppercase font-bold tracking-wide">Direction Technique</div>
+                    <!-- Groupe -->
+                    <div class="text-[0.6rem] text-gray-500 font-medium">Groupe Proxiserve - Prox-Hydro</div>
                 </div>
-                <div class="text-[0.6rem] text-gray-300 mt-1 text-center border-t border-gray-100 pt-2">
-                    Tous droits réservés © 2026
+                
+                <!-- Copyright (Date & Couleur ajustées) -->
+                <div class="text-[0.6rem] text-gray-400 mt-3 border-t border-gray-200 pt-2">
+                    Tous droits réservés © 2023 - 2026
                 </div>
             </div>
         </div>
@@ -334,6 +340,7 @@
                 <div class="flex gap-2">
                     <button class="bg-white border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-all"><i class="fa-brands fa-salesforce text-blue-500"></i> CRM</button>
                     <button class="bg-white border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-all"><i class="fa-solid fa-book-open text-orange-400"></i> Aide</button>
+                    <!-- BOUTON HELPJUICE -->
                     <button class="bg-white border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-600 hover:bg-gray-50 flex items-center gap-2 transition-all"><i class="fa-solid fa-book-bookmark text-purple-500"></i> Helpjuice</button>
                     <button class="text-gray-400 hover:text-red-500 px-2 transition-all"><i class="fa-solid fa-power-off"></i></button>
                 </div>
@@ -736,13 +743,34 @@
                                 <div class="card-header border-b border-gray-100 pb-2 mb-3"><span><i class="fa-solid fa-file-code text-blue-500"></i> Outils de Correction</span></div>
                                 <div class="flex flex-col gap-3">
                                     <div class="group border border-gray-100 rounded-lg p-3 hover:border-red-200 hover:bg-red-50/30 transition-all flex items-center justify-between cursor-pointer shadow-sm hover:shadow-md">
-                                        <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-eraser"></i></div><div><div class="text-sm font-bold text-gray-700 group-hover:text-red-600 transition-colors">Nettoyage RFC 999</div><div class="text-xs text-gray-400 mt-0.5">Supprime les lignes avec code relevé 999 (Erreur)</div></div></div><button class="px-4 py-1.5 rounded text-xs font-bold border border-red-200 bg-white text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm">LANCER</button>
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-eraser"></i></div>
+                                            <div>
+                                                <div class="text-sm font-bold text-gray-700 group-hover:text-red-600 transition-colors">Nettoyage RFC 999</div>
+                                                <div class="text-xs text-gray-400 mt-0.5">Supprime les lignes relatives aux déposes de compteurs fictifs (999)</div>
+                                            </div>
+                                        </div>
+                                        <button class="px-4 py-1.5 rounded text-xs font-bold border border-red-200 bg-white text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm">LANCER</button>
                                     </div>
                                     <div class="group border border-gray-100 rounded-lg p-3 hover:border-blue-200 hover:bg-blue-50/30 transition-all flex items-center justify-between cursor-pointer shadow-sm hover:shadow-md">
-                                        <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-text-width"></i></div><div><div class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Formatage CET (8 Car.)</div><div class="text-xs text-gray-400 mt-0.5">Standardise les IDs sur 8 caractères (Padding)</div></div></div><button class="px-4 py-1.5 rounded text-xs font-bold border border-blue-200 bg-white text-blue-500 hover:bg-blue-500 hover:text-white transition-all shadow-sm">LANCER</button>
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-text-width"></i></div>
+                                            <div>
+                                                <div class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Formatage CET (6 Car.)</div>
+                                                <div class="text-xs text-gray-400 mt-0.5">Ajuste l'index sur 6 caractères au lieu de 5</div>
+                                            </div>
+                                        </div>
+                                        <button class="px-4 py-1.5 rounded text-xs font-bold border border-blue-200 bg-white text-blue-500 hover:bg-blue-500 hover:text-white transition-all shadow-sm">LANCER</button>
                                     </div>
                                     <div class="group border border-gray-100 rounded-lg p-3 hover:border-gray-300 hover:bg-gray-50 transition-all flex items-center justify-between cursor-pointer shadow-sm hover:shadow-md">
-                                        <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-list-check"></i></div><div><div class="text-sm font-bold text-gray-700 group-hover:text-gray-900 transition-colors">Vérification Codes IF</div><div class="text-xs text-gray-400 mt-0.5">Contrôle de cohérence des codes Installations/Fluides</div></div></div><button class="px-4 py-1.5 rounded text-xs font-bold border border-gray-200 bg-white text-gray-600 hover:bg-gray-600 hover:text-white transition-all shadow-sm">LANCER</button>
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-10 h-10 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-list-check"></i></div>
+                                            <div>
+                                                <div class="text-sm font-bold text-gray-700 group-hover:text-gray-900 transition-colors">Modification Codes IF</div>
+                                                <div class="text-xs text-gray-400 mt-0.5">Modification des codes index fictifs</div>
+                                            </div>
+                                        </div>
+                                        <button class="px-4 py-1.5 rounded text-xs font-bold border border-gray-200 bg-white text-gray-600 hover:bg-gray-600 hover:text-white transition-all shadow-sm">LANCER</button>
                                     </div>
                                 </div>
                             </div>
