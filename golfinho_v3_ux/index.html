@@ -582,15 +582,25 @@
                         <div class="card">
                             <div class="card-header">Chemins Réseau</div>
                             
-                            <!-- Volume Serveur (RO) -->
-                            <div class="p-3 bg-gray-50 border border-gray-200 rounded mb-2 flex items-center justify-between">
-                                <div>
-                                    <label class="text-[0.65rem] font-bold text-gray-400 uppercase flex items-center gap-1 mb-1">
-                                        <i class="fa-solid fa-server"></i> Volume Serveur (Système)
-                                    </label>
-                                    <div id="path-server-text" class="text-xs font-mono text-blue-600 font-bold">\\jetform_comptage\prod</div>
+                            <!-- Volume Serveur (RO + Admin Toggle) -->
+                            <div class="p-3 bg-gray-50 border border-gray-200 rounded mb-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-grow">
+                                        <label class="text-[0.65rem] font-bold text-gray-400 uppercase flex items-center gap-1 mb-1">
+                                            <i class="fa-solid fa-server"></i> Volume Serveur (Système)
+                                        </label>
+                                        <div id="path-server-text" class="text-xs font-mono text-blue-600 font-bold">\\jetform_comptage\prod</div>
+                                    </div>
+                                    
+                                    <!-- Lock icon for normal users -->
+                                    <i id="server-lock-icon" class="fa-solid fa-lock text-gray-300 hidden"></i>
+                                    
+                                    <!-- Switch for Admins -->
+                                    <div id="server-mode-switch" class="flex bg-white border border-gray-300 rounded overflow-hidden shadow-sm">
+                                        <button onclick="setServerMode('prod')" id="btn-mode-prod" class="px-2 py-1 text-[0.6rem] font-bold bg-blue-100 text-blue-700 transition-colors">PROD</button>
+                                        <button onclick="setServerMode('sandbox')" id="btn-mode-sandbox" class="px-2 py-1 text-[0.6rem] font-bold text-gray-500 hover:bg-gray-50 transition-colors">RECETTE</button>
+                                    </div>
                                 </div>
-                                <i class="fa-solid fa-lock text-gray-300"></i>
                             </div>
 
                             <!-- Dossier Source (RW) -->
@@ -659,6 +669,7 @@
                 initial: 'D.',
                 status: 'Administrateur',
                 roleClass: 'status-admin',
+                isAdmin: true,
                 serverPath: '\\\\jetform_comptage\\prod',
                 sourcePath: 'G:\\Mon Drive\\Extractions'
             },
@@ -667,6 +678,7 @@
                 initial: 'D.',
                 status: 'Administrateur',
                 roleClass: 'status-admin',
+                isAdmin: true,
                 serverPath: '\\\\jetform_comptage\\assist',
                 sourcePath: 'G:\\Mon Drive\\Assist\\Data'
             },
@@ -675,6 +687,7 @@
                 initial: 'B.',
                 status: 'Production',
                 roleClass: 'status-prod',
+                isAdmin: false,
                 serverPath: '\\\\jetform_comptage\\etudes',
                 sourcePath: 'G:\\Partagés\\Pauline\\Imports'
             }
@@ -686,26 +699,74 @@
             const userData = users[userId];
 
             if(userData) {
-                // Mise à jour Dashboard (Bonjour + Statut)
-                document.getElementById('dashboard-user-name').textContent = userData.firstName + " " + userData.initial;
-                
-                const badge = document.getElementById('user-status-badge');
-                badge.textContent = userData.status;
-                // Reset classes
-                badge.className = 'status-badge ' + userData.roleClass;
-
-                // Mise à jour Chemins (Page Outils)
-                document.getElementById('path-server-text').textContent = userData.serverPath;
-                // Pour l'input source, on change sa valeur
-                document.getElementById('path-source-input').value = userData.sourcePath;
+                updateUIForUser(userData);
             }
         });
 
-        // Fonction Mock Save
+        function updateUIForUser(userData) {
+            // Mise à jour Dashboard (Bonjour + Statut)
+            document.getElementById('dashboard-user-name').textContent = userData.firstName + " " + userData.initial;
+            
+            const badge = document.getElementById('user-status-badge');
+            badge.textContent = userData.status;
+            badge.className = 'status-badge ' + userData.roleClass;
+
+            // Mise à jour Chemins (Page Outils)
+            document.getElementById('path-server-text').textContent = userData.serverPath;
+            document.getElementById('path-source-input').value = userData.sourcePath;
+
+            // GESTION MODE ADMIN (SERVER SWITCH)
+            const switchEl = document.getElementById('server-mode-switch');
+            const lockIcon = document.getElementById('server-lock-icon');
+
+            if (userData.isAdmin) {
+                switchEl.classList.remove('hidden');
+                lockIcon.classList.add('hidden');
+                // Reset to PROD by default on user switch
+                setServerMode('prod');
+            } else {
+                switchEl.classList.add('hidden');
+                lockIcon.classList.remove('hidden');
+                // Force PROD visual
+                setServerMode('prod');
+            }
+        }
+
+        // Fonction pour basculer PROD / SANDBOX
+        function setServerMode(mode) {
+            const pathText = document.getElementById('path-server-text');
+            const btnProd = document.getElementById('btn-mode-prod');
+            const btnSandbox = document.getElementById('btn-mode-sandbox');
+
+            if (mode === 'prod') {
+                // Style Texte
+                pathText.textContent = '\\\\jetform_comptage\\prod';
+                pathText.classList.remove('text-orange-600');
+                pathText.classList.add('text-blue-600');
+                
+                // Style Boutons
+                btnProd.className = "px-2 py-1 text-[0.6rem] font-bold bg-blue-100 text-blue-700 transition-colors";
+                btnSandbox.className = "px-2 py-1 text-[0.6rem] font-bold text-gray-500 hover:bg-gray-50 transition-colors";
+            } else {
+                // Style Texte
+                pathText.textContent = '\\\\jetform_comptage\\recette';
+                pathText.classList.remove('text-blue-600');
+                pathText.classList.add('text-orange-600');
+                
+                // Style Boutons
+                btnProd.className = "px-2 py-1 text-[0.6rem] font-bold text-gray-500 hover:bg-gray-50 transition-colors";
+                btnSandbox.className = "px-2 py-1 text-[0.6rem] font-bold bg-orange-100 text-orange-700 transition-colors";
+            }
+        }
+
         function savePath() {
-            // Simulation VBA MsgBox
             alert("Chemin Source sauvegardé avec succès pour l'utilisateur sélectionné.");
         }
+
+        // Init avec Aurélien au chargement
+        window.onload = function() {
+            updateUIForUser(users['aurelien']);
+        };
     </script>
 </body>
 </html>
