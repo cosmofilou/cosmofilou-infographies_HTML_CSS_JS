@@ -11,7 +11,7 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap');
-        /* Import d'une police Google "Oswald" pour simuler Agency FB si elle n'est pas installée sur le PC qui visualise la maquette web */
+        /* Import d'une police Google "Oswald" pour simuler Agency FB */
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&display=swap');
 
         :root {
@@ -25,7 +25,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif; /* Police native Windows/Excel */
+            font-family: 'Segoe UI', sans-serif;
             background-color: #eef2f6;
             height: 100vh;
             margin: 0;
@@ -36,19 +36,18 @@
             user-select: none;
         }
 
-        /* --- CONTENEUR PRINCIPAL (USERFORM) --- */
+        /* --- CONTENEUR PRINCIPAL --- */
         .userform-frame {
             width: 1240px;
             height: 750px;
             background-color: var(--bg-app);
             box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 20px 50px rgba(0,0,0,0.1);
             display: flex;
-            flex-direction: row; /* Sidebar à gauche, contenu à droite */
+            flex-direction: row;
             overflow: hidden;
-            /* En VBA: BorderStyle = fmBorderStyleSingle */
         }
 
-        /* --- SIDEBAR (Frame Gauche) --- */
+        /* --- SIDEBAR --- */
         .sidebar {
             width: 260px;
             background-color: var(--bg-sidebar);
@@ -59,16 +58,15 @@
         }
 
         .sidebar-header {
-            height: 90px; /* Un peu plus haut pour le style Agency FB */
+            height: 90px;
             display: flex;
             align-items: center;
             padding: 0 1.5rem;
             border-bottom: 1px solid var(--border);
         }
 
-        /* TYPOGRAPHIE TITRE */
         .app-title {
-            font-family: 'Agency FB', 'Oswald', sans-serif; /* Priorité à Agency FB */
+            font-family: 'Agency FB', 'Oswald', sans-serif;
             font-weight: 700;
             letter-spacing: 0.05em;
             text-transform: uppercase;
@@ -92,44 +90,25 @@
             border-left: 4px solid transparent;
         }
 
-        .menu-item:hover {
-            background-color: #F9FAFB;
-            color: var(--primary);
-        }
+        .menu-item:hover { background-color: #F9FAFB; color: var(--primary); }
+        .menu-item.active { background-color: #EFF6FF; color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
 
-        .menu-item.active {
-            background-color: #EFF6FF; /* Bleu très pâle */
-            color: var(--primary);
-            border-left-color: var(--primary);
-            font-weight: 600;
-        }
-
-        /* STYLE SPÉCIAL DASHBOARD (Bouton "Hub") */
+        /* STYLE SPÉCIAL DASHBOARD */
         .menu-item.special {
-            margin: 0 1rem 0.5rem 1rem; /* Décalage pour effet bouton */
-            border-radius: 0.5rem;      /* Coins arrondis */
-            border-left: none;          /* Pas de bordure latérale */
+            margin: 0 1rem 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border-left: none;
             padding-left: 1rem;
             transition: all 0.2s ease;
         }
-
-        .menu-item.special:hover {
-            background-color: #E2E8F0; /* Gris survol */
-            color: #1E293B;
-        }
-
+        .menu-item.special:hover { background-color: #E2E8F0; color: #1E293B; }
         .menu-item.special.active {
-            background-color: #1E293B; /* BLEU NUIT FONCÉ */
-            color: #FFFFFF;            /* Texte Blanc */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: #1E293B;
+            color: #FFFFFF;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             transform: translateY(-1px);
         }
-        
-        /* Icône Dashboard en bleu clair quand actif pour le contraste */
-        .menu-item.special.active i {
-            color: #38BDF8; 
-        }
-
+        .menu-item.special.active i { color: #38BDF8; }
         .menu-item i { width: 25px; text-align: center; margin-right: 10px; }
 
         .sidebar-footer {
@@ -141,7 +120,7 @@
             gap: 0.5rem;
         }
 
-        /* --- ZONE CONTENU (MultiPage) --- */
+        /* --- CONTENU --- */
         .content-area {
             flex: 1;
             display: flex;
@@ -151,29 +130,27 @@
         }
 
         .top-bar {
-            height: 50px; /* COMPACTÉ: Était 60px */
+            height: 50px;
             background-color: var(--bg-sidebar);
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 1.5rem; /* COMPACTÉ */
+            padding: 0 1.5rem;
         }
 
         .page-container {
             flex: 1;
-            padding: 1.5rem; /* COMPACTÉ: Était 2rem */
+            padding: 1.5rem;
             overflow-y: auto;
         }
 
-        /* --- COMPOSANTS UI (Proxiserve Style) --- */
-        
-        /* En VBA: Frame avec SpecialEffect = fmSpecialEffectFlat + BorderColor */
+        /* --- CARDS & ACTIONS (Retour Standard) --- */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 4px; /* VBA: 0px ou image de fond */
-            padding: 1rem; /* COMPACTÉ: Était 1.25rem */
+            border-radius: 4px;
+            padding: 1rem;
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -182,21 +159,20 @@
         .card-header {
             font-family: 'Agency FB', 'Oswald', sans-serif;
             text-transform: uppercase;
-            font-size: 0.9rem; /* Un peu plus grand car Agency FB est condensed */
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--text-muted);
-            margin-bottom: 0.75rem; /* COMPACTÉ: Était 1rem */
+            margin-bottom: 0.75rem;
             letter-spacing: 0.05em;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        /* En VBA: CommandButton ou Label avec événement Click */
         .btn-action {
             background-color: #FFFFFF;
             border: 1px solid var(--border);
-            padding: 0.5rem 0.75rem; /* COMPACTÉ: Était 0.75rem 1rem */
+            padding: 0.5rem 0.75rem;
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
@@ -206,20 +182,17 @@
             position: relative;
         }
         
-        /* Simulation de l'effet "Bouton Enfoncé" de Windows */
         .btn-action:hover { border-color: #BCCCE5; background-color: #F0F5FF; }
         .btn-action:active { background-color: #E0E7FF; transform: translateY(1px); }
 
         .btn-primary { background-color: #EFF6FF; border-color: #BFDBFE; }
         .btn-danger { background-color: #FEF2F2; border-color: #FECACA; }
         .btn-danger i { color: #DC2626; }
-        
-        /* Pour les boutons "Secondary" un peu moins visibles */
         .btn-secondary { border-style: dashed; border-color: #D1D5DB; }
 
         .btn-content { display: flex; flex-direction: column; flex: 1; }
         .btn-title { font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
-        .btn-sub { font-size: 0.7rem; color: var(--text-muted); margin-top: 0px; } /* COMPACTÉ */
+        .btn-sub { font-size: 0.7rem; color: var(--text-muted); margin-top: 0px; }
 
         .status-bar {
             height: 30px;
@@ -233,21 +206,16 @@
             justify-content: space-between;
         }
 
-        /* Input Style Excel */
         .input-excel {
             background: #fff;
             border: 1px solid #9CA3AF;
-            padding: 2px 8px; /* COMPACTÉ */
+            padding: 2px 8px;
             font-size: 0.9rem;
             width: 100%;
-            height: 28px; /* COMPACTÉ */
+            height: 28px;
         }
-        .input-excel:focus {
-            border-color: var(--primary);
-            outline: 1px solid var(--primary);
-        }
+        .input-excel:focus { border-color: var(--primary); outline: 1px solid var(--primary); }
         
-        /* Select Style Excel */
         .select-excel {
             background: #fff;
             border: 1px solid #9CA3AF;
@@ -257,12 +225,8 @@
             height: 32px;
             cursor: pointer;
         }
-        .select-excel:focus {
-            border-color: var(--primary);
-            outline: 1px solid var(--primary);
-        }
+        .select-excel:focus { border-color: var(--primary); outline: 1px solid var(--primary); }
 
-        /* Badges */
         .badge {
             font-size: 0.65rem;
             padding: 2px 6px;
@@ -272,7 +236,6 @@
         }
         .badge-blue { background: #EFF6FF; color: #1D4ED8; }
         
-        /* Radio Custom pour VBA simulation (OptionButton) */
         .radio-vba {
             display: flex;
             align-items: center;
@@ -284,7 +247,6 @@
         }
         .radio-vba input { margin: 0; }
 
-        /* NOUVEAU: BADGE STATUT */
         .status-badge {
             font-size: 0.6rem;
             padding: 1px 6px;
@@ -319,43 +281,32 @@
             </div>
 
             <div class="menu-container">
-                <!-- DASHBOARD (Style "Special" Bleu Nuit) -->
                 <div class="menu-item special font-bold active mb-2" onclick="switchPage('accueil', this)">
                     <i class="fa-solid fa-gauge-high"></i> Dashboard
                 </div>
                 
-                <!-- BLOC MÉTIER -->
                 <div class="menu-item" onclick="switchPage('patrimoine', this)"><i class="fa-solid fa-building"></i> Patrimoine</div>
                 <div class="menu-item" onclick="switchPage('interventions', this)"><i class="fa-solid fa-screwdriver-wrench"></i> Maintenance</div>
                 <div class="menu-item" onclick="switchPage('releves', this)"><i class="fa-solid fa-satellite-dish"></i> Relevés</div>
                 
-                <!-- SÉPARATEUR ANALYSE -->
                 <div class="py-2"><div class="border-t border-gray-200 mx-6"></div></div>
                 
-                <!-- BLOC ANALYSE (Renommage) -->
                 <div class="menu-item" onclick="switchPage('analyse', this)"><i class="fa-solid fa-chart-pie"></i> Traitements EDI</div>
                 <div class="menu-item" onclick="switchPage('rapports', this)"><i class="fa-solid fa-file-invoice-dollar"></i> Rapports</div>
                 
-                <!-- SÉPARATEUR PARAMÈTRES (Nouveau) -->
                 <div class="py-2"><div class="border-t border-gray-200 mx-6"></div></div>
-                
-                <!-- PARAMÈTRES -->
                 <div class="menu-item" onclick="switchPage('outils', this)"><i class="fa-solid fa-gear"></i> Paramètres</div>
             </div>
 
-            <!-- PIED DE PAGE SIDEBAR (SIGNATURE DÉVELOPPEUR) -->
             <div class="sidebar-footer">
                 <div class="text-[0.6rem] text-gray-400 font-bold uppercase tracking-widest text-center mb-1">Conception & Dév.</div>
-                
                 <div class="flex items-center gap-3 justify-center">
                     <div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs shadow-sm">AD</div>
                     <div>
-                        <!-- Nom du Dév Fixe -->
                         <div class="text-sm font-bold text-gray-800 leading-tight">Aurélien DA COSTA</div>
                         <div class="text-[0.6rem] text-blue-600 uppercase font-bold tracking-wide">Direction Technique</div>
                     </div>
                 </div>
-                
                 <div class="text-[0.6rem] text-gray-300 mt-1 text-center border-t border-gray-100 pt-2">
                     Tous droits réservés © 2026
                 </div>
@@ -364,7 +315,6 @@
 
         <!-- MAIN CONTENT -->
         <div class="content-area">
-            <!-- TOP BAR -->
             <div class="top-bar">
                 <div class="flex items-center gap-2">
                     <div class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.6)]"></div>
@@ -377,31 +327,27 @@
                 </div>
             </div>
 
-            <!-- PAGES (MULTIPAGE) -->
             <div class="page-container">
                 
-                <!-- PAGE 1: DASHBOARD (COMPACTÉ) -->
+                <!-- PAGE 1: DASHBOARD -->
                 <div id="page-accueil" class="page-content">
                     <div class="mb-3 flex justify-between items-end">
                         <div>
-                            <!-- GREETING USER + STATUT -->
                             <div class="flex items-center">
                                 <h2 class="text-2xl font-light text-gray-800">Bonjour, <b id="dashboard-user-name" class="text-blue-600 font-semibold">Aurélien D.</b></h2>
-                                <!-- Badge de statut ici -->
                                 <span id="user-status-badge" class="status-badge status-admin">ADMINISTRATEUR</span>
                             </div>
                             <p class="text-sm text-gray-500 mt-0.5">Actions rapides et suivi des importations.</p>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-12 gap-4 h-full"> <!-- GAP REDUIT -->
+                    <div class="grid grid-cols-12 gap-4 h-full">
                         <!-- Left Col -->
-                        <div class="col-span-8 flex flex-col gap-4"> <!-- GAP REDUIT -->
+                        <div class="col-span-8 flex flex-col gap-4">
                             <!-- Card Extraction -->
                             <div class="card border-l-4 border-l-blue-600 shadow-sm">
                                 <div class="card-header"><i class="fa-solid fa-bolt text-blue-600"></i> Extractions Rapides</div>
-                                
-                                <div class="grid grid-cols-2 gap-4 mb-4"> <!-- GAP & MARGE REDUITS -->
+                                <div class="grid grid-cols-2 gap-4 mb-4">
                                     <div class="bg-gray-50 p-2.5 rounded border border-gray-100">
                                         <label class="text-[0.65rem] font-bold text-gray-400 uppercase block mb-1 tracking-wider">Recherche par Cité</label>
                                         <div class="flex gap-2">
@@ -417,7 +363,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="grid grid-cols-3 gap-2">
                                     <div class="btn-action">
                                         <i class="fa-solid fa-list-ul text-blue-600 text-lg"></i>
@@ -425,7 +370,6 @@
                                     </div>
                                     <div class="btn-action">
                                         <i class="fa-solid fa-file-contract text-blue-600 text-lg"></i>
-                                        <!-- Correction: Listing Contrats -->
                                         <div class="btn-content"><span class="btn-title">Contrats Agence</span><span class="btn-sub">Listing Contrats</span></div>
                                     </div>
                                     <div class="btn-action btn-primary border-blue-200">
@@ -438,9 +382,7 @@
                             <!-- Card Imports -->
                             <div class="card shadow-sm">
                                 <div class="card-header"><i class="fa-solid fa-file-import"></i> Imports de Masse</div>
-                                <div class="grid grid-cols-3 gap-2"> <!-- GAP REDUIT -->
-                                    
-                                    <!-- IMPORT PATRIMOINE (MIS EN EVIDENCE) -->
+                                <div class="grid grid-cols-3 gap-2">
                                     <div class="btn-action col-span-2 border-blue-200 bg-blue-50 hover:bg-blue-100 transition-colors cursor-pointer group">
                                         <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm mr-2 group-hover:scale-110 transition-transform">
                                             <i class="fa-solid fa-cloud-arrow-down text-blue-600 text-lg"></i>
@@ -450,41 +392,29 @@
                                             <span class="btn-sub text-blue-700/70 font-bold">Fichier DFLGEST</span>
                                         </div>
                                     </div>
-
-                                    <!-- Correction: DFCGEST -->
                                     <div class="btn-action"><i class="fa-solid fa-file-shield text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Contrats</span><span class="btn-sub">DFCGEST</span></div></div>
-                                    
-                                    <!-- Correction: Export des index -->
                                     <div class="btn-action"><i class="fa-solid fa-desktop text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Accès Pro</span><span class="btn-sub">Exp. Index</span></div></div>
-                                    
-                                    <!-- Correction: Export des alarmes -->
                                     <div class="btn-action"><i class="fa-solid fa-bell text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Alarmes</span><span class="btn-sub">Exp. Alarmes</span></div></div>
-                                    
-                                    <!-- Correction: Fichiers MBWGPRS format .txt -->
-                                    <div class="btn-action"><i class="fa-solid fa-satellite-dish text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">MBW / GPRS</span><span class="btn-sub">Fichiers .txt</span></div></div>
+                                    <div class="btn-action col-span-2 btn-secondary"><i class="fa-solid fa-satellite-dish text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">MBW / GPRS</span><span class="btn-sub">Fichiers .txt</span></div></div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Right Col -->
                         <div class="col-span-4 flex flex-col gap-4">
-                            
-                            <!-- CARTE ACTIVITÉ (UPDATED: Split Stats) -->
+                            <!-- CARTE ACTIVITÉ -->
                             <div class="card bg-blue-600 text-white border-none shadow-md bg-gradient-to-br from-blue-600 to-blue-500 p-4">
                                 <div class="flex justify-between items-start mb-3">
                                     <div class="text-[0.65rem] font-bold opacity-75 uppercase tracking-widest">Activité Journalière</div>
                                     <i class="fa-solid fa-chart-line opacity-50"></i>
                                 </div>
-                                
                                 <div class="grid grid-cols-2 gap-4 mb-2">
-                                    <!-- Stat 1: Envois -->
                                     <div class="flex flex-col border-r border-blue-400/30 pr-2">
                                         <div class="text-3xl font-bold font-['Agency_FB'] leading-none">12</div>
                                         <div class="text-[0.65rem] opacity-80 uppercase font-medium mt-1 flex items-center gap-1">
                                             <i class="fa-solid fa-cloud-arrow-up text-[0.6rem]"></i> Envois SF
                                         </div>
                                     </div>
-                                    <!-- Stat 2: Imports -->
                                     <div class="flex flex-col pl-1">
                                         <div class="text-3xl font-bold font-['Agency_FB'] leading-none">30</div>
                                         <div class="text-[0.65rem] opacity-80 uppercase font-medium mt-1 flex items-center gap-1">
@@ -492,126 +422,73 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <!-- Barre de charge globale -->
                                 <div class="mt-2">
-                                    <div class="flex justify-between text-[0.6rem] opacity-60 mb-1">
-                                        <span>Charge</span>
-                                        <span>85%</span>
-                                    </div>
-                                    <div class="h-1 bg-black/20 rounded-full overflow-hidden">
-                                        <div class="bg-white/90 h-full w-[85%]"></div>
-                                    </div>
+                                    <div class="flex justify-between text-[0.6rem] opacity-60 mb-1"><span>Charge</span><span>85%</span></div>
+                                    <div class="h-1 bg-black/20 rounded-full overflow-hidden"><div class="bg-white/90 h-full w-[85%]"></div></div>
                                 </div>
                             </div>
                             
-                            <!-- LOGS (UPDATED: Sémantique) -->
+                            <!-- LOGS -->
                             <div class="card flex-grow shadow-sm">
                                 <div class="card-header">Derniers Logs</div>
                                 <div class="space-y-3">
-                                    
-                                    <!-- Log 1: Import -->
                                     <div class="flex items-center gap-3 border-b border-gray-50 pb-2">
                                         <div class="w-8 h-8 rounded bg-green-50 flex items-center justify-center text-green-600 shadow-sm"><i class="fa-solid fa-file-import text-xs"></i></div>
                                         <div>
                                             <div class="text-xs font-bold text-gray-700">Import DFLGEST</div>
-                                            <div class="text-[0.65rem] text-gray-400 flex gap-2">
-                                                <span>10:42</span>
-                                                <span class="text-green-600 font-bold">• Succès</span>
-                                            </div>
+                                            <div class="text-[0.65rem] text-gray-400 flex gap-2"><span>10:42</span><span class="text-green-600 font-bold">• Succès</span></div>
                                         </div>
                                     </div>
-
-                                    <!-- Log 2: Extraction (Ex-Scan) -->
                                     <div class="flex items-center gap-3 border-b border-gray-50 pb-2">
                                         <div class="w-8 h-8 rounded bg-blue-50 flex items-center justify-center text-blue-600 shadow-sm"><i class="fa-solid fa-bolt text-xs"></i></div>
                                         <div>
                                             <div class="text-xs font-bold text-gray-700">Extraction Cité 45012</div>
-                                            <div class="text-[0.65rem] text-gray-400 flex gap-2">
-                                                <span>10:15</span>
-                                                <span class="text-blue-500 font-bold">• Consult.</span>
-                                            </div>
+                                            <div class="text-[0.65rem] text-gray-400 flex gap-2"><span>10:15</span><span class="text-blue-500 font-bold">• Consult.</span></div>
                                         </div>
                                     </div>
-
-                                    <!-- Log 3: Envoi (Nouveau) -->
                                     <div class="flex items-center gap-3 border-b border-gray-50 pb-2">
                                         <div class="w-8 h-8 rounded bg-purple-50 flex items-center justify-center text-purple-600 shadow-sm"><i class="fa-solid fa-cloud-arrow-up text-xs"></i></div>
                                         <div>
                                             <div class="text-xs font-bold text-gray-700">Envoi MAJPLAN</div>
-                                            <div class="text-[0.65rem] text-gray-400 flex gap-2">
-                                                <span>09:30</span>
-                                                <span class="text-purple-500 font-bold">• Sync OK</span>
-                                            </div>
+                                            <div class="text-[0.65rem] text-gray-400 flex gap-2"><span>09:30</span><span class="text-purple-500 font-bold">• Sync OK</span></div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
-                <!-- PAGE 2: PATRIMOINE (UPDATED) -->
+                <!-- AUTRES PAGES (Conservent la structure "Compacte" + Fix État de Pose) -->
+                
                 <div id="page-patrimoine" class="page-content hidden">
                     <h2 class="text-2xl font-light text-gray-800 mb-6">Gestion <b class="text-blue-600 font-semibold">Patrimoine</b></h2>
-                    
-                    <div class="grid grid-cols-12 gap-4">
-                        
-                        <!-- COLONNE GAUCHE : CRÉATION (Lieux & PDM) -->
-                        <div class="col-span-5 flex flex-col gap-4">
-                            <!-- 1. LIEUX -->
-                            <div class="card">
-                                <div class="card-header">Lieux (DFCRAPT)</div>
-                                <div class="btn-action mb-2">
-                                    <i class="fa-solid fa-plus-circle text-green-600 text-lg"></i>
-                                    <div class="btn-content"><span class="btn-title">Création Lieux</span><span class="btn-sub">Saisie UserForm</span></div>
-                                </div>
-                                <div class="flex gap-2">
-                                    <div class="btn-action btn-secondary flex-grow mb-0 cursor-pointer p-1">
-                                        <div class="btn-content items-center"><i class="fa-solid fa-file-excel text-green-700 mb-1"></i><span class="btn-sub font-bold">Trame</span></div>
-                                    </div>
-                                    <button class="btn-action border-green-200 bg-green-50 text-green-600 flex-col justify-center px-3 mb-0 hover:bg-green-100 transition-colors">
-                                        <i class="fa-solid fa-upload mb-1"></i><span class="text-[0.6rem] font-bold uppercase">Envoyer</span>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <!-- 2. PDM -->
-                            <div class="card">
-                                <div class="card-header">Points de Mesure (DFCREAPL)</div>
-                                <div class="btn-action mb-2">
-                                    <i class="fa-solid fa-microchip text-purple-600 text-lg"></i>
-                                    <div class="btn-content"><span class="btn-title">Création PDM</span><span class="btn-sub">Saisie UserForm</span></div>
-                                </div>
-                                <div class="flex gap-2">
-                                    <div class="btn-action btn-secondary flex-grow mb-0 cursor-pointer p-1">
-                                        <div class="btn-content items-center"><i class="fa-solid fa-file-excel text-purple-700 mb-1"></i><span class="btn-sub font-bold">Trame</span></div>
-                                    </div>
-                                    <button class="btn-action border-purple-200 bg-purple-50 text-purple-600 flex-col justify-center px-3 mb-0 hover:bg-purple-100 transition-colors">
-                                        <i class="fa-solid fa-upload mb-1"></i><span class="text-[0.6rem] font-bold uppercase">Envoyer</span>
-                                    </button>
-                                </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="card">
+                            <div class="card-header">Lieux (DFCRAPT)</div>
+                            <div class="btn-action mb-2"><i class="fa-solid fa-plus-circle text-green-600 text-lg"></i><div class="btn-content"><span class="btn-title">Création Lieux</span><span class="btn-sub">Saisie UserForm</span></div></div>
+                            <div class="flex gap-2">
+                                <div class="btn-action btn-secondary flex-grow mb-0 cursor-pointer p-1"><div class="btn-content items-center"><i class="fa-solid fa-file-excel text-green-700 mb-1"></i><span class="btn-sub font-bold">Trame</span></div></div>
+                                <button class="btn-action border-green-200 bg-green-50 text-green-600 flex-col justify-center px-3 mb-0 hover:bg-green-100 transition-colors"><i class="fa-solid fa-upload mb-1"></i><span class="text-[0.6rem] font-bold uppercase">Envoyer</span></button>
                             </div>
                         </div>
-
-                        <!-- COLONNE DROITE : MISE A JOUR & SYNCHRO (LISTE COMPACTE) -->
-                        <div class="col-span-7">
+                        <div class="card">
+                            <div class="card-header">Points de Mesure (DFCREAPL)</div>
+                            <div class="btn-action mb-2"><i class="fa-solid fa-microchip text-purple-600 text-lg"></i><div class="btn-content"><span class="btn-title">Création PDM</span><span class="btn-sub">Saisie UserForm</span></div></div>
+                            <div class="flex gap-2">
+                                <div class="btn-action btn-secondary flex-grow mb-0 cursor-pointer p-1"><div class="btn-content items-center"><i class="fa-solid fa-file-excel text-purple-700 mb-1"></i><span class="btn-sub font-bold">Trame</span></div></div>
+                                <button class="btn-action border-purple-200 bg-purple-50 text-purple-600 flex-col justify-center px-3 mb-0 hover:bg-purple-100 transition-colors"><i class="fa-solid fa-upload mb-1"></i><span class="text-[0.6rem] font-bold uppercase">Envoyer</span></button>
+                            </div>
+                        </div>
+                        <div class="col-span-2">
                             <div class="card h-full">
                                 <div class="card-header border-b border-gray-100 pb-2 mb-2 flex justify-between">
                                     <span><i class="fa-brands fa-salesforce text-blue-500"></i> Mise à jour & Synchro</span>
                                     <span class="text-[0.6rem] text-gray-400 font-normal normal-case tracking-normal mt-1">Unitaire / Trame / Envoi</span>
                                 </div>
-                                
                                 <div class="flex flex-col h-full justify-between gap-1">
-                                    
-                                    <!-- Item 1: HISTO 14 -->
                                     <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded transition-colors group">
-                                        <div class="flex flex-col">
-                                            <span class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">HISTO 14</span>
-                                            <span class="text-[0.65rem] text-gray-400 font-medium">Mise à jour Index</span>
-                                        </div>
+                                        <div class="flex flex-col"><span class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">HISTO 14</span><span class="text-[0.65rem] text-gray-400 font-medium">Mise à jour Index</span></div>
                                         <div class="flex gap-2">
                                             <button class="w-8 h-8 rounded bg-white border border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-300 shadow-sm transition-all" title="Saisie Unitaire (Form)"><i class="fa-solid fa-pen-to-square"></i></button>
                                             <div class="w-[1px] bg-gray-200 h-6 self-center"></div>
@@ -619,13 +496,8 @@
                                             <button class="w-8 h-8 rounded bg-blue-50 border border-blue-100 text-blue-600 hover:bg-blue-100 shadow-sm transition-all" title="Envoyer au Serveur"><i class="fa-solid fa-upload"></i></button>
                                         </div>
                                     </div>
-
-                                    <!-- Item 2: RADIATEURS -->
                                     <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded transition-colors group">
-                                        <div class="flex flex-col">
-                                            <span class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">RADIATEURS</span>
-                                            <span class="text-[0.65rem] text-gray-400 font-medium">Calibrage & Puissance</span>
-                                        </div>
+                                        <div class="flex flex-col"><span class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">RADIATEURS</span><span class="text-[0.65rem] text-gray-400 font-medium">Calibrage & Puissance</span></div>
                                         <div class="flex gap-2">
                                             <button class="w-8 h-8 rounded bg-white border border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-300 shadow-sm transition-all"><i class="fa-solid fa-pen-to-square"></i></button>
                                             <div class="w-[1px] bg-gray-200 h-6 self-center"></div>
@@ -633,13 +505,8 @@
                                             <button class="w-8 h-8 rounded bg-blue-50 border border-blue-100 text-blue-600 hover:bg-blue-100 shadow-sm transition-all"><i class="fa-solid fa-upload"></i></button>
                                         </div>
                                     </div>
-
-                                    <!-- Item 3: COEFF SITU -->
                                     <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded transition-colors group">
-                                        <div class="flex flex-col">
-                                            <span class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">COEFF. SITUATION</span>
-                                            <span class="text-[0.65rem] text-gray-400 font-medium">Calculs Répartiteurs</span>
-                                        </div>
+                                        <div class="flex flex-col"><span class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">COEFF. SITUATION</span><span class="text-[0.65rem] text-gray-400 font-medium">Calculs Répartiteurs</span></div>
                                         <div class="flex gap-2">
                                             <button class="w-8 h-8 rounded bg-white border border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-300 shadow-sm transition-all"><i class="fa-solid fa-pen-to-square"></i></button>
                                             <div class="w-[1px] bg-gray-200 h-6 self-center"></div>
@@ -647,13 +514,8 @@
                                             <button class="w-8 h-8 rounded bg-blue-50 border border-blue-100 text-blue-600 hover:bg-blue-100 shadow-sm transition-all"><i class="fa-solid fa-upload"></i></button>
                                         </div>
                                     </div>
-
-                                    <!-- Item 4: INFOS LIEUX -->
                                     <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded transition-colors group">
-                                        <div class="flex flex-col">
-                                            <span class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">INFOS LIEUX</span>
-                                            <span class="text-[0.65rem] text-gray-400 font-medium">Détails Techniques</span>
-                                        </div>
+                                        <div class="flex flex-col"><span class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">INFOS LIEUX</span><span class="text-[0.65rem] text-gray-400 font-medium">Détails Techniques</span></div>
                                         <div class="flex gap-2">
                                             <button class="w-8 h-8 rounded bg-white border border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-300 shadow-sm transition-all"><i class="fa-solid fa-pen-to-square"></i></button>
                                             <div class="w-[1px] bg-gray-200 h-6 self-center"></div>
@@ -661,13 +523,8 @@
                                             <button class="w-8 h-8 rounded bg-blue-50 border border-blue-100 text-blue-600 hover:bg-blue-100 shadow-sm transition-all"><i class="fa-solid fa-upload"></i></button>
                                         </div>
                                     </div>
-
-                                    <!-- Item 5: REF APPAREIL (Le petit nouveau intégré) -->
-                                    <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded transition-colors group border-t border-dashed border-gray-100 mt-1 pt-3">
-                                        <div class="flex flex-col">
-                                            <span class="text-sm font-bold text-gray-700 group-hover:text-orange-500 transition-colors">RÉF. APPAREILS</span>
-                                            <span class="text-[0.65rem] text-gray-400 font-medium">Correction PDM</span>
-                                        </div>
+                                    <div class="flex items-center justify-between p-2 hover:bg-orange-50/50 rounded-lg transition-colors group border-t border-dashed border-gray-100 mt-1 pt-3">
+                                        <div class="flex flex-col"><span class="text-sm font-bold text-gray-700 group-hover:text-orange-500 transition-colors">RÉF. APPAREILS</span><span class="text-[0.65rem] text-gray-400 font-medium">Correction PDM</span></div>
                                         <div class="flex gap-2">
                                             <button class="w-8 h-8 rounded bg-white border border-gray-200 text-gray-500 hover:text-orange-500 hover:border-orange-300 shadow-sm transition-all"><i class="fa-solid fa-barcode"></i></button>
                                             <div class="w-[1px] bg-gray-200 h-6 self-center"></div>
@@ -675,583 +532,290 @@
                                             <button class="w-8 h-8 rounded bg-orange-50 border border-orange-100 text-orange-600 hover:bg-orange-100 shadow-sm transition-all"><i class="fa-solid fa-upload"></i></button>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
                 <div id="page-interventions" class="page-content hidden">
                     <h2 class="text-2xl font-light text-gray-800 mb-6">Maintenance & <b class="text-blue-600 font-semibold">Pose</b></h2>
                     <div class="grid grid-cols-2 gap-4">
-                        
-                        <!-- PLANNING (Conservé : Liens externes) -->
                         <div class="card">
                             <div class="card-header">Planning</div>
                             <div class="flex flex-col gap-2">
-                                <!-- Bouton 1: Back Office -->
                                 <div class="btn-action bg-slate-800 border-none hover:bg-slate-700 shadow-md group mb-0 cursor-pointer">
                                     <i class="fa-solid fa-users-gear text-blue-400 text-lg group-hover:text-white transition-colors"></i>
-                                    <div class="btn-content">
-                                        <span class="btn-title text-white">Planning Tech.</span>
-                                        <span class="btn-sub text-gray-400 group-hover:text-gray-200">Portail Back-Office</span>
-                                    </div>
+                                    <div class="btn-content"><span class="btn-title text-white">Planning Tech.</span><span class="btn-sub text-gray-400 group-hover:text-gray-200">Portail Back-Office</span></div>
                                 </div>
-                                <!-- Bouton 2: Console SMAX -->
                                 <div class="btn-action border-blue-200 bg-blue-50 hover:bg-blue-100 transition-colors mb-0 cursor-pointer">
                                     <i class="fa-brands fa-salesforce text-blue-600 text-lg"></i>
-                                    <div class="btn-content">
-                                        <span class="btn-title text-blue-900">Console SMAX</span>
-                                        <span class="btn-sub text-blue-700/70">Planification Chantiers</span>
-                                    </div>
+                                    <div class="btn-content"><span class="btn-title text-blue-900">Console SMAX</span><span class="btn-sub text-blue-700/70">Planification Chantiers</span></div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- MOUVEMENTS (Conservé : Saisie Terrain) -->
                         <div class="card">
                             <div class="card-header">Mouvements Produits</div>
-                            <!-- Unitaire -->
-                            <div class="btn-action mb-2">
-                                <i class="fa-solid fa-screwdriver text-slate-600 text-lg"></i>
-                                <div class="btn-content"><span class="btn-title">Dépose / Pose</span><span class="btn-sub">Saisie UserForm</span></div>
-                            </div>
-                            <!-- Masse & Transfert -->
+                            <div class="btn-action mb-2"><i class="fa-solid fa-screwdriver text-slate-600 text-lg"></i><div class="btn-content"><span class="btn-title">Dépose / Pose</span><span class="btn-sub">Saisie UserForm</span></div></div>
                             <div class="flex gap-2">
-                                <div class="btn-action btn-secondary flex-grow mb-0 cursor-pointer p-1">
-                                    <div class="btn-content items-center"><i class="fa-solid fa-file-excel text-slate-600 mb-1"></i><span class="btn-sub font-bold">Trame DFDEPOSE</span></div>
-                                </div>
-                                <button class="btn-action border-slate-300 bg-slate-100 text-slate-600 flex-col justify-center px-3 mb-0 hover:bg-slate-200 transition-colors" title="Traiter et Envoyer">
-                                    <i class="fa-solid fa-upload mb-1"></i>
-                                    <span class="text-[0.6rem] font-bold uppercase">Envoyer</span>
-                                </button>
+                                <div class="btn-action btn-secondary flex-grow mb-0 cursor-pointer p-1"><div class="btn-content items-center"><i class="fa-solid fa-file-excel text-slate-600 mb-1"></i><span class="btn-sub font-bold">Trame DFDEPOSE</span></div></div>
+                                <button class="btn-action border-slate-300 bg-slate-100 text-slate-600 flex-col justify-center px-3 mb-0 hover:bg-slate-200 transition-colors" title="Traiter et Envoyer"><i class="fa-solid fa-upload mb-1"></i><span class="text-[0.6rem] font-bold uppercase">Envoyer</span></button>
                             </div>
                         </div>
-
-                        <!-- GENERATEUR DFLTAB (NOUVEAU : Injections & Stock) -->
                         <div class="card col-span-2">
                             <div class="card-header border-b border-gray-100 pb-2 mb-3 flex justify-between items-center">
                                 <span><i class="fa-solid fa-table-list text-blue-500"></i> Générateur DFLTAB (Injections)</span>
                                 <span class="badge bg-blue-50 text-blue-600 border border-blue-100">Source : DFLGEST</span>
                             </div>
-                            
                             <div class="grid grid-cols-2 gap-6 h-full">
-                                
-                                <!-- ZONE GAUCHE : PARAMÉTRAGE CR (Planning) -->
                                 <div class="bg-gray-50/80 rounded-lg border border-gray-200 p-3 flex flex-col justify-between">
                                     <div>
-                                        <div class="text-[0.65rem] font-bold text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-2">
-                                            <i class="fa-solid fa-filter"></i> Filtres Codes Relevés (CR)
-                                        </div>
+                                        <div class="text-[0.65rem] font-bold text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-2"><i class="fa-solid fa-filter"></i> Filtres Codes Relevés (CR)</div>
                                         <div class="grid grid-cols-2 gap-y-3 gap-x-2 mb-4 pl-1">
-                                            <label class="flex items-center gap-2 cursor-pointer hover:text-blue-600 transition-colors">
-                                                <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 accent-blue-600" checked>
-                                                <span class="text-xs font-bold text-gray-700">TOUT CR</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 cursor-pointer hover:text-blue-600 transition-colors">
-                                                <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 accent-blue-600">
-                                                <span class="text-xs font-medium text-gray-600">Code CP</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 cursor-pointer hover:text-blue-600 transition-colors">
-                                                <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 accent-blue-600">
-                                                <span class="text-xs font-medium text-gray-600">Code SC</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 cursor-pointer hover:text-blue-600 transition-colors">
-                                                <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 accent-blue-600">
-                                                <span class="text-xs font-medium text-gray-600">Code NT</span>
-                                            </label>
+                                            <label class="flex items-center gap-2 cursor-pointer hover:text-blue-600 transition-colors"><input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 accent-blue-600" checked><span class="text-xs font-bold text-gray-700">TOUT CR</span></label>
+                                            <label class="flex items-center gap-2 cursor-pointer hover:text-blue-600 transition-colors"><input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 accent-blue-600"><span class="text-xs font-medium text-gray-600">Code CP</span></label>
+                                            <label class="flex items-center gap-2 cursor-pointer hover:text-blue-600 transition-colors"><input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 accent-blue-600"><span class="text-xs font-medium text-gray-600">Code SC</span></label>
+                                            <label class="flex items-center gap-2 cursor-pointer hover:text-blue-600 transition-colors"><input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 accent-blue-600"><span class="text-xs font-medium text-gray-600">Code NT</span></label>
                                         </div>
                                     </div>
-                                    <button class="btn-action border-blue-200 bg-white text-blue-700 justify-center hover:bg-blue-50 transition-colors w-full mb-0 shadow-sm">
-                                        <i class="fa-solid fa-gears"></i><span class="btn-title text-sm">Générer DFLTAB</span>
-                                    </button>
+                                    <button class="btn-action border-blue-200 bg-white text-blue-700 justify-center hover:bg-blue-50 transition-colors w-full mb-0 shadow-sm"><i class="fa-solid fa-gears"></i><span class="btn-title text-sm">Générer DFLTAB</span></button>
                                 </div>
-
-                                <!-- ZONE DROITE : IMPORTS STOCK -->
                                 <div class="flex flex-col gap-3 justify-center pl-2">
-                                    <div class="text-[0.65rem] font-bold text-gray-400 uppercase tracking-wide mb-1 flex items-center gap-2">
-                                        <i class="fa-solid fa-boxes-stacked"></i> Mise à jour du Stock
-                                    </div>
-                                    
+                                    <div class="text-[0.65rem] font-bold text-gray-400 uppercase tracking-wide mb-1 flex items-center gap-2"><i class="fa-solid fa-boxes-stacked"></i> Mise à jour du Stock</div>
                                     <button class="btn-action justify-between group hover:border-emerald-300 hover:bg-emerald-50/30 transition-all mb-0">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-9 h-9 rounded bg-emerald-100 text-emerald-600 flex items-center justify-center shadow-sm"><i class="fa-solid fa-box-open"></i></div>
-                                            <div class="flex flex-col text-left">
-                                                <span class="btn-title text-gray-800">Import Stock Complet</span>
-                                                <span class="btn-sub text-gray-500">Toutes données (Sans filtre)</span>
-                                            </div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-emerald-500"></i>
+                                        <div class="flex items-center gap-3"><div class="w-9 h-9 rounded bg-emerald-100 text-emerald-600 flex items-center justify-center shadow-sm"><i class="fa-solid fa-box-open"></i></div><div class="flex flex-col text-left"><span class="btn-title text-gray-800">Import Stock Complet</span><span class="btn-sub text-gray-500">Toutes données (Sans filtre)</span></div></div><i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-emerald-500"></i>
                                     </button>
-
                                     <button class="btn-action justify-between group hover:border-orange-300 hover:bg-orange-50/30 transition-all mb-0">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-9 h-9 rounded bg-orange-100 text-orange-600 flex items-center justify-center shadow-sm"><i class="fa-solid fa-filter"></i></div>
-                                            <div class="flex flex-col text-left">
-                                                <span class="btn-title text-gray-800">Filtre MTCE / QDC</span>
-                                                <span class="btn-sub text-gray-500">Maintenance & Queues Chantiers</span>
-                                            </div>
-                                        </div>
-                                        <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-orange-500"></i>
+                                        <div class="flex items-center gap-3"><div class="w-9 h-9 rounded bg-orange-100 text-orange-600 flex items-center justify-center shadow-sm"><i class="fa-solid fa-filter"></i></div><div class="flex flex-col text-left"><span class="btn-title text-gray-800">Filtre MTCE / QDC</span><span class="btn-sub text-gray-500">Maintenance & Queues Chantiers</span></div></div><i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-orange-500"></i>
                                     </button>
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
 
                 <div id="page-releves" class="page-content hidden">
-                    
-                    <!-- EN-TÊTE AVEC BOUTON ACCÈS PRO -->
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-light text-gray-800">Relevés & <b class="text-blue-600 font-semibold">Télérelève</b></h2>
-                        <!-- Bouton Accès Pro mis en valeur -->
-                        <button class="btn-action bg-slate-800 text-white border-none hover:bg-slate-700 shadow-lg px-5 py-2 mb-0 transition-all transform hover:-translate-y-0.5">
-                            <i class="fa-solid fa-desktop mr-2 text-blue-400"></i> <span class="font-bold">PORTAIL ACCÈS PRO</span>
-                        </button>
+                        <button class="btn-action bg-slate-800 text-white border-none hover:bg-slate-700 shadow-lg px-5 py-2 mb-0 transition-all transform hover:-translate-y-0.5"><i class="fa-solid fa-desktop mr-2 text-blue-400"></i> <span class="font-bold">PORTAIL ACCÈS PRO</span></button>
                     </div>
-
                     <div class="grid grid-cols-12 gap-4">
-                        
-                        <!-- COLONNE GAUCHE : OPERATIONNEL -->
                         <div class="col-span-5 flex flex-col gap-4">
-                            
-                            <!-- 1. PLANNING SALESFORCE -->
                             <div class="card">
                                 <div class="card-header">Planning & Supports</div>
                                 <div class="flex flex-col gap-2">
-                                    <div class="btn-action border-blue-200 bg-blue-50 hover:bg-blue-100 mb-0 cursor-pointer transition-colors">
-                                        <i class="fa-brands fa-salesforce text-blue-600 text-lg"></i>
-                                        <div class="btn-content">
-                                            <span class="btn-title text-blue-900">Planning Relevé</span>
-                                            <span class="btn-sub text-blue-700/70">Console Salesforce</span>
-                                        </div>
-                                    </div>
-                                    <div class="btn-action border-blue-200 bg-blue-50 hover:bg-blue-100 mb-0 cursor-pointer transition-colors">
-                                        <i class="fa-solid fa-print text-blue-600 text-lg"></i>
-                                        <div class="btn-content">
-                                            <span class="btn-title text-blue-900">Support Manuel</span>
-                                            <span class="btn-sub text-blue-700/70">Génération DFPO</span>
-                                        </div>
-                                    </div>
+                                    <div class="btn-action border-blue-200 bg-blue-50 hover:bg-blue-100 mb-0 cursor-pointer transition-colors"><i class="fa-brands fa-salesforce text-blue-600 text-lg"></i><div class="btn-content"><span class="btn-title text-blue-900">Planning Relevé</span><span class="btn-sub text-blue-700/70">Console Salesforce</span></div></div>
+                                    <div class="btn-action border-blue-200 bg-blue-50 hover:bg-blue-100 mb-0 cursor-pointer transition-colors"><i class="fa-solid fa-print text-blue-600 text-lg"></i><div class="btn-content"><span class="btn-title text-blue-900">Support Manuel</span><span class="btn-sub text-blue-700/70">Génération DFPO</span></div></div>
                                 </div>
                             </div>
-
-                            <!-- 2. MAJPLAN (CALIBRATION) -->
                             <div class="card">
                                 <div class="card-header">Calibration (MAJPLAN)</div>
                                 <div class="flex gap-2">
-                                    <div class="btn-action btn-secondary flex-grow mb-0 cursor-pointer p-1">
-                                        <div class="btn-content items-center"><i class="fa-solid fa-file-excel text-slate-600 mb-1"></i><span class="btn-sub font-bold">Fichier Param.</span></div>
-                                    </div>
-                                    <button class="btn-action border-slate-300 bg-slate-100 text-slate-600 flex-col justify-center px-3 mb-0 hover:bg-slate-200 transition-colors" title="Transfert sur Serveur Jetform">
-                                        <i class="fa-solid fa-server mb-1"></i>
-                                        <span class="text-[0.6rem] font-bold uppercase">Jetform</span>
-                                    </button>
+                                    <div class="btn-action btn-secondary flex-grow mb-0 cursor-pointer p-1"><div class="btn-content items-center"><i class="fa-solid fa-file-excel text-slate-600 mb-1"></i><span class="btn-sub font-bold">Fichier Param.</span></div></div>
+                                    <button class="btn-action border-slate-300 bg-slate-100 text-slate-600 flex-col justify-center px-3 mb-0 hover:bg-slate-200 transition-colors" title="Transfert sur Serveur Jetform"><i class="fa-solid fa-server mb-1"></i><span class="text-[0.6rem] font-bold uppercase">Jetform</span></button>
                                 </div>
                             </div>
-
-                            <!-- 3. CREATION TESTINSTALL (CONFIGURATEUR) -->
                             <div class="card">
                                 <div class="card-header border-b border-gray-100 pb-2 mb-2 flex justify-between items-center">
                                     <span>Création Fichier TestInstall</span>
                                     <button class="text-gray-400 hover:text-teal-600 transition-colors" title="Ouvrir dossier"><i class="fa-solid fa-folder-open"></i></button>
                                 </div>
-                                
                                 <div class="flex flex-col gap-3">
-                                    <!-- Options (Checkbox) -->
                                     <div class="bg-gray-50 p-2 rounded border border-gray-100 grid grid-cols-2 gap-2">
-                                        <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-white rounded transition-colors">
-                                            <input type="checkbox" class="accent-teal-500 w-3 h-3 rounded">
-                                            <span class="text-xs font-bold text-gray-600">R4</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-white rounded transition-colors">
-                                            <input type="checkbox" class="accent-teal-500 w-3 h-3 rounded">
-                                            <span class="text-xs font-bold text-gray-600">OMS</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-white rounded transition-colors">
-                                            <input type="checkbox" class="accent-teal-500 w-3 h-3 rounded">
-                                            <span class="text-xs font-bold text-gray-600">Apator</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-white rounded transition-colors">
-                                            <input type="checkbox" class="accent-teal-500 w-3 h-3 rounded">
-                                            <span class="text-xs font-bold text-gray-600">Chauff.</span>
-                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-white rounded transition-colors"><input type="checkbox" class="accent-teal-500 w-3 h-3 rounded"><span class="text-xs font-bold text-gray-600">R4</span></label>
+                                        <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-white rounded transition-colors"><input type="checkbox" class="accent-teal-500 w-3 h-3 rounded"><span class="text-xs font-bold text-gray-600">OMS</span></label>
+                                        <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-white rounded transition-colors"><input type="checkbox" class="accent-teal-500 w-3 h-3 rounded"><span class="text-xs font-bold text-gray-600">Apator</span></label>
+                                        <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-white rounded transition-colors"><input type="checkbox" class="accent-teal-500 w-3 h-3 rounded"><span class="text-xs font-bold text-gray-600">Chauff.</span></label>
                                     </div>
-
-                                    <!-- Bouton Création -->
-                                    <button class="btn-action border-teal-200 bg-teal-50 text-teal-700 justify-center hover:bg-teal-100 transition-colors w-full mb-0 shadow-sm">
-                                        <i class="fa-solid fa-file-code mr-2"></i><span class="btn-title text-sm">Générer Fichier</span>
-                                    </button>
+                                    <button class="btn-action border-teal-200 bg-teal-50 text-teal-700 justify-center hover:bg-teal-100 transition-colors w-full mb-0 shadow-sm"><i class="fa-solid fa-file-code mr-2"></i><span class="btn-title text-sm">Générer Fichier</span></button>
                                 </div>
                             </div>
-
                         </div>
-
-                        <!-- COLONNE DROITE : DATA & ANALYSE -->
                         <div class="col-span-7 flex flex-col gap-4">
-
-                            <!-- 1. WORKFLOWS TELERELVE (Avec Test Blanc) -->
                             <div class="card">
                                 <div class="card-header text-purple-600 flex justify-between items-center">
                                     <span>Workflows Télérelève</span>
                                     <button class="text-purple-300 hover:text-purple-600 transition-colors" title="Ouvrir dossier analyses"><i class="fa-solid fa-folder-open"></i></button>
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
-                                    <!-- MyVoid -->
-                                    <div class="btn-action mb-0 cursor-pointer hover:border-purple-300 transition-all">
-                                        <i class="fa-solid fa-check-double text-purple-500 text-lg"></i>
-                                        <div class="btn-content"><span class="btn-title">Verif. MyVoid</span><span class="btn-sub">Conformité Fichier</span></div>
-                                    </div>
-                                    <!-- Alarmes -->
-                                    <div class="btn-action mb-0 cursor-pointer hover:border-orange-300 transition-all">
-                                        <i class="fa-solid fa-bell text-orange-500 text-lg"></i>
-                                        <div class="btn-content"><span class="btn-title">Analyse Alarmes</span><span class="btn-sub">Diagnostic</span></div>
-                                    </div>
-                                    
-                                    <!-- Test Intégration (Déplacé ici) -->
-                                    <div class="btn-action mb-0 cursor-pointer col-span-2 hover:border-teal-300 bg-teal-50/30 transition-all justify-center">
-                                        <i class="fa-solid fa-vial text-teal-500 text-lg mr-3"></i>
-                                        <div class="btn-content flex-none"><span class="btn-title text-teal-800">Test Intégration (Blanc)</span><span class="btn-sub text-teal-600">Simulation Import Prod</span></div>
-                                    </div>
-
-                                    <!-- MBW Tools Sub-Block -->
+                                    <div class="btn-action mb-0 cursor-pointer hover:border-purple-300 transition-all"><i class="fa-solid fa-check-double text-purple-500 text-lg"></i><div class="btn-content"><span class="btn-title">Verif. MyVoid</span><span class="btn-sub">Conformité Fichier</span></div></div>
+                                    <div class="btn-action mb-0 cursor-pointer hover:border-orange-300 transition-all"><i class="fa-solid fa-bell text-orange-500 text-lg"></i><div class="btn-content"><span class="btn-title">Analyse Alarmes</span><span class="btn-sub">Diagnostic</span></div></div>
+                                    <div class="btn-action mb-0 cursor-pointer col-span-2 hover:border-teal-300 bg-teal-50/30 transition-all justify-center"><i class="fa-solid fa-vial text-teal-500 text-lg mr-3"></i><div class="btn-content flex-none"><span class="btn-title text-teal-800">Test Intégration (Blanc)</span><span class="btn-sub text-teal-600">Simulation Import Prod</span></div></div>
                                     <div class="col-span-2 flex gap-2 p-2 bg-purple-50 rounded border border-purple-100 items-center mt-1">
-                                        <div class="flex flex-col w-20 pl-1">
-                                            <span class="text-xs font-bold text-purple-700">MBW</span>
-                                            <span class="text-[0.6rem] text-purple-400 font-bold uppercase">Tools</span>
-                                        </div>
-                                        <button class="btn-action border-white bg-white text-purple-600 flex-grow mb-0 justify-center h-9 shadow-sm hover:text-purple-800 transition-colors">
-                                            <i class="fa-solid fa-shuffle mr-2"></i> Fusionner
-                                        </button>
-                                        <button class="btn-action border-white bg-white text-purple-600 flex-grow mb-0 justify-center h-9 shadow-sm hover:text-purple-800 transition-colors">
-                                            <i class="fa-solid fa-magnifying-glass-chart mr-2"></i> Analyser
-                                        </button>
+                                        <div class="flex flex-col w-20 pl-1"><span class="text-xs font-bold text-purple-700">MBW</span><span class="text-[0.6rem] text-purple-400 font-bold uppercase">Tools</span></div>
+                                        <button class="btn-action border-white bg-white text-purple-600 flex-grow mb-0 justify-center h-9 shadow-sm hover:text-purple-800 transition-colors"><i class="fa-solid fa-shuffle mr-2"></i> Fusionner</button>
+                                        <button class="btn-action border-white bg-white text-purple-600 flex-grow mb-0 justify-center h-9 shadow-sm hover:text-purple-800 transition-colors"><i class="fa-solid fa-magnifying-glass-chart mr-2"></i> Analyser</button>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- 2. ANALYSE PATRIMOINE (FILTRES COMPLETS) -->
                             <div class="card flex-grow">
                                 <div class="card-header border-b border-gray-100 pb-2 mb-3 flex justify-between items-center">
                                     <span><i class="fa-solid fa-chart-pie text-blue-500"></i> Analyse Patrimoine (DFLGEST)</span>
                                     <button class="text-gray-400 hover:text-blue-600 transition-colors" title="Ouvrir dossier rapports"><i class="fa-solid fa-folder-open"></i></button>
                                 </div>
-                                
                                 <div class="flex flex-col h-full gap-4">
-                                    <!-- Filters Row -->
                                     <div class="bg-gray-50 p-3 rounded border border-gray-200 grid grid-cols-2 gap-4">
-                                        <!-- Filter Codes -->
                                         <div>
                                             <div class="text-[0.6rem] font-bold text-gray-400 uppercase tracking-wide mb-2">Périmètre Codes</div>
-                                            <label class="flex items-center gap-2 cursor-pointer mb-1 group">
-                                                <input type="radio" name="scope_pat" class="accent-blue-600 w-3 h-3" checked> 
-                                                <span class="text-xs font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Complet</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 cursor-pointer group">
-                                                <input type="radio" name="scope_pat" class="accent-blue-600 w-3 h-3"> 
-                                                <span class="text-xs text-gray-600 group-hover:text-blue-600 transition-colors">Exclure CS / SC</span>
-                                            </label>
+                                            <label class="flex items-center gap-2 cursor-pointer mb-1 group"><input type="radio" name="scope_pat" class="accent-blue-600 w-3 h-3" checked><span class="text-xs font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Complet</span></label>
+                                            <label class="flex items-center gap-2 cursor-pointer group"><input type="radio" name="scope_pat" class="accent-blue-600 w-3 h-3"><span class="text-xs text-gray-600 group-hover:text-blue-600 transition-colors">Exclure CS / SC</span></label>
                                         </div>
-                                        <!-- Filter Fluids & Options -->
                                         <div>
-                                            <div class="text-[0.6rem] font-bold text-gray-400 uppercase tracking-wide mb-2">Filtres & Options</div>
+                                            <div class="text-[0.6rem] font-bold text-gray-400 uppercase tracking-wide mb-2">Filtre Fluides</div>
                                             <div class="flex flex-col gap-1">
-                                                <label class="flex items-center gap-2 cursor-pointer group">
-                                                    <input type="checkbox" checked class="accent-blue-600 w-3 h-3 rounded">
-                                                    <span class="text-xs text-gray-600 group-hover:text-blue-600 transition-colors">Eau (EF/ECS)</span>
-                                                </label>
-                                                <label class="flex items-center gap-2 cursor-pointer group">
-                                                    <input type="checkbox" checked class="accent-blue-600 w-3 h-3 rounded">
-                                                    <span class="text-xs text-gray-600 group-hover:text-blue-600 transition-colors">Chauffage (RFC/CET)</span>
-                                                </label>
-                                                <!-- Nouvelle Option -->
-                                                <label class="flex items-center gap-2 cursor-pointer group mt-1 pt-1 border-t border-gray-200">
-                                                    <input type="checkbox" class="accent-red-500 w-3 h-3 rounded">
-                                                    <i class="fa-solid fa-trash-can text-[0.6rem] text-red-400"></i>
-                                                    <span class="text-xs text-red-500 font-medium group-hover:text-red-700 transition-colors">Exclure Généraux</span>
-                                                </label>
+                                                <label class="flex items-center gap-2 cursor-pointer group"><input type="checkbox" checked class="accent-blue-600 w-3 h-3 rounded"><span class="text-xs text-gray-600 group-hover:text-blue-600 transition-colors">Eau (EF/ECS)</span></label>
+                                                <label class="flex items-center gap-2 cursor-pointer group"><input type="checkbox" checked class="accent-blue-600 w-3 h-3 rounded"><span class="text-xs text-gray-600 group-hover:text-blue-600 transition-colors">Chauffage (RFC/CET)</span></label>
+                                                <label class="flex items-center gap-2 cursor-pointer group mt-1 pt-1 border-t border-gray-200"><input type="checkbox" class="accent-red-500 w-3 h-3 rounded"><i class="fa-solid fa-trash-can text-[0.6rem] text-red-400"></i><span class="text-xs text-red-500 font-medium group-hover:text-red-700 transition-colors">Exclure Généraux</span></label>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Actions (3 Boutons) -->
                                     <div class="grid grid-cols-3 gap-2 mt-auto">
-                                        
-                                        <!-- Analyse Patrimoine -->
-                                        <button class="btn-action bg-blue-600 text-white border-blue-700 justify-center flex-col px-1 hover:bg-blue-700 shadow-md mb-0 transition-all h-16">
-                                            <span class="text-xs font-medium uppercase text-blue-200 leading-none mb-1">Analyse</span>
-                                            <span class="text-sm font-bold uppercase leading-none tracking-wide">Patrimoine</span>
-                                        </button>
-                                        
-                                        <!-- Spécial Bailleur -->
-                                        <button class="btn-action bg-white text-gray-600 border-gray-300 justify-center flex-col px-1 hover:bg-gray-50 mb-0 transition-all h-16">
-                                            <span class="text-xs font-medium uppercase text-gray-400 leading-none mb-1">Spécial</span>
-                                            <span class="text-sm font-bold uppercase text-gray-700 leading-none tracking-wide">Bailleur</span>
-                                        </button>
-                                        
-                                        <!-- Spécial Chauffage -->
-                                        <button class="btn-action bg-white text-orange-600 border-orange-200 justify-center flex-col px-1 hover:bg-orange-50 mb-0 transition-all h-16">
-                                            <span class="text-xs font-medium uppercase text-orange-400 leading-none mb-1">Spécial</span>
-                                            <span class="text-sm font-bold uppercase text-orange-700 leading-none tracking-wide">Chauffage</span>
-                                        </button>
-                                        
+                                        <button class="btn-action bg-blue-600 text-white border-blue-700 justify-center flex-col px-1 hover:bg-blue-700 shadow-md mb-0 transition-all h-16"><span class="text-xs font-medium uppercase text-blue-200 leading-none mb-1">Analyse</span><span class="text-sm font-bold uppercase leading-none tracking-wide">Patrimoine</span></button>
+                                        <button class="btn-action bg-white text-gray-600 border-gray-300 justify-center flex-col px-1 hover:bg-gray-50 mb-0 transition-all h-16"><span class="text-xs font-medium uppercase text-gray-400 leading-none mb-1">Spécial</span><span class="text-sm font-bold uppercase text-gray-700 leading-none tracking-wide">Bailleur</span></button>
+                                        <button class="btn-action bg-white text-orange-600 border-orange-200 justify-center flex-col px-1 hover:bg-orange-50 mb-0 transition-all h-16"><span class="text-xs font-medium uppercase text-orange-400 leading-none mb-1">Spécial</span><span class="text-sm font-bold uppercase text-orange-700 leading-none tracking-wide">Chauffage</span></button>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
 
                 <div id="page-analyse" class="page-content hidden">
                     <h2 class="text-2xl font-light text-gray-800 mb-6">Traitements <b class="text-blue-600 font-semibold">EDI & Flux</b></h2>
-                    
                     <div class="grid grid-cols-12 gap-4">
-                        
-                        <!-- INFO / GUIDANCE -->
                         <div class="col-span-4">
                             <div class="card bg-slate-800 text-white border-none shadow-md">
                                 <div class="card-header text-blue-300 border-b border-slate-700 pb-2 mb-3">Guide Workflow EDI</div>
-                                <p class="text-xs text-slate-300 mb-6 leading-relaxed text-justify">
-                                    Ces utilitaires permettent de normaliser les fichiers d'échanges avant intégration ou envoi aux partenaires.
-                                    <br><br>
-                                    <i class="fa-solid fa-circle-info text-blue-400"></i> Utilisez les modules ci-contre pour corriger les erreurs de structure (longueur d'ID) ou nettoyer les données invalides (Codes erreur 999).
-                                </p>
+                                <p class="text-xs text-slate-300 mb-6 leading-relaxed text-justify">Ces utilitaires permettent de normaliser les fichiers d'échanges avant intégration ou envoi aux partenaires.<br><br><i class="fa-solid fa-circle-info text-blue-400"></i> Utilisez les modules ci-contre pour corriger les erreurs de structure (longueur d'ID) ou nettoyer les données invalides (Codes erreur 999).</p>
                                 <div class="mt-auto pt-4 border-t border-slate-700">
-                                    <div class="text-[0.65rem] text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                                        <i class="fa-solid fa-life-ring"></i> Support Technique
-                                    </div>
-                                    <p class="text-xs text-slate-300">
-                                        Pour toute assistance sur les flux EDI, contactez le service dédié :
-                                    </p>
-                                    <a href="mailto:contact-edi@proxiserve.fr" class="text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors mt-1 block">
-                                        contact-edi@proxiserve.fr
-                                    </a>
+                                    <div class="text-[0.65rem] text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2"><i class="fa-solid fa-life-ring"></i> Support Technique</div>
+                                    <p class="text-xs text-slate-300">Pour toute assistance sur les flux EDI, contactez le service dédié :</p>
+                                    <a href="mailto:contact-edi@proxiserve.fr" class="text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors mt-1 block">contact-edi@proxiserve.fr</a>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- TOOLS LIST -->
                         <div class="col-span-8">
                             <div class="card h-full">
-                                <div class="card-header border-b border-gray-100 pb-2 mb-3">
-                                    <span><i class="fa-solid fa-file-code text-blue-500"></i> Outils de Correction</span>
-                                </div>
-
+                                <div class="card-header border-b border-gray-100 pb-2 mb-3"><span><i class="fa-solid fa-file-code text-blue-500"></i> Outils de Correction</span></div>
                                 <div class="flex flex-col gap-3">
-                                    
-                                    <!-- TOOL 1: RFC 999 -->
                                     <div class="group border border-gray-100 rounded-lg p-3 hover:border-red-200 hover:bg-red-50/30 transition-all flex items-center justify-between cursor-pointer shadow-sm hover:shadow-md">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center text-lg shadow-inner">
-                                                <i class="fa-solid fa-eraser"></i>
-                                            </div>
-                                            <div>
-                                                <div class="text-sm font-bold text-gray-700 group-hover:text-red-600 transition-colors">Nettoyage RFC 999</div>
-                                                <div class="text-xs text-gray-400 mt-0.5">Supprime les lignes avec code relevé 999 (Erreur)</div>
-                                            </div>
-                                        </div>
-                                        <button class="px-4 py-1.5 rounded text-xs font-bold border border-red-200 bg-white text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm">
-                                            LANCER
-                                        </button>
+                                        <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-eraser"></i></div><div><div class="text-sm font-bold text-gray-700 group-hover:text-red-600 transition-colors">Nettoyage RFC 999</div><div class="text-xs text-gray-400 mt-0.5">Supprime les lignes avec code relevé 999 (Erreur)</div></div></div><button class="px-4 py-1.5 rounded text-xs font-bold border border-red-200 bg-white text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm">LANCER</button>
                                     </div>
-
-                                    <!-- TOOL 2: CET 8 CAR -->
                                     <div class="group border border-gray-100 rounded-lg p-3 hover:border-blue-200 hover:bg-blue-50/30 transition-all flex items-center justify-between cursor-pointer shadow-sm hover:shadow-md">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center text-lg shadow-inner">
-                                                <i class="fa-solid fa-text-width"></i>
-                                            </div>
-                                            <div>
-                                                <div class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Formatage CET (8 Car.)</div>
-                                                <div class="text-xs text-gray-400 mt-0.5">Standardise les IDs sur 8 caractères (Padding)</div>
-                                            </div>
-                                        </div>
-                                        <button class="px-4 py-1.5 rounded text-xs font-bold border border-blue-200 bg-white text-blue-500 hover:bg-blue-500 hover:text-white transition-all shadow-sm">
-                                            LANCER
-                                        </button>
+                                        <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-text-width"></i></div><div><div class="text-sm font-bold text-gray-700 group-hover:text-blue-600 transition-colors">Formatage CET (8 Car.)</div><div class="text-xs text-gray-400 mt-0.5">Standardise les IDs sur 8 caractères (Padding)</div></div></div><button class="px-4 py-1.5 rounded text-xs font-bold border border-blue-200 bg-white text-blue-500 hover:bg-blue-500 hover:text-white transition-all shadow-sm">LANCER</button>
                                     </div>
-
-                                    <!-- TOOL 3: CODES IF -->
                                     <div class="group border border-gray-100 rounded-lg p-3 hover:border-gray-300 hover:bg-gray-50 transition-all flex items-center justify-between cursor-pointer shadow-sm hover:shadow-md">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-10 h-10 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center text-lg shadow-inner">
-                                                <i class="fa-solid fa-list-check"></i>
-                                            </div>
-                                            <div>
-                                                <div class="text-sm font-bold text-gray-700 group-hover:text-gray-900 transition-colors">Vérification Codes IF</div>
-                                                <div class="text-xs text-gray-400 mt-0.5">Contrôle de cohérence des codes Installations/Fluides</div>
-                                            </div>
-                                        </div>
-                                        <button class="px-4 py-1.5 rounded text-xs font-bold border border-gray-200 bg-white text-gray-600 hover:bg-gray-600 hover:text-white transition-all shadow-sm">
-                                            LANCER
-                                        </button>
+                                        <div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-list-check"></i></div><div><div class="text-sm font-bold text-gray-700 group-hover:text-gray-900 transition-colors">Vérification Codes IF</div><div class="text-xs text-gray-400 mt-0.5">Contrôle de cohérence des codes Installations/Fluides</div></div></div><button class="px-4 py-1.5 rounded text-xs font-bold border border-gray-200 bg-white text-gray-600 hover:bg-gray-600 hover:text-white transition-all shadow-sm">LANCER</button>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
                 <div id="page-rapports" class="page-content hidden">
                     <h2 class="text-2xl font-light text-gray-800 mb-6">Exports & <b class="text-blue-600 font-semibold">Analyses</b></h2>
-                    
                     <div class="grid grid-cols-12 gap-4">
-                        
-                        <!-- COLONNE GAUCHE : EXPORTS DÉTAILLÉS -->
                         <div class="col-span-4 flex flex-col gap-4">
-                            
-                            <!-- BLOC EXCEL -->
                             <div class="card bg-emerald-50/50 border-emerald-100">
                                 <div class="card-header border-b border-emerald-200 pb-2 mb-2 flex justify-between items-center">
                                     <span class="text-emerald-700"><i class="fa-solid fa-file-excel mr-2"></i> Exports Excel</span>
                                     <button class="text-emerald-400 hover:text-emerald-700 transition-colors bg-white p-1.5 rounded shadow-sm" title="Ouvrir dossier Excel"><i class="fa-solid fa-folder-open"></i></button>
                                 </div>
                                 <div class="flex flex-col gap-2">
-                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2">
-                                        <span class="btn-title text-xs">Analyse Client</span>
-                                        <i class="fa-solid fa-download text-emerald-300 ml-auto"></i>
-                                    </button>
-                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2">
-                                        <span class="btn-title text-xs">Analyse Patrimoine</span>
-                                        <i class="fa-solid fa-download text-emerald-300 ml-auto"></i>
-                                    </button>
-                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2">
-                                        <span class="btn-title text-xs">Analyse Bailleur</span>
-                                        <i class="fa-solid fa-download text-emerald-300 ml-auto"></i>
-                                    </button>
-                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2">
-                                        <span class="btn-title text-xs">Analyse SDC</span>
-                                        <i class="fa-solid fa-download text-emerald-300 ml-auto"></i>
-                                    </button>
-                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2">
-                                        <span class="btn-title text-xs">État de Pose (XLS)</span>
-                                        <i class="fa-solid fa-download text-emerald-300 ml-auto"></i>
-                                    </button>
+                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2"><span class="btn-title text-xs">Analyse Client</span><i class="fa-solid fa-download text-emerald-300 ml-auto"></i></button>
+                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2"><span class="btn-title text-xs">Analyse Patrimoine</span><i class="fa-solid fa-download text-emerald-300 ml-auto"></i></button>
+                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2"><span class="btn-title text-xs">Analyse Bailleur</span><i class="fa-solid fa-download text-emerald-300 ml-auto"></i></button>
+                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2"><span class="btn-title text-xs">Analyse SDC</span><i class="fa-solid fa-download text-emerald-300 ml-auto"></i></button>
+                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2"><span class="btn-title text-xs">État de Pose (XLS)</span><i class="fa-solid fa-download text-emerald-300 ml-auto"></i></button>
                                 </div>
                             </div>
-
-                            <!-- BLOC PDF -->
                             <div class="card bg-red-50/50 border-red-100">
                                 <div class="card-header border-b border-red-200 pb-2 mb-2 flex justify-between items-center">
                                     <span class="text-red-700"><i class="fa-solid fa-file-pdf mr-2"></i> Exports PDF</span>
                                     <button class="text-red-400 hover:text-red-700 transition-colors bg-white p-1.5 rounded shadow-sm" title="Ouvrir dossier PDF"><i class="fa-solid fa-folder-open"></i></button>
                                 </div>
                                 <div class="flex flex-col gap-2">
-                                    <button class="btn-action border-red-200 bg-white text-red-800 hover:bg-red-50 transition-colors mb-0 h-10 p-2">
-                                        <span class="btn-title text-xs">État de Pose (PDF)</span>
-                                        <i class="fa-solid fa-download text-red-300 ml-auto"></i>
-                                    </button>
-                                    <button class="btn-action border-red-200 bg-white text-red-800 hover:bg-red-50 transition-colors mb-0 h-10 p-2">
-                                        <span class="btn-title text-xs">Format EDC Flash</span>
-                                        <i class="fa-solid fa-bolt text-red-300 ml-auto"></i>
-                                    </button>
+                                    <button class="btn-action border-red-200 bg-white text-red-800 hover:bg-red-50 transition-colors mb-0 h-10 p-2"><span class="btn-title text-xs">État de Pose (PDF)</span><i class="fa-solid fa-download text-red-300 ml-auto"></i></button>
+                                    <button class="btn-action border-red-200 bg-white text-red-800 hover:bg-red-50 transition-colors mb-0 h-10 p-2"><span class="btn-title text-xs">Format EDC Flash</span><i class="fa-solid fa-bolt text-red-300 ml-auto"></i></button>
                                 </div>
                             </div>
-
                         </div>
-
-                        <!-- COLONNE DROITE : AUDITS & BILANS -->
                         <div class="col-span-8">
                             <div class="card h-full">
-                                <div class="card-header border-b border-gray-100 pb-2 mb-3">
-                                    <span><i class="fa-solid fa-clipboard-check text-blue-500"></i> Audits & Bilans</span>
-                                </div>
-
+                                <div class="card-header border-b border-gray-100 pb-2 mb-3"><span><i class="fa-solid fa-clipboard-check text-blue-500"></i> Audits & Bilans</span></div>
                                 <div class="flex flex-col gap-4">
-                                    
-                                    <!-- Ligne 1 : Audits Généraux -->
                                     <div class="grid grid-cols-3 gap-3">
-                                        <!-- Audit Agence -->
                                         <div class="btn-action flex-col justify-center items-start h-20 hover:border-blue-300 transition-all cursor-pointer mb-0">
-                                            <div class="flex items-center gap-2 mb-1">
-                                                <i class="fa-solid fa-building-user text-blue-500"></i>
-                                                <span class="btn-title text-sm">Audit Agence</span>
-                                            </div>
+                                            <div class="flex items-center gap-2 mb-1"><i class="fa-solid fa-building-user text-blue-500"></i><span class="btn-title text-sm">Audit Agence</span></div>
                                             <span class="btn-sub">Base Contrats (DFCGEST)</span>
                                         </div>
-
-                                        <!-- Rapport Patrimoine -->
                                         <div class="btn-action flex-col justify-center items-start h-20 hover:border-blue-300 transition-all cursor-pointer mb-0">
-                                            <div class="flex items-center gap-2 mb-1">
-                                                <i class="fa-solid fa-city text-blue-500"></i>
-                                                <span class="btn-title text-sm">Rapport Patrimoine</span>
-                                            </div>
+                                            <div class="flex items-center gap-2 mb-1"><i class="fa-solid fa-city text-blue-500"></i><span class="btn-title text-sm">Rapport Patrimoine</span></div>
                                             <span class="btn-sub">Analyse Flash (DFLGEST)</span>
                                         </div>
-
-                                        <!-- Bilan Exploitation -->
                                         <div class="btn-action flex-col justify-center items-start h-20 hover:border-blue-300 transition-all cursor-pointer mb-0">
-                                            <div class="flex items-center gap-2 mb-1">
-                                                <i class="fa-solid fa-chart-simple text-blue-500"></i>
-                                                <span class="btn-title text-sm">Bilan Exploitation</span>
-                                            </div>
+                                            <div class="flex items-center gap-2 mb-1"><i class="fa-solid fa-chart-simple text-blue-500"></i><span class="btn-title text-sm">Bilan Exploitation</span></div>
                                             <span class="btn-sub">Bilan sur Parc Client</span>
                                         </div>
                                     </div>
 
-                                    <!-- Ligne 2 : États de Pose (Sub-section UPDATED) -->
-                                    <div class="bg-gray-50 rounded border border-gray-200 p-3 mt-auto">
-                                        <div class="flex justify-between items-end mb-2">
+                                    <!-- ZONE ETAT DE POSE AÉRÉE (UNIQUEMENT ICI) -->
+                                    <div class="bg-gray-50 rounded-lg border border-gray-200 p-4 mt-auto"> <!-- Padding augmenté -->
+                                        <div class="flex justify-between items-end mb-4"> <!-- Marge augmentée -->
                                             <div class="text-[0.65rem] font-bold text-gray-400 uppercase tracking-wide flex items-center gap-2">
                                                 <i class="fa-solid fa-list-check"></i> États de Pose (Compteurs)
                                             </div>
                                             <span class="text-[0.6rem] text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded border border-blue-100">PARAMÉTRAGE</span>
                                         </div>
                                         
-                                        <!-- Paramétrage Fluides (Checkbox) -->
-                                        <div class="flex items-center gap-3 mb-3 px-1 border-b border-gray-200 pb-2">
-                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-blue-600 transition-colors">
-                                                <input type="checkbox" class="accent-blue-500 w-3.5 h-3.5 rounded" checked>
-                                                <span class="text-xs text-gray-600 font-medium">EF</span>
+                                        <!-- Paramétrage Fluides (Checkbox) AÉRÉ -->
+                                        <div class="flex items-center justify-between gap-2 mb-5 px-1 border-b border-gray-200 pb-3"> <!-- Marges augmentées -->
+                                            <span class="text-[0.6rem] text-red-400 italic font-medium mr-2">Cocher pour EXCLURE :</span>
+                                            
+                                            <label class="flex items-center gap-2 cursor-pointer hover:text-red-700 transition-colors p-1 hover:bg-white rounded">
+                                                <input type="checkbox" class="accent-red-500 w-4 h-4 rounded"> <!-- Checkbox plus grande -->
+                                                <span class="text-xs font-bold text-red-600">EF</span>
                                             </label>
-                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-blue-600 transition-colors">
-                                                <input type="checkbox" class="accent-blue-500 w-3.5 h-3.5 rounded" checked>
-                                                <span class="text-xs text-gray-600 font-medium">EC</span>
+                                            <label class="flex items-center gap-2 cursor-pointer hover:text-red-700 transition-colors p-1 hover:bg-white rounded">
+                                                <input type="checkbox" class="accent-red-500 w-4 h-4 rounded">
+                                                <span class="text-xs font-bold text-red-600">EC</span>
                                             </label>
-                                            <div class="w-[1px] bg-gray-300 h-3"></div>
-                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-orange-600 transition-colors">
-                                                <input type="checkbox" class="accent-orange-500 w-3.5 h-3.5 rounded">
-                                                <span class="text-xs text-gray-600 font-medium">CET</span>
+                                            <div class="w-[1px] bg-gray-300 h-6"></div>
+                                            <label class="flex items-center gap-2 cursor-pointer hover:text-red-700 transition-colors p-1 hover:bg-white rounded">
+                                                <input type="checkbox" class="accent-red-500 w-4 h-4 rounded">
+                                                <span class="text-xs font-bold text-red-600">CET</span>
                                             </label>
-                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-orange-600 transition-colors">
-                                                <input type="checkbox" class="accent-orange-500 w-3.5 h-3.5 rounded">
-                                                <span class="text-xs text-gray-600 font-medium">RFC</span>
+                                            <label class="flex items-center gap-2 cursor-pointer hover:text-red-700 transition-colors p-1 hover:bg-white rounded">
+                                                <input type="checkbox" class="accent-red-500 w-4 h-4 rounded">
+                                                <span class="text-xs font-bold text-red-600">RFC</span>
                                             </label>
                                         </div>
 
-                                        <!-- Actions Grid (1-Click & Custom) -->
-                                        <div class="grid grid-cols-4 gap-2">
+                                        <!-- Actions Grid (1-Click & Custom) HAUTEUR AUGMENTÉE -->
+                                        <div class="grid grid-cols-4 gap-3"> <!-- Gap augmenté -->
                                             <!-- 1-Click EAU -->
-                                            <button class="btn-action bg-white border-blue-200 text-blue-600 flex-col justify-center px-1 hover:bg-blue-50 transition-all h-12 shadow-sm mb-0" title="Rapport Eau Standard (EF+EC)">
-                                                <i class="fa-solid fa-droplet text-lg mb-0.5"></i>
+                                            <button class="btn-action bg-white border-blue-200 text-blue-600 flex-col justify-center px-1 hover:bg-blue-50 transition-all h-16 shadow-sm mb-0 group" title="Rapport Eau Standard (EF+EC)"> <!-- Hauteur 16 -->
+                                                <i class="fa-solid fa-droplet text-2xl mb-1 group-hover:scale-110 transition-transform"></i>
                                                 <span class="text-[0.6rem] font-bold uppercase">Eau 1-Clic</span>
                                             </button>
                                             
                                             <!-- 1-Click CHAUFFAGE -->
-                                            <button class="btn-action bg-white border-orange-200 text-orange-600 flex-col justify-center px-1 hover:bg-orange-50 transition-all h-12 shadow-sm mb-0" title="Rapport Chauffage Standard (CET+RFC)">
-                                                <i class="fa-solid fa-fire text-lg mb-0.5"></i>
+                                            <button class="btn-action bg-white border-orange-200 text-orange-600 flex-col justify-center px-1 hover:bg-orange-50 transition-all h-16 shadow-sm mb-0 group" title="Rapport Chauffage Standard (CET+RFC)">
+                                                <i class="fa-solid fa-fire text-2xl mb-1 group-hover:scale-110 transition-transform"></i>
                                                 <span class="text-[0.6rem] font-bold uppercase">Chauff. 1-Clic</span>
                                             </button>
 
                                             <!-- Standard (Custom) -->
-                                            <button class="btn-action bg-slate-700 border-slate-800 text-white flex-col justify-center px-1 hover:bg-slate-600 transition-all h-12 shadow-md mb-0" title="Générer selon cases cochées">
-                                                <span class="btn-title text-xs text-white">Standard</span>
+                                            <button class="btn-action bg-slate-700 border-slate-800 text-white flex-col justify-center px-1 hover:bg-slate-600 transition-all h-16 shadow-lg mb-0 group" title="Générer selon cases cochées">
+                                                <span class="btn-title text-sm text-white group-hover:text-blue-200 transition-colors">Standard</span>
                                                 <span class="text-[0.55rem] text-slate-300 uppercase font-medium">Selon Filtres</span>
                                             </button>
 
                                             <!-- V3 (Custom) -->
-                                            <button class="btn-action bg-white border-purple-200 text-purple-700 flex-col justify-center px-1 hover:bg-purple-50 transition-all h-12 shadow-sm mb-0" title="Générer Version 3 (Selon Filtres)">
-                                                <span class="badge bg-purple-100 text-purple-600 border border-purple-200 mb-0.5 text-[0.6rem]">V3</span>
-                                                <span class="text-[0.6rem] font-bold uppercase">Générer</span>
+                                            <button class="btn-action bg-white border-purple-200 text-purple-700 flex-col justify-center px-1 hover:bg-purple-50 transition-all h-16 shadow-sm mb-0 group" title="Générer Version 3 (Selon Filtres)">
+                                                <span class="badge bg-purple-100 text-purple-600 border border-purple-200 mb-1 text-[0.6rem]">V3</span>
+                                                <span class="text-[0.6rem] font-bold uppercase group-hover:text-purple-800 transition-colors">Générer</span>
                                             </button>
                                         </div>
                                     </div>
@@ -1259,15 +823,12 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
                 <div id="page-outils" class="page-content hidden">
                     <h2 class="text-2xl font-light text-gray-800 mb-6">Paramètres <b class="text-blue-600 font-semibold">Système</b></h2>
                     <div class="grid grid-cols-2 gap-5">
-                        
-                        <!-- SELECTION PROFIL (NEW) -->
                         <div class="card">
                             <div class="card-header">Profil Utilisateur</div>
                             <div class="p-2 bg-blue-50 rounded border border-blue-100 mb-3">
@@ -1278,53 +839,33 @@
                                     <option value="pauline">Pauline BOUCARD</option>
                                 </select>
                             </div>
-                            <div class="text-[0.7rem] text-gray-400 italic px-1">
-                                <i class="fa-solid fa-info-circle"></i> Le choix du profil charge automatiquement vos chemins réseaux et préférences.
-                            </div>
+                            <div class="text-[0.7rem] text-gray-400 italic px-1"><i class="fa-solid fa-info-circle"></i> Le choix du profil charge automatiquement vos chemins réseaux et préférences.</div>
                         </div>
-
-                        <!-- CHEMINS (DYNAMIQUE) -->
                         <div class="card">
                             <div class="card-header">Chemins Réseau</div>
-                            
-                            <!-- Volume Serveur (RO + Admin Toggle) -->
                             <div class="p-3 bg-gray-50 border border-gray-200 rounded mb-2">
                                 <div class="flex items-center justify-between">
                                     <div class="flex-grow">
-                                        <label class="text-[0.65rem] font-bold text-gray-400 uppercase flex items-center gap-1 mb-1">
-                                            <i class="fa-solid fa-server"></i> Volume Serveur (Système)
-                                        </label>
+                                        <label class="text-[0.65rem] font-bold text-gray-400 uppercase flex items-center gap-1 mb-1"><i class="fa-solid fa-server"></i> Volume Serveur (Système)</label>
                                         <div id="path-server-text" class="text-xs font-mono text-blue-600 font-bold">\\jetform_comptage\prod</div>
                                     </div>
-                                    
-                                    <!-- Lock icon for normal users -->
                                     <i id="server-lock-icon" class="fa-solid fa-lock text-gray-300 hidden"></i>
-                                    
-                                    <!-- Switch for Admins -->
                                     <div id="server-mode-switch" class="flex bg-white border border-gray-300 rounded overflow-hidden shadow-sm">
                                         <button onclick="setServerMode('prod')" id="btn-mode-prod" class="px-2 py-1 text-[0.6rem] font-bold bg-blue-100 text-blue-700 transition-colors">PROD</button>
                                         <button onclick="setServerMode('sandbox')" id="btn-mode-sandbox" class="px-2 py-1 text-[0.6rem] font-bold text-gray-500 hover:bg-gray-50 transition-colors">RECETTE</button>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Dossier Source (RW) -->
                             <div class="p-3 bg-white border border-gray-200 rounded mb-2">
                                 <div class="flex justify-between items-center mb-1">
-                                    <label class="text-[0.65rem] font-bold text-gray-500 uppercase flex items-center gap-1">
-                                        <i class="fa-solid fa-folder-open"></i> Dossier Source (Editable)
-                                    </label>
+                                    <label class="text-[0.65rem] font-bold text-gray-500 uppercase flex items-center gap-1"><i class="fa-solid fa-folder-open"></i> Dossier Source (Editable)</label>
                                 </div>
                                 <div class="flex gap-2">
                                     <input type="text" id="path-source-input" class="input-excel text-xs text-gray-600" value="G:\Mon Drive\Extractions">
-                                    <button onclick="savePath()" class="bg-white border border-green-200 text-green-600 hover:bg-green-50 px-3 rounded text-xs font-bold transition-colors">
-                                        <i class="fa-solid fa-floppy-disk"></i>
-                                    </button>
+                                    <button onclick="savePath()" class="bg-white border border-green-200 text-green-600 hover:bg-green-50 px-3 rounded text-xs font-bold transition-colors"><i class="fa-solid fa-floppy-disk"></i></button>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- ADMIN -->
                         <div class="card border-red-200 bg-red-50">
                             <div class="card-header text-red-600">ADMINISTRATEUR</div>
                             <div class="btn-action btn-danger h-20 justify-center"><i class="fa-solid fa-key text-xl"></i><span class="btn-title ml-3 text-lg">Service Mode (Sync)</span></div>
@@ -1333,7 +874,6 @@
                                 <div class="btn-action border-red-200 text-red-600 justify-center hover:bg-red-100"><span class="btn-title text-xs">SYNCRO PDM</span></div>
                             </div>
                         </div>
-                        <!-- TABLES -->
                         <div class="card">
                             <div class="card-header">Tables de Référence</div>
                             <div class="btn-action btn-secondary"><i class="fa-solid fa-users text-gray-500 text-lg"></i><span class="btn-title">Utilisateurs</span></div>
@@ -1344,7 +884,6 @@
 
             </div>
 
-            <!-- STATUS BAR -->
             <div class="status-bar">
                 <div class="flex gap-6">
                     <span class="flex items-center gap-2"><i class="fa-solid fa-server text-blue-600"></i> <span class="font-bold text-gray-500 text-[0.65rem] uppercase tracking-wide">Jetform :</span> <span class="text-gray-600">\\jetform_comptage\prod</span></span>
@@ -1357,129 +896,73 @@
 
     <script>
         function switchPage(pageId, element) {
-            // Hide all pages
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            
-            // Show target with safety check
             const targetPage = document.getElementById('page-' + pageId);
             if (targetPage) {
                 targetPage.classList.remove('hidden');
             } else {
                 console.warn("Page introuvable : page-" + pageId);
             }
-            
-            // Update menu
             if (element) {
                 document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
                 element.classList.add('active');
             }
         }
 
-        // --- GESTION PROFIL UTILISATEUR (JS SIMULATION POUR VBA) ---
         const users = {
-            'aurelien': {
-                firstName: 'Aurélien',
-                initial: 'D.',
-                status: 'Administrateur',
-                roleClass: 'status-admin',
-                isAdmin: true,
-                serverPath: '\\\\jetform_comptage\\prod',
-                sourcePath: 'G:\\Mon Drive\\Extractions'
-            },
-            'christopher': {
-                firstName: 'Christopher',
-                initial: 'D.',
-                status: 'Administrateur',
-                roleClass: 'status-admin',
-                isAdmin: true,
-                serverPath: '\\\\jetform_comptage\\assist',
-                sourcePath: 'G:\\Mon Drive\\Assist\\Data'
-            },
-            'pauline': {
-                firstName: 'Pauline',
-                initial: 'B.',
-                status: 'Production',
-                roleClass: 'status-prod',
-                isAdmin: false,
-                serverPath: '\\\\jetform_comptage\\etudes',
-                sourcePath: 'G:\\Partagés\\Pauline\\Imports'
-            }
+            'aurelien': { firstName: 'Aurélien', initial: 'D.', status: 'Administrateur', roleClass: 'status-admin', isAdmin: true, serverPath: '\\\\jetform_comptage\\prod', sourcePath: 'G:\\Mon Drive\\Extractions' },
+            'christopher': { firstName: 'Christopher', initial: 'D.', status: 'Administrateur', roleClass: 'status-admin', isAdmin: true, serverPath: '\\\\jetform_comptage\\assist', sourcePath: 'G:\\Mon Drive\\Assist\\Data' },
+            'pauline': { firstName: 'Pauline', initial: 'B.', status: 'Production', roleClass: 'status-prod', isAdmin: false, serverPath: '\\\\jetform_comptage\\etudes', sourcePath: 'G:\\Partagés\\Pauline\\Imports' }
         };
 
-        // Ecouteur d'événement sur la liste déroulante
         document.getElementById('user-select').addEventListener('change', function(e) {
             const userId = e.target.value;
             const userData = users[userId];
-
-            if(userData) {
-                updateUIForUser(userData);
-            }
+            if(userData) { updateUIForUser(userData); }
         });
 
         function updateUIForUser(userData) {
-            // Mise à jour Dashboard (Bonjour + Statut)
             document.getElementById('dashboard-user-name').textContent = userData.firstName + " " + userData.initial;
-            
             const badge = document.getElementById('user-status-badge');
             badge.textContent = userData.status;
             badge.className = 'status-badge ' + userData.roleClass;
-
-            // Mise à jour Chemins (Page Outils)
             document.getElementById('path-server-text').textContent = userData.serverPath;
             document.getElementById('path-source-input').value = userData.sourcePath;
-
-            // GESTION MODE ADMIN (SERVER SWITCH)
             const switchEl = document.getElementById('server-mode-switch');
             const lockIcon = document.getElementById('server-lock-icon');
-
             if (userData.isAdmin) {
                 switchEl.classList.remove('hidden');
                 lockIcon.classList.add('hidden');
-                // Reset to PROD by default on user switch
                 setServerMode('prod');
             } else {
                 switchEl.classList.add('hidden');
                 lockIcon.classList.remove('hidden');
-                // Force PROD visual
                 setServerMode('prod');
             }
         }
 
-        // Fonction pour basculer PROD / SANDBOX
         function setServerMode(mode) {
             const pathText = document.getElementById('path-server-text');
             const btnProd = document.getElementById('btn-mode-prod');
             const btnSandbox = document.getElementById('btn-mode-sandbox');
-
             if (mode === 'prod') {
-                // Style Texte
                 pathText.textContent = '\\\\jetform_comptage\\prod';
                 pathText.classList.remove('text-orange-600');
                 pathText.classList.add('text-blue-600');
-                
-                // Style Boutons
                 btnProd.className = "px-2 py-1 text-[0.6rem] font-bold bg-blue-100 text-blue-700 transition-colors";
                 btnSandbox.className = "px-2 py-1 text-[0.6rem] font-bold text-gray-500 hover:bg-gray-50 transition-colors";
             } else {
-                // Style Texte
                 pathText.textContent = '\\\\jetform_comptage\\recette';
                 pathText.classList.remove('text-blue-600');
                 pathText.classList.add('text-orange-600');
-                
-                // Style Boutons
                 btnProd.className = "px-2 py-1 text-[0.6rem] font-bold text-gray-500 hover:bg-gray-50 transition-colors";
                 btnSandbox.className = "px-2 py-1 text-[0.6rem] font-bold bg-orange-100 text-orange-700 transition-colors";
             }
         }
 
-        function savePath() {
-            alert("Chemin Source sauvegardé avec succès pour l'utilisateur sélectionné.");
-        }
+        function savePath() { alert("Chemin Source sauvegardé avec succès pour l'utilisateur sélectionné."); }
 
-        // Init avec Aurélien au chargement
-        window.onload = function() {
-            updateUIForUser(users['aurelien']);
-        };
+        window.onload = function() { updateUIForUser(users['aurelien']); };
     </script>
 </body>
 </html>
