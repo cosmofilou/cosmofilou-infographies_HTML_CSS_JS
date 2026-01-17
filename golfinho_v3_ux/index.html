@@ -112,7 +112,7 @@
             background-color: #F9FAFB;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.5rem;
         }
 
         /* --- ZONE CONTENU (MultiPage) --- */
@@ -220,6 +220,21 @@
             border-color: var(--primary);
             outline: 1px solid var(--primary);
         }
+        
+        /* Select Style Excel */
+        .select-excel {
+            background: #fff;
+            border: 1px solid #9CA3AF;
+            padding: 2px 8px;
+            font-size: 0.9rem;
+            width: 100%;
+            height: 32px;
+            cursor: pointer;
+        }
+        .select-excel:focus {
+            border-color: var(--primary);
+            outline: 1px solid var(--primary);
+        }
 
         /* Badges */
         .badge {
@@ -242,6 +257,22 @@
             cursor: pointer;
         }
         .radio-vba input { margin: 0; }
+
+        /* NOUVEAU: BADGE STATUT */
+        .status-badge {
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 1px solid transparent;
+            margin-left: 10px;
+            transform: translateY(-2px);
+            display: inline-block;
+        }
+        .status-admin { background-color: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+        .status-prod { background-color: #F3F4F6; color: #4B5563; border-color: #E5E7EB; }
 
     </style>
 </head>
@@ -272,23 +303,21 @@
                 <div class="menu-item" onclick="switchPage('outils', this)"><i class="fa-solid fa-gear"></i> Paramètres</div>
             </div>
 
-            <!-- PIED DE PAGE SIDEBAR -->
+            <!-- PIED DE PAGE SIDEBAR (SIGNATURE DÉVELOPPEUR) -->
             <div class="sidebar-footer">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-sm shadow-sm">AD</div>
+                <div class="text-[0.6rem] text-gray-400 font-bold uppercase tracking-widest text-center mb-1">Conception & Dév.</div>
+                
+                <div class="flex items-center gap-3 justify-center">
+                    <div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-xs shadow-sm">AD</div>
                     <div>
+                        <!-- Nom du Dév Fixe -->
                         <div class="text-sm font-bold text-gray-800 leading-tight">Aurélien DA COSTA</div>
-                        <div class="text-[0.65rem] text-blue-600 uppercase font-bold tracking-wide">Chef de Projet</div>
+                        <div class="text-[0.6rem] text-blue-600 uppercase font-bold tracking-wide">Direction Technique</div>
                     </div>
                 </div>
-                <div class="border-t border-gray-200"></div>
-                <div>
-                    <div class="flex items-center gap-2 mb-1">
-                        <i class="fa-solid fa-building-user text-gray-400 text-xs"></i>
-                        <span class="text-xs font-bold text-gray-600 uppercase">Direction Technique</span>
-                    </div>
-                    <div class="text-[0.65rem] text-gray-400 font-medium">Groupe Proxiserve - Prox-Hydro</div>
-                    <div class="text-[0.6rem] text-gray-300 mt-1">Tous droits réservés © 2023 - 2026</div>
+                
+                <div class="text-[0.6rem] text-gray-300 mt-1 text-center border-t border-gray-100 pt-2">
+                    Tous droits réservés © 2026
                 </div>
             </div>
         </div>
@@ -313,9 +342,14 @@
                 
                 <!-- PAGE 1: DASHBOARD (COMPACTÉ) -->
                 <div id="page-accueil" class="page-content">
-                    <div class="mb-3 flex justify-between items-end"> <!-- MB REDUIT -->
+                    <div class="mb-3 flex justify-between items-end">
                         <div>
-                            <h2 class="text-2xl font-light text-gray-800">Bonjour, <b class="text-blue-600 font-semibold">Aurélien.</b></h2>
+                            <!-- GREETING USER + STATUT -->
+                            <div class="flex items-center">
+                                <h2 class="text-2xl font-light text-gray-800">Bonjour, <b id="dashboard-user-name" class="text-blue-600 font-semibold">Aurélien D.</b></h2>
+                                <!-- Badge de statut ici -->
+                                <span id="user-status-badge" class="status-badge status-admin">ADMINISTRATEUR</span>
+                            </div>
                             <p class="text-sm text-gray-500 mt-0.5">Actions rapides et suivi des importations.</p>
                         </div>
                     </div>
@@ -527,12 +561,54 @@
                 <div id="page-outils" class="page-content hidden">
                     <h2 class="text-2xl font-light text-gray-800 mb-6">Paramètres <b class="text-blue-600 font-semibold">Système</b></h2>
                     <div class="grid grid-cols-2 gap-5">
-                        <!-- CHEMINS -->
+                        
+                        <!-- SELECTION PROFIL (NEW) -->
+                        <div class="card">
+                            <div class="card-header">Profil Utilisateur</div>
+                            <div class="p-2 bg-blue-50 rounded border border-blue-100 mb-3">
+                                <label class="text-[0.65rem] font-bold text-blue-500 uppercase block mb-1">Sélectionner un compte</label>
+                                <select id="user-select" class="select-excel">
+                                    <option value="aurelien" selected>Aurélien DA COSTA</option>
+                                    <option value="christopher">Christopher DOS SANTOS</option>
+                                    <option value="pauline">Pauline BOUCARD</option>
+                                </select>
+                            </div>
+                            <div class="text-[0.7rem] text-gray-400 italic px-1">
+                                <i class="fa-solid fa-info-circle"></i> Le choix du profil charge automatiquement vos chemins réseaux et préférences.
+                            </div>
+                        </div>
+
+                        <!-- CHEMINS (DYNAMIQUE) -->
                         <div class="card">
                             <div class="card-header">Chemins Réseau</div>
-                            <div class="btn-action btn-secondary"><i class="fa-solid fa-server text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Volume Serveur</span><span class="btn-sub">\\jetform_comptage...</span></div></div>
-                            <div class="btn-action btn-secondary"><i class="fa-solid fa-folder-open text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Dossier Source</span><span class="btn-sub">G:\Mon Drive\...</span></div></div>
+                            
+                            <!-- Volume Serveur (RO) -->
+                            <div class="p-3 bg-gray-50 border border-gray-200 rounded mb-2 flex items-center justify-between">
+                                <div>
+                                    <label class="text-[0.65rem] font-bold text-gray-400 uppercase flex items-center gap-1 mb-1">
+                                        <i class="fa-solid fa-server"></i> Volume Serveur (Système)
+                                    </label>
+                                    <div id="path-server-text" class="text-xs font-mono text-blue-600 font-bold">\\jetform_comptage\prod</div>
+                                </div>
+                                <i class="fa-solid fa-lock text-gray-300"></i>
+                            </div>
+
+                            <!-- Dossier Source (RW) -->
+                            <div class="p-3 bg-white border border-gray-200 rounded mb-2">
+                                <div class="flex justify-between items-center mb-1">
+                                    <label class="text-[0.65rem] font-bold text-gray-500 uppercase flex items-center gap-1">
+                                        <i class="fa-solid fa-folder-open"></i> Dossier Source (Editable)
+                                    </label>
+                                </div>
+                                <div class="flex gap-2">
+                                    <input type="text" id="path-source-input" class="input-excel text-xs text-gray-600" value="G:\Mon Drive\Extractions">
+                                    <button onclick="savePath()" class="bg-white border border-green-200 text-green-600 hover:bg-green-50 px-3 rounded text-xs font-bold transition-colors">
+                                        <i class="fa-solid fa-floppy-disk"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+                        
                         <!-- ADMIN -->
                         <div class="card border-red-200 bg-red-50">
                             <div class="card-header text-red-600">ADMINISTRATEUR</div>
@@ -574,6 +650,61 @@
             // Update menu
             document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
             element.classList.add('active');
+        }
+
+        // --- GESTION PROFIL UTILISATEUR (JS SIMULATION POUR VBA) ---
+        const users = {
+            'aurelien': {
+                firstName: 'Aurélien',
+                initial: 'D.',
+                status: 'Administrateur',
+                roleClass: 'status-admin',
+                serverPath: '\\\\jetform_comptage\\prod',
+                sourcePath: 'G:\\Mon Drive\\Extractions'
+            },
+            'christopher': {
+                firstName: 'Christopher',
+                initial: 'D.',
+                status: 'Administrateur',
+                roleClass: 'status-admin',
+                serverPath: '\\\\jetform_comptage\\assist',
+                sourcePath: 'G:\\Mon Drive\\Assist\\Data'
+            },
+            'pauline': {
+                firstName: 'Pauline',
+                initial: 'B.',
+                status: 'Production',
+                roleClass: 'status-prod',
+                serverPath: '\\\\jetform_comptage\\etudes',
+                sourcePath: 'G:\\Partagés\\Pauline\\Imports'
+            }
+        };
+
+        // Ecouteur d'événement sur la liste déroulante
+        document.getElementById('user-select').addEventListener('change', function(e) {
+            const userId = e.target.value;
+            const userData = users[userId];
+
+            if(userData) {
+                // Mise à jour Dashboard (Bonjour + Statut)
+                document.getElementById('dashboard-user-name').textContent = userData.firstName + " " + userData.initial;
+                
+                const badge = document.getElementById('user-status-badge');
+                badge.textContent = userData.status;
+                // Reset classes
+                badge.className = 'status-badge ' + userData.roleClass;
+
+                // Mise à jour Chemins (Page Outils)
+                document.getElementById('path-server-text').textContent = userData.serverPath;
+                // Pour l'input source, on change sa valeur
+                document.getElementById('path-source-input').value = userData.sourcePath;
+            }
+        });
+
+        // Fonction Mock Save
+        function savePath() {
+            // Simulation VBA MsgBox
+            alert("Chemin Source sauvegardé avec succès pour l'utilisateur sélectionné.");
         }
     </script>
 </body>
