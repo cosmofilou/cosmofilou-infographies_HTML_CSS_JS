@@ -293,13 +293,27 @@
             </div>
 
             <div class="menu-container">
-                <div class="menu-item active" onclick="switchPage('accueil', this)"><i class="fa-solid fa-gauge-high"></i> Dashboard</div>
+                <!-- DASHBOARD (Mis en valeur + Séparé) -->
+                <div class="menu-item font-bold active mb-2" onclick="switchPage('accueil', this)">
+                    <i class="fa-solid fa-gauge-high"></i> Dashboard
+                </div>
+                
+                <!-- BLOC MÉTIER -->
                 <div class="menu-item" onclick="switchPage('patrimoine', this)"><i class="fa-solid fa-building"></i> Patrimoine</div>
                 <div class="menu-item" onclick="switchPage('interventions', this)"><i class="fa-solid fa-screwdriver-wrench"></i> Maintenance</div>
                 <div class="menu-item" onclick="switchPage('releves', this)"><i class="fa-solid fa-satellite-dish"></i> Relevés</div>
+                
+                <!-- SÉPARATEUR ANALYSE -->
                 <div class="py-2"><div class="border-t border-gray-200 mx-6"></div></div>
-                <div class="menu-item" onclick="switchPage('analyse', this)"><i class="fa-solid fa-chart-pie"></i> Analyses EDI</div>
+                
+                <!-- BLOC ANALYSE (Renommage) -->
+                <div class="menu-item" onclick="switchPage('analyse', this)"><i class="fa-solid fa-chart-pie"></i> Traitements EDI</div>
                 <div class="menu-item" onclick="switchPage('rapports', this)"><i class="fa-solid fa-file-invoice-dollar"></i> Rapports</div>
+                
+                <!-- SÉPARATEUR PARAMÈTRES (Nouveau) -->
+                <div class="py-2"><div class="border-t border-gray-200 mx-6"></div></div>
+                
+                <!-- PARAMÈTRES -->
                 <div class="menu-item" onclick="switchPage('outils', this)"><i class="fa-solid fa-gear"></i> Paramètres</div>
             </div>
 
