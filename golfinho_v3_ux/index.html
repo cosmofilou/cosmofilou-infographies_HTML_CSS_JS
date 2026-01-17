@@ -104,6 +104,32 @@
             font-weight: 600;
         }
 
+        /* STYLE SPÉCIAL DASHBOARD (Bouton "Hub") */
+        .menu-item.special {
+            margin: 0 1rem 0.5rem 1rem; /* Décalage pour effet bouton */
+            border-radius: 0.5rem;      /* Coins arrondis */
+            border-left: none;          /* Pas de bordure latérale */
+            padding-left: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item.special:hover {
+            background-color: #E2E8F0; /* Gris survol */
+            color: #1E293B;
+        }
+
+        .menu-item.special.active {
+            background-color: #1E293B; /* BLEU NUIT FONCÉ */
+            color: #FFFFFF;            /* Texte Blanc */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transform: translateY(-1px);
+        }
+        
+        /* Icône Dashboard en bleu clair quand actif pour le contraste */
+        .menu-item.special.active i {
+            color: #38BDF8; 
+        }
+
         .menu-item i { width: 25px; text-align: center; margin-right: 10px; }
 
         .sidebar-footer {
@@ -293,8 +319,8 @@
             </div>
 
             <div class="menu-container">
-                <!-- DASHBOARD (Mis en valeur + Séparé) -->
-                <div class="menu-item font-bold active mb-2" onclick="switchPage('accueil', this)">
+                <!-- DASHBOARD (Style "Special" Bleu Nuit) -->
+                <div class="menu-item special font-bold active mb-2" onclick="switchPage('accueil', this)">
                     <i class="fa-solid fa-gauge-high"></i> Dashboard
                 </div>
                 
@@ -1076,19 +1102,164 @@
                 </div>
 
                 <div id="page-rapports" class="page-content hidden">
-                    <h2 class="text-2xl font-light text-gray-800 mb-6">Rapports & <b class="text-blue-600 font-semibold">Audits</b></h2>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="card">
-                            <div class="card-header">Exports</div>
-                            <div class="btn-action"><i class="fa-solid fa-file-excel text-emerald-600 text-lg"></i><span class="btn-title">Export Excel</span></div>
-                            <div class="btn-action"><i class="fa-solid fa-file-pdf text-red-600 text-lg"></i><span class="btn-title">Export PDF</span></div>
+                    <h2 class="text-2xl font-light text-gray-800 mb-6">Exports & <b class="text-blue-600 font-semibold">Analyses</b></h2>
+                    
+                    <div class="grid grid-cols-12 gap-4">
+                        
+                        <!-- COLONNE GAUCHE : EXPORTS DÉTAILLÉS -->
+                        <div class="col-span-4 flex flex-col gap-4">
+                            
+                            <!-- BLOC EXCEL -->
+                            <div class="card bg-emerald-50/50 border-emerald-100">
+                                <div class="card-header border-b border-emerald-200 pb-2 mb-2 flex justify-between items-center">
+                                    <span class="text-emerald-700"><i class="fa-solid fa-file-excel mr-2"></i> Exports Excel</span>
+                                    <button class="text-emerald-400 hover:text-emerald-700 transition-colors bg-white p-1.5 rounded shadow-sm" title="Ouvrir dossier Excel"><i class="fa-solid fa-folder-open"></i></button>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2">
+                                        <span class="btn-title text-xs">Analyse Client</span>
+                                        <i class="fa-solid fa-download text-emerald-300 ml-auto"></i>
+                                    </button>
+                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2">
+                                        <span class="btn-title text-xs">Analyse Patrimoine</span>
+                                        <i class="fa-solid fa-download text-emerald-300 ml-auto"></i>
+                                    </button>
+                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2">
+                                        <span class="btn-title text-xs">Analyse Bailleur</span>
+                                        <i class="fa-solid fa-download text-emerald-300 ml-auto"></i>
+                                    </button>
+                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2">
+                                        <span class="btn-title text-xs">Analyse SDC</span>
+                                        <i class="fa-solid fa-download text-emerald-300 ml-auto"></i>
+                                    </button>
+                                    <button class="btn-action border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50 transition-colors mb-0 h-10 p-2">
+                                        <span class="btn-title text-xs">État de Pose (XLS)</span>
+                                        <i class="fa-solid fa-download text-emerald-300 ml-auto"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- BLOC PDF -->
+                            <div class="card bg-red-50/50 border-red-100">
+                                <div class="card-header border-b border-red-200 pb-2 mb-2 flex justify-between items-center">
+                                    <span class="text-red-700"><i class="fa-solid fa-file-pdf mr-2"></i> Exports PDF</span>
+                                    <button class="text-red-400 hover:text-red-700 transition-colors bg-white p-1.5 rounded shadow-sm" title="Ouvrir dossier PDF"><i class="fa-solid fa-folder-open"></i></button>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <button class="btn-action border-red-200 bg-white text-red-800 hover:bg-red-50 transition-colors mb-0 h-10 p-2">
+                                        <span class="btn-title text-xs">État de Pose (PDF)</span>
+                                        <i class="fa-solid fa-download text-red-300 ml-auto"></i>
+                                    </button>
+                                    <button class="btn-action border-red-200 bg-white text-red-800 hover:bg-red-50 transition-colors mb-0 h-10 p-2">
+                                        <span class="btn-title text-xs">Format EDC Flash</span>
+                                        <i class="fa-solid fa-bolt text-red-300 ml-auto"></i>
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
-                        <div class="card">
-                            <div class="card-header">Audits Métier</div>
-                            <div class="btn-action"><i class="fa-solid fa-building-user text-blue-600 text-lg"></i><span class="btn-title">Audit Agence</span></div>
-                            <div class="btn-action"><i class="fa-solid fa-signature text-purple-600 text-lg"></i><span class="btn-title">État de Pose</span></div>
-                            <div class="btn-action"><i class="fa-solid fa-file-invoice text-gray-600 text-lg"></i><span class="btn-title">BPRS Bailleur</span></div>
+
+                        <!-- COLONNE DROITE : AUDITS & BILANS -->
+                        <div class="col-span-8">
+                            <div class="card h-full">
+                                <div class="card-header border-b border-gray-100 pb-2 mb-3">
+                                    <span><i class="fa-solid fa-clipboard-check text-blue-500"></i> Audits & Bilans</span>
+                                </div>
+
+                                <div class="flex flex-col gap-4">
+                                    
+                                    <!-- Ligne 1 : Audits Généraux -->
+                                    <div class="grid grid-cols-3 gap-3">
+                                        <!-- Audit Agence -->
+                                        <div class="btn-action flex-col justify-center items-start h-20 hover:border-blue-300 transition-all cursor-pointer mb-0">
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <i class="fa-solid fa-building-user text-blue-500"></i>
+                                                <span class="btn-title text-sm">Audit Agence</span>
+                                            </div>
+                                            <span class="btn-sub">Base Contrats (DFCGEST)</span>
+                                        </div>
+
+                                        <!-- Rapport Patrimoine -->
+                                        <div class="btn-action flex-col justify-center items-start h-20 hover:border-blue-300 transition-all cursor-pointer mb-0">
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <i class="fa-solid fa-city text-blue-500"></i>
+                                                <span class="btn-title text-sm">Rapport Patrimoine</span>
+                                            </div>
+                                            <span class="btn-sub">Analyse Flash (DFLGEST)</span>
+                                        </div>
+
+                                        <!-- Bilan Exploitation -->
+                                        <div class="btn-action flex-col justify-center items-start h-20 hover:border-blue-300 transition-all cursor-pointer mb-0">
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <i class="fa-solid fa-chart-simple text-blue-500"></i>
+                                                <span class="btn-title text-sm">Bilan Exploitation</span>
+                                            </div>
+                                            <span class="btn-sub">Bilan sur Parc Client</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Ligne 2 : États de Pose (Sub-section UPDATED) -->
+                                    <div class="bg-gray-50 rounded border border-gray-200 p-3 mt-auto">
+                                        <div class="flex justify-between items-end mb-2">
+                                            <div class="text-[0.65rem] font-bold text-gray-400 uppercase tracking-wide flex items-center gap-2">
+                                                <i class="fa-solid fa-list-check"></i> États de Pose (Compteurs)
+                                            </div>
+                                            <span class="text-[0.6rem] text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded border border-blue-100">PARAMÉTRAGE</span>
+                                        </div>
+                                        
+                                        <!-- Paramétrage Fluides (Checkbox) -->
+                                        <div class="flex items-center gap-3 mb-3 px-1 border-b border-gray-200 pb-2">
+                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-blue-600 transition-colors">
+                                                <input type="checkbox" class="accent-blue-500 w-3.5 h-3.5 rounded" checked>
+                                                <span class="text-xs text-gray-600 font-medium">EF</span>
+                                            </label>
+                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-blue-600 transition-colors">
+                                                <input type="checkbox" class="accent-blue-500 w-3.5 h-3.5 rounded" checked>
+                                                <span class="text-xs text-gray-600 font-medium">EC</span>
+                                            </label>
+                                            <div class="w-[1px] bg-gray-300 h-3"></div>
+                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-orange-600 transition-colors">
+                                                <input type="checkbox" class="accent-orange-500 w-3.5 h-3.5 rounded">
+                                                <span class="text-xs text-gray-600 font-medium">CET</span>
+                                            </label>
+                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-orange-600 transition-colors">
+                                                <input type="checkbox" class="accent-orange-500 w-3.5 h-3.5 rounded">
+                                                <span class="text-xs text-gray-600 font-medium">RFC</span>
+                                            </label>
+                                        </div>
+
+                                        <!-- Actions Grid (1-Click & Custom) -->
+                                        <div class="grid grid-cols-4 gap-2">
+                                            <!-- 1-Click EAU -->
+                                            <button class="btn-action bg-white border-blue-200 text-blue-600 flex-col justify-center px-1 hover:bg-blue-50 transition-all h-12 shadow-sm mb-0" title="Rapport Eau Standard (EF+EC)">
+                                                <i class="fa-solid fa-droplet text-lg mb-0.5"></i>
+                                                <span class="text-[0.6rem] font-bold uppercase">Eau 1-Clic</span>
+                                            </button>
+                                            
+                                            <!-- 1-Click CHAUFFAGE -->
+                                            <button class="btn-action bg-white border-orange-200 text-orange-600 flex-col justify-center px-1 hover:bg-orange-50 transition-all h-12 shadow-sm mb-0" title="Rapport Chauffage Standard (CET+RFC)">
+                                                <i class="fa-solid fa-fire text-lg mb-0.5"></i>
+                                                <span class="text-[0.6rem] font-bold uppercase">Chauff. 1-Clic</span>
+                                            </button>
+
+                                            <!-- Standard (Custom) -->
+                                            <button class="btn-action bg-slate-700 border-slate-800 text-white flex-col justify-center px-1 hover:bg-slate-600 transition-all h-12 shadow-md mb-0" title="Générer selon cases cochées">
+                                                <span class="btn-title text-xs text-white">Standard</span>
+                                                <span class="text-[0.55rem] text-slate-300 uppercase font-medium">Selon Filtres</span>
+                                            </button>
+
+                                            <!-- V3 (Custom) -->
+                                            <button class="btn-action bg-white border-purple-200 text-purple-700 flex-col justify-center px-1 hover:bg-purple-50 transition-all h-12 shadow-sm mb-0" title="Générer Version 3 (Selon Filtres)">
+                                                <span class="badge bg-purple-100 text-purple-600 border border-purple-200 mb-0.5 text-[0.6rem]">V3</span>
+                                                <span class="text-[0.6rem] font-bold uppercase">Générer</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
