@@ -281,20 +281,27 @@
             </div>
 
             <div class="menu-container">
+                <!-- DASHBOARD -->
                 <div class="menu-item special font-bold active mb-2" onclick="switchPage('accueil', this)">
                     <i class="fa-solid fa-gauge-high"></i> Dashboard
                 </div>
                 
+                <!-- BLOC MÉTIER -->
                 <div class="menu-item" onclick="switchPage('patrimoine', this)"><i class="fa-solid fa-building"></i> Patrimoine</div>
                 <div class="menu-item" onclick="switchPage('interventions', this)"><i class="fa-solid fa-screwdriver-wrench"></i> Maintenance</div>
                 <div class="menu-item" onclick="switchPage('releves', this)"><i class="fa-solid fa-satellite-dish"></i> Relevés</div>
                 
+                <!-- SÉPARATEUR -->
                 <div class="py-2"><div class="border-t border-gray-200 mx-6"></div></div>
                 
+                <!-- BLOC ANALYSE -->
                 <div class="menu-item" onclick="switchPage('analyse', this)"><i class="fa-solid fa-chart-pie"></i> Traitements EDI</div>
-                <div class="menu-item" onclick="switchPage('rapports', this)"><i class="fa-solid fa-file-invoice-dollar"></i> Rapports</div>
+                <div class="menu-item" onclick="switchPage('rapports', this)"><i class="fa-solid fa-file-invoice-dollar"></i> Exports & Analyses</div>
                 
+                <!-- SÉPARATEUR -->
                 <div class="py-2"><div class="border-t border-gray-200 mx-6"></div></div>
+                
+                <!-- PARAMÈTRES -->
                 <div class="menu-item" onclick="switchPage('outils', this)"><i class="fa-solid fa-gear"></i> Paramètres</div>
             </div>
 
@@ -383,19 +390,32 @@
                             <div class="card shadow-sm">
                                 <div class="card-header"><i class="fa-solid fa-file-import"></i> Imports de Masse</div>
                                 <div class="grid grid-cols-3 gap-2">
+                                    <div class="btn-action col-span-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-none shadow-md hover:shadow-lg hover:from-indigo-500 hover:to-purple-500 transition-all cursor-pointer group h-16 relative overflow-hidden">
+                                        <div class="absolute top-0 right-0 -mr-4 -mt-4 w-20 h-20 rounded-full bg-white/10 blur-xl"></div>
+                                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-4 group-hover:scale-110 transition-transform backdrop-blur-sm border border-white/30">
+                                            <i class="fa-solid fa-wand-magic-sparkles text-white text-xl"></i>
+                                        </div>
+                                        <div class="btn-content">
+                                            <span class="btn-title text-lg text-white">Analyse Patrimoine 360°</span>
+                                            <span class="btn-sub text-indigo-100 font-medium text-xs">Import DFLGEST + Ouverture Rapport Auto</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right text-white/50 text-xl ml-auto"></i>
+                                    </div>
+
                                     <div class="btn-action col-span-2 border-blue-200 bg-blue-50 hover:bg-blue-100 transition-colors cursor-pointer group">
                                         <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm mr-2 group-hover:scale-110 transition-transform">
                                             <i class="fa-solid fa-cloud-arrow-down text-blue-600 text-lg"></i>
                                         </div>
                                         <div class="btn-content">
-                                            <span class="btn-title text-blue-900">Import Patrimoine</span>
-                                            <span class="btn-sub text-blue-700/70 font-bold">Fichier DFLGEST</span>
+                                            <span class="btn-title text-blue-900">Import Simple</span>
+                                            <span class="btn-sub text-blue-700/70 font-bold">Juste charger DFLGEST</span>
                                         </div>
                                     </div>
+                                    
                                     <div class="btn-action"><i class="fa-solid fa-file-shield text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Contrats</span><span class="btn-sub">DFCGEST</span></div></div>
                                     <div class="btn-action"><i class="fa-solid fa-desktop text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Accès Pro</span><span class="btn-sub">Exp. Index</span></div></div>
                                     <div class="btn-action"><i class="fa-solid fa-bell text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">Alarmes</span><span class="btn-sub">Exp. Alarmes</span></div></div>
-                                    <div class="btn-action col-span-2 btn-secondary"><i class="fa-solid fa-satellite-dish text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">MBW / GPRS</span><span class="btn-sub">Fichiers .txt</span></div></div>
+                                    <div class="btn-action"><i class="fa-solid fa-satellite-dish text-gray-400 text-lg"></i><div class="btn-content"><span class="btn-title">MBW / GPRS</span><span class="btn-sub">Fichiers .txt</span></div></div>
                                 </div>
                             </div>
                         </div>
@@ -459,8 +479,7 @@
                     </div>
                 </div>
 
-                <!-- AUTRES PAGES (Conservent la structure "Compacte" + Fix État de Pose) -->
-                
+                <!-- PAGE 2: PATRIMOINE -->
                 <div id="page-patrimoine" class="page-content hidden">
                     <h2 class="text-2xl font-light text-gray-800 mb-6">Gestion <b class="text-blue-600 font-semibold">Patrimoine</b></h2>
                     <div class="grid grid-cols-2 gap-4">
@@ -762,60 +781,69 @@
 
                                     <!-- ZONE ETAT DE POSE AÉRÉE (UNIQUEMENT ICI) -->
                                     <div class="bg-gray-50 rounded-lg border border-gray-200 p-4 mt-auto"> <!-- Padding augmenté -->
-                                        <div class="flex justify-between items-end mb-4"> <!-- Marge augmentée -->
+                                        <div class="flex justify-between items-center mb-4"> <!-- Marge augmentée -->
                                             <div class="text-[0.65rem] font-bold text-gray-400 uppercase tracking-wide flex items-center gap-2">
-                                                <i class="fa-solid fa-list-check"></i> États de Pose (Compteurs)
+                                                <i class="fa-solid fa-list-check"></i> États de Pose
                                             </div>
-                                            <span class="text-[0.6rem] text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded border border-blue-100">PARAMÉTRAGE</span>
+                                            <div class="text-[0.6rem] text-red-400 italic flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-red-100">
+                                                <i class="fa-solid fa-triangle-exclamation"></i> Cocher pour EXCLURE
+                                            </div>
                                         </div>
                                         
-                                        <!-- Paramétrage Fluides (Checkbox) AÉRÉ -->
-                                        <div class="flex items-center justify-between gap-2 mb-5 px-1 border-b border-gray-200 pb-3"> <!-- Marges augmentées -->
-                                            <span class="text-[0.6rem] text-red-400 italic font-medium mr-2">Cocher pour EXCLURE :</span>
+                                        <!-- Paramétrage Fluides (Checkbox Standards) -->
+                                        <div class="flex items-center justify-between gap-2 mb-4 px-1 border-b border-gray-200 pb-3"> <!-- Marges augmentées -->
+                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-red-600 transition-colors">
+                                                <input type="checkbox" class="accent-red-500 w-3.5 h-3.5 rounded">
+                                                <span class="text-[0.7rem] font-bold text-gray-600">EF</span>
+                                            </label>
+                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-red-600 transition-colors">
+                                                <input type="checkbox" class="accent-red-500 w-3.5 h-3.5 rounded">
+                                                <span class="text-[0.7rem] font-bold text-gray-600">EC</span>
+                                            </label>
+                                            <div class="w-[1px] bg-gray-300 h-3"></div>
+                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-red-600 transition-colors">
+                                                <input type="checkbox" class="accent-red-500 w-3.5 h-3.5 rounded">
+                                                <span class="text-[0.7rem] font-bold text-gray-600">CET</span>
+                                            </label>
+                                            <label class="flex items-center gap-1.5 cursor-pointer hover:text-red-600 transition-colors">
+                                                <input type="checkbox" class="accent-red-500 w-3.5 h-3.5 rounded">
+                                                <span class="text-[0.7rem] font-bold text-gray-600">RFC</span>
+                                            </label>
                                             
-                                            <label class="flex items-center gap-2 cursor-pointer hover:text-red-700 transition-colors p-1 hover:bg-white rounded">
-                                                <input type="checkbox" class="accent-red-500 w-4 h-4 rounded"> <!-- Checkbox plus grande -->
-                                                <span class="text-xs font-bold text-red-600">EF</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 cursor-pointer hover:text-red-700 transition-colors p-1 hover:bg-white rounded">
-                                                <input type="checkbox" class="accent-red-500 w-4 h-4 rounded">
-                                                <span class="text-xs font-bold text-red-600">EC</span>
-                                            </label>
-                                            <div class="w-[1px] bg-gray-300 h-6"></div>
-                                            <label class="flex items-center gap-2 cursor-pointer hover:text-red-700 transition-colors p-1 hover:bg-white rounded">
-                                                <input type="checkbox" class="accent-red-500 w-4 h-4 rounded">
-                                                <span class="text-xs font-bold text-red-600">CET</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 cursor-pointer hover:text-red-700 transition-colors p-1 hover:bg-white rounded">
-                                                <input type="checkbox" class="accent-red-500 w-4 h-4 rounded">
-                                                <span class="text-xs font-bold text-red-600">RFC</span>
+                                            <!-- Espaceur flexible -->
+                                            <div class="flex-grow"></div>
+                                            
+                                            <!-- Switch tout/rien simplifié -->
+                                            <label class="flex items-center gap-1.5 cursor-pointer">
+                                                <input type="checkbox" class="accent-slate-500 w-3.5 h-3.5 rounded">
+                                                <span class="text-[0.65rem] text-gray-400">Tout Exclure</span>
                                             </label>
                                         </div>
 
-                                        <!-- Actions Grid (1-Click & Custom) HAUTEUR AUGMENTÉE -->
+                                        <!-- Actions Grid (4 Blocs Identiques) HAUTEUR AUGMENTÉE -->
                                         <div class="grid grid-cols-4 gap-3"> <!-- Gap augmenté -->
                                             <!-- 1-Click EAU -->
                                             <button class="btn-action bg-white border-blue-200 text-blue-600 flex-col justify-center px-1 hover:bg-blue-50 transition-all h-16 shadow-sm mb-0 group" title="Rapport Eau Standard (EF+EC)"> <!-- Hauteur 16 -->
-                                                <i class="fa-solid fa-droplet text-2xl mb-1 group-hover:scale-110 transition-transform"></i>
-                                                <span class="text-[0.6rem] font-bold uppercase">Eau 1-Clic</span>
+                                                <i class="fa-solid fa-droplet text-lg mb-1 group-hover:scale-110 transition-transform"></i>
+                                                <span class="text-[0.6rem] font-bold uppercase tracking-tight">Eau 1-Clic</span>
                                             </button>
                                             
                                             <!-- 1-Click CHAUFFAGE -->
                                             <button class="btn-action bg-white border-orange-200 text-orange-600 flex-col justify-center px-1 hover:bg-orange-50 transition-all h-16 shadow-sm mb-0 group" title="Rapport Chauffage Standard (CET+RFC)">
-                                                <i class="fa-solid fa-fire text-2xl mb-1 group-hover:scale-110 transition-transform"></i>
-                                                <span class="text-[0.6rem] font-bold uppercase">Chauff. 1-Clic</span>
+                                                <i class="fa-solid fa-fire text-lg mb-1 group-hover:scale-110 transition-transform"></i>
+                                                <span class="text-[0.6rem] font-bold uppercase tracking-tight">Chauff. 1-Clic</span>
                                             </button>
 
                                             <!-- Standard (Custom) -->
                                             <button class="btn-action bg-slate-700 border-slate-800 text-white flex-col justify-center px-1 hover:bg-slate-600 transition-all h-16 shadow-lg mb-0 group" title="Générer selon cases cochées">
-                                                <span class="btn-title text-sm text-white group-hover:text-blue-200 transition-colors">Standard</span>
-                                                <span class="text-[0.55rem] text-slate-300 uppercase font-medium">Selon Filtres</span>
+                                                <span class="text-xs font-bold text-white mb-0.5">Standard</span>
+                                                <span class="text-[0.55rem] text-slate-300 uppercase">Selon Filtres</span>
                                             </button>
 
                                             <!-- V3 (Custom) -->
                                             <button class="btn-action bg-white border-purple-200 text-purple-700 flex-col justify-center px-1 hover:bg-purple-50 transition-all h-16 shadow-sm mb-0 group" title="Générer Version 3 (Selon Filtres)">
-                                                <span class="badge bg-purple-100 text-purple-600 border border-purple-200 mb-1 text-[0.6rem]">V3</span>
-                                                <span class="text-[0.6rem] font-bold uppercase group-hover:text-purple-800 transition-colors">Générer</span>
+                                                <span class="badge bg-purple-100 text-purple-600 border border-purple-200 mb-1 text-[0.6rem] px-1.5 py-0">V3</span>
+                                                <span class="text-[0.6rem] font-bold uppercase tracking-tight">Générer</span>
                                             </button>
                                         </div>
                                     </div>
@@ -866,18 +894,31 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card border-red-200 bg-red-50">
-                            <div class="card-header text-red-600">ADMINISTRATEUR</div>
-                            <div class="btn-action btn-danger h-20 justify-center"><i class="fa-solid fa-key text-xl"></i><span class="btn-title ml-3 text-lg">Service Mode (Sync)</span></div>
-                            <div class="grid grid-cols-2 gap-3 mt-3">
-                                <div class="btn-action border-red-200 text-red-600 justify-center hover:bg-red-100"><span class="btn-title text-xs">SYNCRO LIEUX</span></div>
-                                <div class="btn-action border-red-200 text-red-600 justify-center hover:bg-red-100"><span class="btn-title text-xs">SYNCRO PDM</span></div>
+                        <div class="card border-red-100 bg-red-50/30 shadow-sm">
+                            <div class="card-header text-red-800 border-b border-red-100 pb-2 mb-3 flex justify-between items-center">
+                                <span><i class="fa-solid fa-user-shield mr-2"></i> Zone Administrateur</span>
+                                <i class="fa-solid fa-lock text-red-300"></i>
+                            </div>
+                            <div class="flex items-center justify-between bg-white border border-red-200 rounded-lg p-3 mb-3 shadow-sm">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded bg-red-100 text-red-600 flex items-center justify-center"><i class="fa-solid fa-key"></i></div>
+                                    <div><div class="text-sm font-bold text-gray-800">Service Mode</div><div class="text-[0.6rem] text-gray-400 uppercase tracking-wide">Accès Restreint</div></div>
+                                </div>
+                                <button class="px-3 py-1.5 bg-red-600 text-white text-xs font-bold rounded hover:bg-red-700 transition-colors shadow-sm">Déverrouiller</button>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 opacity-60 hover:opacity-100 transition-opacity">
+                                <button class="btn-action border-red-200 text-red-700 justify-center hover:bg-red-50 h-10 shadow-sm mb-0 text-xs font-bold bg-white"><i class="fa-solid fa-trash-can mr-2"></i> SUPPR. LIEUX</button>
+                                <button class="btn-action border-red-200 text-red-700 justify-center hover:bg-red-50 h-10 shadow-sm mb-0 text-xs font-bold bg-white"><i class="fa-solid fa-trash-can mr-2"></i> SUPPR. PDM</button>
                             </div>
                         </div>
                         <div class="card">
                             <div class="card-header">Tables de Référence</div>
-                            <div class="btn-action btn-secondary"><i class="fa-solid fa-users text-gray-500 text-lg"></i><span class="btn-title">Utilisateurs</span></div>
-                            <div class="btn-action btn-secondary"><i class="fa-solid fa-building text-gray-500 text-lg"></i><span class="btn-title">Agences</span></div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="btn-action btn-secondary h-16 px-4 hover:bg-gray-50 mb-0"><i class="fa-solid fa-users text-gray-400 text-xl mr-3"></i><div class="btn-content"><span class="btn-title text-sm">Utilisateurs</span><span class="btn-sub">Droits & Profils</span></div></div>
+                                <div class="btn-action btn-secondary h-16 px-4 hover:bg-gray-50 mb-0"><i class="fa-solid fa-building text-gray-400 text-xl mr-3"></i><div class="btn-content"><span class="btn-title text-sm">Agences</span><span class="btn-sub">Codes & Adresses</span></div></div>
+                                <div class="btn-action btn-secondary h-16 px-4 hover:bg-gray-50 mb-0"><i class="fa-solid fa-cube text-gray-400 text-xl mr-3"></i><div class="btn-content"><span class="btn-title text-sm">Table Produits</span><span class="btn-sub">Réf. Matériel</span></div></div>
+                                <div class="btn-action btn-secondary h-16 px-4 hover:bg-gray-50 mb-0"><i class="fa-solid fa-magnifying-glass-chart text-gray-400 text-xl mr-3"></i><div class="btn-content"><span class="btn-title text-sm">Table Analyses</span><span class="btn-sub">Param. Diagnostics</span></div></div>
+                            </div>
                         </div>
                     </div>
                 </div>
