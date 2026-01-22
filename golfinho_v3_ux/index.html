@@ -44,6 +44,38 @@
             justify-content: center;
             overflow: hidden;
             user-select: none;
+            position: relative; /* Pour positionnement watermark */
+        }
+
+        /* --- FILIGRANE SALESFORCE --- */
+        .watermark-salesforce {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-20deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 0; /* Derrière la frame */
+            pointer-events: none;
+            opacity: 0.03; /* Très estompé */
+            color: white;
+            white-space: nowrap;
+        }
+        
+        .watermark-salesforce i {
+            font-size: 40vw; /* Taille massive réactive */
+            line-height: 1;
+            margin-bottom: -5vw; /* Chevauchement léger */
+        }
+        
+        .watermark-salesforce span {
+            font-size: 4vw;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5em;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         /* --- CONTENEUR --- */
@@ -58,6 +90,7 @@
             flex-direction: row;
             overflow: hidden;
             position: relative;
+            z-index: 10; /* Devant le filigrane */
         }
 
         /* --- SIDEBAR --- */
@@ -339,6 +372,12 @@
     </style>
 </head>
 <body>
+
+    <!-- WATERMARK SALESFORCE -->
+    <div class="watermark-salesforce">
+        <i class="fa-brands fa-salesforce"></i>
+        <span>Powered by Salesforce</span>
+    </div>
 
     <div class="userform-frame">
         
