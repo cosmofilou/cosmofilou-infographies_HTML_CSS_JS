@@ -52,29 +52,29 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) rotate(-20deg);
+            transform: translate(-50%, -50%) rotate(-15deg);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 0; /* Derrière la frame */
             pointer-events: none;
-            opacity: 0.03; /* Très estompé */
+            opacity: 0.04; /* Légèrement plus visible */
             color: white;
             white-space: nowrap;
         }
         
         .watermark-salesforce i {
-            font-size: 40vw; /* Taille massive réactive */
+            font-size: 25vw; /* Taille ajustée pour équilibre */
             line-height: 1;
-            margin-bottom: -5vw; /* Chevauchement léger */
+            margin-bottom: 1rem;
         }
         
         .watermark-salesforce span {
-            font-size: 4vw;
-            font-weight: 800;
+            font-size: 3vw;
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 0.5em;
+            letter-spacing: 0.3em;
             font-family: 'Segoe UI', sans-serif;
         }
 
@@ -376,7 +376,7 @@
     <!-- WATERMARK SALESFORCE -->
     <div class="watermark-salesforce">
         <i class="fa-brands fa-salesforce"></i>
-        <span>Powered by Salesforce</span>
+        <span>POWERED BY SALESFORCE</span>
     </div>
 
     <div class="userform-frame">
