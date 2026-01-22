@@ -608,7 +608,7 @@
                             <!-- LOGS (Condensed Timeline Style) -->
                             <div class="card flex-grow shadow-sm overflow-hidden flex flex-col">
                                 <div class="card-header border-b border-gray-100 pb-2 mb-0 bg-white sticky top-0 z-10">
-                                    <div class="flex justify-between items-center">
+                                    <div class="flex justify-between items-center w-full"> <!-- Added w-full -->
                                         <span>Flux Récents</span>
                                         <span class="badge bg-gray-100 text-gray-500 border border-gray-200">Aujourd'hui</span>
                                     </div>
@@ -1075,6 +1075,7 @@
                                 <select id="user-select" class="select-excel">
                                     <option value="aurelien" selected>Aurélien DA COSTA</option>
                                     <option value="christopher">Christopher DOS SANTOS</option>
+                                    <option value="jessica">Jessica BORDENAVE</option>
                                     <option value="pauline">Pauline BOUCARD</option>
                                 </select>
                             </div>
@@ -1167,6 +1168,7 @@
         const users = {
             'aurelien': { firstName: 'Aurélien', initial: 'D.', status: 'Administrateur', roleClass: 'status-admin', isAdmin: true, serverPath: '\\\\jetform_comptage\\prod', sourcePath: 'G:\\Mon Drive\\Extractions' },
             'christopher': { firstName: 'Christopher', initial: 'D.', status: 'Administrateur', roleClass: 'status-admin', isAdmin: true, serverPath: '\\\\jetform_comptage\\assist', sourcePath: 'G:\\Mon Drive\\Assist\\Data' },
+            'jessica': { firstName: 'Jessica', initial: 'B.', status: 'Administrateur', roleClass: 'status-admin', isAdmin: true, serverPath: '\\\\jetform_comptage\\prod', sourcePath: 'G:\\Mon Drive\\Direction\\Data' },
             'pauline': { firstName: 'Pauline', initial: 'B.', status: 'Production', roleClass: 'status-prod', isAdmin: false, serverPath: '\\\\jetform_comptage\\etudes', sourcePath: 'G:\\Partagés\\Pauline\\Imports' }
         };
 
