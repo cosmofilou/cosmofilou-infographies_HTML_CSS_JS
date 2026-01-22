@@ -538,7 +538,7 @@
 
                         <!-- Right Col (UPDATED) -->
                         <div class="col-span-4 flex flex-col gap-4">
-                            <!-- CARTE ACTIVITÉ (Redesigned) -->
+                            <!-- CARTE ACTIVITÉ (Redesigned & Custom Counters) -->
                             <div class="card bg-blue-600 text-white border-none shadow-md bg-gradient-to-br from-blue-600 to-blue-500 p-0 overflow-hidden relative">
                                 <!-- Decoration BG -->
                                 <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 rounded-full bg-white/10 blur-2xl"></div>
@@ -555,21 +555,27 @@
                                         </div>
                                     </div>
 
-                                    <div class="grid grid-cols-2 gap-3 mb-4">
+                                    <div class="grid grid-cols-2 gap-3 mb-2">
                                         <div class="bg-black/10 rounded p-2 border border-white/5 backdrop-blur-sm">
                                             <div class="flex justify-between items-start mb-1">
-                                                <span class="text-[0.6rem] uppercase font-bold text-blue-200">Envois SF</span>
-                                                <i class="fa-solid fa-cloud-arrow-up text-[0.6rem] text-blue-300"></i>
+                                                <span class="text-[0.6rem] uppercase font-bold text-blue-200">Demandes DFLGEST</span>
+                                                <i class="fa-solid fa-file-export text-[0.6rem] text-blue-300"></i>
                                             </div>
-                                            <div class="text-2xl font-bold font-['Agency_FB'] leading-none">12</div>
+                                            <div class="text-2xl font-bold font-['Agency_FB'] leading-none">15</div>
                                         </div>
                                         <div class="bg-black/10 rounded p-2 border border-white/5 backdrop-blur-sm">
                                             <div class="flex justify-between items-start mb-1">
-                                                <span class="text-[0.6rem] uppercase font-bold text-blue-200">Imports G.</span>
-                                                <i class="fa-solid fa-file-import text-[0.6rem] text-blue-300"></i>
+                                                <span class="text-[0.6rem] uppercase font-bold text-blue-200 leading-tight">Utilitaires Envoyés</span>
+                                                <i class="fa-solid fa-screwdriver-wrench text-[0.6rem] text-blue-300"></i>
                                             </div>
-                                            <div class="text-2xl font-bold font-['Agency_FB'] leading-none">30</div>
+                                            <div class="text-2xl font-bold font-['Agency_FB'] leading-none">4</div>
                                         </div>
+                                    </div>
+                                    
+                                    <!-- PROCESSING TIME INDICATOR -->
+                                    <div class="flex items-center justify-center gap-2 mb-3 opacity-80">
+                                        <i class="fa-regular fa-clock text-[0.6rem]"></i>
+                                        <span class="text-[0.6rem] italic">Traitement : ~20 min / utilitaire</span>
                                     </div>
 
                                     <div>
@@ -584,9 +590,9 @@
                                 </div>
                             </div>
                             
-                            <!-- LOGS (Timeline Style) -->
+                            <!-- LOGS (Condensed Timeline Style) -->
                             <div class="card flex-grow shadow-sm overflow-hidden flex flex-col">
-                                <div class="card-header border-b border-gray-100 pb-3 mb-0 bg-white sticky top-0 z-10">
+                                <div class="card-header border-b border-gray-100 pb-2 mb-0 bg-white sticky top-0 z-10">
                                     <div class="flex justify-between items-center">
                                         <span>Flux Récents</span>
                                         <span class="badge bg-gray-100 text-gray-500 border border-gray-200">Aujourd'hui</span>
@@ -594,63 +600,65 @@
                                 </div>
                                 <div class="relative flex-grow overflow-y-auto p-0" style="max-height: 280px;">
                                     <!-- Vertical Line -->
-                                    <div class="absolute left-[19px] top-4 bottom-4 w-[1px] bg-gray-200"></div>
+                                    <div class="absolute left-[15px] top-3 bottom-3 w-[1px] bg-gray-200"></div>
 
                                     <div class="flex flex-col gap-0">
-                                        <!-- Log Item 1 -->
-                                        <div class="relative flex gap-4 p-3 hover:bg-gray-50 transition-colors group">
-                                            <div class="relative z-10 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-white shadow-sm mt-1.5 ml-2"></div>
-                                            <div class="flex-grow">
-                                                <div class="flex justify-between items-start">
-                                                    <span class="text-xs font-bold text-gray-700">Import DFLGEST</span>
-                                                    <span class="text-[0.65rem] font-bold text-gray-400">10:42</span>
+                                        <!-- Log Item 1 Condensed -->
+                                        <div class="relative flex gap-3 p-2 hover:bg-gray-50 transition-colors group border-b border-gray-50/50">
+                                            <div class="relative z-10 w-2 h-2 rounded-full bg-green-500 border-2 border-white shadow-sm mt-1.5 ml-3"></div>
+                                            <div class="flex-grow flex justify-between items-center">
+                                                <div class="flex flex-col">
+                                                    <span class="text-xs font-bold text-gray-700 leading-tight">Import DFLGEST</span>
+                                                    <span class="text-[0.65rem] text-gray-400">Intégration mensuelle terminée.</span>
                                                 </div>
-                                                <p class="text-[0.7rem] text-gray-500 mt-0.5">Intégration du fichier mensuel terminée avec succès.</p>
-                                                <div class="mt-1.5 flex gap-2">
-                                                    <span class="text-[0.6rem] bg-green-50 text-green-600 px-1.5 py-0.5 rounded border border-green-100 font-bold uppercase">Succès</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Log Item 2 -->
-                                        <div class="relative flex gap-4 p-3 hover:bg-gray-50 transition-colors group">
-                                            <div class="relative z-10 w-2.5 h-2.5 rounded-full bg-blue-500 border-2 border-white shadow-sm mt-1.5 ml-2"></div>
-                                            <div class="flex-grow">
-                                                <div class="flex justify-between items-start">
-                                                    <span class="text-xs font-bold text-gray-700">Extraction Cité 45012</span>
-                                                    <span class="text-[0.65rem] font-bold text-gray-400">10:15</span>
-                                                </div>
-                                                <p class="text-[0.7rem] text-gray-500 mt-0.5">Consultation patrimoine et export Excel généré.</p>
-                                                <div class="mt-1.5 flex gap-2">
-                                                    <span class="text-[0.6rem] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded border border-blue-100 font-bold uppercase">Consultation</span>
+                                                <div class="flex flex-col items-end">
+                                                    <span class="text-[0.65rem] font-bold text-gray-500 mb-0.5">10:42</span>
+                                                    <span class="text-[0.55rem] bg-green-50 text-green-600 px-1 rounded border border-green-100 font-bold uppercase">Succès</span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Log Item 3 -->
-                                        <div class="relative flex gap-4 p-3 hover:bg-gray-50 transition-colors group">
-                                            <div class="relative z-10 w-2.5 h-2.5 rounded-full bg-purple-500 border-2 border-white shadow-sm mt-1.5 ml-2"></div>
-                                            <div class="flex-grow">
-                                                <div class="flex justify-between items-start">
-                                                    <span class="text-xs font-bold text-gray-700">Envoi MAJPLAN</span>
-                                                    <span class="text-[0.65rem] font-bold text-gray-400">09:30</span>
+                                        <!-- Log Item 2 Condensed -->
+                                        <div class="relative flex gap-3 p-2 hover:bg-gray-50 transition-colors group border-b border-gray-50/50">
+                                            <div class="relative z-10 w-2 h-2 rounded-full bg-blue-500 border-2 border-white shadow-sm mt-1.5 ml-3"></div>
+                                            <div class="flex-grow flex justify-between items-center">
+                                                <div class="flex flex-col">
+                                                    <span class="text-xs font-bold text-gray-700 leading-tight">Extraction 45012</span>
+                                                    <span class="text-[0.65rem] text-gray-400">Export Excel généré.</span>
                                                 </div>
-                                                <p class="text-[0.7rem] text-gray-500 mt-0.5">Synchronisation automatique vers Jetform.</p>
-                                                <div class="mt-1.5 flex gap-2">
-                                                    <span class="text-[0.6rem] bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded border border-purple-100 font-bold uppercase">Sync OK</span>
+                                                <div class="flex flex-col items-end">
+                                                    <span class="text-[0.65rem] font-bold text-gray-500 mb-0.5">10:15</span>
+                                                    <span class="text-[0.55rem] bg-blue-50 text-blue-600 px-1 rounded border border-blue-100 font-bold uppercase">Consult.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Log Item 3 Condensed -->
+                                        <div class="relative flex gap-3 p-2 hover:bg-gray-50 transition-colors group border-b border-gray-50/50">
+                                            <div class="relative z-10 w-2 h-2 rounded-full bg-purple-500 border-2 border-white shadow-sm mt-1.5 ml-3"></div>
+                                            <div class="flex-grow flex justify-between items-center">
+                                                <div class="flex flex-col">
+                                                    <span class="text-xs font-bold text-gray-700 leading-tight">Envoi MAJPLAN</span>
+                                                    <span class="text-[0.65rem] text-gray-400">Sync vers Jetform.</span>
+                                                </div>
+                                                <div class="flex flex-col items-end">
+                                                    <span class="text-[0.65rem] font-bold text-gray-500 mb-0.5">09:30</span>
+                                                    <span class="text-[0.55rem] bg-purple-50 text-purple-600 px-1 rounded border border-purple-100 font-bold uppercase">Sync OK</span>
                                                 </div>
                                             </div>
                                         </div>
                                         
-                                        <!-- Log Item 4 (Old) -->
-                                        <div class="relative flex gap-4 p-3 hover:bg-gray-50 transition-colors group opacity-60">
-                                            <div class="relative z-10 w-2.5 h-2.5 rounded-full bg-gray-300 border-2 border-white shadow-sm mt-1.5 ml-2"></div>
-                                            <div class="flex-grow">
-                                                <div class="flex justify-between items-start">
-                                                    <span class="text-xs font-bold text-gray-700">Purge Logs</span>
-                                                    <span class="text-[0.65rem] font-bold text-gray-400">Hier</span>
+                                        <!-- Log Item 4 Condensed (Old) -->
+                                        <div class="relative flex gap-3 p-2 hover:bg-gray-50 transition-colors group opacity-60">
+                                            <div class="relative z-10 w-2 h-2 rounded-full bg-gray-300 border-2 border-white shadow-sm mt-1.5 ml-3"></div>
+                                            <div class="flex-grow flex justify-between items-center">
+                                                <div class="flex flex-col">
+                                                    <span class="text-xs font-bold text-gray-700 leading-tight">Purge Logs</span>
+                                                    <span class="text-[0.65rem] text-gray-400">Maintenance auto.</span>
                                                 </div>
-                                                <p class="text-[0.7rem] text-gray-500 mt-0.5">Maintenance système automatique.</p>
+                                                <div class="flex flex-col items-end">
+                                                    <span class="text-[0.65rem] font-bold text-gray-500 mb-0.5">Hier</span>
+                                                </div>
                                             </div>
                                         </div>
 
