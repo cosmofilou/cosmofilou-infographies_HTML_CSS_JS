@@ -47,36 +47,48 @@
             position: relative; /* Pour positionnement watermark */
         }
 
-        /* --- FILIGRANE SALESFORCE --- */
+        /* --- FILIGRANE SALESFORCE (Bottom Right) --- */
         .watermark-salesforce {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-15deg);
+            bottom: 30px;
+            right: 40px;
             display: flex;
-            flex-direction: column;
+            flex-direction: row; /* Alignement horizontal */
             align-items: center;
-            justify-content: center;
+            justify-content: flex-end;
+            gap: 12px;
             z-index: 0; /* Derrière la frame */
             pointer-events: none;
-            opacity: 0.15; /* Augmenté pour visibilité */
+            opacity: 0.25; /* Discret mais visible */
             color: white;
-            white-space: nowrap;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1); /* Légère lueur */
         }
         
         .watermark-salesforce i {
-            font-size: 25vw; /* Taille ajustée pour équilibre */
+            font-size: 3.5rem; /* Taille logo standard */
             line-height: 1;
-            margin-bottom: 1rem;
+            margin-bottom: 0;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
         
         .watermark-salesforce span {
-            font-size: 3vw;
-            font-weight: 900;
+            font-size: 0.9rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.15em;
             font-family: 'Segoe UI', sans-serif;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.2;
+        }
+        
+        .watermark-salesforce span small {
+            font-size: 0.6rem;
+            font-weight: 400;
+            opacity: 0.8;
+            letter-spacing: 0.05em;
+            text-transform: none;
         }
 
         /* --- CONTENEUR --- */
@@ -377,7 +389,10 @@
     <!-- WATERMARK SALESFORCE -->
     <div class="watermark-salesforce">
         <i class="fa-brands fa-salesforce"></i>
-        <span>POWERED BY SALESFORCE</span>
+        <span>
+            <small>Propulsé par</small>
+            Salesforce
+        </span>
     </div>
 
     <div class="userform-frame">
