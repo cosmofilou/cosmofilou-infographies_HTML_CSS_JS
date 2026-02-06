@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html class="antialiased">
+  <head>
+    <base target="_top">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind Typography Plugin -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <!-- Vue.js 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- SortableJS -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- Marked -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <script>
+      tailwind.config = {
+        darkMode: 'media', // S'adapte automatiquement au système (Clair/Sombre)
+        theme: {
+          extend: {
+            colors: {
+              // Définition de palettes sémantiques si besoin
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      /* Scrollbar Adaptative */
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      
+      /* Light Mode Scrollbar */
+      ::-webkit-scrollbar-track { background: #f3f4f6; }
+      ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+      /* Dark Mode Scrollbar via Media Query */
+      @media (prefers-color-scheme: dark) {
+        ::-webkit-scrollbar-track { background: #191919; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+      }
+      
+      .loader {
+        border-top-color: #3B82F6;
+        -webkit-animation: spinner 1.5s linear infinite;
+        animation: spinner 1.5s linear infinite;
+      }
+      @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      
+      .fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease; }
+      .fade-enter-from, .fade-leave-to { opacity: 0; }
+
+      .list-enter-active, .list-leave-active { transition: all 0.3s ease; }
+      .list-enter-from, .list-leave-to { opacity: 0; transform: translateX(30px); }
+      
+      input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.6; }
+      @media (prefers-color-scheme: dark) {
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+      }
+
+      .ghost-card { opacity: 0.4; background: #e5e7eb; border: 1px dashed #3b82f6; }
+      @media (prefers-color-scheme: dark) {
+        .ghost-card { background: #1e1e1e; border-color: #60a5fa; }
+      }
+      
+      .drag-handle { cursor: grab; }
+      .drag-handle:active { cursor: grabbing; }
+      
+      .project-drag-handle { cursor: move; color: #9ca3af; touch-action: none; }
+      .project-drag-handle:hover { color: #6b7280; }
+      @media (prefers-color-scheme: dark) {
+        .project-drag-handle:hover { color: #fff; }
+      }
+
+      /* Markdown Styles - Adaptative */
+      .prose h1, .prose h2, .prose h3 { color: #111827; margin-top: 1em; margin-bottom: 0.5em; font-weight: 700; }
+      .prose p { margin-bottom: 0.8em; line-height: 1.6; color: #374151; }
+      .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 0.8em; color: #374151; }
+      .prose strong { color: #000; font-weight: 700; }
+      
+      @media (prefers-color-scheme: dark) {
+        .prose h1, .prose h2, .prose h3 { color: #e5e7eb; }
+        .prose p { color: #d1d5db; }
+        .prose ul { color: #d1d5db; }
+        .prose strong { color: #fff; }
+      }
+
+      /* Table Styles */
+      .review-table th { position: sticky; top: 0; z-index: 10; }
+      .review-input { background: transparent; border: 1px solid transparent; width: 100%; padding: 4px; border-radius: 4px; transition: all 0.2s; }
+      .review-input:hover, .review-input:focus { outline: none; }
+      
+      /* Light Mode Inputs */
+      .review-input:hover, .review-input:focus { background: #f3f4f6; border-color: #d1d5db; }
+      /* Dark Mode Inputs */
+      @media (prefers-color-scheme: dark) {
+        .review-input:hover, .review-input:focus { background: #2a2a2a; border-color: #4b5563; }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 dark:bg-[#191919] text-gray-900 dark:text-gray-200 font-sans h-screen overflow-hidden selection:bg-blue-100 dark:selection:bg-orange-500/30 selection:text-blue-900 dark:selection:text-orange-200">
+
+    <div id="app" class="h-full flex relative">
+      
+      <!-- TOASTS -->
+      <div class="fixed bottom-6 right-6 z-[100] flex flex-col gap-2 pointer-events-none w-full max-w-xs px-4 sm:px-0">
+        <transition-group name="list">
+          <div v-for="toast in toasts" :key="toast.id" 
+               class="pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-lg shadow-xl border min-w-0 w-full backdrop-blur-md"
+               :class="{
+                 'bg-green-100 border-green-200 text-green-800 dark:bg-green-900/90 dark:border-green-800 dark:text-green-100': toast.type === 'success',
+                 'bg-red-100 border-red-200 text-red-800 dark:bg-red-900/90 dark:border-red-800 dark:text-red-100': toast.type === 'error',
+                 'bg-blue-100 border-blue-200 text-blue-800 dark:bg-blue-900/90 dark:border-blue-800 dark:text-blue-100': toast.type === 'info'
+               }">
+             <i :data-lucide="toast.icon" class="w-5 h-5 shrink-0"></i>
+             <div class="text-sm font-medium truncate">{{ toast.message }}</div>
+          </div>
+        </transition-group>
+      </div>
+
+      <!-- MOBILE OVERLAY BACKDROP -->
+      <transition name="fade">
+        <div v-if="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm"></div>
+      </transition>
+
+      <!-- SIDEBAR -->
+      <aside class="w-72 sm:w-64 bg-white dark:bg-[#202020] border-r border-gray-200 dark:border-gray-800 flex flex-col justify-between shrink-0 transition-transform duration-300 z-50 fixed inset-y-0 left-0 lg:relative lg:translate-x-0 shadow-2xl lg:shadow-none" 
+             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
+        <div>
+          <!-- Brand -->
+          <div class="h-14 flex items-center px-4 border-b border-gray-200 dark:border-gray-800 gap-3">
+             <div class="w-8 h-8 rounded bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white font-bold text-xs shadow-md">PX</div>
+             <div><h1 class="font-bold text-sm text-gray-900 dark:text-gray-100 leading-tight">DT Groupe</h1><p class="text-[10px] text-gray-500 dark:text-gray-500 font-medium">Proxiserve - Prox-Hydro</p></div>
+             <button @click="sidebarOpen = false" class="lg:hidden ml-auto text-gray-500 hover:text-gray-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+          </div>
+
+          <!-- Navigation -->
+          <nav class="p-3 space-y-1">
+            <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase px-3 py-2 tracking-wider">Espace de travail</div>
+            
+            <button @click="currentViewScope = 'active'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'active' && viewType === 'grid' ? 'bg-gray-100 text-gray-900 dark:bg-[#2c2c2c] dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+              <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Projets en cours
+            </button>
+            
+            <button @click="currentViewScope = 'active'; viewType = 'review'; if(isMobile) sidebarOpen = false;" :class="viewType === 'review' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-900/40 dark:text-indigo-200 dark:border-indigo-500/30' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors mt-1">
+              <i data-lucide="presentation" class="w-4 h-4"></i> 🎯 Revue de Projet
+            </button>
+
+            <button @click="currentViewScope = 'archived'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'archived' ? 'bg-gray-100 text-gray-900 dark:bg-[#2c2c2c] dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors mt-4">
+              <i data-lucide="archive" class="w-4 h-4"></i> Archives
+            </button>
+
+            <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase px-3 py-2 mt-4 tracking-wider">Organisation</div>
+            <button @click="showTeamModal = true; if(isMobile) sidebarOpen = false;" class="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200 transition-colors"><i data-lucide="users" class="w-4 h-4"></i> Annuaire Équipe</button>
+             <button @click="showKPIModal = true; if(isMobile) sidebarOpen = false;" class="w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200 transition-colors"><i data-lucide="bar-chart-2" class="w-4 h-4"></i> Rapports KPI</button>
+          </nav>
+        </div>
+
+        <div class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#1c1c1c]">
+           <div class="p-3 flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#252525] transition-colors cursor-pointer">
+              <img :src="currentUser.avatar" class="w-8 h-8 rounded-full border border-gray-300 dark:border-gray-600">
+              <div class="flex-1 min-w-0"><p class="text-sm font-medium text-gray-900 dark:text-gray-200 truncate">{{ currentUser.name }}</p><p class="text-[10px] text-gray-500 truncate">{{ currentUser.email }}</p></div>
+           </div>
+           <div class="px-4 py-2 border-t border-gray-200 dark:border-gray-800">
+             <button @click="showLegalModal = true" class="text-[10px] text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 flex items-center gap-1 w-full transition-colors"><i data-lucide="scale" class="w-3 h-3"></i> Mentions Légales & RGPD</button>
+           </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <div class="flex-1 flex flex-col min-w-0 bg-gray-50 dark:bg-[#191919]">
+        
+        <!-- HEADER -->
+        <header class="h-14 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 sm:px-6 bg-white dark:bg-[#191919]">
+          <div class="flex items-center gap-3 sm:gap-4">
+            <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"><i data-lucide="menu" class="w-5 h-5"></i></button>
+            <h2 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2 truncate max-w-[200px] sm:max-w-none">
+               <span v-if="viewType === 'review'" class="text-indigo-600 dark:text-indigo-400"><i data-lucide="presentation" class="w-5 h-5"></i></span>
+               {{ viewType === 'review' ? 'Cockpit' : (currentViewScope === 'active' ? 'Vue d\'ensemble' : 'Archives') }}
+            </h2>
+            
+            <span class="text-gray-300 dark:text-gray-600 text-sm hidden sm:inline">|</span>
+            
+            <!-- Standard View Switcher -->
+            <div v-if="viewType !== 'review'" class="hidden sm:flex bg-gray-100 dark:bg-[#2c2c2c] rounded p-0.5">
+               <button @click="viewType = 'grid'" :class="viewType === 'grid' ? 'bg-white text-gray-900 shadow dark:bg-[#3f3f3f] dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'" class="p-1.5 rounded transition-all"><i data-lucide="grid" class="w-4 h-4"></i></button>
+               <button @click="viewType = 'list'" :class="viewType === 'list' ? 'bg-white text-gray-900 shadow dark:bg-[#3f3f3f] dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'" class="p-1.5 rounded transition-all"><i data-lucide="list" class="w-4 h-4"></i></button>
+            </div>
+            <!-- Review Mode Indicator -->
+            <div v-if="viewType === 'review'" class="hidden sm:flex text-xs text-indigo-500 dark:text-indigo-300 italic items-center gap-1">
+               <i data-lucide="arrow-up-down" class="w-3 h-3"></i> Priorisation
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 sm:gap-3">
+            <div class="relative hidden lg:flex items-center bg-gray-100 dark:bg-[#252525] border border-gray-200 dark:border-gray-700 rounded-full px-3 py-1.5 gap-2">
+               <i data-lucide="filter" class="w-3.5 h-3.5 text-gray-500"></i>
+               <select v-model="selectedUserFilter" class="bg-transparent text-sm text-gray-700 dark:text-gray-300 outline-none cursor-pointer appearance-none pr-4 border-none py-0 w-full">
+                  <option :value="null" class="bg-white dark:bg-[#1e1e1e]">👥 Tous les membres</option>
+                  <option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option>
+               </select>
+               <i data-lucide="chevron-down" class="w-3 h-3 text-gray-500 absolute right-2 pointer-events-none"></i>
+            </div>
+
+            <div class="relative hidden sm:block">
+               <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-gray-500"></i>
+               <input type="text" placeholder="Rechercher..." v-model="searchQuery" class="bg-gray-100 dark:bg-[#252525] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-200 text-sm rounded-full pl-9 pr-4 py-1.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-32 transition-all focus:w-48 placeholder-gray-500">
+            </div>
+
+            <button @click="showNewProjectModal = true" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-medium transition-colors flex items-center gap-2 shadow-lg shadow-blue-900/10">
+              <i data-lucide="plus" class="w-4 h-4"></i> <span class="hidden sm:inline">Nouveau</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- MAIN SCROLL AREA -->
+        <main class="flex-1 overflow-auto p-4 sm:p-6 relative">
+          
+          <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-[#191919] z-50">
+            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
+          </div>
+
+          <div v-else>
+            
+            <!-- VIEW: REVIEW (STEERING COMMITTEE) -->
+            <div v-if="viewType === 'review'" class="h-full flex flex-col">
+               
+               <div class="flex flex-col sm:flex-row items-start gap-4 mb-6 p-4 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/10 border border-indigo-200 dark:border-indigo-900/30 rounded-lg">
+                  <div class="p-3 bg-indigo-100 dark:bg-indigo-500/20 rounded-lg shrink-0"><i data-lucide="target" class="w-6 h-6 text-indigo-600 dark:text-indigo-400"></i></div>
+                  <div>
+                     <h3 class="text-gray-900 dark:text-white font-bold text-lg">Réunion de Pilotage</h3>
+                     <p class="text-sm text-gray-600 dark:text-gray-400 max-w-2xl">
+                        Vue unique de décision. Utilisez les poignées <i data-lucide="grip-vertical" class="w-3 h-3 inline"></i> pour définir la priorité globale. 
+                     </p>
+                  </div>
+               </div>
+
+               <div class="bg-white dark:bg-[#202020] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden flex-1 overflow-y-auto shadow-sm dark:shadow-2xl">
+                  <table class="w-full text-left text-sm review-table">
+                     <thead class="bg-gray-50 dark:bg-[#202020] text-gray-500 dark:text-gray-400 font-medium text-xs uppercase tracking-wider border-b border-gray-200 dark:border-gray-700">
+                        <tr>
+                           <th class="px-4 py-3 w-10 text-center bg-gray-50 dark:bg-[#202020]"></th> <!-- Drag Handle Col -->
+                           <th class="px-4 py-3 min-w-[250px] bg-gray-50 dark:bg-[#202020]">Projet & Description</th>
+                           <th class="px-4 py-3 w-32 bg-gray-50 dark:bg-[#202020]">Propriétaire</th>
+                           <th class="px-4 py-3 w-36 bg-gray-50 dark:bg-[#202020]">Deadline</th>
+                           <th class="px-4 py-3 w-32 bg-gray-50 dark:bg-[#202020]">Priorité</th>
+                           <th class="px-4 py-3 w-32 bg-gray-50 dark:bg-[#202020]">Statut</th>
+                           <th class="px-4 py-3 min-w-[200px] bg-gray-50 dark:bg-[#202020]">Décision Séance</th>
+                        </tr>
+                     </thead>
+                     <tbody :ref="el => { if(el) initProjectSortable(el) }" class="divide-y divide-gray-200 dark:divide-gray-800">
+                        <tr v-for="(project, index) in filteredProjects" :key="project.id" :data-id="project.id" class="hover:bg-gray-50 dark:hover:bg-[#252525] group transition-colors">
+                           
+                           <!-- Drag Handle -->
+                           <td class="px-4 py-3 text-center align-top pt-4">
+                              <i data-lucide="grip-vertical" class="project-drag-handle w-5 h-5 mx-auto"></i>
+                           </td>
+                           
+                           <!-- Name & Context -->
+                           <td class="px-4 py-3 align-top">
+                              <div class="flex items-center gap-3 mb-1">
+                                 <button @click="openProjectDetails(project)" class="p-1 hover:bg-blue-100 dark:hover:bg-blue-500/20 rounded text-blue-600 dark:text-blue-400 transition-colors" title="Ouvrir la fiche complète">
+                                    <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                                 </button>
+                                 <span class="text-xl">{{ project.emoji }}</span>
+                                 <input v-model="project.nom" @change="updateProject(project)" class="review-input font-bold text-gray-900 dark:text-white text-sm" />
+                              </div>
+                              <div class="pl-8 opacity-80 sm:opacity-60 hover:opacity-100 transition-opacity">
+                                 <input v-model="project.description" @change="updateProject(project)" class="review-input text-xs text-gray-500 dark:text-gray-400 italic" placeholder="Ajouter une courte description..." />
+                              </div>
+                           </td>
+
+                           <!-- Owner -->
+                           <td class="px-4 py-3 align-top">
+                              <select v-model="project.owner" @change="updateProject(project)" class="review-input bg-transparent text-gray-700 dark:text-gray-300 text-xs py-1">
+                                 <option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option>
+                              </select>
+                           </td>
+
+                           <!-- Deadline -->
+                           <td class="px-4 py-3 align-top">
+                              <input type="date" :value="toInputDate(project.deadline)" @input="e => { project.deadline = new Date(e.target.value); updateProject(project); }" 
+                                     class="review-input text-xs font-mono py-1"
+                                     :class="isOverdueProject(project) ? 'text-red-600 dark:text-red-400 font-bold border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/10' : 'text-gray-500 dark:text-gray-400'">
+                           </td>
+
+                           <!-- Priority -->
+                           <td class="px-4 py-3 align-top">
+                              <select v-model="project.priorite" @change="updateProject(project)" class="review-input text-xs font-bold py-1 border"
+                                      :class="{
+                                         'text-red-600 border-red-200 bg-red-50 dark:text-red-400 dark:border-red-900/50 dark:bg-red-900/10': project.priorite === 'Haute',
+                                         'text-yellow-600 border-yellow-200 bg-yellow-50 dark:text-yellow-400 dark:border-yellow-900/50 dark:bg-yellow-900/10': project.priorite === 'Moyenne',
+                                         'text-blue-600 border-blue-200 bg-blue-50 dark:text-blue-400 dark:border-blue-900/50 dark:bg-blue-900/10': project.priorite === 'Basse'
+                                      }">
+                                 <option value="Haute" class="bg-white dark:bg-[#202020]">🔥 Haute</option>
+                                 <option value="Moyenne" class="bg-white dark:bg-[#202020]">⚡ Moyenne</option>
+                                 <option value="Basse" class="bg-white dark:bg-[#202020]">☕ Basse</option>
+                              </select>
+                           </td>
+
+                           <!-- Status -->
+                           <td class="px-4 py-3 align-top">
+                              <select v-model="project.status" @change="updateProject(project)" class="review-input text-xs font-medium py-1 rounded-full text-center"
+                                      :class="{
+                                         'text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/20': project.status === 'Terminé',
+                                         'text-yellow-700 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-900/20': project.status === 'En cours',
+                                         'text-gray-500 bg-gray-100 dark:text-gray-400 dark:bg-gray-700/20': project.status === 'En pause'
+                                      }">
+                                 <option value="En cours" class="bg-white dark:bg-[#202020]">En cours</option>
+                                 <option value="Terminé" class="bg-white dark:bg-[#202020]">Terminé</option>
+                                 <option value="En pause" class="bg-white dark:bg-[#202020]">En pause</option>
+                              </select>
+                           </td>
+
+                           <!-- Notes -->
+                           <td class="px-4 py-3 align-top">
+                              <textarea v-model="project.meeting_notes" @change="updateProject(project)" placeholder="Décision..." rows="1" class="review-input text-xs text-indigo-700 dark:text-indigo-200 bg-indigo-50 dark:bg-indigo-900/10 border-indigo-100 dark:border-indigo-900/20 placeholder-indigo-300 dark:placeholder-indigo-500/50 resize-none focus:h-20 focus:absolute focus:z-20 focus:w-64 focus:shadow-xl"></textarea>
+                           </td>
+
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+
+            <!-- VIEW: GRID (READ ONLY ORDER) -->
+            <div v-if="viewType === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div v-for="project in filteredProjects" :key="project.id" :data-id="project.id"
+                  @click="openProjectDetails(project)"
+                  class="group bg-white dark:bg-[#202020] border border-gray-200 dark:border-gray-800 hover:border-gray-400 dark:hover:border-gray-600 rounded-lg p-5 cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1 relative overflow-hidden flex flex-col h-64">
+                
+                <div class="flex justify-between items-start mb-3">
+                  <div class="w-10 h-10 rounded bg-gray-100 dark:bg-gray-800/50 flex items-center justify-center text-2xl shadow-inner dark:shadow-inner mx-auto sm:mx-0">
+                    {{ project.emoji || '📁' }}
+                  </div>
+                  <span :class="getPriorityClass(project.priorite)" class="text-[10px] uppercase font-bold px-2 py-0.5 rounded border">
+                    {{ project.priorite }}
+                  </span>
+                </div>
+
+                <h3 class="text-gray-900 dark:text-white font-medium text-lg mb-1 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{{ project.nom }}</h3>
+                <div class="flex items-center gap-2 mb-4">
+                   <img :src="getUserAvatar(project.owner)" class="w-4 h-4 rounded-full">
+                   <p class="text-xs text-gray-500">{{ project.owner }}</p>
+                </div>
+
+                <div class="text-xs text-gray-500 dark:text-gray-400 mb-auto line-clamp-3 leading-relaxed opacity-80" v-html="stripMarkdown(project.description) || 'Aucune description...'"></div>
+
+                <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+                  <div class="flex justify-between text-[10px] text-gray-400 mb-1.5">
+                    <span>Avancement</span>
+                    <span>{{ project.progress }}%</span>
+                  </div>
+                  <div class="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div class="h-full bg-blue-500 transition-all duration-500" :style="{ width: project.progress + '%' }"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Add Card -->
+              <div @click="showNewProjectModal = true" class="border border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-5 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 hover:border-gray-500 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#202020] cursor-pointer transition-all min-h-[16rem]">
+                 <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center mb-3 group-hover:bg-gray-300 dark:group-hover:bg-gray-700 transition">
+                   <i data-lucide="plus" class="w-6 h-6 opacity-50"></i>
+                 </div>
+                 <span class="text-sm font-medium">Créer un projet</span>
+              </div>
+            </div>
+
+            <!-- VIEW: LIST (READ ONLY ORDER) -->
+            <div v-if="viewType === 'list'" class="bg-white dark:bg-[#202020] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+               <div class="overflow-x-auto">
+                 <table class="w-full text-left text-sm whitespace-nowrap">
+                   <thead class="bg-gray-50 dark:bg-[#252525] text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 font-medium text-xs uppercase tracking-wider">
+                     <tr>
+                       <th class="px-6 py-3 w-12"></th> <!-- Emoji -->
+                       <th class="px-6 py-3">Nom du projet</th>
+                       <th class="px-6 py-3">État</th>
+                       <th class="px-6 py-3">Propriétaire</th>
+                       <th class="px-6 py-3">Priorité</th>
+                       <th class="px-6 py-3">Progression</th>
+                       <th class="px-6 py-3 text-right">Deadline</th>
+                     </tr>
+                   </thead>
+                   <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
+                     <tr v-for="project in filteredProjects" :key="project.id" :data-id="project.id" @click="openProjectDetails(project)" class="hover:bg-gray-50 dark:hover:bg-[#2a2a2a] cursor-pointer transition-colors group">
+                       <td class="pl-6 py-3 text-xl">{{ project.emoji || '📁' }}</td>
+                       <td class="px-6 py-3 font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                          {{ project.nom }}
+                       </td>
+                       <td class="px-6 py-3">
+                         <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs bg-gray-100 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
+                           <div class="w-1.5 h-1.5 rounded-full bg-yellow-500"></div> {{ project.status }}
+                         </span>
+                       </td>
+                       <td class="px-6 py-3 text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                          <img :src="getUserAvatar(project.owner)" class="w-5 h-5 rounded-full border border-gray-300 dark:border-gray-600">
+                          {{ project.owner }}
+                       </td>
+                       <td class="px-6 py-3">
+                          <span :class="getPriorityClass(project.priorite)" class="px-2 py-0.5 rounded border text-[10px]">{{ project.priorite }}</span>
+                       </td>
+                       <td class="px-6 py-3 w-48">
+                          <div class="flex items-center gap-2">
+                             <span class="text-xs text-gray-500 dark:text-gray-400 w-8">{{ project.progress }}%</span>
+                             <div class="h-1.5 flex-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-500" :style="{ width: project.progress + '%' }"></div>
+                             </div>
+                          </div>
+                       </td>
+                       <td class="px-6 py-3 text-right text-gray-500 dark:text-gray-500 text-xs">
+                          {{ formatDate(project.deadline) }}
+                       </td>
+                     </tr>
+                   </tbody>
+                 </table>
+               </div>
+            </div>
+
+          </div>
+        </main>
+      </div>
+
+      <!-- MODALS -->
+      <!-- PROJECT DETAILS -->
+      <transition name="fade">
+        <div v-if="activeProject" class="fixed inset-0 bg-black/60 backdrop-blur-[2px] z-50 flex justify-center items-center p-0 sm:p-4 sm:justify-end" @click.self="activeProject = null">
+          <div class="w-full h-full sm:max-w-3xl bg-white dark:bg-[#191919] border-l border-gray-200 dark:border-gray-700 shadow-2xl flex flex-col transform transition-transform duration-300">
+            <div class="h-12 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center px-4 bg-gray-50 dark:bg-[#202020]">
+               <div class="flex gap-2 text-gray-500 dark:text-gray-400 text-xs items-center truncate">
+                 <span class="hover:text-gray-900 dark:hover:text-white cursor-pointer transition">Projects</span> 
+                 <i data-lucide="chevron-right" class="w-3 h-3"></i> 
+                 <span class="text-gray-900 dark:text-white flex items-center gap-1 truncate">{{ activeProject.emoji }} {{ activeProject.nom }}</span>
+               </div>
+               <div class="flex items-center gap-1 shrink-0">
+                 <button @click="activeProject = null" class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"><i data-lucide="chevrons-right" class="w-5 h-5"></i></button>
+               </div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 sm:p-8 sm:px-12">
+              <div class="mb-8 group/header">
+                 <div class="text-5xl mb-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 inline-block p-2 rounded transition-colors select-none" title="Changer l'emoji">{{ activeProject.emoji || '📁' }}</div>
+                 <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-6 border-b border-transparent focus:border-gray-300 dark:focus:border-gray-700 outline-none pb-1">{{ activeProject.nom }}</h1>
+                 <div class="grid grid-cols-1 sm:grid-cols-[120px_1fr] gap-y-3 gap-x-4 text-sm mb-8">
+                    <div class="text-gray-500 flex items-center gap-2"><i data-lucide="user" class="w-4 h-4"></i> Propriétaire</div>
+                    <div class="flex items-center gap-2 text-gray-700 dark:text-gray-300 group cursor-pointer hover:text-gray-900 dark:hover:text-white"><img :src="getUserAvatar(activeProject.owner)" class="w-5 h-5 rounded-full border border-gray-300 dark:border-gray-600"> {{ activeProject.owner }}</div>
+                    
+                    <div class="text-gray-500 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4"></i> Dates</div>
+                    <div class="text-gray-700 dark:text-gray-300">{{ formatDate(activeProject.created_at) }} → {{ formatDate(activeProject.deadline) }}</div>
+                    
+                    <div class="text-gray-500 flex items-center gap-2"><i data-lucide="flag" class="w-4 h-4"></i> Priorité</div>
+                    <div><span :class="getPriorityClass(activeProject.priorite)" class="px-2 py-0.5 rounded text-xs border inline-block">{{ activeProject.priorite }}</span></div>
+                 </div>
+              </div>
+              <div class="mb-10">
+                 <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">À propos de ce projet</h3>
+                    <button @click="toggleEditDesc" class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 hover:underline">{{ isEditingDesc ? 'Terminer' : 'Modifier' }}</button>
+                 </div>
+                 <div class="bg-gray-50 dark:bg-[#2c2c2c] border border-gray-200 dark:border-[#3f3f3f] rounded-lg p-4 text-gray-700 dark:text-gray-300 relative min-h-[100px]">
+                    <div v-if="!isEditingDesc" @dblclick="isEditingDesc = true" class="prose prose-invert prose-sm max-w-none text-sm cursor-text" v-html="renderMarkdown(activeProject.description) || '<p class=\'text-gray-400 italic\'>Aucune description. Double-cliquez pour ajouter du contenu...</p>'"></div>
+                    <textarea v-else ref="descInput" v-model="activeProject.description" placeholder="Utilisez le Markdown..." class="w-full bg-transparent border-none outline-none resize-none text-sm leading-relaxed font-mono text-gray-800 dark:text-gray-200 h-full min-h-[150px]" @blur="isEditingDesc = false"></textarea>
+                 </div>
+              </div>
+              <div class="border-t border-gray-200 dark:border-gray-800 pt-8">
+                <div class="flex justify-between items-center mb-6"><h3 class="text-lg font-semibold text-gray-900 dark:text-white">Tâches</h3><span class="text-xs text-gray-500">{{ getTasksByProject(activeProject.id).length }} éléments</span></div>
+                <div class="flex items-center gap-3 mb-6"><span class="text-xs font-mono text-gray-500 dark:text-gray-400">{{ activeProject.progress }}%</span><div class="h-1.5 flex-1 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden"><div class="h-full bg-green-500 transition-all duration-500" :style="{ width: activeProject.progress + '%' }"></div></div></div>
+                
+                <div class="flex flex-col sm:flex-row gap-2 mb-6 group">
+                   <div class="flex gap-2 flex-1">
+                      <button @click="addTask" class="bg-blue-600 hover:bg-blue-700 text-white w-10 h-10 sm:w-8 sm:h-8 rounded flex items-center justify-center shrink-0 transition-colors shadow-lg"><i data-lucide="plus" class="w-5 h-5"></i></button>
+                      <input v-model="newTaskTitle" @keyup.enter="addTask" type="text" placeholder="Nouvelle tâche..." class="flex-1 bg-transparent border-b border-gray-300 dark:border-gray-700 group-hover:border-gray-500 text-sm py-1 outline-none transition-colors text-gray-900 dark:text-white">
+                   </div>
+                   <div class="flex gap-2">
+                      <input type="date" v-model="newTaskDate" class="bg-gray-100 dark:bg-[#202020] border border-gray-300 dark:border-gray-700 rounded text-xs text-gray-700 dark:text-gray-300 outline-none px-2 h-8 sm:h-7 font-mono w-auto">
+                      <select v-model="newTaskAssignee" class="bg-gray-100 dark:bg-[#202020] border border-gray-300 dark:border-gray-700 rounded text-xs text-gray-700 dark:text-gray-300 outline-none px-2 h-8 sm:h-7"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select>
+                   </div>
+                </div>
+
+                <div class="space-y-6">
+                   <div v-for="status in ['À faire', 'En cours', 'Terminé']" :key="status">
+                     <div class="flex items-center gap-2 mb-2 select-none"><span class="px-1.5 py-0.5 rounded text-[10px] uppercase font-bold tracking-wide text-white" :class="getStatusColor(status)">{{ status }}</span><div class="h-[1px] bg-gray-200 dark:bg-gray-800 flex-1"></div></div>
+                     <div :ref="el => { if(el) initSortable(el, status) }" class="space-y-1 min-h-[10px] pb-4" :data-status="status">
+                        <div v-for="task in getTasksByStatus(status)" :key="task.id" :data-id="task.id" class="drag-handle p-3 sm:p-2.5 hover:bg-gray-50 dark:hover:bg-[#252525] rounded -mx-2 transition-all group/task cursor-grab active:cursor-grabbing border border-transparent hover:border-gray-200 dark:hover:border-gray-700 select-none bg-white sm:bg-transparent dark:bg-[#191919] sm:dark:bg-transparent shadow-sm sm:shadow-none mb-1 sm:mb-0">
+                           <div v-if="editingTaskId !== task.id" class="flex items-center gap-3">
+                              <button @click.stop="cycleStatus(task)" class="w-5 h-5 sm:w-4 sm:h-4 rounded border border-gray-400 dark:border-gray-600 hover:border-blue-500 flex items-center justify-center transition-all shrink-0" :class="task.status === 'Terminé' ? 'bg-blue-600 border-blue-600' : ''"><i v-if="task.status === 'Terminé'" data-lucide="check" class="w-3 h-3 text-white"></i></button>
+                              <span @dblclick="startEdit(task)" :class="task.status === 'Terminé' ? 'text-gray-400 dark:text-gray-500 line-through' : 'text-gray-700 dark:text-gray-300'" class="text-sm flex-1 truncate select-none" title="Double-clic pour éditer">{{ task.titre }}</span>
+                              <div class="flex items-center gap-3">
+                                 <div v-if="task.due_date" class="flex items-center gap-1 text-[10px]" :class="isOverdue(task) ? 'text-red-600 dark:text-red-400 font-bold' : 'text-gray-500'"><i data-lucide="calendar" class="w-3 h-3"></i>{{ formatDateShort(task.due_date) }}</div>
+                                 <div class="flex items-center gap-1.5 opacity-50 group-hover/task:opacity-100 transition-opacity"><img :src="getUserAvatar(task.assignee)" class="w-5 h-5 rounded-full border border-gray-300 dark:border-gray-600" :title="task.assignee"></div>
+                                 <button @click.stop="startEdit(task)" class="opacity-0 group-hover/task:opacity-100 p-1 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-opacity" title="Éditer"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
+                                 <button @click.stop="deleteTask(task)" class="opacity-0 group-hover/task:opacity-100 p-1 text-gray-500 hover:text-red-600 dark:hover:text-red-400 transition-opacity" title="Supprimer"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                              </div>
+                           </div>
+                           <div v-else class="flex items-center gap-2 bg-gray-100 dark:bg-[#1a1a1a] p-1 rounded border border-blue-200 dark:border-blue-900/50 cursor-default" @click.stop>
+                              <input ref="editInput" v-model="editTaskForm.titre" @keyup.enter="saveEdit" @keyup.esc="cancelEdit" class="flex-1 bg-transparent text-sm text-gray-900 dark:text-white outline-none px-2" autofocus>
+                              <input type="date" v-model="editTaskForm.due_date_str" class="bg-white dark:bg-[#333] text-[10px] text-gray-800 dark:text-white rounded border border-gray-300 dark:border-gray-600 px-1 py-0.5 outline-none font-mono">
+                              <select v-model="editTaskForm.assignee" class="bg-white dark:bg-[#333] text-[10px] text-gray-800 dark:text-white rounded border border-gray-300 dark:border-gray-600 px-1 py-0.5 outline-none max-w-[80px]"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select>
+                              <button @click="saveEdit" class="text-green-600 dark:text-green-500 hover:text-green-500 p-1"><i data-lucide="check" class="w-4 h-4"></i></button>
+                              <button @click="cancelEdit" class="text-gray-500 hover:text-gray-700 dark:hover:text-white p-1"><i data-lucide="x" class="w-4 h-4"></i></button>
+                           </div>
+                        </div>
+                     </div>
+                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+
+      <!-- NEW PROJECT MODAL -->
+      <div v-if="showNewProjectModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[60] backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-[#202020] w-full max-w-md p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-2xl">
+           <h2 class="text-xl font-bold mb-6 text-gray-900 dark:text-white flex items-center gap-2"><div class="w-8 h-8 rounded bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400"><i data-lucide="plus" class="w-5 h-5"></i></div> Nouveau Projet</h2>
+           <div class="space-y-4">
+             <div class="flex gap-3">
+               <div class="w-16"><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Emoji</label><input v-model="newProjectForm.emoji" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded p-2.5 text-center text-xl outline-none focus:border-blue-500 text-gray-900 dark:text-white" placeholder="📁"></div>
+               <div class="flex-1"><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Nom du projet</label><input v-model="newProjectForm.nom" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded p-2.5 text-gray-900 dark:text-white focus:border-blue-500 outline-none transition-colors" placeholder="Ex: Déploiement Salesforce"></div>
+             </div>
+             <div class="grid grid-cols-2 gap-4">
+               <div><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Propriétaire</label><select v-model="newProjectForm.owner" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded p-2.5 text-gray-900 dark:text-white outline-none appearance-none"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select></div>
+               <div><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Priorité</label><select v-model="newProjectForm.priorite" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded p-2.5 text-gray-900 dark:text-white outline-none appearance-none"><option value="Haute" class="bg-white dark:bg-[#1e1e1e]">🔥 Haute</option><option value="Moyenne" class="bg-white dark:bg-[#1e1e1e]">⚡ Moyenne</option><option value="Basse" class="bg-white dark:bg-[#1e1e1e]">☕ Basse</option></select></div>
+             </div>
+             <div><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Description</label><textarea v-model="newProjectForm.description" rows="2" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded p-2.5 text-gray-900 dark:text-white outline-none resize-none" placeholder="Contexte du projet..."></textarea></div>
+           </div>
+           <div class="flex justify-end gap-3 mt-8"><button @click="showNewProjectModal = false" class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white px-4 py-2 text-sm">Annuler</button><button @click="createProject" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium shadow-lg shadow-blue-900/10 transition-all hover:scale-105">Créer le projet</button></div>
+        </div>
+      </div>
+
+      <!-- TEAM, KPI, LEGAL -->
+      <div v-if="showTeamModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[60] backdrop-blur-sm px-4"><div class="bg-white dark:bg-[#202020] w-full max-w-lg p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-2xl"><div class="flex justify-between items-center mb-6"><h2 class="text-xl font-bold text-gray-900 dark:text-white">Annuaire Équipe</h2><button @click="showTeamModal = false" class="text-gray-500 hover:text-gray-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button></div><div class="space-y-3 max-h-[60vh] overflow-y-auto pr-2"><div v-for="user in teamMembers" :key="user.email" class="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-[#252525] border border-transparent hover:border-gray-200 dark:hover:border-gray-700 transition"><img :src="user.avatar" class="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600"><div class="flex-1"><h3 class="text-sm font-bold text-gray-900 dark:text-white">{{ user.name }}</h3><p class="text-xs text-gray-500">{{ user.email }}</p></div></div></div></div></div>
+      
+      <div v-if="showKPIModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[70] backdrop-blur-sm px-4"><div class="bg-white dark:bg-[#202020] w-full max-w-4xl p-8 rounded-xl border border-gray-200 dark:border-gray-700 shadow-2xl relative max-h-[90vh] overflow-y-auto"><button @click="showKPIModal = false" class="absolute top-6 right-6 text-gray-500 hover:text-gray-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button><h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-2"><i data-lucide="bar-chart-2" class="w-6 h-6 text-blue-500"></i> Tableau de bord KPI</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8"><div class="bg-gray-50 dark:bg-[#2a2a2a] p-4 rounded-lg border border-gray-200 dark:border-gray-700"><p class="text-xs text-gray-500 uppercase font-bold mb-1">Projets Actifs</p><p class="text-3xl font-bold text-gray-900 dark:text-white">{{ kpiData.activeProjects }}</p></div><div class="bg-gray-50 dark:bg-[#2a2a2a] p-4 rounded-lg border border-gray-200 dark:border-gray-700"><p class="text-xs text-gray-500 uppercase font-bold mb-1">Tâches en cours</p><p class="text-3xl font-bold text-yellow-600 dark:text-yellow-500">{{ kpiData.tasksPending }}</p></div><div class="bg-gray-50 dark:bg-[#2a2a2a] p-4 rounded-lg border border-gray-200 dark:border-gray-700"><p class="text-xs text-gray-500 uppercase font-bold mb-1">Tâches Terminées</p><p class="text-3xl font-bold text-green-600 dark:text-green-500">{{ kpiData.tasksDone }}</p></div><div class="bg-gray-50 dark:bg-[#2a2a2a] p-4 rounded-lg border border-gray-200 dark:border-gray-700"><p class="text-xs text-gray-500 uppercase font-bold mb-1">Avancement Global</p><p class="text-3xl font-bold text-blue-600 dark:text-blue-500">{{ kpiData.globalProgress }}%</p></div></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8"><div><h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Charge de travail</h3><div class="space-y-4"><div v-for="user in kpiData.userStats" :key="user.name" class="flex items-center gap-3"><img :src="getUserAvatar(user.name)" class="w-8 h-8 rounded-full"><div class="flex-1"><div class="flex justify-between text-xs mb-1"><span class="text-gray-700 dark:text-gray-300">{{ user.name }}</span><span class="text-gray-500">{{ user.count }} tâches</span></div><div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"><div class="h-full bg-blue-600" :style="{ width: (user.count / kpiData.maxTasks * 100) + '%' }"></div></div></div></div></div></div><div><h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Santé des Projets (Top 5)</h3><div class="space-y-3"><div v-for="p in kpiData.topProjects" :key="p.id" class="bg-gray-50 dark:bg-[#252525] p-3 rounded border border-gray-200 dark:border-gray-700"><div class="flex justify-between items-center mb-2"><span class="text-sm font-medium text-gray-900 dark:text-white truncate w-3/4">{{ p.emoji }} {{ p.nom }}</span><span class="text-xs font-mono text-gray-500">{{ p.progress }}%</span></div><div class="h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"><div class="h-full" :class="p.progress === 100 ? 'bg-green-500' : 'bg-blue-500'" :style="{ width: p.progress + '%' }"></div></div></div></div></div></div></div></div>
+      
+      <div v-if="showLegalModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[70] backdrop-blur-sm px-4"><div class="bg-white dark:bg-[#202020] w-full max-w-2xl p-8 rounded-xl border border-gray-200 dark:border-gray-700 relative max-h-[80vh] overflow-y-auto"><button @click="showLegalModal = false" class="absolute top-6 right-6 text-gray-500 hover:text-gray-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button><h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">Mentions Légales</h2><div class="text-sm text-gray-600 dark:text-gray-300 space-y-6 leading-relaxed"><section><h3 class="text-gray-900 dark:text-white font-bold mb-2">1. Éditeur</h3><p>Direction Technique Groupe Proxiserve.</p></section><div class="text-xs text-gray-500 mt-8 border-t border-gray-200 dark:border-gray-800 pt-4 flex justify-between items-center"><span>© {{ new Date().getFullYear() }} Proxiserve - Prox-Hydro.</span></div></div></div></div>
+
+    </div>
+
+    <!-- MOCKING SYSTEM (Same as before) -->
+    <script>
+      (function() {
+        if (typeof google === 'undefined') {
+          console.warn("⚠️ Mode Prévisualisation: Mock Activé");
+          const USERS = [
+             { name: 'Aurélien Da Costa', email: 'a.dacosta@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Aurélien+Da+Costa&background=0D8ABC&color=fff', role: 'Admin' },
+             { name: 'Sophie Martin', email: 's.martin@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Sophie+Martin&background=D946EF&color=fff', role: 'Manager' },
+             { name: 'Thomas Dubreuil', email: 't.dubreuil@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Thomas+Dubreuil&background=F59E0B&color=fff', role: 'Dev' },
+             { name: 'Julie Leroy', email: 'j.leroy@prox-hydro.fr', avatar: 'https://ui-avatars.com/api/?name=Julie+Leroy&background=10B981&color=fff', role: 'User' }
+          ];
+          const MOCK_DATA = {
+            currentUser: USERS[0],
+            team: USERS,
+            projects: [
+              { id: 'p1', nom: 'Ouverture Licorne Ag. IDF', emoji: '🦄', description: "Ce projet pilote la bascule de l'agence IDF.\n\n**Objectifs :**\n- Migrer les données\n- Former les équipes\n- *Zéro coupure de service*", owner: 'Aurélien Da Costa', status: 'En cours', priorite: 'Haute', deadline: new Date(2026, 3, 30), created_at: new Date(2025, 10, 14), archived: false, rank: 1 },
+              { id: 'p2', nom: 'Audit Énergétique Nord', emoji: '⚡', description: "Analyse complète du parc immobilier social.", owner: 'Sophie Martin', status: 'En cours', priorite: 'Moyenne', deadline: new Date(2024, 5, 15), created_at: new Date(), archived: false, rank: 2 },
+              { id: 'p3', nom: 'Migration CRM V2 (Archives)', emoji: '💾', description: "Ancien projet.", owner: 'Thomas Dubreuil', status: 'Terminé', priorite: 'Basse', deadline: new Date(2023, 2, 10), created_at: new Date(), archived: true, rank: 3 }
+            ],
+            tasks: [
+              { id: 't1', project_id: 'p1', titre: 'Recette fonctionnelle', status: 'En cours', assignee: 'Aurélien Da Costa', due_date: new Date(2025, 5, 20) }, 
+              { id: 't2', project_id: 'p1', titre: 'Formation utilisateurs', status: 'À faire', assignee: 'Julie Leroy', due_date: new Date(2023, 10, 10) },
+              { id: 't3', project_id: 'p1', titre: 'Migration des données historiques', status: 'Terminé', assignee: 'Thomas Dubreuil', due_date: new Date() },
+              { id: 't4', project_id: 'p2', titre: 'Relevé terrain', status: 'En cours', assignee: 'Sophie Martin', due_date: new Date() },
+              { id: 't5', project_id: 'p2', titre: 'Analyse thermique', status: 'En cours', assignee: 'Sophie Martin', due_date: new Date() }
+            ]
+          };
+          const mockServer = {
+            getAllData: () => JSON.parse(JSON.stringify(MOCK_DATA)),
+            createTask: (d) => ({...d, id: 'mock-t-'+Date.now(), status: d.status || 'À faire'}),
+            createProject: (d) => ({...d, id: 'mock-p-'+Date.now(), status: 'En cours', progress: 0, rank: 999}),
+            updateProject: (p) => p,
+            updateTaskStatus: () => true,
+            updateTaskDetails: (t) => t, 
+            deleteTask: (id) => true,
+            updateProjectOrder: (order) => true 
+          };
+          const createMockRunner = (handlers = {}) => {
+            const runner = {
+              withSuccessHandler: (fn) => createMockRunner({ ...handlers, success: fn }),
+              withFailureHandler: (fn) => createMockRunner({ ...handlers, failure: fn }),
+            };
+            Object.keys(mockServer).forEach(method => {
+              runner[method] = (...args) => {
+                setTimeout(() => {
+                   const result = mockServer[method](...args);
+                   if (handlers.success) handlers.success(result);
+                   if(method === 'createTask') MOCK_DATA.tasks.push(result);
+                   if(method === 'createProject') MOCK_DATA.projects.push(result);
+                }, 400);
+              };
+            });
+            return runner;
+          };
+          window.google = { script: { run: createMockRunner() } };
+        }
+      })();
+    </script>
+
+    <script>
+      const { createApp, ref, computed, onMounted, onUpdated, nextTick } = Vue;
+
+      const toInputDate = (d) => {
+         if (!d) return new Date().toISOString().split('T')[0];
+         return new Date(d).toISOString().split('T')[0];
+      };
+
+      createApp({
+        setup() {
+          const loading = ref(true);
+          const projects = ref([]);
+          const tasks = ref([]);
+          const teamMembers = ref([]);
+          const currentUser = ref({});
+          const toasts = ref([]); 
+          
+          const sidebarOpen = ref(false); // Default closed on mobile
+          const isMobile = ref(window.innerWidth < 1024);
+          
+          const currentViewScope = ref('active'); 
+          const viewType = ref('grid'); 
+          const searchQuery = ref("");
+          const selectedUserFilter = ref(null);
+
+          const activeProject = ref(null);
+          const isEditingDesc = ref(false); 
+          const newTaskTitle = ref("");
+          const newTaskAssignee = ref("");
+          const newTaskDate = ref(toInputDate(new Date())); 
+          
+          const editingTaskId = ref(null);
+          const editTaskForm = ref({});
+          const showNewProjectModal = ref(false);
+          const showLegalModal = ref(false);
+          const showTeamModal = ref(false);
+          const showKPIModal = ref(false); 
+          
+          const newProjectForm = ref({ nom: '', emoji: '📁', owner: '', priorite: 'Moyenne', description: '', deadline: new Date() });
+
+          // Window Resize Listener for Responsive Logic
+          window.addEventListener('resize', () => {
+             isMobile.value = window.innerWidth < 1024;
+             if(!isMobile.value) sidebarOpen.value = false; // Reset when going to desktop
+          });
+
+          const enrichedProjects = computed(() => {
+            const sortedProjects = [...projects.value].sort((a, b) => (a.rank || 0) - (b.rank || 0));
+            return sortedProjects.map(p => {
+              const pTasks = tasks.value.filter(t => t.project_id === p.id);
+              const total = pTasks.length;
+              const done = pTasks.filter(t => t.status === 'Terminé').length;
+              const progress = total === 0 ? 0 : Math.round((done / total) * 100);
+              return { ...p, progress, tasksTotal: total };
+            });
+          });
+
+          const filteredProjects = computed(() => {
+             let base = enrichedProjects.value;
+             if (currentViewScope.value === 'active') base = base.filter(p => !p.archived);
+             else base = base.filter(p => p.archived);
+             if (searchQuery.value) {
+                const q = searchQuery.value.toLowerCase();
+                base = base.filter(p => p.nom.toLowerCase().includes(q) || p.owner.toLowerCase().includes(q));
+             }
+             if (selectedUserFilter.value) base = base.filter(p => p.owner === selectedUserFilter.value);
+             return base;
+          });
+
+          const kpiData = computed(() => {
+             const activeProjs = enrichedProjects.value.filter(p => !p.archived);
+             const allTasks = tasks.value;
+             const activeProjects = activeProjs.length;
+             const tasksPending = allTasks.filter(t => t.status !== 'Terminé').length;
+             const tasksDone = allTasks.filter(t => t.status === 'Terminé').length;
+             const totalProgress = activeProjs.reduce((acc, p) => acc + p.progress, 0);
+             const globalProgress = activeProjects ? Math.round(totalProgress / activeProjects) : 0;
+             const userStats = teamMembers.value.map(user => {
+               const count = allTasks.filter(t => t.assignee === user.name && t.status !== 'Terminé').length;
+               return { name: user.name, count };
+             }).sort((a,b) => b.count - a.count);
+             const maxTasks = Math.max(...userStats.map(u => u.count)) || 1;
+             return { activeProjects, tasksPending, tasksDone, globalProgress, userStats, maxTasks, topProjects: activeProjs.sort((a,b) => b.progress - a.progress).slice(0, 5) };
+          });
+
+          const getTasksByProject = (pid) => tasks.value.filter(t => t.project_id === pid);
+          const getTasksByStatus = (status) => activeProject.value ? tasks.value.filter(t => t.project_id === activeProject.value.id && t.status === status) : [];
+
+          const loadData = () => {
+            loading.value = true;
+            google.script.run.withSuccessHandler((data) => {
+                projects.value = data.projects;
+                tasks.value = data.tasks;
+                if(data.team) teamMembers.value = data.team;
+                if(data.currentUser) {
+                   currentUser.value = data.currentUser;
+                   newTaskAssignee.value = data.currentUser.name;
+                   newProjectForm.value.owner = data.currentUser.name;
+                }
+                loading.value = false;
+                initIcons();
+              }).getAllData();
+          };
+
+          const showToast = (message, type = 'info') => {
+             const id = Date.now();
+             const icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'alert-circle' : 'info');
+             toasts.value.push({ id, message, type, icon });
+             setTimeout(() => { toasts.value = toasts.value.filter(t => t.id !== id); }, 3000);
+             nextTick(() => initIcons());
+          };
+
+          const renderMarkdown = (text) => text ? marked.parse(text) : '';
+          const stripMarkdown = (text) => text ? text.replace(/[*#_]/g, '') : '';
+
+          const initSortable = (el, status) => {
+             new Sortable(el, {
+               group: 'tasks', animation: 150, ghostClass: 'ghost-card', handle: '.drag-handle',
+               onEnd: (evt) => {
+                  const itemEl = evt.item;
+                  const newStatus = evt.to.getAttribute('data-status');
+                  const taskId = itemEl.getAttribute('data-id');
+                  if (!newStatus || !taskId) return;
+                  const task = tasks.value.find(t => t.id == taskId);
+                  if (task && task.status !== newStatus) {
+                     const oldStatus = task.status;
+                     task.status = newStatus;
+                     google.script.run
+                       .withSuccessHandler(() => showToast('Statut mis à jour', 'success'))
+                       .withFailureHandler(() => { task.status = oldStatus; showToast('Erreur', 'error'); })
+                       .updateTaskStatus(task.id, newStatus);
+                  }
+               }
+             });
+          };
+
+          const initProjectSortable = (el) => {
+             new Sortable(el, {
+               animation: 150, ghostClass: 'ghost-card', handle: '.project-drag-handle',
+               onEnd: (evt) => {
+                  const itemEl = evt.item;
+                  const newIndex = evt.newIndex;
+                  const oldIndex = evt.oldIndex;
+                  if (newIndex === oldIndex) return;
+                  const visibleProjects = filteredProjects.value;
+                  const movedItem = visibleProjects[oldIndex];
+                  visibleProjects.splice(oldIndex, 1);
+                  visibleProjects.splice(newIndex, 0, movedItem);
+                  visibleProjects.forEach((p, idx) => {
+                     const mainProj = projects.value.find(mp => mp.id === p.id);
+                     if(mainProj) mainProj.rank = idx + 1;
+                  });
+                  projects.value = [...projects.value]; 
+                  const orderMap = visibleProjects.map((p, idx) => ({ id: p.id, rank: idx + 1 }));
+                  google.script.run
+                     .withSuccessHandler(() => showToast('Priorités mises à jour', 'success'))
+                     .withFailureHandler(() => showToast('Erreur', 'error'))
+                     .updateProjectOrder(orderMap);
+               }
+             });
+          };
+
+          const updateProject = (project) => {
+             google.script.run
+               .withSuccessHandler(() => showToast('Projet mis à jour', 'success'))
+               .withFailureHandler(() => showToast('Erreur sauvegarde', 'error'))
+               .updateProject(project);
+          };
+
+          const isOverdueProject = (project) => {
+             if (!project.deadline || project.status === 'Terminé') return false;
+             return new Date(project.deadline) < new Date();
+          };
+
+          const openProjectDetails = (project) => { activeProject.value = project; initIcons(); };
+          const toggleEditDesc = () => { isEditingDesc.value = !isEditingDesc.value; };
+
+          const addTask = () => {
+            if (!newTaskTitle.value.trim() || !activeProject.value) return;
+            const tempId = 'temp_' + Date.now();
+            const taskPayload = {
+              project_id: activeProject.value.id, titre: newTaskTitle.value, assignee: newTaskAssignee.value || currentUser.value.name,
+              due_date: new Date(newTaskDate.value), status: 'À faire'
+            };
+            tasks.value.push({ ...taskPayload, id: tempId });
+            newTaskTitle.value = "";
+            google.script.run.withSuccessHandler((serverTask) => {
+                const idx = tasks.value.findIndex(t => t.id === tempId);
+                if (idx !== -1) tasks.value[idx] = serverTask;
+                showToast('Tâche ajoutée', 'success');
+                initIcons();
+              }).createTask(taskPayload);
+          };
+
+          const cycleStatus = (task) => {
+            const map = { 'À faire': 'En cours', 'En cours': 'Terminé', 'Terminé': 'À faire' };
+            const oldStatus = task.status;
+            task.status = map[oldStatus];
+            google.script.run
+               .withSuccessHandler(() => showToast('Statut mis à jour', 'success'))
+               .withFailureHandler(() => { task.status = oldStatus; showToast('Erreur', 'error'); })
+               .updateTaskStatus(task.id, task.status);
+          };
+
+          const startEdit = (task) => {
+            editingTaskId.value = task.id;
+            editTaskForm.value = { ...task, due_date_str: toInputDate(task.due_date) };
+            nextTick(() => { const inputs = document.querySelectorAll('input'); });
+            initIcons();
+          };
+
+          const cancelEdit = () => { editingTaskId.value = null; editTaskForm.value = {}; };
+
+          const saveEdit = () => {
+             if (!editingTaskId.value) return;
+             const idx = tasks.value.findIndex(t => t.id === editingTaskId.value);
+             if (idx !== -1) {
+                tasks.value[idx].titre = editTaskForm.value.titre;
+                tasks.value[idx].assignee = editTaskForm.value.assignee;
+                tasks.value[idx].due_date = new Date(editTaskForm.value.due_date_str);
+             }
+             google.script.run.withSuccessHandler(() => showToast('Tâche modifiée', 'success')).updateTaskDetails(editTaskForm.value);
+             cancelEdit();
+          };
+
+          const deleteTask = (task) => {
+             if(!confirm('Supprimer cette tâche ?')) return;
+             tasks.value = tasks.value.filter(t => t.id !== task.id);
+             google.script.run.withSuccessHandler(() => showToast('Tâche supprimée', 'info')).deleteTask(task.id);
+          };
+
+          const createProject = () => {
+             showNewProjectModal.value = false;
+             loading.value = true;
+             const maxRank = Math.max(...projects.value.map(p => p.rank || 0), 0);
+             newProjectForm.value.rank = maxRank + 1;
+             google.script.run.withSuccessHandler((newP) => {
+                projects.value.push(newP);
+                loading.value = false;
+                showToast('Projet créé avec succès', 'success');
+                initIcons();
+             }).createProject(newProjectForm.value);
+          };
+
+          const getPriorityClass = (p) => {
+            switch(p) {
+              case 'Haute': return 'text-red-600 bg-red-100 border-red-200 dark:text-red-400 dark:border-red-900/50 dark:bg-red-900/20';
+              case 'Moyenne': return 'text-yellow-600 bg-yellow-100 border-yellow-200 dark:text-yellow-400 dark:border-yellow-900/50 dark:bg-yellow-900/20';
+              default: return 'text-blue-600 bg-blue-100 border-blue-200 dark:text-blue-400 dark:border-blue-900/50 dark:bg-blue-900/20';
+            }
+          };
+
+          const getStatusColor = (s) => {
+             if (s === 'À faire') return 'bg-gray-400 dark:bg-gray-500';
+             if (s === 'En cours') return 'bg-yellow-500 dark:bg-yellow-600';
+             return 'bg-green-500 dark:bg-green-600';
+          };
+
+          const getUserAvatar = (name) => {
+             const user = teamMembers.value.find(u => u.name === name);
+             if(user) return user.avatar;
+             return `https://ui-avatars.com/api/?name=${name || '?'}&background=random&color=fff&size=24`;
+          };
+          
+          const formatDate = (d) => d ? new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+          const formatDateShort = (d) => d ? new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '';
+          
+          const isOverdue = (task) => {
+             if(!task.due_date || task.status === 'Terminé') return false;
+             const now = new Date(); now.setHours(0,0,0,0);
+             return new Date(task.due_date) < now;
+          }
+
+          const initIcons = () => nextTick(() => { if (window.lucide) window.lucide.createIcons(); });
+
+          onMounted(() => loadData());
+          onUpdated(() => initIcons());
+
+          return {
+            loading, sidebarOpen, isMobile, currentViewScope, viewType, searchQuery, selectedUserFilter, toasts,
+            activeProject, isEditingDesc, newTaskTitle, newTaskAssignee, newTaskDate,
+            showNewProjectModal, showLegalModal, showTeamModal, showKPIModal,
+            newProjectForm, filteredProjects, getTasksByProject, getTasksByStatus, teamMembers, currentUser, kpiData,
+            openProjectDetails, toggleEditDesc, addTask, cycleStatus, createProject, updateProject, isOverdueProject,
+            editingTaskId, editTaskForm, startEdit, cancelEdit, saveEdit, deleteTask,
+            getPriorityClass, getStatusColor, getUserAvatar, formatDate, formatDateShort, isOverdue,
+            initSortable, initProjectSortable, renderMarkdown, stripMarkdown, toInputDate
+          };
+        }
+      }).mount('#app');
+    </script>
+  </body>
+</html>
