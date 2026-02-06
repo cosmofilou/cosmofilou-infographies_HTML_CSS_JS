@@ -21,7 +21,7 @@
         theme: {
           extend: {
             screens: {
-              'xs': '480px', // Ajout d'un breakpoint extra small pour les petits iPhones
+              'xs': '480px',
             }
           }
         }
@@ -111,12 +111,18 @@
       @media (prefers-color-scheme: dark) {
         .mobile-label { color: #9ca3af; }
       }
+
+      /* SAFARI IOS FIXES */
+      body {
+        -webkit-overflow-scrolling: touch; /* Fluid scrolling */
+      }
     </style>
   </head>
-  <!-- FIXED: h-screen to h-[100dvh] for mobile browsers address bar issue -->
-  <body class="bg-gray-50 dark:bg-[#191919] text-gray-900 dark:text-gray-200 font-sans h-[100dvh] overflow-hidden selection:bg-blue-100 dark:selection:bg-orange-500/30 selection:text-blue-900 dark:selection:text-orange-200">
+  <!-- FIXED: Removed h-screen/overflow-hidden on mobile to allow natural scrolling.
+       Only applied on lg (desktop) screens where layout is fixed sidebar. -->
+  <body class="bg-gray-50 dark:bg-[#191919] text-gray-900 dark:text-gray-200 font-sans min-h-screen lg:h-screen lg:overflow-hidden selection:bg-blue-100 dark:selection:bg-orange-500/30 selection:text-blue-900 dark:selection:text-orange-200">
 
-    <div id="app" class="h-full flex relative">
+    <div id="app" class="h-full flex flex-col lg:flex-row relative">
       
       <!-- TOASTS -->
       <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[110] flex flex-col gap-2 pointer-events-none w-full max-w-xs px-4">
@@ -141,36 +147,36 @@
         <div v-if="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-sm"></div>
       </transition>
 
-      <!-- SIDEBAR -->
+      <!-- SIDEBAR (Mobile Slide-in / Desktop Fixed) -->
       <aside class="w-[85vw] sm:w-64 bg-white dark:bg-[#202020] border-r border-gray-200 dark:border-gray-800 flex flex-col justify-between shrink-0 transition-transform duration-300 z-50 fixed inset-y-0 left-0 lg:relative lg:translate-x-0 shadow-2xl lg:shadow-none" 
              :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
         <div>
           <!-- Brand -->
-          <div class="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-800 gap-3">
-             <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white font-bold text-sm shadow-md">PX</div>
-             <div><h1 class="font-bold text-base text-gray-900 dark:text-gray-100 leading-tight">DT Groupe</h1><p class="text-[11px] text-gray-500 dark:text-gray-500 font-medium">Proxiserve - Prox-Hydro</p></div>
+          <div class="h-16 lg:h-14 flex items-center px-6 lg:px-4 border-b border-gray-200 dark:border-gray-800 gap-3">
+             <div class="w-9 h-9 lg:w-8 lg:h-8 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white font-bold text-sm lg:text-xs shadow-md">PX</div>
+             <div><h1 class="font-bold text-base lg:text-sm text-gray-900 dark:text-gray-100 leading-tight">DT Groupe</h1><p class="text-[11px] lg:text-[10px] text-gray-500 dark:text-gray-500 font-medium">Proxiserve - Prox-Hydro</p></div>
              <button @click="sidebarOpen = false" class="lg:hidden ml-auto p-2 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-500 hover:text-gray-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
           </div>
 
           <!-- Navigation -->
-          <nav class="p-4 space-y-2">
+          <nav class="p-4 lg:p-3 space-y-2 lg:space-y-1">
             <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase px-3 py-2 tracking-wider">Espace de travail</div>
             
-            <button @click="currentViewScope = 'active'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'active' && viewType === 'grid' ? 'bg-gray-100 text-gray-900 dark:bg-[#2c2c2c] dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors">
-              <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Projets en cours
+            <button @click="currentViewScope = 'active'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'active' && viewType === 'grid' ? 'bg-gray-100 text-gray-900 dark:bg-[#2c2c2c] dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium transition-colors">
+              <i data-lucide="layout-dashboard" class="w-5 h-5 lg:w-4 lg:h-4"></i> Projets en cours
             </button>
             
-            <button @click="currentViewScope = 'active'; viewType = 'review'; if(isMobile) sidebarOpen = false;" :class="viewType === 'review' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-900/40 dark:text-indigo-200 dark:border-indigo-500/30' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors">
-              <i data-lucide="presentation" class="w-5 h-5"></i> 🎯 Revue de Projet
+            <button @click="currentViewScope = 'active'; viewType = 'review'; if(isMobile) sidebarOpen = false;" :class="viewType === 'review' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-900/40 dark:text-indigo-200 dark:border-indigo-500/30' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium transition-colors">
+              <i data-lucide="presentation" class="w-5 h-5 lg:w-4 lg:h-4"></i> 🎯 Revue de Projet
             </button>
 
-            <button @click="currentViewScope = 'archived'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'archived' ? 'bg-gray-100 text-gray-900 dark:bg-[#2c2c2c] dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-colors mt-4">
-              <i data-lucide="archive" class="w-5 h-5"></i> Archives
+            <button @click="currentViewScope = 'archived'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'archived' ? 'bg-gray-100 text-gray-900 dark:bg-[#2c2c2c] dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium transition-colors mt-4">
+              <i data-lucide="archive" class="w-5 h-5 lg:w-4 lg:h-4"></i> Archives
             </button>
 
-            <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase px-3 py-2 mt-6 tracking-wider">Organisation</div>
-            <button @click="showTeamModal = true; if(isMobile) sidebarOpen = false;" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200 transition-colors"><i data-lucide="users" class="w-5 h-5"></i> Annuaire Équipe</button>
-             <button @click="showKPIModal = true; if(isMobile) sidebarOpen = false;" class="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200 transition-colors"><i data-lucide="bar-chart-2" class="w-5 h-5"></i> Rapports KPI</button>
+            <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase px-3 py-2 mt-6 lg:mt-4 tracking-wider">Organisation</div>
+            <button @click="showTeamModal = true; if(isMobile) sidebarOpen = false;" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200 transition-colors"><i data-lucide="users" class="w-5 h-5 lg:w-4 lg:h-4"></i> Annuaire Équipe</button>
+             <button @click="showKPIModal = true; if(isMobile) sidebarOpen = false;" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200 transition-colors"><i data-lucide="bar-chart-2" class="w-5 h-5 lg:w-4 lg:h-4"></i> Rapports KPI</button>
           </nav>
         </div>
 
@@ -184,10 +190,10 @@
       </aside>
 
       <!-- MAIN CONTENT -->
-      <div class="flex-1 flex flex-col min-w-0 bg-gray-50 dark:bg-[#191919]">
+      <div class="flex-1 flex flex-col min-w-0 bg-gray-50 dark:bg-[#191919] min-h-0"> <!-- min-h-0 critical for nested flex scroll -->
         
         <!-- HEADER -->
-        <header class="h-16 sm:h-14 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 sm:px-6 bg-white dark:bg-[#191919] sticky top-0 z-30">
+        <header class="h-16 lg:h-14 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 sm:px-6 bg-white dark:bg-[#191919] sticky top-0 z-30 shrink-0">
           <div class="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
             <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 rounded-lg"><i data-lucide="menu" class="w-6 h-6"></i></button>
             
@@ -228,13 +234,14 @@
         </header>
 
         <!-- MAIN SCROLL AREA -->
-        <main class="flex-1 overflow-auto p-4 sm:p-6 relative">
+        <!-- Use h-auto / overflow-visible for mobile to allow native body scroll -->
+        <main class="flex-1 overflow-auto p-4 sm:p-6 relative lg:overflow-auto h-auto lg:h-full">
           
           <div v-if="loading" class="absolute inset-0 flex items-center justify-center bg-gray-50 dark:bg-[#191919] z-50">
             <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
           </div>
 
-          <div v-else class="pb-20 sm:pb-0"> <!-- Padding bottom for mobile scrolling -->
+          <div v-else class="pb-20 lg:pb-0"> <!-- Extra padding bottom for mobile scrolling -->
             
             <!-- VIEW: REVIEW (COCKPIT) -->
             <div v-if="viewType === 'review'" class="h-full flex flex-col">
@@ -466,7 +473,7 @@
       <!-- PROJECT DETAILS (Mobile Fullscreen) -->
       <transition name="fade">
         <div v-if="activeProject" class="fixed inset-0 bg-black/60 backdrop-blur-[2px] z-50 flex justify-center items-center p-0 sm:p-4 sm:justify-end" @click.self="activeProject = null">
-          <div class="w-full h-[100dvh] sm:h-full sm:max-w-3xl bg-white dark:bg-[#191919] border-l border-gray-200 dark:border-gray-700 shadow-2xl flex flex-col transform transition-transform duration-300">
+          <div class="w-full h-full sm:h-full sm:max-w-3xl bg-white dark:bg-[#191919] border-l border-gray-200 dark:border-gray-700 shadow-2xl flex flex-col transform transition-transform duration-300">
             <div class="h-14 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center px-4 bg-gray-50 dark:bg-[#202020] shrink-0">
                <div class="flex gap-2 text-gray-500 dark:text-gray-400 text-xs items-center truncate">
                  <button @click="activeProject = null" class="flex items-center gap-1 hover:text-gray-900 dark:hover:text-white"><i data-lucide="chevron-left" class="w-4 h-4"></i> Retour</button>
@@ -755,8 +762,20 @@
              // Check if sortable already exists on this element
              if (el._sortable) return;
 
+             // Disable Sortable on Mobile if needed or adjust config
+             const isMobileDrag = window.innerWidth < 1024;
+             
+             // OPTION: DISABLE DRAG ON MOBILE LIST VIEW to prevent scroll issues
+             // if (isMobileDrag) return; 
+
              el._sortable = new Sortable(el, {
-               group: 'tasks', animation: 150, ghostClass: 'ghost-card', handle: '.drag-handle',
+               group: 'tasks', 
+               animation: 150, 
+               ghostClass: 'ghost-card', 
+               handle: '.drag-handle',
+               disabled: isMobileDrag, // DISABLED ON MOBILE as requested "just consultation"
+               delay: 200, // Touch delay to distinguish tap from drag
+               delayOnTouchOnly: true,
                onEnd: (evt) => {
                   const itemEl = evt.item;
                   const newStatus = evt.to.getAttribute('data-status');
