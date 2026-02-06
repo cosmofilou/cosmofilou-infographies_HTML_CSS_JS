@@ -54,7 +54,12 @@ Ce dépôt contient une collection d'infographies interactives, créées avec HT
 ### 10. Assistant de Continuité | Proxiserve
 
 * **Description :** Un outil interactif conçu pour la Direction Technique permettant de générer rapidement des messages d'absence (Gmail) selon le contexte : RTT, Congés, Déplacement Pro ou Support Restreint.
-* **Accéder à l'infographie :** [Voir l'Assistant de Continuité](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS//assistant_continuite_proxiserve/index.html)
+* **Accéder à l'infographie :** [Voir l'Assistant de Continuité](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/assistant_continuite_proxiserve/index.html)
+
+### 11. Frontend App : Project Tracker
+
+* **Description :** Une application front-end responsive et adaptative conçue pour le suivi des projets de la Direction Technique. Elle inclut un mode sombre automatique, une gestion visuelle de l'avancement des projets (ex: Ouverture Licorne, Audit Énergétique) et un menu de navigation latéral optimisé pour mobile.
+* **Accéder au projet :** [Voir le Project Tracker]([.](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/project_tracker_dt_groupe/index.html)
 
 ---
 
