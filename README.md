@@ -59,7 +59,7 @@ Ce dépôt contient une collection d'infographies interactives, créées avec HT
 ### 11. Frontend App : Project Tracker
 
 * **Description :** Une application front-end responsive et adaptative conçue pour le suivi des projets de la Direction Technique. Elle inclut un mode sombre automatique, une gestion visuelle de l'avancement des projets (ex: Ouverture Licorne, Audit Énergétique) et un menu de navigation latéral optimisé pour mobile.
-* **Accéder au projet :** [Voir le Project Tracker]([.](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/project_tracker_dt_groupe/index.html)
+* **Accéder au projet :** [Voir le Project Tracker](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/project_tracker_dt_groupe/index.html)
 
 ---
 
