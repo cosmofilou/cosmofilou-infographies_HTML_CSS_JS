@@ -21,14 +21,19 @@
         theme: {
           extend: {
             colors: {
-              // Custom Salesforce-like Blue
+              // Salesforce-like Blue Palette - Adjusted for better dark mode contrast
               brand: {
                 50: '#f0f9ff',
                 100: '#e0f2fe',
-                500: '#0ea5e9', // Sky blue
-                600: '#0284c7', // Primary
-                700: '#0369a1', // Hover
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
+                500: '#0ea5e9',
+                600: '#0284c7', // Primary Light Mode
+                700: '#0369a1',
+                800: '#075985',
                 900: '#0c4a6e',
+                950: '#082f49',
               }
             },
             fontFamily: {
@@ -124,7 +129,6 @@
     </style>
   </head>
   
-  <!-- Use Slate (Blue-Grey) for a pro look instead of neutral Gray -->
   <body class="bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-slate-200 font-sans min-h-screen lg:h-screen lg:overflow-hidden selection:bg-brand-100 dark:selection:bg-brand-900 selection:text-brand-900 dark:selection:text-brand-100">
 
     <div id="app" class="h-full flex flex-col lg:flex-row relative" v-cloak>
@@ -163,7 +167,6 @@
         <div>
           <!-- Brand -->
           <div class="h-16 lg:h-14 flex items-center px-6 lg:px-5 border-b border-slate-100 dark:border-slate-800 gap-3">
-             <!-- SALESFORCE-LIKE LOGO COLOR (Blue Gradient) -->
              <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-brand-700 flex items-center justify-center text-white font-bold text-xs shadow-md ring-1 ring-white/20">DT</div>
              <div><h1 class="font-bold text-sm text-slate-800 dark:text-slate-100 leading-tight tracking-tight">DT Groupe</h1><p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Proxiserve - Prox-Hydro</p></div>
              <button @click="sidebarOpen = false" class="lg:hidden ml-auto p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -173,21 +176,34 @@
           <nav class="p-4 lg:p-3 space-y-1">
             <div class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase px-3 py-2 tracking-wider">Pilotage</div>
             
-            <button @click="currentViewScope = 'dashboard'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'dashboard' ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300 font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
-              <i data-lucide="layout-grid" class="w-5 h-5 lg:w-4 lg:h-4" :class="currentViewScope === 'dashboard' ? 'text-brand-600 dark:text-brand-400' : 'text-slate-400'"></i> Tableau de Bord
+            <!-- MENU ITEMS: Updated styling for better contrast -->
+            <button @click="currentViewScope = 'dashboard'; if(isMobile) sidebarOpen = false;" 
+                    :class="currentViewScope === 'dashboard' 
+                      ? 'bg-brand-50 text-brand-700 dark:bg-brand-600 dark:text-white font-semibold shadow-sm' 
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'" 
+                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all">
+              <i data-lucide="layout-grid" class="w-5 h-5 lg:w-4 lg:h-4" :class="currentViewScope === 'dashboard' ? 'text-brand-600 dark:text-white' : 'text-slate-400'"></i> Tableau de Bord
             </button>
 
-            <button @click="currentViewScope = 'active'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'active' && viewType === 'grid' ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300 font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
-              <i data-lucide="folder-kanban" class="w-5 h-5 lg:w-4 lg:h-4" :class="currentViewScope === 'active' && viewType === 'grid' ? 'text-brand-600 dark:text-brand-400' : 'text-slate-400'"></i> Projets en cours
+            <button @click="currentViewScope = 'active'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" 
+                    :class="currentViewScope === 'active' && viewType === 'grid' 
+                      ? 'bg-brand-50 text-brand-700 dark:bg-brand-600 dark:text-white font-semibold shadow-sm' 
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'" 
+                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all">
+              <i data-lucide="folder-kanban" class="w-5 h-5 lg:w-4 lg:h-4" :class="currentViewScope === 'active' && viewType === 'grid' ? 'text-brand-600 dark:text-white' : 'text-slate-400'"></i> Projets en cours
             </button>
             
-            <button @click="currentViewScope = 'active'; viewType = 'review'; if(isMobile) sidebarOpen = false;" :class="viewType === 'review' ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300 font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
-              <i data-lucide="presentation" class="w-5 h-5 lg:w-4 lg:h-4" :class="viewType === 'review' ? 'text-brand-600 dark:text-brand-400' : 'text-slate-400'"></i> 🎯 Revue de Projet
+            <button @click="currentViewScope = 'active'; viewType = 'review'; if(isMobile) sidebarOpen = false;" 
+                    :class="viewType === 'review' 
+                      ? 'bg-brand-50 text-brand-700 dark:bg-brand-600 dark:text-white font-semibold shadow-sm' 
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'" 
+                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all">
+              <i data-lucide="presentation" class="w-5 h-5 lg:w-4 lg:h-4" :class="viewType === 'review' ? 'text-brand-600 dark:text-white' : 'text-slate-400'"></i> 🎯 Revue de Projet
             </button>
 
             <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
                <div class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase px-3 py-2 tracking-wider">Données</div>
-               <button @click="currentViewScope = 'archived'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'archived' ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
+               <button @click="currentViewScope = 'archived'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'archived' ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
                  <i data-lucide="archive" class="w-5 h-5 lg:w-4 lg:h-4 text-slate-400"></i> Archives
                </button>
                <button @click="showTeamModal = true; if(isMobile) sidebarOpen = false;" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><i data-lucide="users" class="w-5 h-5 lg:w-4 lg:h-4 text-slate-400"></i> Annuaire Équipe</button>
@@ -593,7 +609,7 @@
                  <div class="text-6xl mb-4 text-center sm:text-left">{{ activeProject.emoji || '📁' }}</div>
                  <h1 class="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white mb-6 leading-tight text-center sm:text-left">{{ activeProject.nom }}</h1>
                  
-                 <!-- NEW: STATUS & PRIORITY PROMINENT BADGES -->
+                 <!-- NEW: STATUS & PRIORITY PROMINENT BADGES - UPDATED WITH TAGS -->
                  <div class="flex flex-wrap items-center gap-3 mb-8 justify-center sm:justify-start">
                      <!-- Big Status Select -->
                      <div class="relative group">
@@ -619,6 +635,11 @@
                         </select>
                          <i data-lucide="chevron-down" class="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 opacity-50 pointer-events-none"></i>
                      </div>
+                     
+                     <!-- OPEN BUTTON IN HEADER -->
+                     <button @click="openProjectDetails(activeProject)" class="hidden sm:flex items-center justify-center p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 hover:text-brand-600 transition-colors" title="Rafraîchir / Ouvrir">
+                        <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                     </button>
                  </div>
 
                  <!-- FUNC 1: TAGS EDIT -->
@@ -626,7 +647,7 @@
                     <span v-for="(tag, i) in activeProject.tags" :key="i" class="px-3 py-1 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 text-xs rounded-full border border-brand-200 dark:border-brand-800 flex items-center gap-1">
                        {{ tag }} <button @click="removeTag(activeProject, i)" class="hover:text-brand-900 dark:hover:text-white"><i data-lucide="x" class="w-3 h-3"></i></button>
                     </span>
-                    <input @keyup.enter="addTag(activeProject, $event)" placeholder="+ Tag" class="px-3 py-1 bg-slate-100 dark:bg-[#1e293b] text-xs rounded-full border-none outline-none w-20 focus:w-32 transition-all text-slate-900 dark:text-white placeholder-slate-400">
+                    <input @keyup.enter="addTag(activeProject, $event)" placeholder="+ Tag" class="px-3 py-1 bg-slate-100 dark:bg-[#2c2c2c] text-xs rounded-full border-none outline-none w-20 focus:w-32 transition-all text-slate-900 dark:text-white placeholder-slate-400">
                  </div>
 
                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm bg-white dark:bg-[#1e293b] p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
@@ -657,6 +678,7 @@
               <div class="border-t border-slate-200 dark:border-slate-800 pt-8 pb-10">
                 <div class="flex justify-between items-center mb-6"><h3 class="text-lg font-bold text-slate-900 dark:text-white">Tâches</h3><span class="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs px-2 py-1 rounded-full">{{ getTasksByProject(activeProject.id).length }}</span></div>
                 
+                <!-- ERGO 2: BATCH TASK ENTRY (Refocus after add) -->
                 <div class="flex flex-col sm:flex-row gap-3 mb-6">
                    <div class="flex gap-2 flex-1 bg-white dark:bg-[#1e293b] p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
                       <button @click="addTask" class="bg-brand-600 text-white w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="plus" class="w-5 h-5"></i></button>
@@ -1329,14 +1351,14 @@
              switch(s) {
                 case 'Terminé': return 'text-green-700 bg-green-100 border-green-200 dark:text-green-400 dark:border-green-900/50 dark:bg-green-900/20';
                 case 'En cours': return 'text-yellow-700 bg-yellow-100 border-yellow-200 dark:text-yellow-400 dark:border-yellow-900/50 dark:bg-yellow-900/20';
-                case 'En pause': return 'text-gray-600 bg-gray-100 border-gray-200 dark:text-gray-400 dark:border-gray-700 dark:bg-gray-800';
+                case 'En pause': return 'text-slate-600 bg-slate-100 border-slate-200 dark:text-slate-400 dark:border-slate-700 dark:bg-slate-800';
                 case 'Annulé': return 'text-red-700 bg-red-100 border-red-200 dark:text-red-400 dark:border-red-900/50 dark:bg-red-900/20';
-                default: return 'text-gray-600 bg-gray-100 border-gray-200';
+                default: return 'text-slate-600 bg-slate-100 border-slate-200';
              }
           };
 
           const getStatusColor = (s) => {
-             if (s === 'À faire') return 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200';
+             if (s === 'À faire') return 'bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-200';
              if (s === 'En cours') return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200';
              return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
           };
