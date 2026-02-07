@@ -20,6 +20,20 @@
         darkMode: 'media', 
         theme: {
           extend: {
+            colors: {
+              // Custom Salesforce-like Blue
+              brand: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                500: '#0ea5e9', // Sky blue
+                600: '#0284c7', // Primary
+                700: '#0369a1', // Hover
+                900: '#0c4a6e',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+            },
             screens: {
               'xs': '480px',
             }
@@ -32,20 +46,19 @@
       /* CRITICAL FIX: Hide raw templates before Vue loads */
       [v-cloak] { display: none !important; }
 
-      /* Scrollbar */
-      ::-webkit-scrollbar { width: 6px; height: 6px; }
-      ::-webkit-scrollbar-track { background: #f3f4f6; }
-      ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
-      ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+      /* Professional Scrollbar */
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
       @media (prefers-color-scheme: dark) {
-        ::-webkit-scrollbar-track { background: #191919; }
-        ::-webkit-scrollbar-thumb { background: #3f3f46; }
-        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+        ::-webkit-scrollbar-thumb { background: #475569; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
       }
       
       .loader {
-        border-top-color: #3B82F6;
+        border-top-color: #0284c7; /* Brand Blue */
         animation: spinner 1.5s linear infinite;
       }
       @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -56,7 +69,6 @@
       .list-enter-active, .list-leave-active { transition: all 0.3s ease; }
       .list-enter-from, .list-leave-to { opacity: 0; transform: translateX(30px); }
       
-      /* Better touch target for date inputs on mobile */
       input[type="date"] {
         -webkit-appearance: none;
         min-height: 2.5rem; 
@@ -66,59 +78,54 @@
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
       }
 
-      .ghost-card { opacity: 0.4; background: #e5e7eb; border: 1px dashed #3b82f6; }
+      .ghost-card { opacity: 0.5; background: #f1f5f9; border: 2px dashed #94a3b8; }
       @media (prefers-color-scheme: dark) {
-        .ghost-card { background: #1e1e1e; border-color: #60a5fa; }
+        .ghost-card { background: #1e293b; border-color: #64748b; }
       }
       
       .drag-handle { cursor: grab; }
       .drag-handle:active { cursor: grabbing; }
       
-      .project-drag-handle { cursor: move; color: #9ca3af; touch-action: none; padding: 10px; }
-      .project-drag-handle:hover { color: #6b7280; }
+      .project-drag-handle { cursor: move; color: #94a3b8; touch-action: none; padding: 10px; }
+      .project-drag-handle:hover { color: #64748b; background-color: #f1f5f9; border-radius: 6px;}
       @media (prefers-color-scheme: dark) {
-        .project-drag-handle:hover { color: #fff; }
+        .project-drag-handle { color: #64748b; }
+        .project-drag-handle:hover { color: #e2e8f0; background-color: #334155; }
       }
 
-      /* Markdown Styles */
-      .prose h1, .prose h2, .prose h3 { color: #111827; margin-top: 1em; margin-bottom: 0.5em; font-weight: 700; }
-      .prose p { margin-bottom: 0.8em; line-height: 1.6; color: #374151; }
-      .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 0.8em; color: #374151; }
-      .prose strong { color: #000; font-weight: 700; }
+      /* Pro Markdown Styles */
+      .prose h1, .prose h2, .prose h3 { color: #0f172a; margin-top: 1em; margin-bottom: 0.5em; font-weight: 700; letter-spacing: -0.025em; }
+      .prose p { margin-bottom: 0.8em; line-height: 1.6; color: #334155; }
+      .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 0.8em; color: #334155; }
+      .prose strong { color: #0f172a; font-weight: 600; }
+      .prose a { color: #0284c7; text-decoration: none; font-weight: 500; }
+      .prose a:hover { text-decoration: underline; }
       
       @media (prefers-color-scheme: dark) {
-        .prose h1, .prose h2, .prose h3 { color: #e5e7eb; }
-        .prose p { color: #d1d5db; }
-        .prose ul { color: #d1d5db; }
+        .prose h1, .prose h2, .prose h3 { color: #f8fafc; }
+        .prose p { color: #cbd5e1; }
+        .prose ul { color: #cbd5e1; }
         .prose strong { color: #fff; }
+        .prose a { color: #38bdf8; }
       }
 
-      /* Desktop Table Styles */
-      .review-table th { position: sticky; top: 0; z-index: 10; }
-      .review-input { background: transparent; border: 1px solid transparent; width: 100%; padding: 4px; border-radius: 4px; transition: all 0.2s; }
-      .review-input:hover, .review-input:focus { outline: none; }
-      .review-input:hover, .review-input:focus { background: #f3f4f6; border-color: #d1d5db; }
+      /* Table Enhancements */
+      .review-table th { position: sticky; top: 0; z-index: 10; font-weight: 600; letter-spacing: 0.05em; }
+      .review-input { background: transparent; border: 1px solid transparent; width: 100%; padding: 6px 8px; border-radius: 6px; transition: all 0.2s; }
+      .review-input:hover, .review-input:focus { outline: none; background: #fff; border-color: #cbd5e1; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
       @media (prefers-color-scheme: dark) {
-        .review-input:hover, .review-input:focus { background: #2a2a2a; border-color: #4b5563; }
+        .review-input:hover, .review-input:focus { background: #1e293b; border-color: #475569; }
       }
       
-      .mobile-label {
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #6b7280;
-        margin-bottom: 0.25rem;
-        font-weight: 600;
-      }
-      @media (prefers-color-scheme: dark) {
-        .mobile-label { color: #9ca3af; }
-      }
+      .mobile-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 0.25rem; font-weight: 600; }
+      @media (prefers-color-scheme: dark) { .mobile-label { color: #94a3b8; } }
 
       body { -webkit-overflow-scrolling: touch; }
     </style>
   </head>
   
-  <body class="bg-gray-50 dark:bg-[#191919] text-gray-900 dark:text-gray-200 font-sans min-h-screen lg:h-screen lg:overflow-hidden selection:bg-blue-100 dark:selection:bg-orange-500/30 selection:text-blue-900 dark:selection:text-orange-200">
+  <!-- Use Slate (Blue-Grey) for a pro look instead of neutral Gray -->
+  <body class="bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-slate-200 font-sans min-h-screen lg:h-screen lg:overflow-hidden selection:bg-brand-100 dark:selection:bg-brand-900 selection:text-brand-900 dark:selection:text-brand-100">
 
     <div id="app" class="h-full flex flex-col lg:flex-row relative" v-cloak>
       
@@ -126,14 +133,14 @@
       <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[250] flex flex-col gap-2 pointer-events-none w-full max-w-xs px-4">
         <transition-group name="fade">
           <div v-for="toast in toasts" :key="toast.id" 
-               class="pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-full shadow-2xl border min-w-0 w-full backdrop-blur-xl"
+               class="pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border min-w-0 w-full backdrop-blur-xl"
                :class="{
-                 'bg-white/90 border-gray-200 text-gray-800 dark:bg-[#252525]/90 dark:border-gray-700 dark:text-white': true
+                 'bg-white/95 border-slate-200 text-slate-800 dark:bg-slate-800/95 dark:border-slate-700 dark:text-white': true
                }">
              <div class="w-2 h-2 rounded-full" :class="{
-               'bg-green-500': toast.type === 'success',
-               'bg-red-500': toast.type === 'error',
-               'bg-blue-500': toast.type === 'info'
+               'bg-emerald-500': toast.type === 'success',
+               'bg-rose-500': toast.type === 'error',
+               'bg-brand-500': toast.type === 'info'
              }"></div>
              <div class="text-sm font-medium truncate flex-1 text-center">{{ toast.message }}</div>
           </div>
@@ -142,182 +149,195 @@
 
       <!-- MOBILE OVERLAY -->
       <transition name="fade">
-        <div v-if="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-sm"></div>
+        <div v-if="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden backdrop-blur-sm"></div>
       </transition>
 
       <!-- MOBILE FAB -->
-      <!-- Adjusted visibility: visible only on xs/small screens, hidden on sm+ -->
-      <button @click="showNewProjectModal = true" class="sm:hidden fixed bottom-6 right-6 z-50 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95">
+      <button @click="showNewProjectModal = true" class="lg:hidden fixed bottom-6 right-6 z-50 w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-xl shadow-brand-600/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95">
         <i data-lucide="plus" class="w-8 h-8"></i>
       </button>
 
       <!-- SIDEBAR -->
-      <aside class="w-[85vw] sm:w-64 bg-white dark:bg-[#202020] border-r border-gray-200 dark:border-gray-800 flex flex-col justify-between shrink-0 transition-transform duration-300 z-50 fixed inset-y-0 left-0 lg:relative lg:translate-x-0 shadow-2xl lg:shadow-none" 
+      <aside class="w-[85vw] sm:w-64 bg-white dark:bg-[#1e293b] border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between shrink-0 transition-transform duration-300 z-50 fixed inset-y-0 left-0 lg:relative lg:translate-x-0 shadow-2xl lg:shadow-none" 
              :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
         <div>
           <!-- Brand -->
-          <div class="h-16 lg:h-14 flex items-center px-6 lg:px-4 border-b border-gray-200 dark:border-gray-800 gap-3">
-             <div class="w-9 h-9 lg:w-8 lg:h-8 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white font-bold text-sm lg:text-xs shadow-md">PX</div>
-             <div><h1 class="font-bold text-base lg:text-sm text-gray-900 dark:text-gray-100 leading-tight">DT Groupe</h1><p class="text-[11px] lg:text-[10px] text-gray-500 dark:text-gray-500 font-medium">Proxiserve - Prox-Hydro</p></div>
-             <button @click="sidebarOpen = false" class="lg:hidden ml-auto p-2 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-500 hover:text-gray-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+          <div class="h-16 lg:h-14 flex items-center px-6 lg:px-5 border-b border-slate-100 dark:border-slate-800 gap-3">
+             <!-- SALESFORCE-LIKE LOGO COLOR (Blue Gradient) -->
+             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-brand-700 flex items-center justify-center text-white font-bold text-xs shadow-md ring-1 ring-white/20">DT</div>
+             <div><h1 class="font-bold text-sm text-slate-800 dark:text-slate-100 leading-tight tracking-tight">DT Groupe</h1><p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Proxiserve - Prox-Hydro</p></div>
+             <button @click="sidebarOpen = false" class="lg:hidden ml-auto p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
           </div>
 
           <!-- Navigation -->
-          <nav class="p-4 lg:p-3 space-y-2 lg:space-y-1">
-            <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase px-3 py-2 tracking-wider">Espace de travail</div>
+          <nav class="p-4 lg:p-3 space-y-1">
+            <div class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase px-3 py-2 tracking-wider">Pilotage</div>
             
-            <!-- AJOUT: BOUTON TABLEAU DE BORD -->
-            <button @click="currentViewScope = 'dashboard'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'dashboard' ? 'bg-gray-100 text-gray-900 dark:bg-[#2c2c2c] dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium transition-colors">
-              <i data-lucide="layout-grid" class="w-5 h-5 lg:w-4 lg:h-4"></i> Tableau de Bord
+            <button @click="currentViewScope = 'dashboard'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'dashboard' ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300 font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
+              <i data-lucide="layout-grid" class="w-5 h-5 lg:w-4 lg:h-4" :class="currentViewScope === 'dashboard' ? 'text-brand-600 dark:text-brand-400' : 'text-slate-400'"></i> Tableau de Bord
             </button>
 
-            <button @click="currentViewScope = 'active'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'active' && viewType === 'grid' ? 'bg-gray-100 text-gray-900 dark:bg-[#2c2c2c] dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium transition-colors">
-              <i data-lucide="layout-dashboard" class="w-5 h-5 lg:w-4 lg:h-4"></i> Projets en cours
+            <button @click="currentViewScope = 'active'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'active' && viewType === 'grid' ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300 font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
+              <i data-lucide="folder-kanban" class="w-5 h-5 lg:w-4 lg:h-4" :class="currentViewScope === 'active' && viewType === 'grid' ? 'text-brand-600 dark:text-brand-400' : 'text-slate-400'"></i> Projets en cours
             </button>
             
-            <button @click="currentViewScope = 'active'; viewType = 'review'; if(isMobile) sidebarOpen = false;" :class="viewType === 'review' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200 dark:bg-indigo-900/40 dark:text-indigo-200 dark:border-indigo-500/30' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium transition-colors">
-              <i data-lucide="presentation" class="w-5 h-5 lg:w-4 lg:h-4"></i> 🎯 Revue de Projet
+            <button @click="currentViewScope = 'active'; viewType = 'review'; if(isMobile) sidebarOpen = false;" :class="viewType === 'review' ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300 font-semibold' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
+              <i data-lucide="presentation" class="w-5 h-5 lg:w-4 lg:h-4" :class="viewType === 'review' ? 'text-brand-600 dark:text-brand-400' : 'text-slate-400'"></i> 🎯 Revue de Projet
             </button>
 
-            <button @click="currentViewScope = 'archived'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'archived' ? 'bg-gray-100 text-gray-900 dark:bg-[#2c2c2c] dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium transition-colors mt-4">
-              <i data-lucide="archive" class="w-5 h-5 lg:w-4 lg:h-4"></i> Archives
-            </button>
-
-            <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase px-3 py-2 mt-6 lg:mt-4 tracking-wider">Organisation</div>
-            <button @click="showTeamModal = true; if(isMobile) sidebarOpen = false;" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200 transition-colors"><i data-lucide="users" class="w-5 h-5 lg:w-4 lg:h-4"></i> Annuaire Équipe</button>
-             <button @click="showKPIModal = true; if(isMobile) sidebarOpen = false;" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200 transition-colors"><i data-lucide="bar-chart-2" class="w-5 h-5 lg:w-4 lg:h-4"></i> Rapports KPI</button>
+            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+               <div class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase px-3 py-2 tracking-wider">Données</div>
+               <button @click="currentViewScope = 'archived'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'archived' ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
+                 <i data-lucide="archive" class="w-5 h-5 lg:w-4 lg:h-4 text-slate-400"></i> Archives
+               </button>
+               <button @click="showTeamModal = true; if(isMobile) sidebarOpen = false;" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><i data-lucide="users" class="w-5 h-5 lg:w-4 lg:h-4 text-slate-400"></i> Annuaire Équipe</button>
+               <button @click="showKPIModal = true; if(isMobile) sidebarOpen = false;" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"><i data-lucide="pie-chart" class="w-5 h-5 lg:w-4 lg:h-4 text-slate-400"></i> Rapports KPI</button>
+            </div>
           </nav>
         </div>
 
-        <div class="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#1c1c1c] p-4">
-           <div class="p-3 flex items-center gap-3 bg-white dark:bg-[#252525] rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
-              <img :src="currentUser.avatar" class="w-10 h-10 rounded-full border-2 border-white dark:border-gray-600">
-              <div class="flex-1 min-w-0"><p class="text-sm font-bold text-gray-900 dark:text-gray-200 truncate">{{ currentUser.name }}</p><p class="text-[10px] text-gray-500 truncate">{{ currentUser.email }}</p></div>
+        <div class="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0f172a] p-4">
+           <div class="p-2.5 flex items-center gap-3 bg-white dark:bg-[#1e293b] rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+              <img :src="currentUser.avatar" class="w-9 h-9 rounded-md border border-slate-200 dark:border-slate-600">
+              <div class="flex-1 min-w-0"><p class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">{{ currentUser.name }}</p><p class="text-[10px] text-slate-500 truncate">{{ currentUser.email }}</p></div>
            </div>
-           <button @click="showLegalModal = true" class="mt-3 text-[10px] text-center w-full text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">Mentions Légales & RGPD</button>
+           <button @click="showLegalModal = true" class="mt-3 text-[10px] text-center w-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">Mentions Légales & RGPD</button>
         </div>
       </aside>
 
       <!-- MAIN CONTENT -->
-      <div class="flex-1 flex flex-col min-w-0 bg-gray-50 dark:bg-[#191919] min-h-0">
+      <div class="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-[#0f172a] min-h-0">
         
         <!-- HEADER -->
-        <header class="h-16 lg:h-14 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 sm:px-6 bg-white dark:bg-[#191919] sticky top-0 z-30 shrink-0">
+        <header class="h-16 lg:h-16 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 sm:px-6 bg-white dark:bg-[#1e293b] sticky top-0 z-30 shrink-0 shadow-sm lg:shadow-none">
           <div class="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-            <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 rounded-lg"><i data-lucide="menu" class="w-6 h-6"></i></button>
+            <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2 -ml-2 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-lg"><i data-lucide="menu" class="w-6 h-6"></i></button>
             
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2 truncate">
-               <!-- ICONE DYNAMIQUE -->
-               <span v-if="currentViewScope === 'dashboard'" class="text-indigo-600 dark:text-indigo-400"><i data-lucide="layout-grid" class="w-5 h-5"></i></span>
-               <span v-else-if="viewType === 'review'" class="text-indigo-600 dark:text-indigo-400"><i data-lucide="presentation" class="w-5 h-5"></i></span>
+            <h2 class="text-base sm:text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 truncate tracking-tight">
+               <span v-if="currentViewScope === 'dashboard'" class="text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20 p-1.5 rounded-md"><i data-lucide="layout-grid" class="w-5 h-5"></i></span>
+               <span v-else-if="viewType === 'review'" class="text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20 p-1.5 rounded-md"><i data-lucide="presentation" class="w-5 h-5"></i></span>
                
-               <!-- TITRE DYNAMIQUE -->
                <span v-if="currentViewScope === 'dashboard'">Tableau de Bord</span>
-               <span v-else-if="viewType === 'review'">{{ isMobile ? 'Revue Mobile' : 'Cockpit' }}</span>
+               <span v-else-if="viewType === 'review'">{{ isMobile ? 'Revue Mobile' : 'Cockpit Pilotage' }}</span>
                <span v-else>{{ currentViewScope === 'active' ? 'Projets' : 'Archives' }}</span>
             </h2>
             
-            <!-- Hide Switcher on Dashboard -->
-            <div v-if="viewType !== 'review' && currentViewScope !== 'dashboard'" class="hidden sm:flex bg-gray-100 dark:bg-[#2c2c2c] rounded p-0.5 ml-2">
-               <button @click="viewType = 'grid'" :class="viewType === 'grid' ? 'bg-white text-gray-900 shadow dark:bg-[#3f3f3f] dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'" class="p-1.5 rounded transition-all"><i data-lucide="grid" class="w-4 h-4"></i></button>
-               <button @click="viewType = 'list'" :class="viewType === 'list' ? 'bg-white text-gray-900 shadow dark:bg-[#3f3f3f] dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'" class="p-1.5 rounded transition-all"><i data-lucide="list" class="w-4 h-4"></i></button>
+            <div v-if="viewType !== 'review' && currentViewScope !== 'dashboard'" class="hidden sm:flex bg-slate-100 dark:bg-[#0f172a] rounded-lg p-1 ml-2 border border-slate-200 dark:border-slate-800">
+               <button @click="viewType = 'grid'" :class="viewType === 'grid' ? 'bg-white text-brand-600 shadow-sm dark:bg-[#1e293b] dark:text-brand-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'" class="p-1.5 rounded-md transition-all"><i data-lucide="grid" class="w-4 h-4"></i></button>
+               <button @click="viewType = 'list'" :class="viewType === 'list' ? 'bg-white text-brand-600 shadow-sm dark:bg-[#1e293b] dark:text-brand-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'" class="p-1.5 rounded-md transition-all"><i data-lucide="list" class="w-4 h-4"></i></button>
             </div>
           </div>
 
           <div class="flex items-center gap-2 sm:gap-3 shrink-0">
             
-            <!-- Hide Filters on Dashboard -->
-            <div v-if="currentViewScope !== 'dashboard'" class="relative hidden lg:flex items-center bg-gray-100 dark:bg-[#252525] border border-gray-200 dark:border-gray-700 rounded-full px-3 py-1.5 gap-2">
-               <i data-lucide="filter" class="w-3.5 h-3.5 text-gray-500"></i>
-               <select v-model="selectedUserFilter" class="bg-transparent text-sm text-gray-700 dark:text-gray-300 outline-none cursor-pointer appearance-none pr-4 border-none py-0 w-full">
-                  <option :value="null" class="bg-white dark:bg-[#1e1e1e]">Tous</option>
+            <!-- Filter Toggle -->
+            <button v-if="currentViewScope === 'active' && viewType !== 'review'" @click="showCompleted = !showCompleted" 
+              class="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg border transition-all text-xs font-semibold shadow-sm"
+              :class="showCompleted ? 'bg-brand-50 text-brand-700 border-brand-200 dark:bg-brand-900/20 dark:text-brand-300 dark:border-brand-800' : 'bg-white text-slate-600 border-slate-200 dark:bg-[#1e293b] dark:text-slate-400 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-[#0f172a]'">
+              <i :data-lucide="showCompleted ? 'eye' : 'eye-off'" class="w-4 h-4"></i>
+              <span class="hidden lg:inline">{{ showCompleted ? 'Masquer terminés' : 'Voir terminés' }}</span>
+            </button>
+
+            <!-- User Filter -->
+            <div v-if="currentViewScope !== 'dashboard'" class="relative hidden lg:flex items-center bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 gap-2 shadow-sm">
+               <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400"></i>
+               <select v-model="selectedUserFilter" class="bg-transparent text-sm text-slate-700 dark:text-slate-300 outline-none cursor-pointer appearance-none pr-6 border-none py-0 w-full font-medium">
+                  <option :value="null" class="bg-white dark:bg-[#1e1e1e]">Tous les membres</option>
                   <option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option>
                </select>
+               <i data-lucide="chevron-down" class="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none"></i>
             </div>
 
-            <button v-if="currentViewScope !== 'dashboard'" class="sm:hidden p-2 text-gray-500 dark:text-gray-400"><i data-lucide="search" class="w-5 h-5"></i></button>
+            <button v-if="currentViewScope !== 'dashboard'" class="sm:hidden p-2 text-slate-500 dark:text-slate-400"><i data-lucide="search" class="w-5 h-5"></i></button>
 
             <div v-if="currentViewScope !== 'dashboard'" class="relative hidden sm:block">
-               <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-gray-500"></i>
-               <input type="text" placeholder="Rechercher..." v-model="searchQuery" class="bg-gray-100 dark:bg-[#252525] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-200 text-sm rounded-full pl-9 pr-4 py-1.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-32 lg:w-48 placeholder-gray-500 transition-all">
+               <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
+               <input type="text" placeholder="Rechercher..." v-model="searchQuery" class="bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 text-sm rounded-lg pl-9 pr-4 py-2 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 w-32 lg:w-56 placeholder-slate-400 transition-all shadow-sm">
             </div>
 
-            <!-- BUTTON NEW PROJECT - VISIBLE ON SM+ (TABLET/DESKTOP) -->
-            <button @click="showNewProjectModal = true" class="hidden sm:flex bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors items-center gap-2 shadow-lg shadow-blue-900/10">
-              <i data-lucide="plus" class="w-5 h-5"></i> <span class="hidden lg:inline">Nouveau</span>
+            <!-- BUTTON NEW PROJECT - PRO STYLE -->
+            <button @click="showNewProjectModal = true" class="hidden sm:flex bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all items-center gap-2 shadow-md shadow-brand-600/20 active:scale-95">
+              <i data-lucide="plus" class="w-4 h-4"></i> <span class="hidden lg:inline">Nouveau Projet</span>
+              <span class="lg:hidden">Nouveau</span>
             </button>
           </div>
         </header>
 
         <!-- MAIN SCROLL AREA -->
-        <main class="flex-1 overflow-auto p-4 sm:p-6 relative lg:overflow-auto h-auto lg:h-full">
+        <main ref="scrollContainer" class="flex-1 overflow-auto p-4 sm:p-8 relative lg:overflow-auto h-auto lg:h-full">
           
           <div v-if="loading" class="grid grid-cols-1 md:grid-cols-3 gap-6 p-2">
-             <div v-for="i in 6" class="h-64 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse-custom"></div>
+             <div v-for="i in 6" class="h-64 bg-slate-200 dark:bg-slate-800 rounded-xl animate-pulse-custom"></div>
           </div>
 
-          <div v-else class="pb-20 lg:pb-0"> 
+          <div v-else class="pb-20 lg:pb-0 max-w-7xl mx-auto"> 
             
-            <!-- AJOUT: VUE DASHBOARD -->
+            <!-- VIEW: DASHBOARD -->
             <div v-if="currentViewScope === 'dashboard'">
-               <div class="flex flex-col gap-6">
+               <div class="flex flex-col gap-8">
                   
                   <!-- Welcome Banner -->
-                  <div class="flex items-center justify-between">
+                  <div class="flex items-end justify-between border-b border-slate-200 dark:border-slate-800 pb-6">
                      <div>
-                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Bonjour, {{ currentUser.name ? currentUser.name.split(' ')[0] : 'Invité' }} 👋</h2>
-                        <p class="text-gray-500 dark:text-gray-400 text-sm">Voici un aperçu des priorités et urgences du jour.</p>
+                        <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Bonjour, {{ currentUser.name ? currentUser.name.split(' ')[0] : 'Invité' }} 👋</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-base">Voici la synthèse de l'activité. <span class="hidden sm:inline">Vous avez <strong>{{ kpiData.tasksPending }} tâches</strong> en cours.</span></p>
                      </div>
                      <div class="hidden sm:block text-right">
-                        <p class="text-3xl font-black text-gray-900 dark:text-white">{{ kpiData.globalProgress }}%</p>
-                        <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Avancement Global</p>
+                        <div class="inline-flex items-center gap-3 bg-white dark:bg-[#1e293b] px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                           <div class="text-right">
+                              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Progression Globale</p>
+                              <p class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{{ kpiData.globalProgress }}%</p>
+                           </div>
+                           <div class="h-10 w-10 rounded-full border-4 border-slate-100 dark:border-slate-700 border-t-brand-500 animate-spin" style="animation-duration: 3s"></div>
+                        </div>
                      </div>
                   </div>
 
-                  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                      
                      <!-- COL 1 & 2: TOP PRIORITY PROJECTS -->
-                     <div class="lg:col-span-2 space-y-4">
+                     <div class="lg:col-span-2 space-y-5">
                         <div class="flex items-center gap-2 mb-2">
-                           <div class="p-1.5 bg-red-100 dark:bg-red-900/20 rounded-md text-red-600 dark:text-red-400"><i data-lucide="flame" class="w-4 h-4"></i></div>
-                           <h3 class="text-lg font-bold text-gray-900 dark:text-white">Top 3 Priorités</h3>
+                           <div class="p-1.5 bg-rose-100 dark:bg-rose-900/30 rounded-md text-rose-600 dark:text-rose-400"><i data-lucide="flame" class="w-5 h-5"></i></div>
+                           <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Top 3 Priorités</h3>
                         </div>
 
                         <div v-for="project in dashboardData.topProjects" :key="project.id" 
                              @click="openProjectDetails(project)"
-                             class="group bg-white dark:bg-[#202020] border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-500 rounded-xl p-5 cursor-pointer transition-all hover:shadow-md relative overflow-hidden">
+                             class="group bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/60 hover:border-brand-400 dark:hover:border-brand-500 rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg relative overflow-hidden">
                            
                            <!-- Rank Badge -->
-                           <div class="absolute top-0 right-0 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-gray-200 dark:border-gray-800">
+                           <div class="absolute top-0 right-0 bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-slate-100 dark:border-slate-700/50">
                               #{{ project.rank || '?' }}
                            </div>
 
-                           <div class="flex items-start gap-4">
-                              <div class="text-4xl bg-gray-50 dark:bg-gray-800/50 p-3 rounded-2xl">{{ project.emoji }}</div>
+                           <div class="flex items-start gap-5">
+                              <div class="text-4xl bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700">{{ project.emoji }}</div>
                               <div class="flex-1 min-w-0">
-                                 <div class="flex items-center gap-2 mb-1">
-                                    <span :class="getPriorityClass(project.priorite)" class="px-2 py-0.5 rounded text-[10px] border">{{ project.priorite }}</span>
-                                    <span class="px-2 py-0.5 rounded text-[10px] border bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">{{ project.status }}</span>
+                                 <div class="flex items-center gap-2 mb-2">
+                                    <span :class="getPriorityClass(project.priorite)" class="px-2.5 py-0.5 rounded-full text-[10px] border font-semibold">{{ project.priorite }}</span>
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] border bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 font-medium">{{ project.status }}</span>
                                  </div>
-                                 <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{{ project.nom }}</h4>
-                                 <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
-                                    <span class="flex items-center gap-1"><i data-lucide="user" class="w-3 h-3"></i> {{ project.owner }}</span>
-                                    <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> {{ formatDate(project.deadline) }}</span>
+                                 <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">{{ project.nom }}</h4>
+                                 <div class="flex items-center gap-6 text-sm text-slate-500 dark:text-slate-400 mt-2">
+                                    <span class="flex items-center gap-1.5"><i data-lucide="user" class="w-3.5 h-3.5"></i> {{ project.owner }}</span>
+                                    <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> {{ formatDate(project.deadline) }}</span>
+                                    <span class="flex items-center gap-1.5 hidden sm:flex"><i data-lucide="list-checks" class="w-3.5 h-3.5"></i> {{ getTasksByProject(project.id).filter(t => t.status!=='Terminé').length }} restants</span>
                                  </div>
                               </div>
-                              <div class="hidden sm:block text-right">
-                                 <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ project.progress }}%</div>
+                              <div class="hidden sm:block text-right self-center pl-4 border-l border-slate-100 dark:border-slate-700/50">
+                                 <div class="text-3xl font-black text-slate-900 dark:text-white">{{ project.progress }}%</div>
                               </div>
                            </div>
                            
                            <!-- Progress Bar -->
-                           <div class="mt-4 h-1.5 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                              <div class="h-full bg-gradient-to-r from-red-500 to-orange-500" :style="{ width: project.progress + '%' }"></div>
+                           <div class="mt-5 h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                              <div class="h-full bg-gradient-to-r from-rose-500 to-amber-500" :style="{ width: project.progress + '%' }"></div>
                            </div>
                         </div>
                         
-                        <div v-if="dashboardData.topProjects.length === 0" class="text-center py-10 bg-gray-50 dark:bg-[#252525] rounded-xl border border-dashed border-gray-300 dark:border-gray-700 text-gray-500">
-                           Aucun projet prioritaire détecté.
+                        <div v-if="dashboardData.topProjects.length === 0" class="text-center py-12 bg-white dark:bg-[#1e293b] rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-500">
+                           Aucun projet prioritaire détecté. Commencez par en créer un !
                         </div>
                      </div>
 
@@ -325,41 +345,41 @@
                      <div class="space-y-6">
                         
                         <!-- Overdue Tasks -->
-                        <div class="bg-white dark:bg-[#202020] rounded-xl border border-red-200 dark:border-red-900/30 overflow-hidden shadow-sm">
-                           <div class="bg-red-50 dark:bg-red-900/10 px-4 py-3 border-b border-red-100 dark:border-red-900/20 flex justify-between items-center">
-                              <h3 class="text-sm font-bold text-red-700 dark:text-red-400 flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4"></i> Urgences ({{ dashboardData.allOverdue.length }})</h3>
+                        <div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                           <div class="bg-rose-50 dark:bg-rose-900/10 px-5 py-3 border-b border-rose-100 dark:border-rose-900/20 flex justify-between items-center">
+                              <h3 class="text-sm font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4"></i> Urgences ({{ dashboardData.allOverdue.length }})</h3>
                            </div>
-                           <div class="divide-y divide-gray-100 dark:divide-gray-800 max-h-[300px] overflow-y-auto">
-                              <div v-for="task in dashboardData.allOverdue" :key="task.id" class="p-3 hover:bg-gray-50 dark:hover:bg-[#252525] transition-colors cursor-pointer group" @click="openProjectDetails(projects.find(p=>p.id===task.project_id))">
-                                 <div class="flex justify-between items-start mb-1">
-                                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400 line-clamp-1 w-2/3">{{ projects.find(p=>p.id===task.project_id)?.nom }}</span>
-                                    <span class="text-[10px] font-bold text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-300 px-1.5 py-0.5 rounded">{{ formatDate(task.due_date) }}</span>
+                           <div class="divide-y divide-slate-100 dark:divide-slate-800 max-h-[350px] overflow-y-auto">
+                              <div v-for="task in dashboardData.allOverdue" :key="task.id" class="p-4 hover:bg-slate-50 dark:hover:bg-[#252525] transition-colors cursor-pointer group" @click="openProjectDetails(projects.find(p=>p.id===task.project_id))">
+                                 <div class="flex justify-between items-start mb-1.5">
+                                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 line-clamp-1 w-2/3 uppercase tracking-wide">{{ projects.find(p=>p.id===task.project_id)?.nom }}</span>
+                                    <span class="text-[10px] font-bold text-rose-600 bg-rose-100 dark:bg-rose-900/30 dark:text-rose-300 px-2 py-0.5 rounded-full">{{ formatDateShort(task.due_date) }}</span>
                                  </div>
-                                 <p class="text-sm text-gray-800 dark:text-gray-200 font-medium line-clamp-2 group-hover:text-red-500 transition-colors">{{ task.titre }}</p>
-                                 <div class="mt-2 flex items-center justify-between">
-                                    <div class="flex items-center gap-1.5"><img :src="getUserAvatar(task.assignee)" class="w-4 h-4 rounded-full"> <span class="text-[10px] text-gray-500">{{ task.assignee }}</span></div>
+                                 <p class="text-sm text-slate-800 dark:text-slate-200 font-medium line-clamp-2 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">{{ task.titre }}</p>
+                                 <div class="mt-3 flex items-center justify-between">
+                                    <div class="flex items-center gap-2"><img :src="getUserAvatar(task.assignee)" class="w-5 h-5 rounded-full ring-1 ring-white dark:ring-slate-700"> <span class="text-xs text-slate-500">{{ task.assignee }}</span></div>
                                  </div>
                               </div>
-                              <div v-if="dashboardData.allOverdue.length === 0" class="p-8 text-center text-sm text-gray-500 dark:text-gray-400 italic">
-                                 Aucune tâche en retard 🎉
+                              <div v-if="dashboardData.allOverdue.length === 0" class="p-8 text-center text-sm text-slate-500 dark:text-slate-400 italic">
+                                 Tout est à jour. Bravo ! 🎉
                               </div>
                            </div>
                         </div>
 
                         <!-- My Upcoming Tasks -->
-                        <div class="bg-white dark:bg-[#202020] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
-                           <div class="bg-gray-50 dark:bg-[#252525] px-4 py-3 border-b border-gray-200 dark:border-gray-800">
-                              <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2"><i data-lucide="calendar-clock" class="w-4 h-4 text-blue-500"></i> Ma Semaine</h3>
+                        <div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                           <div class="bg-slate-50 dark:bg-[#252525] px-5 py-3 border-b border-slate-200 dark:border-slate-700">
+                              <h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="calendar-clock" class="w-4 h-4 text-brand-500"></i> Ma Semaine</h3>
                            </div>
-                           <div class="divide-y divide-gray-100 dark:divide-gray-800">
-                              <div v-for="task in dashboardData.myTasks" :key="task.id" class="p-3 hover:bg-gray-50 dark:hover:bg-[#252525] transition-colors flex items-center gap-3">
-                                 <div class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></div>
+                           <div class="divide-y divide-slate-100 dark:divide-slate-800">
+                              <div v-for="task in dashboardData.myTasks" :key="task.id" class="p-4 hover:bg-slate-50 dark:hover:bg-[#252525] transition-colors flex items-start gap-3">
+                                 <div class="mt-1.5 w-2 h-2 rounded-full bg-brand-500 shrink-0"></div>
                                  <div class="flex-1 min-w-0">
-                                    <p class="text-sm text-gray-800 dark:text-gray-200 truncate">{{ task.titre }}</p>
-                                    <p class="text-[10px] text-gray-500 truncate">{{ formatDate(task.due_date) }} • {{ projects.find(p=>p.id===task.project_id)?.nom }}</p>
+                                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{{ task.titre }}</p>
+                                    <p class="text-[11px] text-slate-500 truncate mt-0.5">{{ formatDateShort(task.due_date) }} • {{ projects.find(p=>p.id===task.project_id)?.nom }}</p>
                                  </div>
                               </div>
-                               <div v-if="dashboardData.myTasks.length === 0" class="p-6 text-center text-sm text-gray-500 italic">
+                               <div v-if="dashboardData.myTasks.length === 0" class="p-8 text-center text-sm text-slate-500 italic">
                                  Rien de prévu cette semaine.
                               </div>
                            </div>
@@ -373,57 +393,58 @@
             <!-- VIEW: REVIEW (COCKPIT) -->
             <div v-if="viewType === 'review' && currentViewScope !== 'dashboard'" class="h-full flex flex-col">
                
-               <div class="hidden sm:flex items-start gap-4 mb-6 p-4 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/10 border border-indigo-200 dark:border-indigo-900/30 rounded-lg">
-                  <div class="p-3 bg-indigo-100 dark:bg-indigo-500/20 rounded-lg shrink-0"><i data-lucide="target" class="w-6 h-6 text-indigo-600 dark:text-indigo-400"></i></div>
+               <div class="hidden sm:flex items-start gap-4 mb-6 p-5 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm">
+                  <div class="p-3 bg-brand-100 dark:bg-brand-500/20 rounded-xl shrink-0"><i data-lucide="sliders" class="w-6 h-6 text-brand-600 dark:text-brand-400"></i></div>
                   <div>
-                     <h3 class="text-gray-900 dark:text-white font-bold text-lg">Réunion de Pilotage</h3>
-                     <p class="text-sm text-gray-600 dark:text-gray-400 max-w-2xl">
-                        Vue unique de décision. Utilisez les poignées <i data-lucide="grip-vertical" class="w-3 h-3 inline"></i> pour définir la priorité globale. 
+                     <h3 class="text-slate-900 dark:text-white font-bold text-lg">Réunion de Pilotage</h3>
+                     <p class="text-sm text-slate-500 dark:text-slate-400 max-w-2xl mt-1">
+                        Utilisez les poignées <i data-lucide="grip-vertical" class="w-3 h-3 inline"></i> pour définir l'ordre de priorité global. <br>
+                        Les modifications sont répercutées instantanément sur tous les affichages.
                      </p>
-                     <button @click="exportToCSV" class="mt-2 text-xs flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:underline"><i data-lucide="download" class="w-3 h-3"></i> Exporter en CSV</button>
+                     <button @click="exportToCSV" class="mt-3 text-xs flex items-center gap-1.5 text-brand-600 dark:text-brand-400 hover:underline font-medium bg-brand-50 dark:bg-brand-900/20 px-3 py-1.5 rounded-full w-fit"><i data-lucide="download" class="w-3 h-3"></i> Exporter le compte-rendu (CSV)</button>
                   </div>
                </div>
 
                <div class="sm:hidden mb-4 px-1 flex justify-between items-center">
-                  <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">Glissez pour prioriser <i data-lucide="arrow-down-up" class="w-3 h-3 inline ml-1"></i></p>
-                  <button @click="exportToCSV" class="text-xs text-indigo-500"><i data-lucide="download" class="w-4 h-4"></i></button>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Glissez pour prioriser <i data-lucide="arrow-down-up" class="w-3 h-3 inline ml-1"></i></p>
+                  <button @click="exportToCSV" class="text-xs text-brand-600"><i data-lucide="download" class="w-4 h-4"></i></button>
                </div>
 
                <!-- DESKTOP TABLE -->
-               <div class="hidden sm:block bg-white dark:bg-[#202020] rounded-lg border border-gray-200 dark:border-gray-800 overflow-hidden flex-1 overflow-y-auto shadow-sm dark:shadow-2xl">
+               <div class="hidden sm:block bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden flex-1 overflow-y-auto shadow-sm">
                   <table class="w-full text-left text-sm review-table">
-                     <thead class="bg-gray-50 dark:bg-[#202020] text-gray-500 dark:text-gray-400 font-medium text-xs uppercase tracking-wider border-b border-gray-200 dark:border-gray-700">
+                     <thead class="bg-slate-50 dark:bg-[#0f172a] text-slate-500 dark:text-slate-400 font-semibold text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700">
                         <tr>
-                           <th class="px-4 py-3 w-12 text-center bg-gray-50 dark:bg-[#202020]"></th>
-                           <th class="px-4 py-3 min-w-[250px] bg-gray-50 dark:bg-[#202020]">Projet</th>
-                           <th class="px-4 py-3 w-32 bg-gray-50 dark:bg-[#202020]">Propriétaire</th>
-                           <th class="px-4 py-3 w-36 bg-gray-50 dark:bg-[#202020]">Deadline</th>
-                           <th class="px-4 py-3 w-32 bg-gray-50 dark:bg-[#202020]">Priorité</th>
-                           <th class="px-4 py-3 w-32 bg-gray-50 dark:bg-[#202020]">Statut</th>
-                           <th class="px-4 py-3 min-w-[200px] bg-gray-50 dark:bg-[#202020]">Décision</th>
+                           <th class="px-4 py-3 w-12 text-center bg-slate-50 dark:bg-[#0f172a]"></th>
+                           <th class="px-4 py-3 min-w-[280px] bg-slate-50 dark:bg-[#0f172a]">Projet</th>
+                           <th class="px-4 py-3 w-40 bg-slate-50 dark:bg-[#0f172a]">Propriétaire</th>
+                           <th class="px-4 py-3 w-36 bg-slate-50 dark:bg-[#0f172a]">Deadline</th>
+                           <th class="px-4 py-3 w-32 bg-slate-50 dark:bg-[#0f172a]">Priorité</th>
+                           <th class="px-4 py-3 w-32 bg-slate-50 dark:bg-[#0f172a]">Statut</th>
+                           <th class="px-4 py-3 min-w-[250px] bg-slate-50 dark:bg-[#0f172a]">Décision Séance</th>
                         </tr>
                      </thead>
-                     <tbody :ref="el => { if(el) initProjectSortable(el) }" class="divide-y divide-gray-200 dark:divide-gray-800">
-                        <tr v-for="(project, index) in filteredProjects" :key="project.id" :data-id="project.id" class="hover:bg-gray-50 dark:hover:bg-[#252525] group transition-colors">
+                     <tbody :ref="el => { if(el) initProjectSortable(el) }" class="divide-y divide-slate-100 dark:divide-slate-800">
+                        <tr v-for="(project, index) in filteredProjects" :key="project.id" :data-id="project.id" class="hover:bg-slate-50 dark:hover:bg-[#252525] group transition-colors">
                            <td class="px-4 py-3 text-center align-top pt-4">
-                              <div class="project-drag-handle w-8 h-8 mx-auto flex items-center justify-center rounded cursor-move hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                <i data-lucide="grip-vertical" class="w-5 h-5 text-gray-400 dark:text-gray-500"></i>
+                              <div class="project-drag-handle w-8 h-8 mx-auto flex items-center justify-center rounded cursor-move hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                                <i data-lucide="grip-vertical" class="w-4 h-4 text-slate-400 dark:text-slate-500"></i>
                               </div>
                            </td>
                            <td class="px-4 py-3 align-top">
                               <div class="flex items-center gap-3 mb-1">
-                                 <button @click="openProjectDetails(project)" class="p-1 hover:bg-blue-100 dark:hover:bg-blue-500/20 rounded text-blue-600 dark:text-blue-400 transition-colors"><i data-lucide="maximize-2" class="w-4 h-4"></i></button>
+                                 <button @click="openProjectDetails(project)" class="p-1 hover:bg-brand-100 dark:hover:bg-brand-500/20 rounded text-brand-600 dark:text-brand-400 transition-colors"><i data-lucide="maximize-2" class="w-4 h-4"></i></button>
                                  <span class="text-xl">{{ project.emoji }}</span>
-                                 <input v-model="project.nom" @change="updateProject(project)" class="review-input font-bold text-gray-900 dark:text-white text-sm" />
-                                 <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="w-4 h-4 text-orange-500" title="Attention: Tâches planifiées après la deadline du projet"></i>
+                                 <input v-model="project.nom" @change="updateProject(project)" class="review-input font-bold text-slate-900 dark:text-white text-sm" />
+                                 <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="w-4 h-4 text-amber-500" title="Attention: Tâches planifiées après la deadline du projet"></i>
                               </div>
-                              <div class="pl-8 opacity-60 hover:opacity-100 transition-opacity"><input v-model="project.description" @change="updateProject(project)" class="review-input text-xs text-gray-500 dark:text-gray-400 italic" placeholder="Description..." /></div>
+                              <div class="pl-8 opacity-80 transition-opacity"><input v-model="project.description" @change="updateProject(project)" class="review-input text-xs text-slate-500 dark:text-slate-400 italic" placeholder="Description..." /></div>
                            </td>
-                           <td class="px-4 py-3 align-top"><select v-model="project.owner" @change="updateProject(project)" class="review-input bg-transparent text-gray-700 dark:text-gray-300 text-xs py-1"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select></td>
-                           <td class="px-4 py-3 align-top"><input type="date" :value="toInputDate(project.deadline)" @input="e => { project.deadline = new Date(e.target.value); updateProject(project); }" class="review-input text-xs font-mono py-1" :class="isOverdueProject(project) ? 'text-red-600 dark:text-red-400 font-bold border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/10' : 'text-gray-500 dark:text-gray-400'"></td>
-                           <td class="px-4 py-3 align-top"><select v-model="project.priorite" @change="updateProject(project)" class="review-input text-xs font-bold py-1 border" :class="{'text-red-600 border-red-200 bg-red-50 dark:text-red-400 dark:border-red-900/50 dark:bg-red-900/10': project.priorite === 'Haute', 'text-yellow-600 border-yellow-200 bg-yellow-50 dark:text-yellow-400 dark:border-yellow-900/50 dark:bg-yellow-900/10': project.priorite === 'Moyenne', 'text-blue-600 border-blue-200 bg-blue-50 dark:text-blue-400 dark:border-blue-900/50 dark:bg-blue-900/10': project.priorite === 'Basse'}"><option value="Haute" class="bg-white dark:bg-[#202020]">🔥 Haute</option><option value="Moyenne" class="bg-white dark:bg-[#202020]">⚡ Moyenne</option><option value="Basse" class="bg-white dark:bg-[#202020]">☕ Basse</option></select></td>
-                           <td class="px-4 py-3 align-top"><select v-model="project.status" @change="updateProject(project)" class="review-input text-xs font-medium py-1 rounded-full text-center" :class="{'text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-900/20': project.status === 'Terminé', 'text-yellow-700 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-900/20': project.status === 'En cours', 'text-gray-500 bg-gray-100 dark:text-gray-400 dark:bg-gray-700/20': project.status === 'En pause', 'text-red-700 bg-red-100 dark:text-red-400 dark:bg-red-900/20': project.status === 'Annulé'}"><option value="En cours" class="bg-white dark:bg-[#202020]">En cours</option><option value="Terminé" class="bg-white dark:bg-[#202020]">Terminé</option><option value="En pause" class="bg-white dark:bg-[#202020]">En pause</option><option value="Annulé" class="bg-white dark:bg-[#202020]">Annulé</option></select></td>
-                           <td class="px-4 py-3 align-top"><textarea v-model="project.meeting_notes" @change="updateProject(project)" placeholder="Décision..." rows="1" class="review-input text-xs text-indigo-700 dark:text-indigo-200 bg-indigo-50 dark:bg-indigo-900/10 border-indigo-100 dark:border-indigo-900/20 placeholder-indigo-300 dark:placeholder-indigo-500/50 resize-none focus:h-20 focus:absolute focus:z-20 focus:w-64 focus:shadow-xl"></textarea></td>
+                           <td class="px-4 py-3 align-top"><select v-model="project.owner" @change="updateProject(project)" class="review-input bg-transparent text-slate-700 dark:text-slate-300 text-xs py-1"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select></td>
+                           <td class="px-4 py-3 align-top"><input type="date" :value="toInputDate(project.deadline)" @input="e => { project.deadline = new Date(e.target.value); updateProject(project); }" class="review-input text-xs font-mono py-1" :class="isOverdueProject(project) ? 'text-rose-600 dark:text-rose-400 font-bold border-rose-200 dark:border-rose-900/50 bg-rose-50 dark:bg-rose-900/10' : 'text-slate-500 dark:text-slate-400'"></td>
+                           <td class="px-4 py-3 align-top"><select v-model="project.priorite" @change="updateProject(project)" class="review-input text-xs font-bold py-1 border" :class="{'text-rose-600 border-rose-200 bg-rose-50 dark:text-rose-400 dark:border-rose-900/50 dark:bg-rose-900/10': project.priorite === 'Haute', 'text-amber-600 border-amber-200 bg-amber-50 dark:text-amber-400 dark:border-amber-900/50 dark:bg-amber-900/10': project.priorite === 'Moyenne', 'text-brand-600 border-brand-200 bg-brand-50 dark:text-brand-400 dark:border-brand-900/50 dark:bg-brand-900/10': project.priorite === 'Basse'}"><option value="Haute" class="bg-white dark:bg-[#202020]">🔥 Haute</option><option value="Moyenne" class="bg-white dark:bg-[#202020]">⚡ Moyenne</option><option value="Basse" class="bg-white dark:bg-[#202020]">☕ Basse</option></select></td>
+                           <td class="px-4 py-3 align-top"><select v-model="project.status" @change="updateProject(project)" class="review-input text-xs font-medium py-1 rounded-full text-center" :class="{'text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/20': project.status === 'Terminé', 'text-amber-700 bg-amber-50 dark:text-amber-400 dark:bg-amber-900/20': project.status === 'En cours', 'text-slate-500 bg-slate-100 dark:text-slate-400 dark:bg-slate-700/20': project.status === 'En pause', 'text-rose-700 bg-rose-50 dark:text-rose-400 dark:bg-rose-900/20': project.status === 'Annulé'}"><option value="En cours" class="bg-white dark:bg-[#202020]">En cours</option><option value="Terminé" class="bg-white dark:bg-[#202020]">Terminé</option><option value="En pause" class="bg-white dark:bg-[#202020]">En pause</option><option value="Annulé" class="bg-white dark:bg-[#202020]">Annulé</option></select></td>
+                           <td class="px-4 py-3 align-top"><textarea v-model="project.meeting_notes" @change="updateProject(project)" placeholder="Note de décision..." rows="1" class="review-input text-xs text-brand-700 dark:text-brand-200 bg-brand-50 dark:bg-brand-900/10 border-brand-100 dark:border-brand-900/20 placeholder-brand-300 dark:placeholder-brand-500/50 resize-none focus:h-20 focus:absolute focus:z-20 focus:w-64 focus:shadow-xl"></textarea></td>
                         </tr>
                      </tbody>
                   </table>
@@ -431,43 +452,43 @@
 
                <!-- MOBILE REVIEW CARDS (FIXED CLICKABLE AREA) -->
                <div class="sm:hidden space-y-4" :ref="el => { if(el) initProjectSortable(el) }">
-                  <div v-for="(project, index) in filteredProjects" :key="project.id" :data-id="project.id" class="bg-white dark:bg-[#202020] rounded-xl p-4 border border-gray-200 dark:border-gray-800 shadow-sm relative overflow-hidden">
+                  <div v-for="(project, index) in filteredProjects" :key="project.id" :data-id="project.id" class="bg-white dark:bg-[#1e293b] rounded-xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
                      <div class="flex items-start justify-between mb-4">
                         <div class="flex items-center gap-3">
                            <div class="text-3xl">{{ project.emoji }}</div>
                            <div class="flex-1">
-                              <button @click="openProjectDetails(project)" class="font-bold text-gray-900 dark:text-white text-lg text-left leading-tight active:text-blue-500 transition-colors flex items-center gap-2">
+                              <button @click="openProjectDetails(project)" class="font-bold text-slate-900 dark:text-white text-lg text-left leading-tight active:text-brand-500 transition-colors flex items-center gap-2">
                                 {{ project.nom }}
-                                <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
                               </button>
                            </div>
                         </div>
-                        <div class="project-drag-handle p-3 -mr-2 text-gray-400"><i data-lucide="grip-vertical" class="w-7 h-7"></i></div>
+                        <div class="project-drag-handle p-3 -mr-2 text-slate-400"><i data-lucide="grip-vertical" class="w-7 h-7"></i></div>
                      </div>
                      <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div><div class="mobile-label">Priorité</div><select v-model="project.priorite" @change="updateProject(project)" class="w-full bg-gray-50 dark:bg-[#1a1a1a] text-gray-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-gray-200 dark:border-gray-700 h-12 sm:h-10"><option value="Haute">🔥 Haute</option><option value="Moyenne">⚡ Moyenne</option><option value="Basse">☕ Basse</option></select></div>
-                        <div><div class="mobile-label">Statut</div><select v-model="project.status" @change="updateProject(project)" class="w-full bg-gray-50 dark:bg-[#1a1a1a] text-gray-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-gray-200 dark:border-gray-700 h-12 sm:h-10"><option value="En cours">En cours</option><option value="Terminé">Terminé</option><option value="En pause">En pause</option><option value="Annulé">Annulé</option></select></div>
+                        <div><div class="mobile-label">Priorité</div><select v-model="project.priorite" @change="updateProject(project)" class="w-full bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-slate-200 dark:border-slate-700 h-12 sm:h-10"><option value="Haute">🔥 Haute</option><option value="Moyenne">⚡ Moyenne</option><option value="Basse">☕ Basse</option></select></div>
+                        <div><div class="mobile-label">Statut</div><select v-model="project.status" @change="updateProject(project)" class="w-full bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-slate-200 dark:border-slate-700 h-12 sm:h-10"><option value="En cours">En cours</option><option value="Terminé">Terminé</option><option value="En pause">En pause</option><option value="Annulé">Annulé</option></select></div>
                      </div>
-                     <div class="mb-4"><div class="mobile-label">Deadline</div><input type="date" :value="toInputDate(project.deadline)" @input="e => { project.deadline = new Date(e.target.value); updateProject(project); }" class="w-full bg-gray-50 dark:bg-[#1a1a1a] text-gray-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-gray-200 dark:border-gray-700 h-12 sm:h-10"></div>
-                     <div><div class="mobile-label">Notes Décision</div><textarea v-model="project.meeting_notes" @change="updateProject(project)" placeholder="Notes de séance..." rows="2" class="w-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-900 dark:text-indigo-200 text-base sm:text-sm rounded-lg p-3 border border-indigo-100 dark:border-indigo-900/30 resize-none"></textarea></div>
+                     <div class="mb-4"><div class="mobile-label">Deadline</div><input type="date" :value="toInputDate(project.deadline)" @input="e => { project.deadline = new Date(e.target.value); updateProject(project); }" class="w-full bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-slate-200 dark:border-slate-700 h-12 sm:h-10"></div>
+                     <div><div class="mobile-label">Notes Décision</div><textarea v-model="project.meeting_notes" @change="updateProject(project)" placeholder="Notes de séance..." rows="2" class="w-full bg-brand-50 dark:bg-brand-900/20 text-brand-900 dark:text-brand-200 text-base sm:text-sm rounded-lg p-3 border border-brand-100 dark:border-brand-900/30 resize-none"></textarea></div>
                   </div>
                </div>
             </div>
 
             <!-- VIEW: GRID -->
-            <div v-if="viewType === 'grid' && currentViewScope !== 'dashboard'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+            <div v-if="viewType === 'grid' && currentViewScope !== 'dashboard'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
               <div v-for="project in filteredProjects" :key="project.id" :data-id="project.id"
                   @click="openProjectDetails(project)"
-                  class="group bg-white dark:bg-[#202020] border-l-4 border-y border-r border-gray-200 dark:border-gray-800 hover:border-r-gray-400 dark:hover:border-r-gray-600 rounded-xl p-5 cursor-pointer transition-all hover:shadow-lg relative overflow-hidden flex flex-col h-auto min-h-[16rem] active:scale-[0.99]"
+                  class="group bg-white dark:bg-[#1e293b] border-l-4 border-y border-r border-slate-200 dark:border-slate-800 hover:border-r-brand-300 dark:hover:border-r-brand-600 rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg relative overflow-hidden flex flex-col h-auto min-h-[18rem] active:scale-[0.99]"
                   :class="{
-                     'border-l-green-500': project.status === 'Terminé',
-                     'border-l-yellow-500': project.status === 'En cours',
-                     'border-l-gray-500': project.status === 'En pause',
-                     'border-l-red-500': project.status === 'Annulé'
+                     'border-l-emerald-500': project.status === 'Terminé',
+                     'border-l-amber-500': project.status === 'En cours',
+                     'border-l-slate-400': project.status === 'En pause',
+                     'border-l-rose-500': project.status === 'Annulé'
                   }">
                 
-                <div class="flex justify-between items-start mb-3">
-                  <div class="w-12 h-12 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-2xl shadow-sm">{{ project.emoji || '📁' }}</div>
+                <div class="flex justify-between items-start mb-4">
+                  <div class="w-14 h-14 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-3xl shadow-inner border border-slate-100 dark:border-slate-700">{{ project.emoji || '📁' }}</div>
                   
                   <!-- IMPROVED STATUS & PRIO ALIGNMENT + OPEN BUTTON -->
                   <div class="flex items-center gap-2">
@@ -475,78 +496,78 @@
                      <span :class="getProjectStatusClass(project.status)" class="px-2 py-1 rounded-md text-[10px] font-medium border shadow-sm">{{ project.status }}</span>
                      
                      <!-- Open Button Moved Here -->
-                     <button @click.stop="openProjectDetails(project)" class="p-1 text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors ml-1" title="Ouvrir la fiche">
+                     <button @click.stop="openProjectDetails(project)" class="p-1 text-slate-400 hover:text-brand-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors ml-1" title="Ouvrir la fiche">
                         <i data-lucide="maximize-2" class="w-4 h-4"></i>
                      </button>
                   </div>
                 </div>
 
-                <div class="mb-1">
-                  <h3 class="text-gray-900 dark:text-white font-bold text-lg leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-2">
+                <div class="mb-2">
+                  <h3 class="text-slate-900 dark:text-white font-bold text-lg leading-tight group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-2">
                      {{ project.nom }}
-                     <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="w-4 h-4 text-orange-500"></i>
+                     <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i>
                   </h3>
                   <!-- Priority moved below title -->
-                  <div class="flex items-center gap-2 mt-1">
+                  <div class="flex items-center gap-2 mt-1.5">
                      <span :class="getPriorityClass(project.priorite)" class="text-[10px] font-bold px-1.5 py-0.5 rounded border flex items-center gap-1">
                         <i data-lucide="flag" class="w-3 h-3"></i> {{ project.priorite }}
                      </span>
                   </div>
                 </div>
                 
-                <div class="flex flex-wrap gap-1 mt-2 mb-3">
-                   <span v-for="tag in project.tags" :key="tag" class="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 text-[10px] rounded-full border border-blue-100 dark:border-blue-900/30">{{ tag }}</span>
+                <div class="flex flex-wrap gap-1 mt-2 mb-4">
+                   <span v-for="tag in project.tags" :key="tag" class="px-2 py-0.5 bg-brand-50 dark:bg-brand-900/20 text-brand-700 dark:text-brand-300 text-[10px] rounded-full border border-brand-100 dark:border-brand-900/30 font-medium">{{ tag }}</span>
                 </div>
 
-                <div class="flex items-center gap-2 mb-4">
-                   <img :src="getUserAvatar(project.owner)" class="w-5 h-5 rounded-full border border-gray-100 dark:border-gray-600 shadow-sm">
-                   <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">{{ project.owner }}</p>
+                <div class="flex items-center gap-2 mb-5 pb-4 border-b border-slate-100 dark:border-slate-800">
+                   <img :src="getUserAvatar(project.owner)" class="w-6 h-6 rounded-full border border-slate-100 dark:border-slate-600 shadow-sm">
+                   <p class="text-xs text-slate-600 dark:text-slate-400 font-semibold">{{ project.owner }}</p>
                 </div>
 
-                <div class="text-xs text-gray-500 dark:text-gray-400 mb-4 line-clamp-3 leading-relaxed opacity-80 flex-1" v-html="stripMarkdown(project.description) || 'Aucune description...'"></div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 mb-4 line-clamp-3 leading-relaxed opacity-90 flex-1" v-html="stripMarkdown(project.description) || 'Aucune description...'"></div>
 
-                <div class="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
-                  <div class="flex justify-between text-[10px] text-gray-400 mb-1.5 font-medium uppercase tracking-wide"><span>Avancement</span><span>{{ project.progress }}%</span></div>
-                  <div class="h-2 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-500" :style="{ width: project.progress + '%' }"></div></div>
+                <div class="mt-auto">
+                  <div class="flex justify-between text-[10px] text-slate-400 mb-1.5 font-bold uppercase tracking-wide"><span>Avancement</span><span>{{ project.progress }}%</span></div>
+                  <div class="h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-brand-500 to-indigo-600 transition-all duration-500" :style="{ width: project.progress + '%' }"></div></div>
                 </div>
               </div>
 
               <!-- Add Card -->
-              <div @click="showNewProjectModal = true" class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-5 flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 hover:border-blue-400 dark:hover:border-blue-500 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-[#252525] cursor-pointer transition-all min-h-[16rem]">
-                 <div class="w-14 h-14 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform"><i data-lucide="plus" class="w-6 h-6"></i></div><span class="text-sm font-bold">Créer un projet</span>
+              <div @click="showNewProjectModal = true" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-5 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:border-brand-400 dark:hover:border-brand-500 hover:text-brand-500 dark:hover:text-brand-400 hover:bg-brand-50/50 dark:hover:bg-[#1e293b] cursor-pointer transition-all min-h-[18rem]">
+                 <div class="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><i data-lucide="plus" class="w-8 h-8 text-slate-400"></i></div><span class="text-sm font-bold">Créer un projet</span>
               </div>
             </div>
 
             <!-- VIEW: LIST -->
-            <div v-if="viewType === 'list' && currentViewScope !== 'dashboard'" class="bg-white dark:bg-[#202020] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+            <div v-if="viewType === 'list' && currentViewScope !== 'dashboard'" class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
                <div class="overflow-x-auto">
                  <table class="w-full text-left text-sm whitespace-nowrap">
-                   <thead class="bg-gray-50 dark:bg-[#252525] text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 font-medium text-xs uppercase tracking-wider">
+                   <thead class="bg-slate-50 dark:bg-[#252525] text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700 font-medium text-xs uppercase tracking-wider">
                      <tr><th class="px-6 py-4 w-12"></th><th class="px-6 py-4">Nom du projet</th><th class="px-6 py-4">État</th><th class="px-6 py-4">Propriétaire</th><th class="px-6 py-4">Priorité</th><th class="px-6 py-4">Progression</th><th class="px-6 py-4 text-right">Deadline</th></tr>
                    </thead>
-                   <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
-                     <tr v-for="project in filteredProjects" :key="project.id" :data-id="project.id" @click="openProjectDetails(project)" class="hover:bg-gray-50 dark:hover:bg-[#2a2a2a] cursor-pointer transition-colors group">
+                   <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                     <tr v-for="project in filteredProjects" :key="project.id" :data-id="project.id" @click="openProjectDetails(project)" class="hover:bg-slate-50 dark:hover:bg-[#252525] cursor-pointer transition-colors group">
                        <td class="pl-6 py-4 text-2xl">{{ project.emoji || '📁' }}</td>
-                       <td class="px-6 py-4 font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                          {{ project.nom }} <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="inline w-3 h-3 text-orange-500 ml-1"></i>
+                       <td class="px-6 py-4 font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400">
+                          {{ project.nom }} <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="inline w-3 h-3 text-amber-500 ml-1"></i>
                        </td>
                        <td class="px-6 py-4"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border" :class="getProjectStatusClass(project.status)">{{ project.status }}</span></td>
-                       <td class="px-6 py-4 text-gray-600 dark:text-gray-300 flex items-center gap-2"><img :src="getUserAvatar(project.owner)" class="w-6 h-6 rounded-full border border-gray-200 dark:border-gray-600">{{ project.owner }}</td>
+                       <td class="px-6 py-4 text-slate-600 dark:text-slate-300 flex items-center gap-2"><img :src="getUserAvatar(project.owner)" class="w-6 h-6 rounded-full border border-slate-200 dark:border-slate-600">{{ project.owner }}</td>
                        <td class="px-6 py-4"><span :class="getPriorityClass(project.priorite)" class="px-2.5 py-1 rounded-md border text-[10px] font-bold tracking-wide shadow-sm">{{ project.priorite }}</span></td>
-                       <td class="px-6 py-4 w-48"><div class="flex items-center gap-3"><span class="text-xs font-mono text-gray-500 dark:text-gray-400 w-8 text-right">{{ project.progress }}%</span><div class="h-2 flex-1 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden"><div class="h-full bg-blue-500" :style="{ width: project.progress + '%' }"></div></div></div></td>
-                       <td class="px-6 py-4 text-right text-gray-500 dark:text-gray-400 text-xs font-mono">{{ formatDate(project.deadline) }}</td>
+                       <td class="px-6 py-4 w-48"><div class="flex items-center gap-3"><span class="text-xs font-mono text-slate-500 dark:text-slate-400 w-8 text-right">{{ project.progress }}%</span><div class="h-2 flex-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-brand-500" :style="{ width: project.progress + '%' }"></div></div></div></td>
+                       <td class="px-6 py-4 text-right text-slate-500 dark:text-slate-400 text-xs font-mono">{{ formatDate(project.deadline) }}</td>
                      </tr>
                    </tbody>
                  </table>
                </div>
                <div class="sm:hidden space-y-3 p-4">
-                  <div v-for="project in filteredProjects" :key="project.id" @click="openProjectDetails(project)" class="bg-white dark:bg-[#202020] rounded-xl p-4 border border-gray-200 dark:border-gray-800 shadow-sm flex items-center gap-4 active:scale-[0.98] transition-transform">
+                  <div v-for="project in filteredProjects" :key="project.id" @click="openProjectDetails(project)" class="bg-white dark:bg-[#1e293b] rounded-xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 active:scale-[0.98] transition-transform">
                      <div class="text-3xl shrink-0">{{ project.emoji || '📁' }}</div>
                      <div class="flex-1 min-w-0">
-                        <h4 class="font-bold text-gray-900 dark:text-white truncate">{{ project.nom }}</h4>
-                        <div class="flex items-center gap-2 text-xs text-gray-500 mt-1"><span class="px-2 py-0.5 rounded border" :class="getProjectStatusClass(project.status)">{{ project.status }}</span><span>•</span><span :class="{'text-red-500 font-bold': isOverdueProject(project)}">{{ formatDateShort(project.deadline) }}</span></div>
+                        <h4 class="font-bold text-slate-900 dark:text-white truncate">{{ project.nom }}</h4>
+                        <div class="flex items-center gap-2 text-xs text-slate-500 mt-1"><span class="px-2 py-0.5 rounded border" :class="getProjectStatusClass(project.status)">{{ project.status }}</span><span>•</span><span :class="{'text-rose-500 font-bold': isOverdueProject(project)}">{{ formatDateShort(project.deadline) }}</span></div>
                      </div>
-                     <div class="shrink-0 flex flex-col items-end gap-1"><span :class="getPriorityClass(project.priorite)" class="px-2 py-0.5 rounded text-[10px] border">{{ project.priorite }}</span><span class="text-xs font-mono text-gray-400">{{ project.progress }}%</span></div>
+                     <div class="shrink-0 flex flex-col items-end gap-1"><span :class="getPriorityClass(project.priorite)" class="px-2 py-0.5 rounded text-[10px] border">{{ project.priorite }}</span><span class="text-xs font-mono text-slate-400">{{ project.progress }}%</span></div>
                   </div>
                </div>
             </div>
@@ -558,31 +579,31 @@
       <!-- MODALS -->
       <transition name="fade">
         <div v-if="activeProject" class="fixed inset-0 bg-black/60 backdrop-blur-[2px] z-[200] flex justify-center items-center p-0 sm:p-4 sm:justify-end" @click.self="activeProject = null">
-          <div class="w-full h-full sm:h-full sm:max-w-3xl bg-white dark:bg-[#191919] border-l border-gray-200 dark:border-gray-700 shadow-2xl flex flex-col transform transition-transform duration-300">
-            <div class="h-14 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center px-4 bg-gray-50 dark:bg-[#202020] shrink-0">
-               <div class="flex gap-2 text-gray-500 dark:text-gray-400 text-xs items-center truncate">
-                 <button @click="activeProject = null" class="flex items-center gap-1 hover:text-gray-900 dark:hover:text-white"><i data-lucide="chevron-left" class="w-4 h-4"></i> Retour</button>
+          <div class="w-full h-full sm:h-full sm:max-w-3xl bg-white dark:bg-[#1e293b] border-l border-slate-200 dark:border-slate-700 shadow-2xl flex flex-col transform transition-transform duration-300">
+            <div class="h-14 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center px-4 bg-slate-50 dark:bg-[#0f172a] shrink-0">
+               <div class="flex gap-2 text-slate-500 dark:text-slate-400 text-xs items-center truncate">
+                 <button @click="activeProject = null" class="flex items-center gap-1 hover:text-slate-900 dark:hover:text-white"><i data-lucide="chevron-left" class="w-4 h-4"></i> Retour</button>
                </div>
-               <button @click="activeProject = null" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+               <button @click="activeProject = null" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             
-            <div class="flex-1 overflow-y-auto p-5 sm:p-8 sm:px-12 bg-gray-50 dark:bg-[#191919]">
+            <div class="flex-1 overflow-y-auto p-5 sm:p-8 sm:px-12 bg-slate-50 dark:bg-[#0f172a]">
               <!-- Project Header Info -->
               <div class="mb-8">
                  <div class="text-6xl mb-4 text-center sm:text-left">{{ activeProject.emoji || '📁' }}</div>
-                 <h1 class="text-2xl sm:text-4xl font-black text-gray-900 dark:text-white mb-6 leading-tight text-center sm:text-left">{{ activeProject.nom }}</h1>
+                 <h1 class="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white mb-6 leading-tight text-center sm:text-left">{{ activeProject.nom }}</h1>
                  
                  <!-- NEW: STATUS & PRIORITY PROMINENT BADGES -->
                  <div class="flex flex-wrap items-center gap-3 mb-8 justify-center sm:justify-start">
                      <!-- Big Status Select -->
                      <div class="relative group">
                          <select v-model="activeProject.status" @change="updateProject(activeProject)" 
-                                 class="appearance-none pl-4 pr-10 py-2 rounded-full font-bold text-sm cursor-pointer transition-all shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#f9fafb] dark:focus:ring-offset-[#191919]"
+                                 class="appearance-none pl-4 pr-10 py-2 rounded-full font-bold text-sm cursor-pointer transition-all shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#f8fafc] dark:focus:ring-offset-[#1e293b]"
                                  :class="getProjectStatusClass(activeProject.status)">
-                             <option value="En cours" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">En cours</option>
-                             <option value="Terminé" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">Terminé</option>
-                             <option value="En pause" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">En pause</option>
-                             <option value="Annulé" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">Annulé</option>
+                             <option value="En cours" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">En cours</option>
+                             <option value="Terminé" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">Terminé</option>
+                             <option value="En pause" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">En pause</option>
+                             <option value="Annulé" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">Annulé</option>
                          </select>
                          <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-50 pointer-events-none group-hover:opacity-80"></i>
                      </div>
@@ -592,9 +613,9 @@
                         <select v-model="activeProject.priorite" @change="updateProject(activeProject)"
                            class="appearance-none px-3 py-2 rounded-full text-xs font-bold border flex items-center gap-1.5 shadow-sm cursor-pointer pr-8"
                            :class="getPriorityClass(activeProject.priorite)">
-                           <option value="Haute" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">🔥 Haute</option>
-                           <option value="Moyenne" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">⚡ Moyenne</option>
-                           <option value="Basse" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">☕ Basse</option>
+                           <option value="Haute" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">🔥 Haute</option>
+                           <option value="Moyenne" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">⚡ Moyenne</option>
+                           <option value="Basse" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">☕ Basse</option>
                         </select>
                          <i data-lucide="chevron-down" class="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 opacity-50 pointer-events-none"></i>
                      </div>
@@ -602,20 +623,20 @@
 
                  <!-- FUNC 1: TAGS EDIT -->
                  <div class="mb-6 flex flex-wrap gap-2 justify-center sm:justify-start">
-                    <span v-for="(tag, i) in activeProject.tags" :key="i" class="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full border border-blue-200 dark:border-blue-800 flex items-center gap-1">
-                       {{ tag }} <button @click="removeTag(activeProject, i)" class="hover:text-blue-900 dark:hover:text-white"><i data-lucide="x" class="w-3 h-3"></i></button>
+                    <span v-for="(tag, i) in activeProject.tags" :key="i" class="px-3 py-1 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 text-xs rounded-full border border-brand-200 dark:border-brand-800 flex items-center gap-1">
+                       {{ tag }} <button @click="removeTag(activeProject, i)" class="hover:text-brand-900 dark:hover:text-white"><i data-lucide="x" class="w-3 h-3"></i></button>
                     </span>
-                    <input @keyup.enter="addTag(activeProject, $event)" placeholder="+ Tag" class="px-3 py-1 bg-gray-100 dark:bg-[#2c2c2c] text-xs rounded-full border-none outline-none w-20 focus:w-32 transition-all text-gray-900 dark:text-white">
+                    <input @keyup.enter="addTag(activeProject, $event)" placeholder="+ Tag" class="px-3 py-1 bg-slate-100 dark:bg-[#1e293b] text-xs rounded-full border-none outline-none w-20 focus:w-32 transition-all text-slate-900 dark:text-white placeholder-slate-400">
                  </div>
 
-                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm bg-white dark:bg-[#202020] p-4 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm">
-                    <div class="flex items-center justify-between sm:justify-start gap-2 border-b sm:border-b-0 border-gray-100 dark:border-gray-800 pb-2 sm:pb-0">
-                       <span class="text-gray-400 flex items-center gap-2"><i data-lucide="user" class="w-4 h-4"></i> Owner</span>
-                       <span class="font-medium text-gray-900 dark:text-white flex items-center gap-2"><img :src="getUserAvatar(activeProject.owner)" class="w-5 h-5 rounded-full"> {{ activeProject.owner }}</span>
+                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm bg-white dark:bg-[#1e293b] p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center justify-between sm:justify-start gap-2 border-b sm:border-b-0 border-slate-100 dark:border-slate-800 pb-2 sm:pb-0">
+                       <span class="text-slate-400 flex items-center gap-2"><i data-lucide="user" class="w-4 h-4"></i> Owner</span>
+                       <span class="font-medium text-slate-900 dark:text-white flex items-center gap-2"><img :src="getUserAvatar(activeProject.owner)" class="w-5 h-5 rounded-full"> {{ activeProject.owner }}</span>
                     </div>
-                    <div class="flex items-center justify-between sm:justify-start gap-2 border-b sm:border-b-0 border-gray-100 dark:border-gray-800 pb-2 sm:pb-0">
-                       <span class="text-gray-400 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4"></i> Fin</span>
-                       <span class="font-mono text-gray-900 dark:text-white">{{ formatDate(activeProject.deadline) }}</span>
+                    <div class="flex items-center justify-between sm:justify-start gap-2 border-b sm:border-b-0 border-slate-100 dark:border-slate-800 pb-2 sm:pb-0">
+                       <span class="text-slate-400 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4"></i> Fin</span>
+                       <span class="font-mono text-slate-900 dark:text-white">{{ formatDate(activeProject.deadline) }}</span>
                     </div>
                  </div>
               </div>
@@ -623,28 +644,27 @@
               <!-- Desc -->
               <div class="mb-10">
                  <div class="flex justify-between items-center mb-3">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Contexte</h3>
-                    <button @click="toggleEditDesc" class="text-xs text-blue-600 dark:text-blue-400 font-medium hover:underline">{{ isEditingDesc ? 'Terminer' : 'Modifier' }}</button>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Contexte</h3>
+                    <button @click="toggleEditDesc" class="text-xs text-brand-600 dark:text-brand-400 font-medium hover:underline">{{ isEditingDesc ? 'Terminer' : 'Modifier' }}</button>
                  </div>
-                 <div class="bg-white dark:bg-[#252525] border border-gray-200 dark:border-[#333] rounded-xl p-5 text-gray-700 dark:text-gray-300 min-h-[100px] shadow-sm">
-                    <div v-if="!isEditingDesc" @dblclick="isEditingDesc = true" class="prose prose-invert prose-sm max-w-none" v-html="renderMarkdown(activeProject.description) || '<p class=\'text-gray-400 italic\'>Aucune description. Double-cliquez pour ajouter du contenu...</p>'"></div>
-                    <textarea v-else ref="descInput" v-model="activeProject.description" class="w-full bg-transparent border-none outline-none resize-none text-base sm:text-sm leading-relaxed h-full min-h-[150px] text-gray-900 dark:text-gray-200" @blur="isEditingDesc = false"></textarea>
+                 <div class="bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-[#333] rounded-xl p-5 text-slate-700 dark:text-slate-300 min-h-[100px] shadow-sm">
+                    <div v-if="!isEditingDesc" @dblclick="isEditingDesc = true" class="prose prose-invert prose-sm max-w-none" v-html="renderMarkdown(activeProject.description) || '<p class=\'text-slate-400 italic\'>Aucune description. Double-cliquez pour ajouter du contenu...</p>'"></div>
+                    <textarea v-else ref="descInput" v-model="activeProject.description" class="w-full bg-transparent border-none outline-none resize-none text-base sm:text-sm leading-relaxed h-full min-h-[150px] text-slate-900 dark:text-slate-200" @blur="isEditingDesc = false"></textarea>
                  </div>
               </div>
 
               <!-- Tasks -->
-              <div class="border-t border-gray-200 dark:border-gray-800 pt-8 pb-10">
-                <div class="flex justify-between items-center mb-6"><h3 class="text-lg font-bold text-gray-900 dark:text-white">Tâches</h3><span class="bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400 text-xs px-2 py-1 rounded-full">{{ getTasksByProject(activeProject.id).length }}</span></div>
+              <div class="border-t border-slate-200 dark:border-slate-800 pt-8 pb-10">
+                <div class="flex justify-between items-center mb-6"><h3 class="text-lg font-bold text-slate-900 dark:text-white">Tâches</h3><span class="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs px-2 py-1 rounded-full">{{ getTasksByProject(activeProject.id).length }}</span></div>
                 
-                <!-- ERGO 2: BATCH TASK ENTRY (Refocus after add) -->
                 <div class="flex flex-col sm:flex-row gap-3 mb-6">
-                   <div class="flex gap-2 flex-1 bg-white dark:bg-[#252525] p-1 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                      <button @click="addTask" class="bg-blue-600 text-white w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="plus" class="w-5 h-5"></i></button>
-                      <input ref="taskInputRef" v-model="newTaskTitle" @keyup.enter="addTask" type="text" placeholder="Nouvelle tâche..." class="flex-1 bg-transparent text-base sm:text-sm px-2 outline-none text-gray-900 dark:text-white">
+                   <div class="flex gap-2 flex-1 bg-white dark:bg-[#1e293b] p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                      <button @click="addTask" class="bg-brand-600 text-white w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="plus" class="w-5 h-5"></i></button>
+                      <input ref="taskInputRef" v-model="newTaskTitle" @keyup.enter="addTask" type="text" placeholder="Nouvelle tâche..." class="flex-1 bg-transparent text-base sm:text-sm px-2 outline-none text-slate-900 dark:text-white placeholder-slate-400">
                    </div>
                    <div class="flex gap-2">
-                      <input type="date" v-model="newTaskDate" class="flex-1 bg-white dark:bg-[#252525] border border-gray-200 dark:border-gray-700 rounded-lg text-xs text-gray-700 dark:text-gray-300 outline-none px-3 h-12 sm:h-auto font-mono">
-                      <select v-model="newTaskAssignee" class="flex-1 bg-white dark:bg-[#252525] border border-gray-200 dark:border-gray-700 rounded-lg text-xs text-gray-700 dark:text-gray-300 outline-none px-3 h-12 sm:h-auto"><option v-for="user in teamMembers" :value="user.name">{{ user.name }}</option></select>
+                      <input type="date" v-model="newTaskDate" class="flex-1 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-300 outline-none px-3 h-12 sm:h-auto font-mono">
+                      <select v-model="newTaskAssignee" class="flex-1 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-300 outline-none px-3 h-12 sm:h-auto"><option v-for="user in teamMembers" :value="user.name">{{ user.name }}</option></select>
                    </div>
                 </div>
 
@@ -652,19 +672,19 @@
                    <div v-for="status in ['À faire', 'En cours', 'Terminé']" :key="status">
                      <div class="flex items-center gap-3 mb-3 select-none">
                         <span class="px-2.5 py-1 rounded-md text-xs font-bold tracking-wide uppercase" :class="getStatusColor(status)">{{ status }}</span>
-                        <div class="h-[1px] bg-gray-200 dark:bg-gray-800 flex-1"></div>
+                        <div class="h-[1px] bg-slate-200 dark:bg-slate-800 flex-1"></div>
                      </div>
                      <div :ref="el => { if(el) initSortable(el, status) }" class="space-y-2 min-h-[20px]" :data-status="status">
-                        <div v-for="task in getTasksByStatus(status)" :key="task.id" :data-id="task.id" class="drag-handle bg-white dark:bg-[#252525] p-3 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm flex items-start gap-3 active:scale-[0.98] transition-transform">
-                           <button @click.stop="cycleStatus(task)" class="mt-0.5 w-6 h-6 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center shrink-0" :class="task.status === 'Terminé' ? 'bg-blue-500 border-blue-500' : 'border-gray-300 dark:border-gray-600'"><i v-if="task.status === 'Terminé'" data-lucide="check" class="w-4 h-4 text-white"></i></button>
+                        <div v-for="task in getTasksByStatus(status)" :key="task.id" :data-id="task.id" class="drag-handle bg-white dark:bg-[#1e293b] p-3 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm flex items-start gap-3 active:scale-[0.98] transition-transform">
+                           <button @click.stop="cycleStatus(task)" class="mt-0.5 w-6 h-6 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center shrink-0" :class="task.status === 'Terminé' ? 'bg-brand-500 border-brand-500' : 'border-slate-300 dark:border-slate-600'"><i v-if="task.status === 'Terminé'" data-lucide="check" class="w-4 h-4 text-white"></i></button>
                            <div class="flex-1 min-w-0" @click="startEdit(task)">
-                              <p class="text-base sm:text-sm font-medium truncate" :class="task.status === 'Terminé' ? 'text-gray-400 line-through' : 'text-gray-900 dark:text-gray-100'">{{ task.titre }}</p>
+                              <p class="text-base sm:text-sm font-medium truncate" :class="task.status === 'Terminé' ? 'text-slate-400 line-through' : 'text-slate-900 dark:text-slate-100'">{{ task.titre }}</p>
                               <div class="flex items-center gap-3 mt-1.5">
-                                 <div v-if="task.due_date" class="flex items-center gap-1 text-[10px] font-mono" :class="isOverdue(task) ? 'text-red-500 font-bold' : 'text-gray-400'"><i data-lucide="calendar" class="w-3 h-3"></i> {{ formatDateShort(task.due_date) }}</div>
-                                 <div class="flex items-center gap-1.5"><img :src="getUserAvatar(task.assignee)" class="w-4 h-4 rounded-full"> <span class="text-[10px] text-gray-500">{{ task.assignee }}</span></div>
+                                 <div v-if="task.due_date" class="flex items-center gap-1 text-[10px] font-mono" :class="isOverdue(task) ? 'text-rose-500 font-bold' : 'text-slate-400'"><i data-lucide="calendar" class="w-3 h-3"></i> {{ formatDateShort(task.due_date) }}</div>
+                                 <div class="flex items-center gap-1.5"><img :src="getUserAvatar(task.assignee)" class="w-4 h-4 rounded-full"> <span class="text-[10px] text-slate-500">{{ task.assignee }}</span></div>
                               </div>
                            </div>
-                           <button @click.stop="deleteTask(task)" class="text-gray-400 hover:text-red-500 p-2"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                           <button @click.stop="deleteTask(task)" class="text-slate-400 hover:text-rose-500 p-2"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
                         </div>
                      </div>
                    </div>
@@ -676,89 +696,88 @@
       </transition>
 
       <!-- NEW PROJECT MODAL (Fixed Z-Index, Added Date, Reset Form) -->
-      <div v-if="showNewProjectModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
-        <div class="bg-white dark:bg-[#202020] w-full max-w-md p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-2xl">
-           <h2 class="text-xl font-bold mb-6 text-gray-900 dark:text-white flex items-center gap-2"><div class="w-8 h-8 rounded bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400"><i data-lucide="plus" class="w-5 h-5"></i></div> Nouveau Projet</h2>
+      <div v-if="showNewProjectModal" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-[#1e293b] w-full max-w-md p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xl">
+           <h2 class="text-xl font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-2"><div class="w-8 h-8 rounded bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 dark:text-brand-400"><i data-lucide="plus" class="w-5 h-5"></i></div> Nouveau Projet</h2>
            <div class="space-y-4">
              <div class="flex gap-3">
-               <div class="w-16"><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Emoji</label><input v-model="newProjectForm.emoji" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-center text-xl outline-none focus:border-blue-500 text-gray-900 dark:text-white h-12 sm:h-10" placeholder="📁"></div>
-               <div class="flex-1"><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Nom du projet</label><input v-model="newProjectForm.nom" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-gray-900 dark:text-white focus:border-blue-500 outline-none transition-colors h-12 sm:h-10 text-base sm:text-sm" placeholder="Ex: Déploiement Salesforce"></div>
+               <div class="w-16"><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Emoji</label><input v-model="newProjectForm.emoji" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-center text-xl outline-none focus:border-brand-500 text-slate-900 dark:text-white h-12 sm:h-10" placeholder="📁"></div>
+               <div class="flex-1"><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Nom du projet</label><input v-model="newProjectForm.nom" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white focus:border-brand-500 outline-none transition-colors h-12 sm:h-10 text-base sm:text-sm" placeholder="Ex: Déploiement Salesforce"></div>
              </div>
              
              <!-- ADDED DEADLINE FIELD -->
-             <div><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Deadline</label><input type="date" v-model="newProjectForm.deadline_str" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-gray-900 dark:text-white outline-none h-12 sm:h-10 font-mono"></div>
+             <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Deadline</label><input type="date" v-model="newProjectForm.deadline_str" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none h-12 sm:h-10 font-mono"></div>
 
              <div class="grid grid-cols-2 gap-4">
-               <div><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Propriétaire</label><select v-model="newProjectForm.owner" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-gray-900 dark:text-white outline-none appearance-none h-12 sm:h-10 text-base sm:text-sm"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select></div>
-               <div><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Priorité</label><select v-model="newProjectForm.priorite" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-gray-900 dark:text-white outline-none appearance-none h-12 sm:h-10 text-base sm:text-sm"><option value="Haute" class="bg-white dark:bg-[#1e1e1e]">🔥 Haute</option><option value="Moyenne" class="bg-white dark:bg-[#1e1e1e]">⚡ Moyenne</option><option value="Basse" class="bg-white dark:bg-[#1e1e1e]">☕ Basse</option></select></div>
+               <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Propriétaire</label><select v-model="newProjectForm.owner" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none appearance-none h-12 sm:h-10 text-base sm:text-sm"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select></div>
+               <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Priorité</label><select v-model="newProjectForm.priorite" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none appearance-none h-12 sm:h-10 text-base sm:text-sm"><option value="Haute" class="bg-white dark:bg-[#1e1e1e]">🔥 Haute</option><option value="Moyenne" class="bg-white dark:bg-[#1e1e1e]">⚡ Moyenne</option><option value="Basse" class="bg-white dark:bg-[#1e1e1e]">☕ Basse</option></select></div>
              </div>
-             <div><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Description</label><textarea v-model="newProjectForm.description" rows="3" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-gray-900 dark:text-white outline-none resize-none text-base sm:text-sm" placeholder="Contexte du projet..."></textarea></div>
+             <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Description</label><textarea v-model="newProjectForm.description" rows="3" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none resize-none text-base sm:text-sm" placeholder="Contexte du projet..."></textarea></div>
            </div>
-           <div class="flex justify-end gap-3 mt-8"><button @click="showNewProjectModal = false" class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white px-4 py-2 text-sm font-medium">Annuler</button><button @click="createProject" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-blue-900/10 transition-all active:scale-95">Créer le projet</button></div>
+           <div class="flex justify-end gap-3 mt-8"><button @click="showNewProjectModal = false" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white px-4 py-2 text-sm font-medium">Annuler</button><button @click="createProject" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-brand-600/10 transition-all active:scale-95">Créer le projet</button></div>
         </div>
       </div>
 
-      <!-- TEAM, KPI, LEGAL MODALS (FIXED: Added z-index and v-if logic) -->
-      <!-- ... same as before ... -->
-      <div v-if="showTeamModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
-        <div class="bg-white dark:bg-[#202020] w-full max-w-lg p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-2xl">
+      <!-- TEAM, KPI, LEGAL MODALS -->
+      <div v-if="showTeamModal" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-[#1e293b] w-full max-w-lg p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xl">
           <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Annuaire Équipe</h2>
-            <button @click="showTeamModal = false" class="text-gray-500 hover:text-gray-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Annuaire Équipe</h2>
+            <button @click="showTeamModal = false" class="text-slate-500 hover:text-slate-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
           </div>
           <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
-            <div v-for="user in teamMembers" :key="user.email" class="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-[#252525] border border-transparent hover:border-gray-200 dark:hover:border-gray-700 transition">
-              <img :src="user.avatar" class="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600">
+            <div v-for="user in teamMembers" :key="user.email" class="flex items-center gap-4 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-[#252525] border border-transparent hover:border-slate-200 dark:hover:border-slate-700 transition">
+              <img :src="user.avatar" class="w-10 h-10 rounded-full border border-slate-300 dark:border-slate-600">
               <div class="flex-1">
-                <h3 class="text-sm font-bold text-gray-900 dark:text-white">{{ user.name }}</h3>
-                <p class="text-xs text-gray-500">{{ user.email }}</p>
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ user.name }}</h3>
+                <p class="text-xs text-slate-500">{{ user.email }}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="showKPIModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
-        <div class="bg-white dark:bg-[#202020] w-full max-w-4xl p-8 rounded-xl border border-gray-200 dark:border-gray-700 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-          <button @click="showKPIModal = false" class="absolute top-6 right-6 text-gray-500 hover:text-gray-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-2"><i data-lucide="bar-chart-2" class="w-6 h-6 text-blue-500"></i> Tableau de bord KPI</h2>
+      <div v-if="showKPIModal" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-[#1e293b] w-full max-w-4xl p-8 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+          <button @click="showKPIModal = false" class="absolute top-6 right-6 text-slate-500 hover:text-slate-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+          <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-2"><i data-lucide="bar-chart-2" class="w-6 h-6 text-brand-500"></i> Tableau de bord KPI</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-gray-50 dark:bg-[#2a2a2a] p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-              <p class="text-xs text-gray-500 uppercase font-bold mb-1">Projets Actifs</p>
-              <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ kpiData.activeProjects }}</p>
+            <div class="bg-slate-50 dark:bg-[#2a2a2a] p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p class="text-xs text-slate-500 uppercase font-bold mb-1">Projets Actifs</p>
+              <p class="text-3xl font-bold text-slate-900 dark:text-white">{{ kpiData.activeProjects }}</p>
             </div>
-            <div class="bg-gray-50 dark:bg-[#2a2a2a] p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-              <p class="text-xs text-gray-500 uppercase font-bold mb-1">Tâches en cours</p>
-              <p class="text-3xl font-bold text-yellow-600 dark:text-yellow-500">{{ kpiData.tasksPending }}</p>
+            <div class="bg-slate-50 dark:bg-[#2a2a2a] p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p class="text-xs text-slate-500 uppercase font-bold mb-1">Tâches en cours</p>
+              <p class="text-3xl font-bold text-amber-600 dark:text-amber-500">{{ kpiData.tasksPending }}</p>
             </div>
-            <div class="bg-gray-50 dark:bg-[#2a2a2a] p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-              <p class="text-xs text-gray-500 uppercase font-bold mb-1">Tâches Terminées</p>
-              <p class="text-3xl font-bold text-green-600 dark:text-green-500">{{ kpiData.tasksDone }}</p>
+            <div class="bg-slate-50 dark:bg-[#2a2a2a] p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p class="text-xs text-slate-500 uppercase font-bold mb-1">Tâches Terminées</p>
+              <p class="text-3xl font-bold text-emerald-600 dark:text-emerald-500">{{ kpiData.tasksDone }}</p>
             </div>
-            <div class="bg-gray-50 dark:bg-[#2a2a2a] p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-              <p class="text-xs text-gray-500 uppercase font-bold mb-1">Avancement Global</p>
-              <p class="text-3xl font-bold text-blue-600 dark:text-blue-500">{{ kpiData.globalProgress }}%</p>
+            <div class="bg-slate-50 dark:bg-[#2a2a2a] p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+              <p class="text-xs text-slate-500 uppercase font-bold mb-1">Avancement Global</p>
+              <p class="text-3xl font-bold text-brand-600 dark:text-brand-500">{{ kpiData.globalProgress }}%</p>
             </div>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Charge de travail</h3>
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">Charge de travail</h3>
               <div class="space-y-4">
                 <div v-for="user in kpiData.userStats" :key="user.name" class="flex items-center gap-3">
                   <img :src="getUserAvatar(user.name)" class="w-8 h-8 rounded-full">
                   <div class="flex-1">
-                    <div class="flex justify-between text-xs mb-1"><span class="text-gray-700 dark:text-gray-300">{{ user.name }}</span><span class="text-gray-500">{{ user.count }} tâches</span></div>
-                    <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"><div class="h-full bg-blue-600" :style="{ width: (user.count / kpiData.maxTasks * 100) + '%' }"></div></div>
+                    <div class="flex justify-between text-xs mb-1"><span class="text-slate-700 dark:text-slate-300">{{ user.name }}</span><span class="text-slate-500">{{ user.count }} tâches</span></div>
+                    <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-brand-600" :style="{ width: (user.count / kpiData.maxTasks * 100) + '%' }"></div></div>
                   </div>
                 </div>
               </div>
             </div>
             <div>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Santé des Projets (Top 5)</h3>
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">Santé des Projets (Top 5)</h3>
               <div class="space-y-3">
-                <div v-for="p in kpiData.topProjects" :key="p.id" class="bg-gray-50 dark:bg-[#252525] p-3 rounded border border-gray-200 dark:border-gray-700">
-                  <div class="flex justify-between items-center mb-2"><span class="text-sm font-medium text-gray-900 dark:text-white truncate w-3/4">{{ p.emoji }} {{ p.nom }}</span><span class="text-xs font-mono text-gray-500">{{ p.progress }}%</span></div>
-                  <div class="h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"><div class="h-full" :class="p.progress === 100 ? 'bg-green-500' : 'bg-blue-500'" :style="{ width: p.progress + '%' }"></div></div>
+                <div v-for="p in kpiData.topProjects" :key="p.id" class="bg-slate-50 dark:bg-[#252525] p-3 rounded border border-slate-200 dark:border-slate-700">
+                  <div class="flex justify-between items-center mb-2"><span class="text-sm font-medium text-slate-900 dark:text-white truncate w-3/4">{{ p.emoji }} {{ p.nom }}</span><span class="text-xs font-mono text-slate-500">{{ p.progress }}%</span></div>
+                  <div class="h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full" :class="p.progress === 100 ? 'bg-emerald-500' : 'bg-brand-500'" :style="{ width: p.progress + '%' }"></div></div>
                 </div>
               </div>
             </div>
@@ -766,13 +785,13 @@
         </div>
       </div>
 
-      <div v-if="showLegalModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
-        <div class="bg-white dark:bg-[#202020] w-full max-w-2xl p-8 rounded-xl border border-gray-200 dark:border-gray-700 relative max-h-[80vh] overflow-y-auto">
-          <button @click="showLegalModal = false" class="absolute top-6 right-6 text-gray-500 hover:text-gray-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">Mentions Légales</h2>
-          <div class="text-sm text-gray-600 dark:text-gray-300 space-y-6 leading-relaxed">
-            <section><h3 class="text-gray-900 dark:text-white font-bold mb-2">1. Éditeur</h3><p>Direction Technique Groupe Proxiserve.</p></section>
-            <div class="text-xs text-gray-500 mt-8 border-t border-gray-200 dark:border-gray-800 pt-4 flex justify-between items-center"><span>© {{ new Date().getFullYear() }} Proxiserve - Prox-Hydro.</span></div>
+      <div v-if="showLegalModal" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-[#1e293b] w-full max-w-2xl p-8 rounded-xl border border-slate-200 dark:border-slate-700 relative max-h-[80vh] overflow-y-auto">
+          <button @click="showLegalModal = false" class="absolute top-6 right-6 text-slate-500 hover:text-slate-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+          <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 border-b border-slate-200 dark:border-slate-700 pb-4">Mentions Légales</h2>
+          <div class="text-sm text-slate-600 dark:text-slate-300 space-y-6 leading-relaxed">
+            <section><h3 class="text-slate-900 dark:text-white font-bold mb-2">1. Éditeur</h3><p>Direction Technique Groupe Proxiserve.</p></section>
+            <div class="text-xs text-slate-500 mt-8 border-t border-slate-200 dark:border-slate-800 pt-4 flex justify-between items-center"><span>© {{ new Date().getFullYear() }} Proxiserve - Prox-Hydro.</span></div>
           </div>
         </div>
       </div>
@@ -786,11 +805,11 @@
           console.warn("⚠️ Mode Prévisualisation: Mock Activé - Génération de données massives");
           
           const USERS = [
-             { name: 'Aurélien Da Costa', email: 'a.dacosta@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Aurélien+Da+Costa&background=0D8ABC&color=fff', role: 'Admin' },
-             { name: 'Sophie Martin', email: 's.martin@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Sophie+Martin&background=D946EF&color=fff', role: 'Manager' },
-             { name: 'Thomas Dubreuil', email: 't.dubreuil@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Thomas+Dubreuil&background=F59E0B&color=fff', role: 'Dev' },
-             { name: 'Julie Leroy', email: 'j.leroy@prox-hydro.fr', avatar: 'https://ui-avatars.com/api/?name=Julie+Leroy&background=10B981&color=fff', role: 'User' },
-             { name: 'Marc Voisin', email: 'm.voisin@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Marc+Voisin&background=EF4444&color=fff', role: 'Tech Lead' }
+             { name: 'Aurélien Da Costa', email: 'a.dacosta@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Aurélien+Da+Costa&background=0284c7&color=fff', role: 'Admin' },
+             { name: 'Sophie Martin', email: 's.martin@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Sophie+Martin&background=e11d48&color=fff', role: 'Manager' },
+             { name: 'Thomas Dubreuil', email: 't.dubreuil@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Thomas+Dubreuil&background=059669&color=fff', role: 'Dev' },
+             { name: 'Julie Leroy', email: 'j.leroy@prox-hydro.fr', avatar: 'https://ui-avatars.com/api/?name=Julie+Leroy&background=d97706&color=fff', role: 'User' },
+             { name: 'Marc Voisin', email: 'm.voisin@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Marc+Voisin&background=7c3aed&color=fff', role: 'Tech Lead' }
           ];
 
           // Data Generators
@@ -936,7 +955,6 @@
           const sidebarOpen = ref(false); // Default closed on mobile
           const isMobile = ref(window.innerWidth < 1024);
           
-          // CHANGE: Dashboard est maintenant la vue par défaut
           const currentViewScope = ref('dashboard'); 
           const viewType = ref('grid'); 
           const searchQuery = ref("");
@@ -1345,7 +1363,7 @@
 
           return {
             loading, sidebarOpen, isMobile, currentViewScope, viewType, searchQuery, selectedUserFilter, toasts, showCompleted,
-            activeProject, isEditingDesc, newTaskTitle, newTaskAssignee, newTaskDate, taskInputRef,
+            activeProject, isEditingDesc, newTaskTitle, newTaskAssignee, newTaskDate, taskInputRef, scrollContainer,
             showNewProjectModal, showLegalModal, showTeamModal, showKPIModal,
             newProjectForm, filteredProjects, getTasksByProject, getTasksByStatus, teamMembers, currentUser, kpiData, 
             // AJOUT EXPORT
