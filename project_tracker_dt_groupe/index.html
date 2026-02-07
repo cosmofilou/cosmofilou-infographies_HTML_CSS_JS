@@ -318,19 +318,28 @@
             <!-- VIEW: DASHBOARD -->
             <div v-if="currentViewScope === 'dashboard'">
                <div class="flex flex-col gap-8">
-                  <!-- ... Dashboard content same as before ... -->
+                  
+                  <!-- Welcome Banner -->
                   <div class="flex items-end justify-between border-b border-slate-200 dark:border-slate-800 pb-6">
                      <div>
                         <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Bonjour, {{ currentUser.name ? currentUser.name.split(' ')[0] : 'Invité' }} 👋</h2>
                         <p class="text-slate-500 dark:text-slate-400 text-base">Voici la synthèse de l'activité. <span class="hidden sm:inline">Vous avez <strong>{{ kpiData.tasksPending }} tâches</strong> en cours.</span></p>
                      </div>
                      <div class="hidden sm:block text-right">
-                        <div class="inline-flex items-center gap-3 bg-white dark:bg-[#1e293b] px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div class="inline-flex items-center gap-4 bg-white dark:bg-[#1e293b] px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
                            <div class="text-right">
-                              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Progression Globale</p>
-                              <p class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{{ kpiData.globalProgress }}%</p>
+                              <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Progression Globale</p>
+                              <p class="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-none">{{ kpiData.globalProgress }}%</p>
                            </div>
-                           <div class="h-10 w-10 rounded-full border-4 border-slate-100 dark:border-slate-700 border-t-brand-500 animate-spin" style="animation-duration: 3s"></div>
+                           <!-- REAL CIRCULAR GAUGE FIX -->
+                           <div class="relative h-14 w-14 flex items-center justify-center">
+                              <svg class="h-full w-full -rotate-90 transform" viewBox="0 0 36 36">
+                                <!-- Track -->
+                                <path class="text-slate-100 dark:text-slate-700" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <!-- Progress -->
+                                <path class="text-brand-500 transition-all duration-1000 ease-out" :stroke-dasharray="100 + ', ' + 100" :stroke-dashoffset="100 - kpiData.globalProgress" stroke-width="3" stroke="currentColor" fill="none" stroke-linecap="round" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                              </svg>
+                           </div>
                         </div>
                      </div>
                   </div>
