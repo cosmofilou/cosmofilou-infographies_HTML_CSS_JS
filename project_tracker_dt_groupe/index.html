@@ -146,7 +146,8 @@
       </transition>
 
       <!-- MOBILE FAB -->
-      <button @click="showNewProjectModal = true" class="lg:hidden fixed bottom-6 right-6 z-50 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95">
+      <!-- Adjusted visibility: visible only on xs/small screens, hidden on sm+ -->
+      <button @click="showNewProjectModal = true" class="sm:hidden fixed bottom-6 right-6 z-50 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95">
         <i data-lucide="plus" class="w-8 h-8"></i>
       </button>
 
@@ -165,6 +166,11 @@
           <nav class="p-4 lg:p-3 space-y-2 lg:space-y-1">
             <div class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase px-3 py-2 tracking-wider">Espace de travail</div>
             
+            <!-- AJOUT: BOUTON TABLEAU DE BORD -->
+            <button @click="currentViewScope = 'dashboard'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'dashboard' ? 'bg-gray-100 text-gray-900 dark:bg-[#2c2c2c] dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium transition-colors">
+              <i data-lucide="layout-grid" class="w-5 h-5 lg:w-4 lg:h-4"></i> Tableau de Bord
+            </button>
+
             <button @click="currentViewScope = 'active'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" :class="currentViewScope === 'active' && viewType === 'grid' ? 'bg-gray-100 text-gray-900 dark:bg-[#2c2c2c] dark:text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#2c2c2c] hover:text-gray-900 dark:hover:text-gray-200'" class="w-full flex items-center gap-3 px-3 py-3 lg:py-2 rounded-xl lg:rounded-md text-sm font-medium transition-colors">
               <i data-lucide="layout-dashboard" class="w-5 h-5 lg:w-4 lg:h-4"></i> Projets en cours
             </button>
@@ -201,11 +207,18 @@
             <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 rounded-lg"><i data-lucide="menu" class="w-6 h-6"></i></button>
             
             <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2 truncate">
-               <span v-if="viewType === 'review'" class="text-indigo-600 dark:text-indigo-400"><i data-lucide="presentation" class="w-5 h-5"></i></span>
-               {{ viewType === 'review' ? (isMobile ? 'Revue Mobile' : 'Cockpit') : (currentViewScope === 'active' ? 'Projets' : 'Archives') }}
+               <!-- ICONE DYNAMIQUE -->
+               <span v-if="currentViewScope === 'dashboard'" class="text-indigo-600 dark:text-indigo-400"><i data-lucide="layout-grid" class="w-5 h-5"></i></span>
+               <span v-else-if="viewType === 'review'" class="text-indigo-600 dark:text-indigo-400"><i data-lucide="presentation" class="w-5 h-5"></i></span>
+               
+               <!-- TITRE DYNAMIQUE -->
+               <span v-if="currentViewScope === 'dashboard'">Tableau de Bord</span>
+               <span v-else-if="viewType === 'review'">{{ isMobile ? 'Revue Mobile' : 'Cockpit' }}</span>
+               <span v-else>{{ currentViewScope === 'active' ? 'Projets' : 'Archives' }}</span>
             </h2>
             
-            <div v-if="viewType !== 'review'" class="hidden sm:flex bg-gray-100 dark:bg-[#2c2c2c] rounded p-0.5 ml-2">
+            <!-- Hide Switcher on Dashboard -->
+            <div v-if="viewType !== 'review' && currentViewScope !== 'dashboard'" class="hidden sm:flex bg-gray-100 dark:bg-[#2c2c2c] rounded p-0.5 ml-2">
                <button @click="viewType = 'grid'" :class="viewType === 'grid' ? 'bg-white text-gray-900 shadow dark:bg-[#3f3f3f] dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'" class="p-1.5 rounded transition-all"><i data-lucide="grid" class="w-4 h-4"></i></button>
                <button @click="viewType = 'list'" :class="viewType === 'list' ? 'bg-white text-gray-900 shadow dark:bg-[#3f3f3f] dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'" class="p-1.5 rounded transition-all"><i data-lucide="list" class="w-4 h-4"></i></button>
             </div>
@@ -213,16 +226,8 @@
 
           <div class="flex items-center gap-2 sm:gap-3 shrink-0">
             
-            <!-- TOGGLE SHOW COMPLETED - RESTORED -->
-            <button v-if="currentViewScope === 'active'" @click="showCompleted = !showCompleted" 
-              class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all text-xs font-medium"
-              :class="showCompleted ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800' : 'bg-gray-100 text-gray-500 border-gray-200 dark:bg-[#252525] dark:text-gray-400 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-[#333]'">
-              <i :data-lucide="showCompleted ? 'eye' : 'eye-off'" class="w-3.5 h-3.5"></i>
-              <span class="hidden lg:inline">{{ showCompleted ? 'Masquer terminés' : 'Afficher terminés' }}</span>
-              <span class="lg:hidden">Terminés</span>
-            </button>
-
-            <div class="relative hidden lg:flex items-center bg-gray-100 dark:bg-[#252525] border border-gray-200 dark:border-gray-700 rounded-full px-3 py-1.5 gap-2">
+            <!-- Hide Filters on Dashboard -->
+            <div v-if="currentViewScope !== 'dashboard'" class="relative hidden lg:flex items-center bg-gray-100 dark:bg-[#252525] border border-gray-200 dark:border-gray-700 rounded-full px-3 py-1.5 gap-2">
                <i data-lucide="filter" class="w-3.5 h-3.5 text-gray-500"></i>
                <select v-model="selectedUserFilter" class="bg-transparent text-sm text-gray-700 dark:text-gray-300 outline-none cursor-pointer appearance-none pr-4 border-none py-0 w-full">
                   <option :value="null" class="bg-white dark:bg-[#1e1e1e]">Tous</option>
@@ -230,21 +235,22 @@
                </select>
             </div>
 
-            <button class="sm:hidden p-2 text-gray-500 dark:text-gray-400"><i data-lucide="search" class="w-5 h-5"></i></button>
+            <button v-if="currentViewScope !== 'dashboard'" class="sm:hidden p-2 text-gray-500 dark:text-gray-400"><i data-lucide="search" class="w-5 h-5"></i></button>
 
-            <div class="relative hidden sm:block">
+            <div v-if="currentViewScope !== 'dashboard'" class="relative hidden sm:block">
                <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-gray-500"></i>
                <input type="text" placeholder="Rechercher..." v-model="searchQuery" class="bg-gray-100 dark:bg-[#252525] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-200 text-sm rounded-full pl-9 pr-4 py-1.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-32 lg:w-48 placeholder-gray-500 transition-all">
             </div>
 
-            <button @click="showNewProjectModal = true" class="hidden lg:flex bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors items-center gap-2 shadow-lg shadow-blue-900/10">
-              <i data-lucide="plus" class="w-5 h-5"></i> <span>Nouveau</span>
+            <!-- BUTTON NEW PROJECT - VISIBLE ON SM+ (TABLET/DESKTOP) -->
+            <button @click="showNewProjectModal = true" class="hidden sm:flex bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors items-center gap-2 shadow-lg shadow-blue-900/10">
+              <i data-lucide="plus" class="w-5 h-5"></i> <span class="hidden lg:inline">Nouveau</span>
             </button>
           </div>
         </header>
 
         <!-- MAIN SCROLL AREA -->
-        <main ref="scrollContainer" class="flex-1 overflow-auto p-4 sm:p-6 relative lg:overflow-auto h-auto lg:h-full">
+        <main class="flex-1 overflow-auto p-4 sm:p-6 relative lg:overflow-auto h-auto lg:h-full">
           
           <div v-if="loading" class="grid grid-cols-1 md:grid-cols-3 gap-6 p-2">
              <div v-for="i in 6" class="h-64 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse-custom"></div>
@@ -252,8 +258,120 @@
 
           <div v-else class="pb-20 lg:pb-0"> 
             
-            <!-- COCKPIT VIEW -->
-            <div v-if="viewType === 'review'" class="h-full flex flex-col">
+            <!-- AJOUT: VUE DASHBOARD -->
+            <div v-if="currentViewScope === 'dashboard'">
+               <div class="flex flex-col gap-6">
+                  
+                  <!-- Welcome Banner -->
+                  <div class="flex items-center justify-between">
+                     <div>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Bonjour, {{ currentUser.name ? currentUser.name.split(' ')[0] : 'Invité' }} 👋</h2>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Voici un aperçu des priorités et urgences du jour.</p>
+                     </div>
+                     <div class="hidden sm:block text-right">
+                        <p class="text-3xl font-black text-gray-900 dark:text-white">{{ kpiData.globalProgress }}%</p>
+                        <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Avancement Global</p>
+                     </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                     
+                     <!-- COL 1 & 2: TOP PRIORITY PROJECTS -->
+                     <div class="lg:col-span-2 space-y-4">
+                        <div class="flex items-center gap-2 mb-2">
+                           <div class="p-1.5 bg-red-100 dark:bg-red-900/20 rounded-md text-red-600 dark:text-red-400"><i data-lucide="flame" class="w-4 h-4"></i></div>
+                           <h3 class="text-lg font-bold text-gray-900 dark:text-white">Top 3 Priorités</h3>
+                        </div>
+
+                        <div v-for="project in dashboardData.topProjects" :key="project.id" 
+                             @click="openProjectDetails(project)"
+                             class="group bg-white dark:bg-[#202020] border border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-500 rounded-xl p-5 cursor-pointer transition-all hover:shadow-md relative overflow-hidden">
+                           
+                           <!-- Rank Badge -->
+                           <div class="absolute top-0 right-0 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-gray-200 dark:border-gray-800">
+                              #{{ project.rank || '?' }}
+                           </div>
+
+                           <div class="flex items-start gap-4">
+                              <div class="text-4xl bg-gray-50 dark:bg-gray-800/50 p-3 rounded-2xl">{{ project.emoji }}</div>
+                              <div class="flex-1 min-w-0">
+                                 <div class="flex items-center gap-2 mb-1">
+                                    <span :class="getPriorityClass(project.priorite)" class="px-2 py-0.5 rounded text-[10px] border">{{ project.priorite }}</span>
+                                    <span class="px-2 py-0.5 rounded text-[10px] border bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">{{ project.status }}</span>
+                                 </div>
+                                 <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{{ project.nom }}</h4>
+                                 <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                                    <span class="flex items-center gap-1"><i data-lucide="user" class="w-3 h-3"></i> {{ project.owner }}</span>
+                                    <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> {{ formatDate(project.deadline) }}</span>
+                                 </div>
+                              </div>
+                              <div class="hidden sm:block text-right">
+                                 <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ project.progress }}%</div>
+                              </div>
+                           </div>
+                           
+                           <!-- Progress Bar -->
+                           <div class="mt-4 h-1.5 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                              <div class="h-full bg-gradient-to-r from-red-500 to-orange-500" :style="{ width: project.progress + '%' }"></div>
+                           </div>
+                        </div>
+                        
+                        <div v-if="dashboardData.topProjects.length === 0" class="text-center py-10 bg-gray-50 dark:bg-[#252525] rounded-xl border border-dashed border-gray-300 dark:border-gray-700 text-gray-500">
+                           Aucun projet prioritaire détecté.
+                        </div>
+                     </div>
+
+                     <!-- COL 3: URGENT TASKS -->
+                     <div class="space-y-6">
+                        
+                        <!-- Overdue Tasks -->
+                        <div class="bg-white dark:bg-[#202020] rounded-xl border border-red-200 dark:border-red-900/30 overflow-hidden shadow-sm">
+                           <div class="bg-red-50 dark:bg-red-900/10 px-4 py-3 border-b border-red-100 dark:border-red-900/20 flex justify-between items-center">
+                              <h3 class="text-sm font-bold text-red-700 dark:text-red-400 flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4"></i> Urgences ({{ dashboardData.allOverdue.length }})</h3>
+                           </div>
+                           <div class="divide-y divide-gray-100 dark:divide-gray-800 max-h-[300px] overflow-y-auto">
+                              <div v-for="task in dashboardData.allOverdue" :key="task.id" class="p-3 hover:bg-gray-50 dark:hover:bg-[#252525] transition-colors cursor-pointer group" @click="openProjectDetails(projects.find(p=>p.id===task.project_id))">
+                                 <div class="flex justify-between items-start mb-1">
+                                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400 line-clamp-1 w-2/3">{{ projects.find(p=>p.id===task.project_id)?.nom }}</span>
+                                    <span class="text-[10px] font-bold text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-300 px-1.5 py-0.5 rounded">{{ formatDate(task.due_date) }}</span>
+                                 </div>
+                                 <p class="text-sm text-gray-800 dark:text-gray-200 font-medium line-clamp-2 group-hover:text-red-500 transition-colors">{{ task.titre }}</p>
+                                 <div class="mt-2 flex items-center justify-between">
+                                    <div class="flex items-center gap-1.5"><img :src="getUserAvatar(task.assignee)" class="w-4 h-4 rounded-full"> <span class="text-[10px] text-gray-500">{{ task.assignee }}</span></div>
+                                 </div>
+                              </div>
+                              <div v-if="dashboardData.allOverdue.length === 0" class="p-8 text-center text-sm text-gray-500 dark:text-gray-400 italic">
+                                 Aucune tâche en retard 🎉
+                              </div>
+                           </div>
+                        </div>
+
+                        <!-- My Upcoming Tasks -->
+                        <div class="bg-white dark:bg-[#202020] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+                           <div class="bg-gray-50 dark:bg-[#252525] px-4 py-3 border-b border-gray-200 dark:border-gray-800">
+                              <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center gap-2"><i data-lucide="calendar-clock" class="w-4 h-4 text-blue-500"></i> Ma Semaine</h3>
+                           </div>
+                           <div class="divide-y divide-gray-100 dark:divide-gray-800">
+                              <div v-for="task in dashboardData.myTasks" :key="task.id" class="p-3 hover:bg-gray-50 dark:hover:bg-[#252525] transition-colors flex items-center gap-3">
+                                 <div class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></div>
+                                 <div class="flex-1 min-w-0">
+                                    <p class="text-sm text-gray-800 dark:text-gray-200 truncate">{{ task.titre }}</p>
+                                    <p class="text-[10px] text-gray-500 truncate">{{ formatDate(task.due_date) }} • {{ projects.find(p=>p.id===task.project_id)?.nom }}</p>
+                                 </div>
+                              </div>
+                               <div v-if="dashboardData.myTasks.length === 0" class="p-6 text-center text-sm text-gray-500 italic">
+                                 Rien de prévu cette semaine.
+                              </div>
+                           </div>
+                        </div>
+
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <!-- VIEW: REVIEW (COCKPIT) -->
+            <div v-if="viewType === 'review' && currentViewScope !== 'dashboard'" class="h-full flex flex-col">
                
                <div class="hidden sm:flex items-start gap-4 mb-6 p-4 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/10 border border-indigo-200 dark:border-indigo-900/30 rounded-lg">
                   <div class="p-3 bg-indigo-100 dark:bg-indigo-500/20 rounded-lg shrink-0"><i data-lucide="target" class="w-6 h-6 text-indigo-600 dark:text-indigo-400"></i></div>
@@ -337,7 +455,7 @@
             </div>
 
             <!-- VIEW: GRID -->
-            <div v-if="viewType === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+            <div v-if="viewType === 'grid' && currentViewScope !== 'dashboard'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               <div v-for="project in filteredProjects" :key="project.id" :data-id="project.id"
                   @click="openProjectDetails(project)"
                   class="group bg-white dark:bg-[#202020] border-l-4 border-y border-r border-gray-200 dark:border-gray-800 hover:border-r-gray-400 dark:hover:border-r-gray-600 rounded-xl p-5 cursor-pointer transition-all hover:shadow-lg relative overflow-hidden flex flex-col h-auto min-h-[16rem] active:scale-[0.99]"
@@ -400,7 +518,7 @@
             </div>
 
             <!-- VIEW: LIST -->
-            <div v-if="viewType === 'list'" class="bg-white dark:bg-[#202020] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+            <div v-if="viewType === 'list' && currentViewScope !== 'dashboard'" class="bg-white dark:bg-[#202020] rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
                <div class="overflow-x-auto">
                  <table class="w-full text-left text-sm whitespace-nowrap">
                    <thead class="bg-gray-50 dark:bg-[#252525] text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 font-medium text-xs uppercase tracking-wider">
@@ -818,7 +936,8 @@
           const sidebarOpen = ref(false); // Default closed on mobile
           const isMobile = ref(window.innerWidth < 1024);
           
-          const currentViewScope = ref('active'); 
+          // CHANGE: Dashboard est maintenant la vue par défaut
+          const currentViewScope = ref('dashboard'); 
           const viewType = ref('grid'); 
           const searchQuery = ref("");
           const selectedUserFilter = ref(null);
@@ -897,7 +1016,7 @@
           });
 
           const kpiData = computed(() => {
-             const activeProjs = enrichedProjects.value.filter(p => !p.archived);
+             const activeProjs = enrichedProjects.value.filter(p => !p.archived && p.status !== 'Terminé' && p.status !== 'Annulé');
              const allTasks = tasks.value;
              const activeProjects = activeProjs.length;
              const tasksPending = allTasks.filter(t => t.status !== 'Terminé').length;
@@ -910,6 +1029,41 @@
              }).sort((a,b) => b.count - a.count);
              const maxTasks = Math.max(...userStats.map(u => u.count)) || 1;
              return { activeProjects, tasksPending, tasksDone, globalProgress, userStats, maxTasks, topProjects: activeProjs.sort((a,b) => b.progress - a.progress).slice(0, 5) };
+          });
+          
+          // AJOUT: DATA DASHBOARD SPECIFIQUE
+          const dashboardData = computed(() => {
+             const now = new Date();
+             now.setHours(0,0,0,0);
+             
+             // 1. Top 3 Priority Projects
+             const topProjects = enrichedProjects.value
+                .filter(p => !p.archived && p.status !== 'Terminé' && p.status !== 'Annulé')
+                .sort((a, b) => {
+                   // Sort by Priority first
+                   const prioScore = { 'Haute': 3, 'Moyenne': 2, 'Basse': 1 };
+                   if (prioScore[b.priorite] !== prioScore[a.priorite]) return prioScore[b.priorite] - prioScore[a.priorite];
+                   // Then by Rank (lower rank = higher priority visually in review, assuming rank 1 is top)
+                   return (a.rank || 0) - (b.rank || 0);
+                })
+                .slice(0, 3);
+
+             // 2. Overdue Tasks
+             const allOverdue = tasks.value.filter(t => {
+                if(t.status === 'Terminé' || !t.due_date) return false;
+                const due = new Date(t.due_date);
+                return due < now;
+             }).sort((a,b) => new Date(a.due_date) - new Date(b.due_date));
+
+             // 3. My Upcoming Tasks (Next 7 days)
+             const myTasks = tasks.value.filter(t => {
+                if(t.status === 'Terminé' || !t.due_date) return false;
+                if(t.assignee !== currentUser.value.name) return false;
+                const due = new Date(t.due_date);
+                return due >= now; 
+             }).sort((a,b) => new Date(a.due_date) - new Date(b.due_date)).slice(0, 5);
+             
+             return { topProjects, allOverdue, myTasks };
           });
 
           const getTasksByProject = (pid) => tasks.value.filter(t => t.project_id === pid);
@@ -1191,15 +1345,19 @@
 
           return {
             loading, sidebarOpen, isMobile, currentViewScope, viewType, searchQuery, selectedUserFilter, toasts, showCompleted,
-            activeProject, isEditingDesc, newTaskTitle, newTaskAssignee, newTaskDate, taskInputRef, scrollContainer,
+            activeProject, isEditingDesc, newTaskTitle, newTaskAssignee, newTaskDate, taskInputRef,
             showNewProjectModal, showLegalModal, showTeamModal, showKPIModal,
-            newProjectForm, filteredProjects, getTasksByProject, getTasksByStatus, teamMembers, currentUser, kpiData,
+            newProjectForm, filteredProjects, getTasksByProject, getTasksByStatus, teamMembers, currentUser, kpiData, 
+            // AJOUT EXPORT
+            dashboardData, projects,
             openProjectDetails, toggleEditDesc, addTask, cycleStatus, createProject, updateProject, isOverdueProject,
             editingTaskId, editTaskForm, startEdit, cancelEdit, saveEdit, deleteTask,
             getPriorityClass, getProjectStatusClass, getStatusColor, getUserAvatar, formatDate, formatDateShort, isOverdue,
             initSortable, initProjectSortable, renderMarkdown, stripMarkdown, toInputDate,
             // New Funcs
-            addTag, removeTag, hasDateConflict, exportToCSV
+            addTag, removeTag, hasDateConflict, exportToCSV,
+            // MISSING EXPORTS TO FIX TEMPLATE ERRORS
+            projects, tasks
           };
         }
       }).mount('#app');
