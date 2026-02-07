@@ -351,16 +351,16 @@
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-12 h-12 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-2xl shadow-sm">{{ project.emoji || '📁' }}</div>
                   
-                  <!-- IMPROVED STATUS & PRIO ALIGNMENT -->
+                  <!-- IMPROVED STATUS & PRIO ALIGNMENT + OPEN BUTTON -->
                   <div class="flex items-center gap-2">
-                     <span :class="getProjectStatusClass(project.status)" class="px-2 py-0.5 rounded-full text-[10px] font-bold border shadow-sm">{{ project.status }}</span>
+                     <span :class="getPriorityClass(project.priorite)" class="text-[10px] uppercase font-bold px-2 py-1 rounded-md border shadow-sm">{{ project.priorite }}</span>
+                     <span :class="getProjectStatusClass(project.status)" class="px-2 py-1 rounded-md text-[10px] font-medium border shadow-sm">{{ project.status }}</span>
+                     
+                     <!-- Open Button Moved Here -->
+                     <button @click.stop="openProjectDetails(project)" class="p-1 text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors ml-1" title="Ouvrir la fiche">
+                        <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                     </button>
                   </div>
-                </div>
-
-                <div class="absolute top-2 right-2">
-                   <button @click.stop="openProjectDetails(project)" class="p-2 text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors" title="Ouvrir la fiche">
-                      <i data-lucide="maximize-2" class="w-4 h-4"></i>
-                   </button>
                 </div>
 
                 <div class="mb-1">
