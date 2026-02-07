@@ -213,8 +213,8 @@
 
           <div class="flex items-center gap-2 sm:gap-3 shrink-0">
             
-            <!-- TOGGLE SHOW COMPLETED -->
-            <button @click="showCompleted = !showCompleted" 
+            <!-- TOGGLE SHOW COMPLETED - RESTORED -->
+            <button v-if="currentViewScope === 'active'" @click="showCompleted = !showCompleted" 
               class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all text-xs font-medium"
               :class="showCompleted ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800' : 'bg-gray-100 text-gray-500 border-gray-200 dark:bg-[#252525] dark:text-gray-400 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-[#333]'">
               <i :data-lucide="showCompleted ? 'eye' : 'eye-off'" class="w-3.5 h-3.5"></i>
@@ -345,9 +345,10 @@
                 <div class="flex justify-between items-start mb-3">
                   <div class="w-12 h-12 rounded-xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-2xl shadow-sm">{{ project.emoji || '📁' }}</div>
                   
-                  <div class="flex flex-col items-end gap-1">
-                     <span :class="getPriorityClass(project.priorite)" class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md border shadow-sm">{{ project.priorite }}</span>
-                     <span :class="getProjectStatusClass(project.status)" class="px-2 py-0.5 rounded text-[10px] border shadow-sm">{{ project.status }}</span>
+                  <!-- IMPROVED BADGE ALIGNMENT (Horizontal) -->
+                  <div class="flex items-center gap-2">
+                     <span :class="getPriorityClass(project.priorite)" class="text-[10px] uppercase font-bold px-2 py-1 rounded-md border shadow-sm">{{ project.priorite }}</span>
+                     <span :class="getProjectStatusClass(project.status)" class="px-2 py-1 rounded-md text-[10px] font-medium border shadow-sm">{{ project.status }}</span>
                   </div>
                 </div>
 
@@ -434,6 +435,33 @@
                  <div class="text-6xl mb-4 text-center sm:text-left">{{ activeProject.emoji || '📁' }}</div>
                  <h1 class="text-2xl sm:text-4xl font-black text-gray-900 dark:text-white mb-6 leading-tight text-center sm:text-left">{{ activeProject.nom }}</h1>
                  
+                 <!-- NEW: STATUS & PRIORITY PROMINENT BADGES -->
+                 <div class="flex flex-wrap items-center gap-3 mb-8 justify-center sm:justify-start">
+                     <!-- Big Status Select -->
+                     <div class="relative group">
+                         <select v-model="activeProject.status" @change="updateProject(activeProject)" 
+                                 class="appearance-none pl-4 pr-10 py-2 rounded-full font-bold text-sm cursor-pointer transition-all shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#f9fafb] dark:focus:ring-offset-[#191919]"
+                                 :class="getProjectStatusClass(activeProject.status)">
+                             <option value="En cours" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">En cours</option>
+                             <option value="Terminé" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">Terminé</option>
+                             <option value="En pause" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">En pause</option>
+                             <option value="Annulé" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">Annulé</option>
+                         </select>
+                         <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-50 pointer-events-none group-hover:opacity-80"></i>
+                     </div>
+                     
+                     <!-- Priority Editable Dropdown -->
+                     <div class="relative group">
+                        <select v-model="activeProject.priorite" @change="updateProject(activeProject)"
+                           class="appearance-none px-3 py-1.5 rounded-full text-xs font-bold border flex items-center gap-1.5 shadow-sm cursor-pointer pr-8"
+                           :class="getPriorityClass(activeProject.priorite)">
+                           <option value="Haute" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">🔥 Haute</option>
+                           <option value="Moyenne" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">⚡ Moyenne</option>
+                           <option value="Basse" class="bg-white dark:bg-[#202020] text-gray-900 dark:text-white">☕ Basse</option>
+                        </select>
+                     </div>
+                 </div>
+
                  <!-- FUNC 1: TAGS EDIT -->
                  <div class="mb-6 flex flex-wrap gap-2 justify-center sm:justify-start">
                     <span v-for="(tag, i) in activeProject.tags" :key="i" class="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full border border-blue-200 dark:border-blue-800 flex items-center gap-1">
@@ -447,23 +475,9 @@
                        <span class="text-gray-400 flex items-center gap-2"><i data-lucide="user" class="w-4 h-4"></i> Owner</span>
                        <span class="font-medium text-gray-900 dark:text-white flex items-center gap-2"><img :src="getUserAvatar(activeProject.owner)" class="w-5 h-5 rounded-full"> {{ activeProject.owner }}</span>
                     </div>
-                    <div class="flex items-center justify-between sm:justify-start gap-2 border-b sm:border-b-0 border-gray-100 dark:border-gray-800 pb-2 sm:pb-0">
+                    <div class="flex items-center justify-between sm:justify-start gap-2">
                        <span class="text-gray-400 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4"></i> Fin</span>
                        <span class="font-mono text-gray-900 dark:text-white">{{ formatDate(activeProject.deadline) }}</span>
-                    </div>
-                    <div class="flex items-center justify-between sm:justify-start gap-2">
-                       <span class="text-gray-400 flex items-center gap-2"><i data-lucide="flag" class="w-4 h-4"></i> Prio</span>
-                       <span :class="getPriorityClass(activeProject.priorite)" class="px-2 py-0.5 rounded text-xs border inline-block">{{ activeProject.priorite }}</span>
-                    </div>
-                    <!-- Added Status Selection in Modal -->
-                    <div class="flex items-center justify-between sm:justify-start gap-2">
-                       <span class="text-gray-400 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4"></i> Statut</span>
-                       <select v-model="activeProject.status" @change="updateProject(activeProject)" :class="getProjectStatusClass(activeProject.status)" class="px-2 py-0.5 rounded text-xs border inline-block bg-transparent appearance-none cursor-pointer">
-                          <option value="En cours" class="bg-white dark:bg-[#202020] text-black dark:text-white">En cours</option>
-                          <option value="Terminé" class="bg-white dark:bg-[#202020] text-black dark:text-white">Terminé</option>
-                          <option value="En pause" class="bg-white dark:bg-[#202020] text-black dark:text-white">En pause</option>
-                          <option value="Annulé" class="bg-white dark:bg-[#202020] text-black dark:text-white">Annulé</option>
-                       </select>
                     </div>
                  </div>
               </div>
@@ -755,7 +769,7 @@
           const teamMembers = ref([]);
           const currentUser = ref({});
           const toasts = ref([]); 
-          const showCompleted = ref(true);
+          const showCompleted = ref(false); // Default false for standard view
           
           const sidebarOpen = ref(false); // Default closed on mobile
           const isMobile = ref(window.innerWidth < 1024);
@@ -814,12 +828,18 @@
 
           const filteredProjects = computed(() => {
              let base = enrichedProjects.value;
-             if (currentViewScope.value === 'active') base = base.filter(p => !p.archived);
-             else base = base.filter(p => p.archived);
              
-             // NEW: Filter by Completed
-             if (!showCompleted.value) {
-                base = base.filter(p => p.status !== 'Terminé');
+             if (currentViewScope.value === 'active') {
+                // Active view: Not manually archived
+                base = base.filter(p => !p.archived);
+                
+                // Hide Completed/Cancelled unless toggle is ON
+                if (!showCompleted.value) {
+                   base = base.filter(p => p.status !== 'Terminé' && p.status !== 'Annulé');
+                }
+             } else {
+                // Archived view: Manually archived OR Status is Terminé/Annulé
+                base = base.filter(p => p.archived || p.status === 'Terminé' || p.status === 'Annulé');
              }
 
              if (searchQuery.value) {
