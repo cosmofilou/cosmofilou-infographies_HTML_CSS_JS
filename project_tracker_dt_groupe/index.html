@@ -244,7 +244,8 @@
         </header>
 
         <!-- MAIN SCROLL AREA -->
-        <main class="flex-1 overflow-auto p-4 sm:p-6 relative lg:overflow-auto h-auto lg:h-full">
+        <!-- Add ref to scroll container to scroll to top -->
+        <main ref="scrollContainer" class="flex-1 overflow-auto p-4 sm:p-6 relative lg:overflow-auto h-auto lg:h-full">
           
           <div v-if="loading" class="grid grid-cols-1 md:grid-cols-3 gap-6 p-2">
              <div v-for="i in 6" class="h-64 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse-custom"></div>
@@ -350,6 +351,12 @@
                      <span :class="getPriorityClass(project.priorite)" class="text-[10px] uppercase font-bold px-2 py-1 rounded-md border shadow-sm">{{ project.priorite }}</span>
                      <span :class="getProjectStatusClass(project.status)" class="px-2 py-1 rounded-md text-[10px] font-medium border shadow-sm">{{ project.status }}</span>
                   </div>
+                </div>
+
+                <div class="absolute top-2 right-2">
+                   <button @click.stop="openProjectDetails(project)" class="p-2 text-gray-400 hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors" title="Ouvrir la fiche">
+                      <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                   </button>
                 </div>
 
                 <h3 class="text-gray-900 dark:text-white font-bold text-lg mb-1 leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-2">
@@ -475,7 +482,7 @@
                        <span class="text-gray-400 flex items-center gap-2"><i data-lucide="user" class="w-4 h-4"></i> Owner</span>
                        <span class="font-medium text-gray-900 dark:text-white flex items-center gap-2"><img :src="getUserAvatar(activeProject.owner)" class="w-5 h-5 rounded-full"> {{ activeProject.owner }}</span>
                     </div>
-                    <div class="flex items-center justify-between sm:justify-start gap-2">
+                    <div class="flex items-center justify-between sm:justify-start gap-2 border-b sm:border-b-0 border-gray-100 dark:border-gray-800 pb-2 sm:pb-0">
                        <span class="text-gray-400 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4"></i> Fin</span>
                        <span class="font-mono text-gray-900 dark:text-white">{{ formatDate(activeProject.deadline) }}</span>
                     </div>
@@ -537,7 +544,31 @@
         </div>
       </transition>
 
+      <!-- NEW PROJECT MODAL (Fixed Z-Index, Added Date, Reset Form) -->
+      <div v-if="showNewProjectModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-[#202020] w-full max-w-md p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-2xl">
+           <h2 class="text-xl font-bold mb-6 text-gray-900 dark:text-white flex items-center gap-2"><div class="w-8 h-8 rounded bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400"><i data-lucide="plus" class="w-5 h-5"></i></div> Nouveau Projet</h2>
+           <div class="space-y-4">
+             <div class="flex gap-3">
+               <div class="w-16"><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Emoji</label><input v-model="newProjectForm.emoji" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-center text-xl outline-none focus:border-blue-500 text-gray-900 dark:text-white h-12 sm:h-10" placeholder="📁"></div>
+               <div class="flex-1"><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Nom du projet</label><input v-model="newProjectForm.nom" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-gray-900 dark:text-white focus:border-blue-500 outline-none transition-colors h-12 sm:h-10 text-base sm:text-sm" placeholder="Ex: Déploiement Salesforce"></div>
+             </div>
+             
+             <!-- ADDED DEADLINE FIELD -->
+             <div><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Deadline</label><input type="date" v-model="newProjectForm.deadline_str" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-gray-900 dark:text-white outline-none h-12 sm:h-10 font-mono"></div>
+
+             <div class="grid grid-cols-2 gap-4">
+               <div><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Propriétaire</label><select v-model="newProjectForm.owner" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-gray-900 dark:text-white outline-none appearance-none h-12 sm:h-10 text-base sm:text-sm"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select></div>
+               <div><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Priorité</label><select v-model="newProjectForm.priorite" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-gray-900 dark:text-white outline-none appearance-none h-12 sm:h-10 text-base sm:text-sm"><option value="Haute" class="bg-white dark:bg-[#1e1e1e]">🔥 Haute</option><option value="Moyenne" class="bg-white dark:bg-[#1e1e1e]">⚡ Moyenne</option><option value="Basse" class="bg-white dark:bg-[#1e1e1e]">☕ Basse</option></select></div>
+             </div>
+             <div><label class="block text-xs text-gray-500 uppercase font-bold mb-1.5">Description</label><textarea v-model="newProjectForm.description" rows="3" class="w-full bg-gray-50 dark:bg-[#151515] border border-gray-300 dark:border-gray-700 rounded-lg p-2.5 text-gray-900 dark:text-white outline-none resize-none text-base sm:text-sm" placeholder="Contexte du projet..."></textarea></div>
+           </div>
+           <div class="flex justify-end gap-3 mt-8"><button @click="showNewProjectModal = false" class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white px-4 py-2 text-sm font-medium">Annuler</button><button @click="createProject" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-blue-900/10 transition-all active:scale-95">Créer le projet</button></div>
+        </div>
+      </div>
+
       <!-- TEAM, KPI, LEGAL MODALS (FIXED: Added z-index and v-if logic) -->
+      <!-- ... same as before ... -->
       <div v-if="showTeamModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
         <div class="bg-white dark:bg-[#202020] w-full max-w-lg p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-2xl">
           <div class="flex justify-between items-center mb-6">
@@ -778,6 +809,8 @@
           const viewType = ref('grid'); 
           const searchQuery = ref("");
           const selectedUserFilter = ref(null);
+          
+          const scrollContainer = ref(null); // Ref for scrolling
 
           const activeProject = ref(null);
           const isEditingDesc = ref(false); 
@@ -793,7 +826,7 @@
           const showTeamModal = ref(false);
           const showKPIModal = ref(false); 
           
-          const newProjectForm = ref({ nom: '', emoji: '📁', owner: '', priorite: 'Moyenne', description: '', deadline: new Date() });
+          const newProjectForm = ref({ nom: '', emoji: '📁', owner: '', priorite: 'Moyenne', description: '', deadline_str: toInputDate(new Date()) }); // FIXED DEFAULT
 
           // Window Resize Listener for Responsive Logic
           window.addEventListener('resize', () => {
@@ -1069,14 +1102,32 @@
           };
 
           const createProject = () => {
+             if(!newProjectForm.value.nom) {
+               showToast('Le nom du projet est requis', 'error');
+               return;
+             }
              showNewProjectModal.value = false;
              loading.value = true;
-             const maxRank = Math.max(...projects.value.map(p => p.rank || 0), 0);
-             newProjectForm.value.rank = maxRank + 1;
+             
+             // FIX: Set rank to minimum - 1 to appear at TOP
+             const minRank = Math.min(...projects.value.map(p => p.rank || 0), 0);
+             newProjectForm.value.rank = minRank - 1;
+             
+             // Set date object from string
+             if(newProjectForm.value.deadline_str) newProjectForm.value.deadline = new Date(newProjectForm.value.deadline_str);
+             
              google.script.run.withSuccessHandler((newP) => {
                 projects.value.push(newP);
                 loading.value = false;
+                
+                // RESET FORM
+                newProjectForm.value = { nom: '', emoji: '📁', owner: currentUser.value.name || '', priorite: 'Moyenne', description: '', deadline_str: toInputDate(new Date()) };
+                
                 showToast('Projet créé avec succès', 'success');
+                
+                // Scroll to top to see new project
+                if(scrollContainer.value) scrollContainer.value.scrollTop = 0;
+                
                 initIcons();
              }).createProject(newProjectForm.value);
           };
@@ -1127,7 +1178,7 @@
 
           return {
             loading, sidebarOpen, isMobile, currentViewScope, viewType, searchQuery, selectedUserFilter, toasts, showCompleted,
-            activeProject, isEditingDesc, newTaskTitle, newTaskAssignee, newTaskDate, taskInputRef,
+            activeProject, isEditingDesc, newTaskTitle, newTaskAssignee, newTaskDate, taskInputRef, scrollContainer,
             showNewProjectModal, showLegalModal, showTeamModal, showKPIModal,
             newProjectForm, filteredProjects, getTasksByProject, getTasksByStatus, teamMembers, currentUser, kpiData,
             openProjectDetails, toggleEditDesc, addTask, cycleStatus, createProject, updateProject, isOverdueProject,
