@@ -156,7 +156,7 @@
         <div v-if="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden backdrop-blur-sm"></div>
       </transition>
 
-      <!-- MOBILE FAB (Visible only on Project views) -->
+      <!-- MOBILE FAB -->
       <button v-if="['active', 'dashboard'].includes(currentViewScope)" @click="showNewProjectModal = true" class="lg:hidden fixed bottom-6 right-6 z-50 w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-xl shadow-brand-600/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95">
         <i data-lucide="plus" class="w-8 h-8"></i>
       </button>
@@ -205,10 +205,10 @@
                
                <button @click="currentViewScope = 'archived'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" 
                     :class="currentViewScope === 'archived' 
-                      ? 'bg-brand-50 text-brand-700 dark:bg-brand-600 dark:text-white font-semibold shadow-sm' 
+                      ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300' 
                       : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'"
                     class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
-                 <i data-lucide="archive" class="w-5 h-5 lg:w-4 lg:h-4" :class="currentViewScope === 'archived' ? 'text-brand-600 dark:text-white' : 'text-slate-400'"></i> Archives
+                 <i data-lucide="archive" class="w-5 h-5 lg:w-4 lg:h-4 text-slate-400"></i> Archives
                </button>
                
                <button @click="currentViewScope = 'team'; if(isMobile) sidebarOpen = false;" 
@@ -216,7 +216,7 @@
                       ? 'bg-brand-50 text-brand-700 dark:bg-brand-600 dark:text-white font-semibold shadow-sm' 
                       : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'"
                     class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
-                 <i data-lucide="users" class="w-5 h-5 lg:w-4 lg:h-4" :class="currentViewScope === 'team' ? 'text-brand-600 dark:text-white' : 'text-slate-400'"></i> Annuaire Équipe
+                 <i data-lucide="users" class="w-5 h-5 lg:w-4 lg:h-4 text-slate-400"></i> Annuaire Équipe
                </button>
                
                <button @click="currentViewScope = 'kpi'; if(isMobile) sidebarOpen = false;" 
@@ -224,17 +224,50 @@
                       ? 'bg-brand-50 text-brand-700 dark:bg-brand-600 dark:text-white font-semibold shadow-sm' 
                       : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'"
                     class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
-                 <i data-lucide="pie-chart" class="w-5 h-5 lg:w-4 lg:h-4" :class="currentViewScope === 'kpi' ? 'text-brand-600 dark:text-white' : 'text-slate-400'"></i> Rapports KPI
+                 <i data-lucide="pie-chart" class="w-5 h-5 lg:w-4 lg:h-4 text-slate-400"></i> Rapports KPI
                </button>
             </div>
           </nav>
         </div>
 
         <div class="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0f172a] p-4">
-           <div class="p-2.5 flex items-center gap-3 bg-white dark:bg-[#1e293b] rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
-              <img :src="currentUser.avatar" class="w-9 h-9 rounded-md border border-slate-200 dark:border-slate-600">
-              <div class="flex-1 min-w-0"><p class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">{{ currentUser.name }}</p><p class="text-[10px] text-slate-500 truncate">{{ currentUser.email }}</p></div>
+           
+           <!-- NEW: USER SWITCHER DROPDOWN -->
+           <div class="relative" v-click-outside="() => showUserMenu = false">
+              <button @click="showUserMenu = !showUserMenu" class="w-full p-2.5 flex items-center gap-3 bg-white dark:bg-[#1e293b] hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm transition-all group text-left">
+                <img :src="currentUser.avatar" class="w-9 h-9 rounded-md border border-slate-200 dark:border-slate-600 shrink-0">
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">{{ currentUser.name }}</p>
+                  <p class="text-[10px] text-slate-500 truncate">{{ currentUser.email }}</p>
+                </div>
+                <i data-lucide="chevrons-up-down" class="w-4 h-4 text-slate-400 shrink-0"></i>
+              </button>
+
+              <!-- Dropup Menu -->
+              <transition name="fade">
+                <div v-if="showUserMenu" class="absolute bottom-full left-0 w-full mb-2 bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden z-50">
+                  <div class="p-2 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-[#0f172a]">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider pl-2">Changer de compte</p>
+                  </div>
+                  <div class="max-h-60 overflow-y-auto">
+                    <button v-for="user in teamMembers" :key="user.email" @click="switchUser(user)" class="w-full flex items-center gap-3 p-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" :class="currentUser.email === user.email ? 'bg-brand-50 dark:bg-brand-900/20' : ''">
+                       <img :src="user.avatar" class="w-7 h-7 rounded-full border border-slate-200 dark:border-slate-600">
+                       <div class="text-left flex-1 min-w-0">
+                         <p class="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate" :class="currentUser.email === user.email ? 'text-brand-700 dark:text-brand-400' : ''">{{ user.name }}</p>
+                         <p class="text-[9px] text-slate-400 truncate">{{ user.role }}</p>
+                       </div>
+                       <i v-if="currentUser.email === user.email" data-lucide="check" class="w-3 h-3 text-brand-600"></i>
+                    </button>
+                  </div>
+                  <div class="p-1 border-t border-slate-100 dark:border-slate-700">
+                     <button @click="openUserModal(); showUserMenu = false" class="w-full flex items-center justify-center gap-2 p-2 text-xs font-medium text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 transition-colors">
+                        <i data-lucide="settings-2" class="w-3 h-3"></i> Gérer l'équipe
+                     </button>
+                  </div>
+                </div>
+              </transition>
            </div>
+           
            <button @click="showLegalModal = true" class="mt-3 text-[10px] text-center w-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">Mentions Légales & RGPD</button>
         </div>
       </aside>
@@ -268,7 +301,7 @@
 
           <div class="flex items-center gap-2 sm:gap-3 shrink-0">
             
-            <!-- Filter Toggle (Only for Projects List) -->
+            <!-- Filter Toggle -->
             <button v-if="currentViewScope === 'active' && viewType !== 'review'" @click="showCompleted = !showCompleted" 
               class="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg border transition-all text-xs font-semibold shadow-sm"
               :class="showCompleted ? 'bg-brand-50 text-brand-700 border-brand-200 dark:bg-brand-900/20 dark:text-brand-300 dark:border-brand-800' : 'bg-white text-slate-600 border-slate-200 dark:bg-[#1e293b] dark:text-slate-400 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-[#0f172a]'">
@@ -276,7 +309,7 @@
               <span class="hidden lg:inline">{{ showCompleted ? 'Masquer terminés' : 'Voir terminés' }}</span>
             </button>
 
-            <!-- User Filter (Only for Projects/Review) -->
+            <!-- User Filter -->
             <div v-if="['active', 'archived', 'review'].includes(currentViewScope)" class="relative hidden lg:flex items-center bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 gap-2 shadow-sm">
                <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400"></i>
                <select v-model="selectedUserFilter" class="bg-transparent text-sm text-slate-700 dark:text-slate-300 outline-none cursor-pointer appearance-none pr-6 border-none py-0 w-full font-medium">
@@ -286,7 +319,6 @@
                <i data-lucide="chevron-down" class="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none"></i>
             </div>
 
-            <!-- Search (Only for Projects/Review/Team) -->
             <button v-if="currentViewScope !== 'dashboard' && currentViewScope !== 'kpi'" class="sm:hidden p-2 text-slate-500 dark:text-slate-400"><i data-lucide="search" class="w-5 h-5"></i></button>
 
             <div v-if="currentViewScope !== 'dashboard' && currentViewScope !== 'kpi'" class="relative hidden sm:block">
@@ -294,7 +326,6 @@
                <input type="text" placeholder="Rechercher..." v-model="searchQuery" class="bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 text-sm rounded-lg pl-9 pr-4 py-2 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 w-32 lg:w-56 placeholder-slate-400 transition-all shadow-sm">
             </div>
 
-            <!-- BUTTONS: NEW PROJECT or ADD MEMBER -->
             <button v-if="['active', 'dashboard'].includes(currentViewScope)" @click="showNewProjectModal = true" class="hidden sm:flex bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all items-center gap-2 shadow-md shadow-brand-600/20 active:scale-95">
               <i data-lucide="plus" class="w-4 h-4"></i> <span class="hidden lg:inline">Nouveau Projet</span>
               <span class="lg:hidden">Nouveau</span>
@@ -326,18 +357,16 @@
                         <p class="text-slate-500 dark:text-slate-400 text-base">Voici la synthèse de l'activité. <span class="hidden sm:inline">Vous avez <strong>{{ kpiData.tasksPending }} tâches</strong> en cours.</span></p>
                      </div>
                      <div class="hidden sm:block text-right">
-                        <div class="inline-flex items-center gap-4 bg-white dark:bg-[#1e293b] px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div class="inline-flex items-center gap-3 bg-white dark:bg-[#1e293b] px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
                            <div class="text-right">
-                              <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Progression Globale</p>
-                              <p class="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-none">{{ kpiData.globalProgress }}%</p>
+                              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Progression Globale</p>
+                              <p class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{{ kpiData.globalProgress }}%</p>
                            </div>
-                           <!-- REAL CIRCULAR GAUGE FIX -->
-                           <div class="relative h-14 w-14 flex items-center justify-center">
+                           <!-- REAL CIRCULAR GAUGE -->
+                           <div class="relative h-12 w-12 flex items-center justify-center">
                               <svg class="h-full w-full -rotate-90 transform" viewBox="0 0 36 36">
-                                <!-- Track -->
-                                <path class="text-slate-100 dark:text-slate-700" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                <!-- Progress -->
-                                <path class="text-brand-500 transition-all duration-1000 ease-out" :stroke-dasharray="100 + ', ' + 100" :stroke-dashoffset="100 - kpiData.globalProgress" stroke-width="3" stroke="currentColor" fill="none" stroke-linecap="round" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="text-slate-100 dark:text-slate-700" stroke-width="4" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <path class="text-brand-500 transition-all duration-1000 ease-out" :stroke-dasharray="100 + ', ' + 100" :stroke-dashoffset="100 - kpiData.globalProgress" stroke-width="4" stroke="currentColor" fill="none" stroke-linecap="round" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                               </svg>
                            </div>
                         </div>
@@ -345,15 +374,23 @@
                   </div>
 
                   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                     <!-- ... Dashboard Widgets ... -->
+                     
                      <!-- COL 1 & 2: TOP PRIORITY PROJECTS -->
                      <div class="lg:col-span-2 space-y-5">
                         <div class="flex items-center gap-2 mb-2">
                            <div class="p-1.5 bg-rose-100 dark:bg-rose-900/30 rounded-md text-rose-600 dark:text-rose-400"><i data-lucide="flame" class="w-5 h-5"></i></div>
                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Top 3 Priorités</h3>
                         </div>
-                        <div v-for="project in dashboardData.topProjects" :key="project.id" @click="openProjectDetails(project)" class="group bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/60 hover:border-brand-400 dark:hover:border-brand-500 rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg relative overflow-hidden">
-                           <div class="absolute top-0 right-0 bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-slate-100 dark:border-slate-700/50">#{{ project.rank || '?' }}</div>
+
+                        <div v-for="project in dashboardData.topProjects" :key="project.id" 
+                             @click="openProjectDetails(project)"
+                             class="group bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/60 hover:border-brand-400 dark:hover:border-brand-500 rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg relative overflow-hidden">
+                           
+                           <!-- Rank Badge -->
+                           <div class="absolute top-0 right-0 bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-slate-100 dark:border-slate-700/50">
+                              #{{ project.rank || '?' }}
+                           </div>
+
                            <div class="flex items-start gap-5">
                               <div class="text-4xl bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700">{{ project.emoji }}</div>
                               <div class="flex-1 min-w-0">
@@ -365,140 +402,77 @@
                                  <div class="flex items-center gap-6 text-sm text-slate-500 dark:text-slate-400 mt-2">
                                     <span class="flex items-center gap-1.5"><i data-lucide="user" class="w-3.5 h-3.5"></i> {{ project.owner }}</span>
                                     <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> {{ formatDate(project.deadline) }}</span>
+                                    <span class="flex items-center gap-1.5 hidden sm:flex"><i data-lucide="list-checks" class="w-3.5 h-3.5"></i> {{ getTasksByProject(project.id).filter(t => t.status!=='Terminé').length }} restants</span>
                                  </div>
                               </div>
-                              <div class="hidden sm:block text-right self-center pl-4 border-l border-slate-100 dark:border-slate-700/50"><div class="text-3xl font-black text-slate-900 dark:text-white">{{ project.progress }}%</div></div>
+                              <div class="hidden sm:block text-right self-center pl-4 border-l border-slate-100 dark:border-slate-700/50">
+                                 <div class="text-3xl font-black text-slate-900 dark:text-white">{{ project.progress }}%</div>
+                              </div>
                            </div>
-                           <div class="mt-5 h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-rose-500 to-amber-500" :style="{ width: project.progress + '%' }"></div></div>
+                           
+                           <!-- Progress Bar -->
+                           <div class="mt-5 h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                              <div class="h-full bg-gradient-to-r from-rose-500 to-amber-500" :style="{ width: project.progress + '%' }"></div>
+                           </div>
                         </div>
-                        <div v-if="dashboardData.topProjects.length === 0" class="text-center py-12 bg-white dark:bg-[#1e293b] rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-500">Aucun projet prioritaire détecté. Commencez par en créer un !</div>
+                        
+                        <div v-if="dashboardData.topProjects.length === 0" class="text-center py-12 bg-white dark:bg-[#1e293b] rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-500">
+                           Aucun projet prioritaire détecté. Commencez par en créer un !
+                        </div>
                      </div>
+
+                     <!-- COL 3: URGENT TASKS -->
                      <div class="space-y-6">
+                        
+                        <!-- Overdue Tasks -->
                         <div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-                           <div class="bg-rose-50 dark:bg-rose-900/10 px-5 py-3 border-b border-rose-100 dark:border-rose-900/20 flex justify-between items-center"><h3 class="text-sm font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4"></i> Urgences ({{ dashboardData.allOverdue.length }})</h3></div>
+                           <div class="bg-rose-50 dark:bg-rose-900/10 px-5 py-3 border-b border-rose-100 dark:border-rose-900/20 flex justify-between items-center">
+                              <h3 class="text-sm font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4"></i> Urgences ({{ dashboardData.allOverdue.length }})</h3>
+                           </div>
                            <div class="divide-y divide-slate-100 dark:divide-slate-800 max-h-[350px] overflow-y-auto">
                               <div v-for="task in dashboardData.allOverdue" :key="task.id" class="p-4 hover:bg-slate-50 dark:hover:bg-[#252525] transition-colors cursor-pointer group" @click="openProjectDetails(projects.find(p=>p.id===task.project_id))">
-                                 <div class="flex justify-between items-start mb-1.5"><span class="text-xs font-semibold text-slate-500 dark:text-slate-400 line-clamp-1 w-2/3 uppercase tracking-wide">{{ projects.find(p=>p.id===task.project_id)?.nom }}</span><span class="text-[10px] font-bold text-rose-600 bg-rose-100 dark:bg-rose-900/30 dark:text-rose-300 px-2 py-0.5 rounded-full">{{ formatDateShort(task.due_date) }}</span></div>
+                                 <div class="flex justify-between items-start mb-1.5">
+                                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 line-clamp-1 w-2/3 uppercase tracking-wide">{{ projects.find(p=>p.id===task.project_id)?.nom }}</span>
+                                    <span class="text-[10px] font-bold text-rose-600 bg-rose-100 dark:bg-rose-900/30 dark:text-rose-300 px-2 py-0.5 rounded-full">{{ formatDateShort(task.due_date) }}</span>
+                                 </div>
                                  <p class="text-sm text-slate-800 dark:text-slate-200 font-medium line-clamp-2 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">{{ task.titre }}</p>
+                                 <div class="mt-3 flex items-center justify-between">
+                                    <div class="flex items-center gap-2"><img :src="getUserAvatar(task.assignee)" class="w-5 h-5 rounded-full ring-1 ring-white dark:ring-slate-700"> <span class="text-xs text-slate-500">{{ task.assignee }}</span></div>
+                                 </div>
+                              </div>
+                              <div v-if="dashboardData.allOverdue.length === 0" class="p-8 text-center text-sm text-slate-500 dark:text-slate-400 italic">
+                                 Tout est à jour. Bravo ! 🎉
                               </div>
                            </div>
                         </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            
-            <!-- VIEW: TEAM (NEW) -->
-            <div v-if="currentViewScope === 'team'" class="h-full flex flex-col">
-               <div class="flex items-center justify-between mb-6">
-                  <div>
-                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Annuaire Équipe</h2>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Gérez les membres et leurs rôles.</p>
-                  </div>
-               </div>
 
-               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div v-for="(user, index) in filteredTeam" :key="user.email" class="bg-white dark:bg-[#1e293b] rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow relative group">
-                     <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button @click="openUserModal(user)" class="p-1.5 text-slate-400 hover:text-brand-500 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-md"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-                        <button @click="deleteUser(index)" class="p-1.5 text-slate-400 hover:text-rose-500 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-md"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                     </div>
-                     <div class="flex items-center gap-4">
-                        <img :src="user.avatar" class="w-16 h-16 rounded-full border-4 border-slate-50 dark:border-slate-800 bg-white dark:bg-slate-900">
-                        <div>
-                           <h3 class="font-bold text-slate-900 dark:text-white text-lg">{{ user.name }}</h3>
-                           <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">{{ user.email }}</p>
-                           <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border" 
-                                 :class="user.role === 'Admin' ? 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-800' : 
-                                         (user.role === 'Manager' ? 'bg-brand-100 text-brand-800 border-brand-200 dark:bg-brand-900/30 dark:text-brand-300 dark:border-brand-800' : 
-                                         'bg-slate-100 text-slate-800 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700')">
-                              {{ user.role }}
-                           </span>
-                        </div>
-                     </div>
-                  </div>
-                  
-                  <!-- Add User Card -->
-                  <div @click="openUserModal()" class="bg-slate-50 dark:bg-[#1e293b]/50 rounded-xl p-5 border-2 border-dashed border-slate-300 dark:border-slate-700 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 cursor-pointer hover:border-brand-400 hover:text-brand-500 dark:hover:border-brand-500 transition-colors min-h-[140px]">
-                     <div class="w-12 h-12 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center mb-3 shadow-sm"><i data-lucide="plus" class="w-6 h-6"></i></div>
-                     <span class="font-medium">Ajouter un membre</span>
-                  </div>
-               </div>
-            </div>
-
-            <!-- VIEW: KPI (NEW) -->
-            <div v-if="currentViewScope === 'kpi'" class="h-full flex flex-col">
-                <div class="flex items-center justify-between mb-8">
-                  <div>
-                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Rapports & KPI</h2>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Analyse de la performance et de la charge.</p>
-                  </div>
-               </div>
-
-               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                  <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden group">
-                     <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i data-lucide="folder" class="w-16 h-16 text-slate-900 dark:text-white"></i></div>
-                     <p class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Projets Actifs</p>
-                     <p class="text-4xl font-black text-slate-900 dark:text-white mt-2">{{ kpiData.activeProjects }}</p>
-                  </div>
-                  <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden group">
-                     <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i data-lucide="clock" class="w-16 h-16 text-amber-500"></i></div>
-                     <p class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Tâches en cours</p>
-                     <p class="text-4xl font-black text-amber-600 dark:text-amber-500 mt-2">{{ kpiData.tasksPending }}</p>
-                  </div>
-                  <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden group">
-                     <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i data-lucide="check-circle" class="w-16 h-16 text-emerald-500"></i></div>
-                     <p class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Tâches Terminées</p>
-                     <p class="text-4xl font-black text-emerald-600 dark:text-emerald-500 mt-2">{{ kpiData.tasksDone }}</p>
-                  </div>
-                  <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden group">
-                     <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i data-lucide="trending-up" class="w-16 h-16 text-brand-500"></i></div>
-                     <p class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Avancement Global</p>
-                     <p class="text-4xl font-black text-brand-600 dark:text-brand-500 mt-2">{{ kpiData.globalProgress }}%</p>
-                  </div>
-               </div>
-
-               <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                  <!-- Workload Chart -->
-                  <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                     <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6">Charge de travail par personne</h3>
-                     <div class="space-y-5">
-                        <div v-for="user in kpiData.userStats" :key="user.name" class="flex items-center gap-4">
-                           <img :src="getUserAvatar(user.name)" class="w-10 h-10 rounded-full border-2 border-slate-100 dark:border-slate-700">
-                           <div class="flex-1">
-                              <div class="flex justify-between text-sm mb-2">
-                                 <span class="font-medium text-slate-700 dark:text-slate-200">{{ user.name }}</span>
-                                 <span class="font-mono text-slate-500">{{ user.count }} tâches</span>
+                        <!-- My Upcoming Tasks -->
+                        <div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                           <div class="bg-slate-50 dark:bg-[#252525] px-5 py-3 border-b border-slate-200 dark:border-slate-700">
+                              <h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="calendar-clock" class="w-4 h-4 text-brand-500"></i> Ma Semaine</h3>
+                           </div>
+                           <div class="divide-y divide-slate-100 dark:divide-slate-800">
+                              <div v-for="task in dashboardData.myTasks" :key="task.id" class="p-4 hover:bg-slate-50 dark:hover:bg-[#252525] transition-colors flex items-start gap-3">
+                                 <div class="mt-1.5 w-2 h-2 rounded-full bg-brand-500 shrink-0"></div>
+                                 <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{{ task.titre }}</p>
+                                    <p class="text-[11px] text-slate-500 truncate mt-0.5">{{ formatDateShort(task.due_date) }} • {{ projects.find(p=>p.id===task.project_id)?.nom }}</p>
+                                 </div>
                               </div>
-                              <div class="h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                 <div class="h-full bg-brand-500 rounded-full transition-all duration-1000" :style="{ width: (user.count / kpiData.maxTasks * 100) + '%' }"></div>
+                               <div v-if="dashboardData.myTasks.length === 0" class="p-8 text-center text-sm text-slate-500 italic">
+                                 Rien de prévu cette semaine.
                               </div>
                            </div>
                         </div>
-                     </div>
-                  </div>
 
-                  <!-- Project Health Chart -->
-                  <div class="bg-white dark:bg-[#1e293b] p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
-                     <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-6">Santé des Projets (Top 5)</h3>
-                     <div class="space-y-4">
-                        <div v-for="p in kpiData.topProjects" :key="p.id" class="p-4 bg-slate-50 dark:bg-[#252525] rounded-lg border border-slate-100 dark:border-slate-700/50">
-                           <div class="flex justify-between items-center mb-2">
-                              <span class="font-semibold text-slate-800 dark:text-slate-200 truncate pr-4">{{ p.emoji }} {{ p.nom }}</span>
-                              <span class="text-xs font-bold px-2 py-1 rounded bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300">{{ p.progress }}%</span>
-                           </div>
-                           <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                              <div class="h-full rounded-full transition-all duration-1000" :class="p.progress === 100 ? 'bg-emerald-500' : 'bg-gradient-to-r from-brand-500 to-indigo-500'" :style="{ width: p.progress + '%' }"></div>
-                           </div>
-                        </div>
                      </div>
                   </div>
                </div>
             </div>
 
-            <!-- VIEW: REVIEW & GRID (EXISTING - RETAINED FOR CONTEXT) -->
+            <!-- VIEW: REVIEW (COCKPIT) -->
             <div v-if="viewType === 'review' && currentViewScope !== 'dashboard' && currentViewScope !== 'team' && currentViewScope !== 'kpi'" class="h-full flex flex-col">
-               <!-- ... (Existing Review Code) ... -->
+               
                <div class="hidden sm:flex items-start gap-4 mb-6 p-5 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm">
                   <div class="p-3 bg-brand-100 dark:bg-brand-500/20 rounded-xl shrink-0"><i data-lucide="sliders" class="w-6 h-6 text-brand-600 dark:text-brand-400"></i></div>
                   <div>
@@ -510,15 +484,42 @@
                      <button @click="exportToCSV" class="mt-3 text-xs flex items-center gap-1.5 text-brand-600 dark:text-brand-400 hover:underline font-medium bg-brand-50 dark:bg-brand-900/20 px-3 py-1.5 rounded-full w-fit"><i data-lucide="download" class="w-3 h-3"></i> Exporter le compte-rendu (CSV)</button>
                   </div>
                </div>
-               <!-- ... (Rest of Review View - Tables/Cards) ... -->
-               <div class="sm:hidden mb-4 px-1 flex justify-between items-center"><p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Glissez pour prioriser <i data-lucide="arrow-down-up" class="w-3 h-3 inline ml-1"></i></p><button @click="exportToCSV" class="text-xs text-brand-600"><i data-lucide="download" class="w-4 h-4"></i></button></div>
+
+               <div class="sm:hidden mb-4 px-1 flex justify-between items-center">
+                  <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Glissez pour prioriser <i data-lucide="arrow-down-up" class="w-3 h-3 inline ml-1"></i></p>
+                  <button @click="exportToCSV" class="text-xs text-brand-600"><i data-lucide="download" class="w-4 h-4"></i></button>
+               </div>
+
+               <!-- DESKTOP TABLE -->
                <div class="hidden sm:block bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden flex-1 overflow-y-auto shadow-sm">
                   <table class="w-full text-left text-sm review-table">
-                     <thead class="bg-slate-50 dark:bg-[#0f172a] text-slate-500 dark:text-slate-400 font-semibold text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700"><tr><th class="px-4 py-3 w-12 text-center bg-slate-50 dark:bg-[#0f172a]"></th><th class="px-4 py-3 min-w-[280px] bg-slate-50 dark:bg-[#0f172a]">Projet</th><th class="px-4 py-3 w-40 bg-slate-50 dark:bg-[#0f172a]">Propriétaire</th><th class="px-4 py-3 w-36 bg-slate-50 dark:bg-[#0f172a]">Deadline</th><th class="px-4 py-3 w-32 bg-slate-50 dark:bg-[#0f172a]">Priorité</th><th class="px-4 py-3 w-32 bg-slate-50 dark:bg-[#0f172a]">Statut</th><th class="px-4 py-3 min-w-[250px] bg-slate-50 dark:bg-[#0f172a]">Décision Séance</th></tr></thead>
+                     <thead class="bg-slate-50 dark:bg-[#0f172a] text-slate-500 dark:text-slate-400 font-semibold text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700">
+                        <tr>
+                           <th class="px-4 py-3 w-12 text-center bg-slate-50 dark:bg-[#0f172a]"></th>
+                           <th class="px-4 py-3 min-w-[280px] bg-slate-50 dark:bg-[#0f172a]">Projet</th>
+                           <th class="px-4 py-3 w-40 bg-slate-50 dark:bg-[#0f172a]">Propriétaire</th>
+                           <th class="px-4 py-3 w-36 bg-slate-50 dark:bg-[#0f172a]">Deadline</th>
+                           <th class="px-4 py-3 w-32 bg-slate-50 dark:bg-[#0f172a]">Priorité</th>
+                           <th class="px-4 py-3 w-32 bg-slate-50 dark:bg-[#0f172a]">Statut</th>
+                           <th class="px-4 py-3 min-w-[250px] bg-slate-50 dark:bg-[#0f172a]">Décision Séance</th>
+                        </tr>
+                     </thead>
                      <tbody :ref="el => { if(el) initProjectSortable(el) }" class="divide-y divide-slate-100 dark:divide-slate-800">
                         <tr v-for="(project, index) in filteredProjects" :key="project.id" :data-id="project.id" class="hover:bg-slate-50 dark:hover:bg-[#252525] group transition-colors">
-                           <td class="px-4 py-3 text-center align-top pt-4"><div class="project-drag-handle w-8 h-8 mx-auto flex items-center justify-center rounded cursor-move hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"><i data-lucide="grip-vertical" class="w-4 h-4 text-slate-400 dark:text-slate-500"></i></div></td>
-                           <td class="px-4 py-3 align-top"><div class="flex items-center gap-3 mb-1"><button @click="openProjectDetails(project)" class="p-1 hover:bg-brand-100 dark:hover:bg-brand-500/20 rounded text-brand-600 dark:text-brand-400 transition-colors"><i data-lucide="maximize-2" class="w-4 h-4"></i></button><span class="text-xl">{{ project.emoji }}</span><input v-model="project.nom" @change="updateProject(project)" class="review-input font-bold text-slate-900 dark:text-white text-sm" /><i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i></div><div class="pl-8 opacity-80 transition-opacity"><input v-model="project.description" @change="updateProject(project)" class="review-input text-xs text-slate-500 dark:text-slate-400 italic" placeholder="Description..." /></div></td>
+                           <td class="px-4 py-3 text-center align-top pt-4">
+                              <div class="project-drag-handle w-8 h-8 mx-auto flex items-center justify-center rounded cursor-move hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                                <i data-lucide="grip-vertical" class="w-4 h-4 text-slate-400 dark:text-slate-500"></i>
+                              </div>
+                           </td>
+                           <td class="px-4 py-3 align-top">
+                              <div class="flex items-center gap-3 mb-1">
+                                 <button @click="openProjectDetails(project)" class="p-1 hover:bg-brand-100 dark:hover:bg-brand-500/20 rounded text-brand-600 dark:text-brand-400 transition-colors"><i data-lucide="maximize-2" class="w-4 h-4"></i></button>
+                                 <span class="text-xl">{{ project.emoji }}</span>
+                                 <input v-model="project.nom" @change="updateProject(project)" class="review-input font-bold text-slate-900 dark:text-white text-sm" />
+                                 <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i>
+                              </div>
+                              <div class="pl-8 opacity-80 transition-opacity"><input v-model="project.description" @change="updateProject(project)" class="review-input text-xs text-slate-500 dark:text-slate-400 italic" placeholder="Description..." /></div>
+                           </td>
                            <td class="px-4 py-3 align-top"><select v-model="project.owner" @change="updateProject(project)" class="review-input bg-transparent text-slate-700 dark:text-slate-300 text-xs py-1"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select></td>
                            <td class="px-4 py-3 align-top"><input type="date" :value="toInputDate(project.deadline)" @input="e => { project.deadline = new Date(e.target.value); updateProject(project); }" class="review-input text-xs font-mono py-1" :class="isOverdueProject(project) ? 'text-rose-600 dark:text-rose-400 font-bold border-rose-200 dark:border-rose-900/50 bg-rose-50 dark:bg-rose-900/10' : 'text-slate-500 dark:text-slate-400'"></td>
                            <td class="px-4 py-3 align-top"><select v-model="project.priorite" @change="updateProject(project)" class="review-input text-xs font-bold py-1 border" :class="{'text-rose-600 border-rose-200 bg-rose-50 dark:text-rose-400 dark:border-rose-900/50 dark:bg-rose-900/10': project.priorite === 'Haute', 'text-amber-600 border-amber-200 bg-amber-50 dark:text-amber-400 dark:border-amber-900/50 dark:bg-amber-900/10': project.priorite === 'Moyenne', 'text-brand-600 border-brand-200 bg-brand-50 dark:text-brand-400 dark:border-brand-900/50 dark:bg-brand-900/10': project.priorite === 'Basse'}"><option value="Haute" class="bg-white dark:bg-[#202020]">🔥 Haute</option><option value="Moyenne" class="bg-white dark:bg-[#202020]">⚡ Moyenne</option><option value="Basse" class="bg-white dark:bg-[#202020]">☕ Basse</option></select></td>
@@ -528,36 +529,280 @@
                      </tbody>
                   </table>
                </div>
-               <!-- ... Mobile Review Cards ... -->
+               
+               <!-- MOBILE REVIEW CARDS (FIXED CLICKABLE AREA) -->
                <div class="sm:hidden space-y-4" :ref="el => { if(el) initProjectSortable(el) }">
                   <div v-for="(project, index) in filteredProjects" :key="project.id" :data-id="project.id" class="bg-white dark:bg-[#1e293b] rounded-xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
-                     <!-- ... (Mobile Card Content) ... -->
-                     <div class="flex items-start justify-between mb-4"><div class="flex items-center gap-3"><div class="text-3xl">{{ project.emoji }}</div><div class="flex-1"><button @click="openProjectDetails(project)" class="font-bold text-slate-900 dark:text-white text-lg text-left leading-tight active:text-brand-500 transition-colors flex items-center gap-2">{{ project.nom }}<i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i></button></div></div><div class="project-drag-handle p-3 -mr-2 text-slate-400"><i data-lucide="grip-vertical" class="w-7 h-7"></i></div></div><div class="grid grid-cols-2 gap-4 mb-4"><div><div class="mobile-label">Priorité</div><select v-model="project.priorite" @change="updateProject(project)" class="w-full bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-slate-200 dark:border-slate-700 h-12 sm:h-10"><option value="Haute">🔥 Haute</option><option value="Moyenne">⚡ Moyenne</option><option value="Basse">☕ Basse</option></select></div><div><div class="mobile-label">Statut</div><select v-model="project.status" @change="updateProject(project)" class="w-full bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-slate-200 dark:border-slate-700 h-12 sm:h-10"><option value="En cours">En cours</option><option value="Terminé">Terminé</option><option value="En pause">En pause</option><option value="Annulé">Annulé</option></select></div></div><div class="mb-4"><div class="mobile-label">Deadline</div><input type="date" :value="toInputDate(project.deadline)" @input="e => { project.deadline = new Date(e.target.value); updateProject(project); }" class="w-full bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-slate-200 dark:border-slate-700 h-12 sm:h-10"></div><div><div class="mobile-label">Notes Décision</div><textarea v-model="project.meeting_notes" @change="updateProject(project)" placeholder="Notes de séance..." rows="2" class="w-full bg-brand-50 dark:bg-brand-900/20 text-brand-900 dark:text-brand-200 text-base sm:text-sm rounded-lg p-3 border border-brand-100 dark:border-brand-900/30 resize-none"></textarea></div>
+                     <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                           <div class="text-3xl">{{ project.emoji }}</div>
+                           <div class="flex-1">
+                              <button @click="openProjectDetails(project)" class="font-bold text-slate-900 dark:text-white text-lg text-left leading-tight active:text-brand-500 transition-colors flex items-center gap-2">
+                                {{ project.nom }}
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                              </button>
+                           </div>
+                        </div>
+                        <div class="project-drag-handle p-3 -mr-2 text-slate-400"><i data-lucide="grip-vertical" class="w-7 h-7"></i></div>
+                     </div>
+                     <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div><div class="mobile-label">Priorité</div><select v-model="project.priorite" @change="updateProject(project)" class="w-full bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-slate-200 dark:border-slate-700 h-12 sm:h-10"><option value="Haute">🔥 Haute</option><option value="Moyenne">⚡ Moyenne</option><option value="Basse">☕ Basse</option></select></div>
+                        <div><div class="mobile-label">Statut</div><select v-model="project.status" @change="updateProject(project)" class="w-full bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-slate-200 dark:border-slate-700 h-12 sm:h-10"><option value="En cours">En cours</option><option value="Terminé">Terminé</option><option value="En pause">En pause</option><option value="Annulé">Annulé</option></select></div>
+                     </div>
+                     <div class="mb-4"><div class="mobile-label">Deadline</div><input type="date" :value="toInputDate(project.deadline)" @input="e => { project.deadline = new Date(e.target.value); updateProject(project); }" class="w-full bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-slate-200 dark:border-slate-700 h-12 sm:h-10"></div>
+                     <div><div class="mobile-label">Notes Décision</div><textarea v-model="project.meeting_notes" @change="updateProject(project)" placeholder="Notes de séance..." rows="2" class="w-full bg-brand-50 dark:bg-brand-900/20 text-brand-900 dark:text-brand-200 text-base sm:text-sm rounded-lg p-3 border border-brand-100 dark:border-brand-900/30 resize-none"></textarea></div>
                   </div>
                </div>
             </div>
 
-            <!-- VIEW: GRID & LIST (Standard Project Views) -->
+            <!-- VIEW: GRID -->
             <div v-if="viewType === 'grid' && currentViewScope !== 'dashboard' && currentViewScope !== 'team' && currentViewScope !== 'kpi'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
-              <!-- ... (Existing Grid Content) ... -->
-               <div v-for="project in filteredProjects" :key="project.id" :data-id="project.id" @click="openProjectDetails(project)" class="group bg-white dark:bg-[#1e293b] border-l-4 border-y border-r border-slate-200 dark:border-slate-800 hover:border-r-brand-300 dark:hover:border-r-brand-600 rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg relative overflow-hidden flex flex-col h-auto min-h-[18rem] active:scale-[0.99]" :class="{'border-l-emerald-500': project.status === 'Terminé', 'border-l-amber-500': project.status === 'En cours', 'border-l-slate-400': project.status === 'En pause', 'border-l-rose-500': project.status === 'Annulé'}"> <div class="flex justify-between items-start mb-4"><div class="w-14 h-14 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-3xl shadow-inner border border-slate-100 dark:border-slate-700">{{ project.emoji || '📁' }}</div><div class="flex items-center gap-2"><span :class="getPriorityClass(project.priorite)" class="text-[10px] uppercase font-bold px-2 py-1 rounded-md border shadow-sm">{{ project.priorite }}</span><span :class="getProjectStatusClass(project.status)" class="px-2 py-1 rounded-md text-[10px] font-medium border shadow-sm">{{ project.status }}</span><button @click.stop="openProjectDetails(project)" class="p-1 text-slate-400 hover:text-brand-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors ml-1" title="Ouvrir la fiche"><i data-lucide="maximize-2" class="w-4 h-4"></i></button></div></div><div class="mb-2"><h3 class="text-slate-900 dark:text-white font-bold text-lg leading-tight group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-2">{{ project.nom }}<i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i></h3><div class="flex items-center gap-2 mt-1.5"><span :class="getPriorityClass(project.priorite)" class="text-[10px] font-bold px-1.5 py-0.5 rounded border flex items-center gap-1"><i data-lucide="flag" class="w-3 h-3"></i> {{ project.priorite }}</span></div></div><div class="flex flex-wrap gap-1 mt-2 mb-4"><span v-for="tag in project.tags" :key="tag" class="px-2 py-0.5 bg-brand-50 dark:bg-brand-900/20 text-brand-700 dark:text-brand-300 text-[10px] rounded-full border border-brand-100 dark:border-brand-900/30 font-medium">{{ tag }}</span></div><div class="flex items-center gap-2 mb-5 pb-4 border-b border-slate-100 dark:border-slate-800"><img :src="getUserAvatar(project.owner)" class="w-6 h-6 rounded-full border border-slate-100 dark:border-slate-600 shadow-sm"><p class="text-xs text-slate-600 dark:text-slate-400 font-semibold">{{ project.owner }}</p></div><div class="text-xs text-slate-500 dark:text-slate-400 mb-4 line-clamp-3 leading-relaxed opacity-90 flex-1" v-html="stripMarkdown(project.description) || 'Aucune description...'"></div><div class="mt-auto"><div class="flex justify-between text-[10px] text-slate-400 mb-1.5 font-bold uppercase tracking-wide"><span>Avancement</span><span>{{ project.progress }}%</span></div><div class="h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-brand-500 to-indigo-600 transition-all duration-500" :style="{ width: project.progress + '%' }"></div></div></div></div>
-              <div @click="showNewProjectModal = true" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-5 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:border-brand-400 dark:hover:border-brand-500 hover:text-brand-500 dark:hover:text-brand-400 hover:bg-brand-50/50 dark:hover:bg-[#1e293b] cursor-pointer transition-all min-h-[18rem]"><div class="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><i data-lucide="plus" class="w-8 h-8 text-slate-400"></i></div><span class="text-sm font-bold">Créer un projet</span></div>
+              <div v-for="project in filteredProjects" :key="project.id" :data-id="project.id"
+                  @click="openProjectDetails(project)"
+                  class="group bg-white dark:bg-[#1e293b] border-l-4 border-y border-r border-slate-200 dark:border-slate-800 hover:border-r-brand-300 dark:hover:border-r-brand-600 rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg relative overflow-hidden flex flex-col h-auto min-h-[18rem] active:scale-[0.99]"
+                  :class="{
+                     'border-l-emerald-500': project.status === 'Terminé',
+                     'border-l-amber-500': project.status === 'En cours',
+                     'border-l-slate-400': project.status === 'En pause',
+                     'border-l-rose-500': project.status === 'Annulé'
+                  }">
+                
+                <div class="flex justify-between items-start mb-4">
+                  <div class="w-14 h-14 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-3xl shadow-inner border border-slate-100 dark:border-slate-700">{{ project.emoji || '📁' }}</div>
+                  
+                  <!-- IMPROVED STATUS & PRIO ALIGNMENT + OPEN BUTTON -->
+                  <div class="flex items-center gap-2">
+                     <span :class="getPriorityClass(project.priorite)" class="text-[10px] uppercase font-bold px-2 py-1 rounded-md border shadow-sm">{{ project.priorite }}</span>
+                     <span :class="getProjectStatusClass(project.status)" class="px-2 py-1 rounded-md text-[10px] font-medium border shadow-sm">{{ project.status }}</span>
+                     
+                     <!-- Open Button Moved Here -->
+                     <button @click.stop="openProjectDetails(project)" class="p-1 text-slate-400 hover:text-brand-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors ml-1" title="Ouvrir la fiche">
+                        <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                     </button>
+                  </div>
+                </div>
+
+                <div class="mb-2">
+                  <h3 class="text-slate-900 dark:text-white font-bold text-lg leading-tight group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-2">
+                     {{ project.nom }}
+                     <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i>
+                  </h3>
+                  <!-- Priority moved below title -->
+                  <div class="flex items-center gap-2 mt-1.5">
+                     <span :class="getPriorityClass(project.priorite)" class="text-[10px] font-bold px-1.5 py-0.5 rounded border flex items-center gap-1">
+                        <i data-lucide="flag" class="w-3 h-3"></i> {{ project.priorite }}
+                     </span>
+                  </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-1 mt-2 mb-4">
+                   <span v-for="tag in project.tags" :key="tag" class="px-2 py-0.5 bg-brand-50 dark:bg-brand-900/20 text-brand-700 dark:text-brand-300 text-[10px] rounded-full border border-brand-100 dark:border-brand-900/30 font-medium">{{ tag }}</span>
+                </div>
+
+                <div class="flex items-center gap-2 mb-5 pb-4 border-b border-slate-100 dark:border-slate-800">
+                   <img :src="getUserAvatar(project.owner)" class="w-6 h-6 rounded-full border border-slate-100 dark:border-slate-600 shadow-sm">
+                   <p class="text-xs text-slate-600 dark:text-slate-400 font-semibold">{{ project.owner }}</p>
+                </div>
+
+                <div class="text-xs text-slate-500 dark:text-slate-400 mb-4 line-clamp-3 leading-relaxed opacity-90 flex-1" v-html="stripMarkdown(project.description) || 'Aucune description...'"></div>
+
+                <div class="mt-auto">
+                  <div class="flex justify-between text-[10px] text-slate-400 mb-1.5 font-bold uppercase tracking-wide"><span>Avancement</span><span>{{ project.progress }}%</span></div>
+                  <div class="h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-brand-500 to-indigo-600 transition-all duration-500" :style="{ width: project.progress + '%' }"></div></div>
+                </div>
+              </div>
+
+              <!-- Add Card -->
+              <div @click="showNewProjectModal = true" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-5 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:border-brand-400 dark:hover:border-brand-500 hover:text-brand-500 dark:hover:text-brand-400 hover:bg-brand-50/50 dark:hover:bg-[#1e293b] cursor-pointer transition-all min-h-[18rem]">
+                 <div class="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><i data-lucide="plus" class="w-8 h-8 text-slate-400"></i></div><span class="text-sm font-bold">Créer un projet</span>
+              </div>
             </div>
 
+            <!-- VIEW: LIST -->
             <div v-if="viewType === 'list' && currentViewScope !== 'dashboard' && currentViewScope !== 'team' && currentViewScope !== 'kpi'" class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-               <!-- ... (Existing List View) ... -->
-               <div class="overflow-x-auto"><table class="w-full text-left text-sm whitespace-nowrap"><thead class="bg-slate-50 dark:bg-[#252525] text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700 font-medium text-xs uppercase tracking-wider"><tr><th class="px-6 py-4 w-12"></th><th class="px-6 py-4">Nom du projet</th><th class="px-6 py-4">État</th><th class="px-6 py-4">Propriétaire</th><th class="px-6 py-4">Priorité</th><th class="px-6 py-4">Progression</th><th class="px-6 py-4 text-right">Deadline</th></tr></thead><tbody class="divide-y divide-slate-200 dark:divide-slate-800"><tr v-for="project in filteredProjects" :key="project.id" :data-id="project.id" @click="openProjectDetails(project)" class="hover:bg-slate-50 dark:hover:bg-[#252525] cursor-pointer transition-colors group"><td class="pl-6 py-4 text-2xl">{{ project.emoji || '📁' }}</td><td class="px-6 py-4 font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400">{{ project.nom }} <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="inline w-3 h-3 text-orange-500 ml-1"></i></td><td class="px-6 py-4"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border" :class="getProjectStatusClass(project.status)">{{ project.status }}</span></td><td class="px-6 py-4 text-slate-600 dark:text-slate-300 flex items-center gap-2"><img :src="getUserAvatar(project.owner)" class="w-6 h-6 rounded-full border border-slate-200 dark:border-slate-600">{{ project.owner }}</td><td class="px-6 py-4"><span :class="getPriorityClass(project.priorite)" class="px-2.5 py-1 rounded-md border text-[10px] font-bold tracking-wide shadow-sm">{{ project.priorite }}</span></td><td class="px-6 py-4 w-48"><div class="flex items-center gap-3"><span class="text-xs font-mono text-slate-500 dark:text-slate-400 w-8 text-right">{{ project.progress }}%</span><div class="h-2 flex-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-brand-500" :style="{ width: project.progress + '%' }"></div></div></div></td><td class="px-6 py-4 text-right text-slate-500 dark:text-slate-400 text-xs font-mono">{{ formatDate(project.deadline) }}</td></tr></tbody></table></div>
-               <div class="sm:hidden space-y-3 p-4"><div v-for="project in filteredProjects" :key="project.id" @click="openProjectDetails(project)" class="bg-white dark:bg-[#1e293b] rounded-xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 active:scale-[0.98] transition-transform"><div class="text-3xl shrink-0">{{ project.emoji || '📁' }}</div><div class="flex-1 min-w-0"><h4 class="font-bold text-slate-900 dark:text-white truncate">{{ project.nom }}</h4><div class="flex items-center gap-2 text-xs text-slate-500 mt-1"><span class="px-2 py-0.5 rounded border" :class="getProjectStatusClass(project.status)">{{ project.status }}</span><span>•</span><span :class="{'text-rose-500 font-bold': isOverdueProject(project)}">{{ formatDateShort(project.deadline) }}</span></div></div><div class="shrink-0 flex flex-col items-end gap-1"><span :class="getPriorityClass(project.priorite)" class="px-2 py-0.5 rounded text-[10px] border">{{ project.priorite }}</span><span class="text-xs font-mono text-slate-400">{{ project.progress }}%</span></div></div></div>
+               <div class="overflow-x-auto">
+                 <table class="w-full text-left text-sm whitespace-nowrap">
+                   <thead class="bg-slate-50 dark:bg-[#252525] text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700 font-medium text-xs uppercase tracking-wider">
+                     <tr><th class="px-6 py-4 w-12"></th><th class="px-6 py-4">Nom du projet</th><th class="px-6 py-4">État</th><th class="px-6 py-4">Propriétaire</th><th class="px-6 py-4">Priorité</th><th class="px-6 py-4">Progression</th><th class="px-6 py-4 text-right">Deadline</th></tr>
+                   </thead>
+                   <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                     <tr v-for="project in filteredProjects" :key="project.id" :data-id="project.id" @click="openProjectDetails(project)" class="hover:bg-slate-50 dark:hover:bg-[#252525] cursor-pointer transition-colors group">
+                       <td class="pl-6 py-4 text-2xl">{{ project.emoji || '📁' }}</td>
+                       <td class="px-6 py-4 font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400">
+                          {{ project.nom }} <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="inline w-3 h-3 text-amber-500 ml-1"></i>
+                       </td>
+                       <td class="px-6 py-4"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border" :class="getProjectStatusClass(project.status)">{{ project.status }}</span></td>
+                       <td class="px-6 py-4 text-slate-600 dark:text-slate-300 flex items-center gap-2"><img :src="getUserAvatar(project.owner)" class="w-6 h-6 rounded-full border border-slate-200 dark:border-slate-600">{{ project.owner }}</td>
+                       <td class="px-6 py-4"><span :class="getPriorityClass(project.priorite)" class="px-2.5 py-1 rounded-md border text-[10px] font-bold tracking-wide shadow-sm">{{ project.priorite }}</span></td>
+                       <td class="px-6 py-4 w-48"><div class="flex items-center gap-3"><span class="text-xs font-mono text-slate-500 dark:text-slate-400 w-8 text-right">{{ project.progress }}%</span><div class="h-2 flex-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-brand-500" :style="{ width: project.progress + '%' }"></div></div></div></td>
+                       <td class="px-6 py-4 text-right text-slate-500 dark:text-slate-400 text-xs font-mono">{{ formatDate(project.deadline) }}</td>
+                     </tr>
+                   </tbody>
+                 </table>
+               </div>
+               <div class="sm:hidden space-y-3 p-4">
+                  <div v-for="project in filteredProjects" :key="project.id" @click="openProjectDetails(project)" class="bg-white dark:bg-[#1e293b] rounded-xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 active:scale-[0.98] transition-transform">
+                     <div class="text-3xl shrink-0">{{ project.emoji || '📁' }}</div>
+                     <div class="flex-1 min-w-0">
+                        <h4 class="font-bold text-slate-900 dark:text-white truncate">{{ project.nom }}</h4>
+                        <div class="flex items-center gap-2 text-xs text-slate-500 mt-1"><span class="px-2 py-0.5 rounded border" :class="getProjectStatusClass(project.status)">{{ project.status }}</span><span>•</span><span :class="{'text-rose-500 font-bold': isOverdueProject(project)}">{{ formatDateShort(project.deadline) }}</span></div>
+                     </div>
+                     <div class="shrink-0 flex flex-col items-end gap-1"><span :class="getPriorityClass(project.priorite)" class="px-2 py-0.5 rounded text-[10px] border">{{ project.priorite }}</span><span class="text-xs font-mono text-slate-400">{{ project.progress }}%</span></div>
+                  </div>
+               </div>
             </div>
 
           </div>
         </main>
       </div>
 
-      <!-- MODALS (DETAILS, NEW PROJECT, TEAM, KPI, LEGAL) - SAME AS PREVIOUS, ADDING USER MODAL -->
-      <!-- ... (Project Details Modal Code kept as is from context) ... -->
-      <transition name="fade"><div v-if="activeProject" class="fixed inset-0 bg-black/60 backdrop-blur-[2px] z-[200] flex justify-center items-center p-0 sm:p-4 sm:justify-end" @click.self="activeProject = null"><div class="w-full h-full sm:h-full sm:max-w-3xl bg-white dark:bg-[#1e293b] border-l border-slate-200 dark:border-slate-700 shadow-2xl flex flex-col transform transition-transform duration-300"><div class="h-14 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center px-4 bg-slate-50 dark:bg-[#0f172a] shrink-0"><div class="flex gap-2 text-slate-500 dark:text-slate-400 text-xs items-center truncate"><button @click="activeProject = null" class="flex items-center gap-1 hover:text-slate-900 dark:hover:text-white"><i data-lucide="chevron-left" class="w-4 h-4"></i> Retour</button></div><button @click="activeProject = null" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button></div><div class="flex-1 overflow-y-auto p-5 sm:p-8 sm:px-12 bg-slate-50 dark:bg-[#0f172a]"><!-- ... Project Details Content ... --> <div class="mb-8"><div class="text-6xl mb-4 text-center sm:text-left">{{ activeProject.emoji || '📁' }}</div><h1 class="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white mb-6 leading-tight text-center sm:text-left">{{ activeProject.nom }}</h1><div class="flex flex-wrap items-center gap-3 mb-8 justify-center sm:justify-start"><div class="relative group"><select v-model="activeProject.status" @change="updateProject(activeProject)" class="appearance-none pl-4 pr-10 py-2 rounded-full font-bold text-sm cursor-pointer transition-all shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#f8fafc] dark:focus:ring-offset-[#1e293b]" :class="getProjectStatusClass(activeProject.status)"><option value="En cours" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">En cours</option><option value="Terminé" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">Terminé</option><option value="En pause" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">En pause</option><option value="Annulé" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">Annulé</option></select><i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-50 pointer-events-none group-hover:opacity-80"></i></div><div class="relative group"><select v-model="activeProject.priorite" @change="updateProject(activeProject)" class="appearance-none px-3 py-2 rounded-full text-xs font-bold border flex items-center gap-1.5 shadow-sm cursor-pointer pr-8" :class="getPriorityClass(activeProject.priorite)"><option value="Haute" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">🔥 Haute</option><option value="Moyenne" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">⚡ Moyenne</option><option value="Basse" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">☕ Basse</option></select><i data-lucide="chevron-down" class="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 opacity-50 pointer-events-none"></i></div><button @click="openProjectDetails(activeProject)" class="hidden sm:flex items-center justify-center p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 hover:text-brand-600 transition-colors" title="Rafraîchir / Ouvrir"><i data-lucide="maximize-2" class="w-4 h-4"></i></button></div><div class="mb-6 flex flex-wrap gap-2 justify-center sm:justify-start"><span v-for="(tag, i) in activeProject.tags" :key="i" class="px-3 py-1 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 text-xs rounded-full border border-brand-200 dark:border-brand-800 flex items-center gap-1">{{ tag }} <button @click="removeTag(activeProject, i)" class="hover:text-brand-900 dark:hover:text-white"><i data-lucide="x" class="w-3 h-3"></i></button></span><input @keyup.enter="addTag(activeProject, $event)" placeholder="+ Tag" class="px-3 py-1 bg-slate-100 dark:bg-[#2c2c2c] text-xs rounded-full border-none outline-none w-20 focus:w-32 transition-all text-slate-900 dark:text-white placeholder-slate-400"></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm bg-white dark:bg-[#1e293b] p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm"><div class="flex items-center justify-between sm:justify-start gap-2 border-b sm:border-b-0 border-slate-100 dark:border-slate-800 pb-2 sm:pb-0"><span class="text-slate-400 flex items-center gap-2"><i data-lucide="user" class="w-4 h-4"></i> Owner</span><span class="font-medium text-slate-900 dark:text-white flex items-center gap-2"><img :src="getUserAvatar(activeProject.owner)" class="w-5 h-5 rounded-full"> {{ activeProject.owner }}</span></div><div class="flex items-center justify-between sm:justify-start gap-2 border-b sm:border-b-0 border-slate-100 dark:border-slate-800 pb-2 sm:pb-0"><span class="text-slate-400 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4"></i> Fin</span><span class="font-mono text-slate-900 dark:text-white">{{ formatDate(activeProject.deadline) }}</span></div></div></div><div class="mb-10"><div class="flex justify-between items-center mb-3"><h3 class="text-lg font-bold text-slate-900 dark:text-white">Contexte</h3><button @click="toggleEditDesc" class="text-xs text-brand-600 dark:text-brand-400 font-medium hover:underline">{{ isEditingDesc ? 'Terminer' : 'Modifier' }}</button></div><div class="bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-[#333] rounded-xl p-5 text-slate-700 dark:text-slate-300 min-h-[100px] shadow-sm"><div v-if="!isEditingDesc" @dblclick="isEditingDesc = true" class="prose prose-invert prose-sm max-w-none" v-html="renderMarkdown(activeProject.description) || '<p class=\'text-slate-400 italic\'>Aucune description. Double-cliquez pour ajouter du contenu...</p>'"></div><textarea v-else ref="descInput" v-model="activeProject.description" class="w-full bg-transparent border-none outline-none resize-none text-base sm:text-sm leading-relaxed h-full min-h-[150px] text-slate-900 dark:text-slate-200" @blur="isEditingDesc = false"></textarea></div></div><div class="border-t border-slate-200 dark:border-slate-800 pt-8 pb-10"><div class="flex justify-between items-center mb-6"><h3 class="text-lg font-bold text-slate-900 dark:text-white">Tâches</h3><span class="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs px-2 py-1 rounded-full">{{ getTasksByProject(activeProject.id).length }}</span></div><div class="flex flex-col sm:flex-row gap-3 mb-6"><div class="flex gap-2 flex-1 bg-white dark:bg-[#1e293b] p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm"><button @click="addTask" class="bg-brand-600 text-white w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="plus" class="w-5 h-5"></i></button><input ref="taskInputRef" v-model="newTaskTitle" @keyup.enter="addTask" type="text" placeholder="Nouvelle tâche..." class="flex-1 bg-transparent text-base sm:text-sm px-2 outline-none text-slate-900 dark:text-white placeholder-slate-400"></div><div class="flex gap-2"><input type="date" v-model="newTaskDate" class="flex-1 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-300 outline-none px-3 h-12 sm:h-auto font-mono"><select v-model="newTaskAssignee" class="flex-1 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-300 outline-none px-3 h-12 sm:h-auto"><option v-for="user in teamMembers" :value="user.name">{{ user.name }}</option></select></div></div><div class="space-y-8"><div v-for="status in ['À faire', 'En cours', 'Terminé']" :key="status"><div class="flex items-center gap-3 mb-3 select-none"><span class="px-2.5 py-1 rounded-md text-xs font-bold tracking-wide uppercase" :class="getStatusColor(status)">{{ status }}</span><div class="h-[1px] bg-slate-200 dark:bg-slate-800 flex-1"></div></div><div :ref="el => { if(el) initSortable(el, status) }" class="space-y-2 min-h-[20px]" :data-status="status"><div v-for="task in getTasksByStatus(status)" :key="task.id" :data-id="task.id" class="drag-handle bg-white dark:bg-[#1e293b] p-3 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm flex items-start gap-3 active:scale-[0.98] transition-transform"><button @click.stop="cycleStatus(task)" class="mt-0.5 w-6 h-6 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center shrink-0" :class="task.status === 'Terminé' ? 'bg-brand-500 border-brand-500' : 'border-slate-300 dark:border-slate-600'"><i v-if="task.status === 'Terminé'" data-lucide="check" class="w-4 h-4 text-white"></i></button><div class="flex-1 min-w-0" @click="startEdit(task)"><p class="text-base sm:text-sm font-medium truncate" :class="task.status === 'Terminé' ? 'text-slate-400 line-through' : 'text-slate-900 dark:text-slate-100'">{{ task.titre }}</p><div class="flex items-center gap-3 mt-1.5"><div v-if="task.due_date" class="flex items-center gap-1 text-[10px] font-mono" :class="isOverdue(task) ? 'text-rose-500 font-bold' : 'text-slate-400'"><i data-lucide="calendar" class="w-3 h-3"></i> {{ formatDateShort(task.due_date) }}</div><div class="flex items-center gap-1.5"><img :src="getUserAvatar(task.assignee)" class="w-4 h-4 rounded-full"> <span class="text-[10px] text-slate-500">{{ task.assignee }}</span></div></div></div><button @click.stop="deleteTask(task)" class="text-slate-400 hover:text-rose-500 p-2"><i data-lucide="trash-2" class="w-5 h-5"></i></button></div></div></div></div></div></div></div></div></transition>
-      <div v-if="showNewProjectModal" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4"><div class="bg-white dark:bg-[#1e293b] w-full max-w-md p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xl"><h2 class="text-xl font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-2"><div class="w-8 h-8 rounded bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 dark:text-brand-400"><i data-lucide="plus" class="w-5 h-5"></i></div> Nouveau Projet</h2><div class="space-y-4"><div class="flex gap-3"><div class="w-16"><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Emoji</label><input v-model="newProjectForm.emoji" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-center text-xl outline-none focus:border-brand-500 text-slate-900 dark:text-white h-12 sm:h-10" placeholder="📁"></div><div class="flex-1"><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Nom du projet</label><input v-model="newProjectForm.nom" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white focus:border-brand-500 outline-none transition-colors h-12 sm:h-10 text-base sm:text-sm" placeholder="Ex: Déploiement Salesforce"></div></div><div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Deadline</label><input type="date" v-model="newProjectForm.deadline_str" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none h-12 sm:h-10 font-mono"></div><div class="grid grid-cols-2 gap-4"><div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Propriétaire</label><select v-model="newProjectForm.owner" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none appearance-none h-12 sm:h-10 text-base sm:text-sm"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select></div><div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Priorité</label><select v-model="newProjectForm.priorite" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none appearance-none h-12 sm:h-10 text-base sm:text-sm"><option value="Haute" class="bg-white dark:bg-[#1e1e1e]">🔥 Haute</option><option value="Moyenne" class="bg-white dark:bg-[#1e1e1e]">⚡ Moyenne</option><option value="Basse" class="bg-white dark:bg-[#1e1e1e]">☕ Basse</option></select></div></div><div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Description</label><textarea v-model="newProjectForm.description" rows="3" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none resize-none text-base sm:text-sm" placeholder="Contexte du projet..."></textarea></div></div><div class="flex justify-end gap-3 mt-8"><button @click="showNewProjectModal = false" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white px-4 py-2 text-sm font-medium">Annuler</button><button @click="createProject" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-brand-600/10 transition-all active:scale-95">Créer le projet</button></div></div></div>
+      <!-- MODALS -->
+      <transition name="fade">
+        <div v-if="activeProject" class="fixed inset-0 bg-black/60 backdrop-blur-[2px] z-[200] flex justify-center items-center p-0 sm:p-4 sm:justify-end" @click.self="activeProject = null">
+          <div class="w-full h-full sm:h-full sm:max-w-3xl bg-white dark:bg-[#1e293b] border-l border-slate-200 dark:border-slate-700 shadow-2xl flex flex-col transform transition-transform duration-300">
+            <div class="h-14 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center px-4 bg-slate-50 dark:bg-[#0f172a] shrink-0">
+               <div class="flex gap-2 text-slate-500 dark:text-slate-400 text-xs items-center truncate">
+                 <button @click="activeProject = null" class="flex items-center gap-1 hover:text-slate-900 dark:hover:text-white"><i data-lucide="chevron-left" class="w-4 h-4"></i> Retour</button>
+               </div>
+               <button @click="activeProject = null" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-5 sm:p-8 sm:px-12 bg-slate-50 dark:bg-[#0f172a]">
+              <!-- Project Header Info -->
+              <div class="mb-8">
+                 <div class="text-6xl mb-4 text-center sm:text-left">{{ activeProject.emoji || '📁' }}</div>
+                 <h1 class="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white mb-6 leading-tight text-center sm:text-left">{{ activeProject.nom }}</h1>
+                 
+                 <!-- NEW: STATUS & PRIORITY PROMINENT BADGES - UPDATED WITH TAGS -->
+                 <div class="flex flex-wrap items-center gap-3 mb-8 justify-center sm:justify-start">
+                     <!-- Big Status Select -->
+                     <div class="relative group">
+                         <select v-model="activeProject.status" @change="updateProject(activeProject)" 
+                                 class="appearance-none pl-4 pr-10 py-2 rounded-full font-bold text-sm cursor-pointer transition-all shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#f8fafc] dark:focus:ring-offset-[#1e293b]"
+                                 :class="getProjectStatusClass(activeProject.status)">
+                             <option value="En cours" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">En cours</option>
+                             <option value="Terminé" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">Terminé</option>
+                             <option value="En pause" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">En pause</option>
+                             <option value="Annulé" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">Annulé</option>
+                         </select>
+                         <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-50 pointer-events-none group-hover:opacity-80"></i>
+                     </div>
+                     
+                     <!-- Priority Editable Dropdown -->
+                     <div class="relative group">
+                        <select v-model="activeProject.priorite" @change="updateProject(activeProject)"
+                           class="appearance-none px-3 py-2 rounded-full text-xs font-bold border flex items-center gap-1.5 shadow-sm cursor-pointer pr-8"
+                           :class="getPriorityClass(activeProject.priorite)">
+                           <option value="Haute" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">🔥 Haute</option>
+                           <option value="Moyenne" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">⚡ Moyenne</option>
+                           <option value="Basse" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">☕ Basse</option>
+                        </select>
+                         <i data-lucide="chevron-down" class="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 opacity-50 pointer-events-none"></i>
+                     </div>
+                     
+                     <!-- OPEN BUTTON IN HEADER -->
+                     <button @click="openProjectDetails(activeProject)" class="hidden sm:flex items-center justify-center p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 hover:text-brand-600 transition-colors" title="Rafraîchir / Ouvrir">
+                        <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                     </button>
+                 </div>
+
+                 <!-- FUNC 1: TAGS EDIT -->
+                 <div class="mb-6 flex flex-wrap gap-2 justify-center sm:justify-start">
+                    <span v-for="(tag, i) in activeProject.tags" :key="i" class="px-3 py-1 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 text-xs rounded-full border border-brand-200 dark:border-brand-800 flex items-center gap-1">
+                       {{ tag }} <button @click="removeTag(activeProject, i)" class="hover:text-brand-900 dark:hover:text-white"><i data-lucide="x" class="w-3 h-3"></i></button>
+                    </span>
+                    <input @keyup.enter="addTag(activeProject, $event)" placeholder="+ Tag" class="px-3 py-1 bg-slate-100 dark:bg-[#2c2c2c] text-xs rounded-full border-none outline-none w-20 focus:w-32 transition-all text-slate-900 dark:text-white placeholder-slate-400">
+                 </div>
+
+                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm bg-white dark:bg-[#1e293b] p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center justify-between sm:justify-start gap-2 border-b sm:border-b-0 border-slate-100 dark:border-slate-800 pb-2 sm:pb-0">
+                       <span class="text-slate-400 flex items-center gap-2"><i data-lucide="user" class="w-4 h-4"></i> Owner</span>
+                       <span class="font-medium text-slate-900 dark:text-white flex items-center gap-2"><img :src="getUserAvatar(activeProject.owner)" class="w-5 h-5 rounded-full"> {{ activeProject.owner }}</span>
+                    </div>
+                    <div class="flex items-center justify-between sm:justify-start gap-2 border-b sm:border-b-0 border-slate-100 dark:border-slate-800 pb-2 sm:pb-0">
+                       <span class="text-slate-400 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4"></i> Fin</span>
+                       <span class="font-mono text-slate-900 dark:text-white">{{ formatDate(activeProject.deadline) }}</span>
+                    </div>
+                 </div>
+              </div>
+
+              <!-- Desc -->
+              <div class="mb-10">
+                 <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Contexte</h3>
+                    <button @click="toggleEditDesc" class="text-xs text-brand-600 dark:text-brand-400 font-medium hover:underline">{{ isEditingDesc ? 'Terminer' : 'Modifier' }}</button>
+                 </div>
+                 <div class="bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-[#333] rounded-xl p-5 text-slate-700 dark:text-slate-300 min-h-[100px] shadow-sm">
+                    <div v-if="!isEditingDesc" @dblclick="isEditingDesc = true" class="prose prose-invert prose-sm max-w-none" v-html="renderMarkdown(activeProject.description) || '<p class=\'text-slate-400 italic\'>Aucune description. Double-cliquez pour ajouter du contenu...</p>'"></div>
+                    <textarea v-else ref="descInput" v-model="activeProject.description" class="w-full bg-transparent border-none outline-none resize-none text-base sm:text-sm leading-relaxed h-full min-h-[150px] text-slate-900 dark:text-slate-200" @blur="isEditingDesc = false"></textarea>
+                 </div>
+              </div>
+
+              <!-- Tasks -->
+              <div class="border-t border-slate-200 dark:border-slate-800 pt-8 pb-10">
+                <div class="flex justify-between items-center mb-6"><h3 class="text-lg font-bold text-slate-900 dark:text-white">Tâches</h3><span class="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs px-2 py-1 rounded-full">{{ getTasksByProject(activeProject.id).length }}</span></div>
+                
+                <!-- ERGO 2: BATCH TASK ENTRY (Refocus after add) -->
+                <div class="flex flex-col sm:flex-row gap-3 mb-6">
+                   <div class="flex gap-2 flex-1 bg-white dark:bg-[#1e293b] p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+                      <button @click="addTask" class="bg-brand-600 text-white w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="plus" class="w-5 h-5"></i></button>
+                      <input ref="taskInputRef" v-model="newTaskTitle" @keyup.enter="addTask" type="text" placeholder="Nouvelle tâche..." class="flex-1 bg-transparent text-base sm:text-sm px-2 outline-none text-slate-900 dark:text-white placeholder-slate-400">
+                   </div>
+                   <div class="flex gap-2">
+                      <input type="date" v-model="newTaskDate" class="flex-1 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-300 outline-none px-3 h-12 sm:h-auto font-mono">
+                      <select v-model="newTaskAssignee" class="flex-1 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-300 outline-none px-3 h-12 sm:h-auto"><option v-for="user in teamMembers" :value="user.name">{{ user.name }}</option></select>
+                   </div>
+                </div>
+
+                <div class="space-y-8">
+                   <div v-for="status in ['À faire', 'En cours', 'Terminé']" :key="status">
+                     <div class="flex items-center gap-3 mb-3 select-none">
+                        <span class="px-2.5 py-1 rounded-md text-xs font-bold tracking-wide uppercase" :class="getStatusColor(status)">{{ status }}</span>
+                        <div class="h-[1px] bg-slate-200 dark:bg-slate-800 flex-1"></div>
+                     </div>
+                     <div :ref="el => { if(el) initSortable(el, status) }" class="space-y-2 min-h-[20px]" :data-status="status">
+                        <div v-for="task in getTasksByStatus(status)" :key="task.id" :data-id="task.id" class="drag-handle bg-white dark:bg-[#1e293b] p-3 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm flex items-start gap-3 active:scale-[0.98] transition-transform">
+                           <button @click.stop="cycleStatus(task)" class="mt-0.5 w-6 h-6 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center shrink-0" :class="task.status === 'Terminé' ? 'bg-brand-500 border-brand-500' : 'border-slate-300 dark:border-slate-600'"><i v-if="task.status === 'Terminé'" data-lucide="check" class="w-4 h-4 text-white"></i></button>
+                           <div class="flex-1 min-w-0" @click="startEdit(task)">
+                              <p class="text-base sm:text-sm font-medium truncate" :class="task.status === 'Terminé' ? 'text-slate-400 line-through' : 'text-slate-900 dark:text-slate-100'">{{ task.titre }}</p>
+                              <div class="flex items-center gap-3 mt-1.5">
+                                 <div v-if="task.due_date" class="flex items-center gap-1 text-[10px] font-mono" :class="isOverdue(task) ? 'text-rose-500 font-bold' : 'text-slate-400'"><i data-lucide="calendar" class="w-3 h-3"></i> {{ formatDateShort(task.due_date) }}</div>
+                                 <div class="flex items-center gap-1.5"><img :src="getUserAvatar(task.assignee)" class="w-4 h-4 rounded-full"> <span class="text-[10px] text-slate-500">{{ task.assignee }}</span></div>
+                              </div>
+                           </div>
+                           <button @click.stop="deleteTask(task)" class="text-slate-400 hover:text-rose-500 p-2"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                        </div>
+                     </div>
+                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+      
+      <!-- New Project Modal -->
+       <div v-if="showNewProjectModal" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
+        <div class="bg-white dark:bg-[#1e293b] w-full max-w-md p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xl">
+           <h2 class="text-xl font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-2"><div class="w-8 h-8 rounded bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 dark:text-brand-400"><i data-lucide="plus" class="w-5 h-5"></i></div> Nouveau Projet</h2>
+           <div class="space-y-4">
+             <div class="flex gap-3">
+               <div class="w-16"><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Emoji</label><input v-model="newProjectForm.emoji" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-center text-xl outline-none focus:border-brand-500 text-slate-900 dark:text-white h-12 sm:h-10" placeholder="📁"></div>
+               <div class="flex-1"><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Nom du projet</label><input v-model="newProjectForm.nom" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white focus:border-brand-500 outline-none transition-colors h-12 sm:h-10 text-base sm:text-sm" placeholder="Ex: Déploiement Salesforce"></div>
+             </div>
+             
+             <!-- ADDED DEADLINE FIELD -->
+             <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Deadline</label><input type="date" v-model="newProjectForm.deadline_str" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none h-12 sm:h-10 font-mono"></div>
+
+             <div class="grid grid-cols-2 gap-4">
+               <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Propriétaire</label><select v-model="newProjectForm.owner" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none appearance-none h-12 sm:h-10 text-base sm:text-sm"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select></div>
+               <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Priorité</label><select v-model="newProjectForm.priorite" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none appearance-none h-12 sm:h-10 text-base sm:text-sm"><option value="Haute" class="bg-white dark:bg-[#1e1e1e]">🔥 Haute</option><option value="Moyenne" class="bg-white dark:bg-[#1e1e1e]">⚡ Moyenne</option><option value="Basse" class="bg-white dark:bg-[#1e1e1e]">☕ Basse</option></select></div>
+             </div>
+             <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Description</label><textarea v-model="newProjectForm.description" rows="3" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none resize-none text-base sm:text-sm" placeholder="Contexte du projet..."></textarea></div>
+           </div>
+           <div class="flex justify-end gap-3 mt-8"><button @click="showNewProjectModal = false" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white px-4 py-2 text-sm font-medium">Annuler</button><button @click="createProject" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-brand-600/10 transition-all active:scale-95">Créer le projet</button></div>
+        </div>
+      </div>
 
       <!-- NEW: USER EDIT MODAL -->
       <div v-if="showUserModal" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
@@ -601,7 +846,7 @@
              { name: 'Marc Voisin', email: 'm.voisin@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Marc+Voisin&background=7c3aed&color=fff', role: 'Tech Lead' }
           ];
 
-          // ... (Existing Data Generators) ...
+          // Data Generators
           const PROJECT_TEMPLATES = [
             { nom: 'Déploiement Fibre Optique Zone Nord', emoji: '📡', tags: ['Infra', 'Réseau'] },
             { nom: 'Migration Serveurs Cloud AWS', emoji: '☁️', tags: ['Cloud', 'DevOps', 'Urgent'] },
@@ -734,7 +979,7 @@
          return new Date(d).toISOString().split('T')[0];
       };
 
-      createApp({
+      const app = createApp({
         setup() {
           const loading = ref(true);
           const projects = ref([]);
@@ -759,7 +1004,7 @@
           const newTaskTitle = ref("");
           const newTaskAssignee = ref("");
           const newTaskDate = ref(toInputDate(new Date())); 
-          const taskInputRef = ref(null); 
+          const taskInputRef = ref(null); // Ref for input focus
           
           const editingTaskId = ref(null);
           const editTaskForm = ref({});
@@ -770,6 +1015,7 @@
           const showTeamModal = ref(false); // Used only on mobile sidebar navigation to open the view
           const showKPIModal = ref(false); // Used only on mobile sidebar navigation to open the view
           
+          const showUserMenu = ref(false); // User Switcher State
           const showUserModal = ref(false);
           const editingUser = ref(null);
           const newUserForm = ref({ name: '', email: '', role: 'User' });
@@ -790,12 +1036,12 @@
           });
 
           // WATCH MODALS TO REFRESH ICONS
-          watch([showLegalModal, showNewProjectModal, activeProject, showUserModal], () => {
+          watch([showLegalModal, showNewProjectModal, activeProject, showUserModal, showUserMenu], () => {
              nextTick(() => {
                 if (window.lucide) window.lucide.createIcons();
              });
           });
-
+          
           const enrichedProjects = computed(() => {
             const sortedProjects = [...projects.value].sort((a, b) => (a.rank || 0) - (b.rank || 0));
             return sortedProjects.map(p => {
@@ -909,7 +1155,6 @@
           const renderMarkdown = (text) => text ? marked.parse(text) : '';
           const stripMarkdown = (text) => text ? text.replace(/[*#_]/g, '') : '';
 
-          // ... (Sortable Logic remains same) ...
           const initSortable = (el, status) => {
              if (el._sortable) return;
              const isMobileDrag = window.innerWidth < 1024;
@@ -1113,6 +1358,15 @@
               showToast('Membre supprimé', 'info');
             }).deleteUser(index); // Passing index for mock simplicity, usually ID
           };
+          
+          // Switch User Method
+          const switchUser = (user) => {
+             currentUser.value = user;
+             showUserMenu.value = false;
+             showToast(`Connecté en tant que ${user.name}`, 'success');
+             // Optionally refresh data if permissions/views depend on user
+             // loadData(); 
+          };
 
           const getPriorityClass = (p) => {
             switch(p) {
@@ -1156,7 +1410,7 @@
           return {
             loading, sidebarOpen, isMobile, currentViewScope, viewType, searchQuery, selectedUserFilter, toasts, showCompleted,
             activeProject, isEditingDesc, newTaskTitle, newTaskAssignee, newTaskDate, taskInputRef, scrollContainer,
-            showNewProjectModal, showLegalModal, showTeamModal, showKPIModal, showUserModal,
+            showNewProjectModal, showLegalModal, showTeamModal, showKPIModal, showUserModal, showUserMenu,
             newProjectForm, newUserForm, filteredProjects, filteredTeam, getTasksByProject, getTasksByStatus, teamMembers, currentUser, kpiData, 
             dashboardData, projects, tasks, editingUser,
             openProjectDetails, toggleEditDesc, addTask, cycleStatus, createProject, updateProject, isOverdueProject,
@@ -1164,10 +1418,26 @@
             getPriorityClass, getProjectStatusClass, getStatusColor, getUserAvatar, formatDate, formatDateShort, isOverdue,
             initSortable, initProjectSortable, renderMarkdown, stripMarkdown, toInputDate,
             addTag, removeTag, hasDateConflict, exportToCSV,
-            openUserModal, saveUser, deleteUser
+            openUserModal, saveUser, deleteUser, switchUser
           };
         }
-      }).mount('#app');
+      });
+      
+      app.directive('click-outside', {
+        beforeMount(el, binding) {
+          el.clickOutsideEvent = (event) => {
+            if (!(el === event.target || el.contains(event.target))) {
+              binding.value(event);
+            }
+          };
+          document.body.addEventListener('click', el.clickOutsideEvent);
+        },
+        unmounted(el) {
+          document.body.removeEventListener('click', el.clickOutsideEvent);
+        },
+      });
+
+      app.mount('#app');
     </script>
   </body>
 </html>
