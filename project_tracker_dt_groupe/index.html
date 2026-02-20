@@ -355,12 +355,16 @@
                             priority: "critique", 
                             progress: 0, 
                             tags: ["Infra", "Cloud", "SecOps"],
-                            managerId: "U1", // Changé pour la démo
+                            managerId: "U1",
                             dueDate: "2026-06-30",
+                            attachments: [
+                                { name: "Architecture_V2.png", url: "#", type: "image" },
+                                { name: "Couts_Opex.pdf", url: "#", type: "pdf" }
+                            ],
                             tasks: [
                                 { id: "T-1", title: "Audit de sécurité", status: "done", dueDate: dYesterday },
                                 { id: "T-2", title: "Setup VPC", status: "done", dueDate: dToday },
-                                { id: "T-3", title: "Migration Base de données", status: "in-progress", dueDate: dYesterday }, // En retard !
+                                { id: "T-3", title: "Migration Base de données", status: "in-progress", dueDate: dYesterday },
                                 { id: "T-4", title: "Tests de charge", status: "todo", dueDate: dTomorrow }
                             ]
                         },
@@ -373,9 +377,10 @@
                             tags: ["Backend", "Go", "Perf"],
                             managerId: "U1",
                             dueDate: "2026-08-15",
+                            attachments: [],
                             tasks: [
                                 { id: "T-5", title: "Design System Architecture", status: "done", dueDate: dYesterday },
-                                { id: "T-6", title: "Endpoint Auth", status: "todo", dueDate: dToday }, // A faire ajd
+                                { id: "T-6", title: "Endpoint Auth", status: "todo", dueDate: dToday }, 
                                 { id: "T-7", title: "Endpoint Users", status: "todo", dueDate: "2026-04-10" }
                             ]
                         },
@@ -388,23 +393,10 @@
                             tags: ["IA", "Support"],
                             managerId: "U3",
                             dueDate: "2026-09-01",
+                            attachments: [],
                             tasks: [
                                 { id: "T-8", title: "Sélection modèle LLM", status: "done", dueDate: "2026-01-15" },
                                 { id: "T-9", title: "Indexation doc interne", status: "todo", dueDate: dTomorrow }
-                            ]
-                        },
-                        {
-                            id: "PRJ-04",
-                            name: "Décommissionnement Legacy V1",
-                            description: "Extinction des vieux serveurs on-premise suite à la migration V2.",
-                            status: "done",
-                            priority: "basse",
-                            tags: ["Infra", "Cleanup"],
-                            managerId: "U2",
-                            dueDate: "2026-01-15",
-                            tasks: [
-                                { id: "T-11", title: "Backup final", status: "done", dueDate: "2026-01-10" },
-                                { id: "T-12", title: "Arrêt machines", status: "done", dueDate: "2026-01-14" }
                             ]
                         }
                     ];
@@ -418,18 +410,15 @@
 
             // --- EXPORT DATA ---
             exportData() {
-                // Création d'un export CSV avec BOM (Byte Order Mark) pour compatibilité Excel et accents
                 const bom = "\uFEFF";
                 let csvContent = "ID;Nom du Projet;Statut;Priorité;Échéance;Responsable;Progression (%)\n";
                 
                 this.state.projects.forEach(p => {
                     const user = this.getUser(p.managerId);
-                    // Échapper les guillemets éventuels dans le nom du projet
                     const safeName = p.name.replace(/"/g, '""');
                     csvContent += `${p.id};"${safeName}";${p.status};${p.priority};${p.dueDate};"${user.name}";${p.progress}\n`;
                 });
 
-                // Création du Blob et déclenchement du téléchargement local
                 const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement("a");
                 const url = URL.createObjectURL(blob);
@@ -451,12 +440,10 @@
                 const backdrop = document.getElementById('sidebar-backdrop');
                 
                 if (sidebar.classList.contains('-translate-x-full')) {
-                    // Open
                     sidebar.classList.remove('-translate-x-full');
                     backdrop.classList.remove('hidden');
                     setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
                 } else {
-                    // Close
                     sidebar.classList.add('-translate-x-full');
                     backdrop.classList.add('opacity-0');
                     setTimeout(() => backdrop.classList.add('hidden'), 300);
@@ -507,7 +494,7 @@
                 this.state.currentUserId = userId;
                 this.updateSidebarUserDisplay();
                 this.closeModal('user-switcher-modal');
-                this.render(); // Re-render everything with new context
+                this.render();
             },
 
             // --- CRUD ACTIONS ---
@@ -537,11 +524,11 @@
                         id: `T-${Date.now().toString().slice(-4)}`,
                         title: title,
                         status: 'todo',
-                        dueDate: new Date().toISOString().split('T')[0] // Aujourd'hui par défaut
+                        dueDate: new Date().toISOString().split('T')[0]
                     });
                     proj.progress = this.calculateProjectProgress(proj);
-                    this.openProjectModal(projectId); // Refresh modal
-                    this.render(); // Refresh UI behind
+                    this.openProjectModal(projectId);
+                    this.render();
                 }
             },
 
@@ -550,8 +537,8 @@
                 const task = proj.tasks.find(t => t.id === taskId);
                 if (task) {
                     task[field] = value;
-                    this.openProjectModal(projectId); // Refresh modal immediately
-                    this.render(); // Refresh background
+                    this.openProjectModal(projectId);
+                    this.render();
                 }
             },
 
@@ -571,8 +558,8 @@
                     const proj = this.state.projects.find(p => p.id === projectId);
                     if (!proj.tags.includes(tag.trim())) {
                         proj.tags.push(tag.trim());
-                        this.openProjectModal(projectId); // Refresh modal
-                        this.render(); // Refresh background
+                        this.openProjectModal(projectId);
+                        this.render();
                     }
                 }
             },
@@ -580,8 +567,43 @@
             removeTag(projectId, tagToRemove) {
                 const proj = this.state.projects.find(p => p.id === projectId);
                 proj.tags = proj.tags.filter(tag => tag !== tagToRemove);
-                this.openProjectModal(projectId); // Refresh modal
-                this.render(); // Refresh background
+                this.openProjectModal(projectId);
+                this.render();
+            },
+
+            // --- FILE UPLOAD (Mock Drive) ---
+            handleFileUpload(projectId, event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                console.log(`GAS Sync: Préparation de l'envoi vers Google Drive du fichier: ${file.name}`);
+                
+                // MOCK : Simule l'upload vers Google Drive et la récupération d'URL
+                setTimeout(() => {
+                    const proj = this.state.projects.find(p => p.id === projectId);
+                    if(!proj.attachments) proj.attachments = [];
+                    
+                    let type = "file";
+                    if (file.type.includes('image')) type = "image";
+                    else if (file.type.includes('pdf')) type = "pdf";
+
+                    proj.attachments.push({
+                        name: file.name,
+                        url: "#", // Ici on mettrait l'URL retournée par DriveApp
+                        type: type
+                    });
+                    
+                    this.openProjectModal(projectId);
+                    this.render();
+                }, 800);
+            },
+
+            deleteAttachment(projectId, attachmentName) {
+                if(confirm("Détacher ce fichier du projet ? (Il restera sur Drive)")) {
+                    const proj = this.state.projects.find(p => p.id === projectId);
+                    proj.attachments = proj.attachments.filter(a => a.name !== attachmentName);
+                    this.openProjectModal(projectId);
+                }
             },
 
             openCreateProjectModal() {
@@ -607,6 +629,7 @@
                     tags: ["Nouveau"],
                     managerId: this.state.currentUserId,
                     dueDate: date,
+                    attachments: [],
                     tasks: []
                 };
 
@@ -684,7 +707,6 @@
                 document.getElementById('current-view-title').textContent = titles[view];
                 document.getElementById('current-view-title-mobile').textContent = titles[view];
                 
-                // Update Sidebar
                 document.querySelectorAll('aside nav button').forEach(b => {
                     b.classList.remove('bg-app-hover', 'text-white');
                     b.classList.add('text-app-textSecondary');
@@ -703,7 +725,6 @@
                 const container = document.getElementById('app-content');
                 if (this.state.isLoading) return;
 
-                // Calcul des progressions
                 this.state.projects.forEach(p => { p.progress = this.calculateProjectProgress(p); });
 
                 switch(this.state.currentView) {
@@ -731,7 +752,6 @@
                 const active = this.state.projects.filter(p => p.status !== 'done' && p.status !== 'blocked');
                 const blocked = this.state.projects.filter(p => p.status === 'blocked');
                 
-                // Calcul global
                 let totalTasks = 0, doneTasks = 0;
                 this.state.projects.filter(p => p.status !== 'done').forEach(p => {
                     totalTasks += p.tasks.length;
@@ -741,21 +761,18 @@
 
                 const myActiveProjects = this.state.projects.filter(p => p.managerId === this.state.currentUserId && p.status !== 'done');
 
-                // Tâches Urgentes pour l'utilisateur actuel
                 let myUrgentTasks = [];
                 myActiveProjects.forEach(p => {
                     p.tasks.filter(t => t.status !== 'done' && t.dueDate).forEach(t => {
                         myUrgentTasks.push({ ...t, projectId: p.id, projectName: p.name });
                     });
                 });
-                // Tri par date d'échéance croissante
                 myUrgentTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-                const topUrgentTasks = myUrgentTasks.slice(0, 5); // Garder le top 5
+                const topUrgentTasks = myUrgentTasks.slice(0, 5); 
 
                 return `
                     <div class="max-w-6xl mx-auto animate-fade-in pb-10">
                         <div class="flex flex-col xl:flex-row gap-4 md:gap-6 mb-8">
-                            <!-- Tuile Globale -->
                             <div class="glass-panel rounded-2xl p-5 md:p-6 flex-1 flex flex-col justify-between">
                                 <div class="flex items-center justify-between mb-4">
                                     <h2 class="text-xs md:text-sm font-medium text-app-textSecondary uppercase tracking-wider">Avancement Portefeuille</h2>
@@ -770,7 +787,6 @@
                                 </div>
                             </div>
 
-                            <!-- Tâches Urgentes / En Retard -->
                             <div class="glass-panel rounded-2xl p-4 md:p-5 flex-1 xl:max-w-md border-t-2 border-t-app-danger flex flex-col">
                                 <div class="flex items-center justify-between mb-4">
                                     <span class="text-sm font-semibold text-white">Mes Tâches Urgentes</span>
@@ -797,7 +813,6 @@
                             </div>
                         </div>
 
-                        <!-- KPIs intégrés au Dashboard -->
                         ${this.buildKPIView()}
 
                         <h3 class="text-lg font-semibold text-white mb-4 mt-8">Mes Projets Prioritaires</h3>
@@ -813,7 +828,6 @@
 
             // 2. PROJETS (Liste / Grille)
             buildProjectsView() {
-                // Filtrage dynamique
                 let filteredProjects = this.state.projects.filter(p => p.status !== 'done');
                 
                 if (this.state.filters.user === 'me') {
@@ -849,7 +863,6 @@
                                 </select>
                             </div>
                             
-                            <!-- Toggle View -->
                             <div class="flex bg-app-panel rounded-lg p-1 border border-app-border shrink-0 ml-auto">
                                 <button onclick="app.state.projectsViewMode='grid'; app.render()" class="p-1.5 rounded-md ${isGrid ? 'bg-app-hover text-white shadow' : 'text-app-textSecondary hover:text-white'} transition-all">
                                     <i data-lucide="layout-grid" class="w-4 h-4"></i>
@@ -906,7 +919,6 @@
 
             // 4. ROADMAP (Nouvelle vue chronologique)
             buildRoadmapView() {
-                // Trier les projets par date d'échéance croissante
                 const sortedProjects = [...this.state.projects]
                     .filter(p => p.status !== 'done')
                     .sort((a, b) => new Date(a.dueDate || "2099-12-31") - new Date(b.dueDate || "2099-12-31"));
@@ -923,7 +935,6 @@
                     const dateObj = new Date(p.dueDate || "2099-12-31");
                     const monthYear = dateObj.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
                     
-                    // Ajouter un séparateur de mois si on change de mois
                     if (monthYear !== currentMonthYear) {
                         html += `
                             <div class="relative pl-6 md:pl-10 mt-6 mb-2">
@@ -994,15 +1005,13 @@
 
             // HTML helper pour Dashboard
             buildKPIView() {
-                // 1. Calcul Charge de l'équipe (Projets par membre)
                 const userWorkload = this.state.users.map(u => {
                     const activeProjs = this.state.projects.filter(p => p.managerId === u.id && p.status !== 'done');
                     return { ...u, count: activeProjs.length };
-                }).sort((a, b) => b.count - a.count).slice(0, 4); // Prend le Top 4 pour l'affichage
+                }).sort((a, b) => b.count - a.count).slice(0, 4); 
                 
-                const maxCount = Math.max(...userWorkload.map(u => u.count), 1); // Évite la division par zéro
+                const maxCount = Math.max(...userWorkload.map(u => u.count), 1); 
 
-                // 2. Calcul Répartition par Tags dynamiques
                 const tagCounts = {};
                 let totalTags = 0;
                 this.state.projects.filter(p => p.status !== 'done').forEach(p => {
@@ -1012,10 +1021,9 @@
                     });
                 });
                 
-                // Trier pour avoir les tags les plus utilisés en premier
                 const sortedTags = Object.entries(tagCounts)
                     .sort((a, b) => b[1] - a[1])
-                    .slice(0, 3); // Affiche le Top 3 des tags
+                    .slice(0, 3); 
                     
                 const tagColors = ['bg-blue-500', 'bg-purple-500', 'bg-emerald-500'];
 
@@ -1023,7 +1031,6 @@
                     <div class="mb-8">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                             
-                            <!-- NOUVEAU KPI : Charge de l'équipe -->
                             <div class="glass-panel p-5 md:p-6 rounded-2xl flex flex-col h-48 md:h-56">
                                 <div class="flex justify-between items-start mb-4 md:mb-6">
                                     <h3 class="text-xs md:text-sm text-app-textSecondary">Charge par collaborateur</h3>
@@ -1033,7 +1040,6 @@
                                     ${userWorkload.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucun projet actif.</p>' : ''}
                                     ${userWorkload.map(u => {
                                         const pct = Math.round((u.count / maxCount) * 100);
-                                        // Code couleur : Rouge si > 2, Jaune si 2, Bleu sinon
                                         let barColor = "bg-app-accent";
                                         if (u.count > 2) barColor = "bg-app-danger"; 
                                         else if (u.count === 2) barColor = "bg-app-warning"; 
@@ -1055,7 +1061,6 @@
                                 </div>
                             </div>
 
-                            <!-- KPI Dynamique : Répartition par Tag -->
                             <div class="glass-panel p-5 md:p-6 rounded-2xl flex flex-col h-48 md:h-56">
                                 <div class="flex justify-between items-start mb-4 md:mb-6">
                                     <h3 class="text-xs md:text-sm text-app-textSecondary">Répartition par Tag (Actifs)</h3>
@@ -1243,7 +1248,6 @@
                 const columns = document.querySelectorAll('.kanban-column');
 
                 cards.forEach(card => {
-                    // Prevenir le drag par defaut sur mobile qui scrolle la page
                     card.addEventListener('touchstart', (e) => {}, {passive: true}); 
                     
                     card.addEventListener('dragstart', (e) => {
@@ -1279,6 +1283,7 @@
                 const user = this.getUser(project.managerId);
                 const pStyle = this.getPriorityStyle(project.priority);
                 const sStyle = this.getStatusStyle(project.status);
+                const attachments = project.attachments || [];
 
                 const modalHtml = `
                     <div class="p-4 md:p-8 border-b border-app-border/50 bg-gradient-to-b from-app-panel to-transparent shrink-0 pt-8 md:pt-8">
@@ -1290,7 +1295,6 @@
                             <div class="flex flex-wrap items-center gap-2 md:gap-3 w-full pr-8 md:pr-0">
                                 <span class="px-2 py-1 bg-app-bg border border-app-border rounded-md text-[10px] md:text-xs font-mono text-app-textSecondary">${project.id}</span>
                                 
-                                <!-- Select Priorité -->
                                 <div class="relative">
                                     <select onchange="app.updateProjectField('${project.id}', 'priority', this.value)" class="badge-select px-2 md:px-2.5 py-1 text-[10px] md:text-[11px] uppercase font-bold rounded flex items-center ${pStyle.bg} ${pStyle.color} border ${pStyle.border}">
                                         <option value="critique" ${project.priority === 'critique' ? 'selected' : ''}>Critique</option>
@@ -1300,7 +1304,6 @@
                                     </select>
                                 </div>
 
-                                <!-- Select Statut -->
                                 <div class="relative">
                                     <select onchange="app.updateProjectField('${project.id}', 'status', this.value)" class="badge-select px-2 md:px-2.5 py-1 text-[10px] md:text-[11px] uppercase font-bold rounded bg-app-bg border ${sStyle.border} ${sStyle.color}">
                                         <option value="todo" ${project.status === 'todo' ? 'selected' : ''}>À faire</option>
@@ -1312,13 +1315,10 @@
                             </div>
                         </div>
                         
-                        <!-- Input Nom du projet -->
                         <input type="text" onchange="app.updateProjectField('${project.id}', 'name', this.value)" value="${project.name}" class="w-full bg-transparent border-none text-xl md:text-3xl font-bold text-white mb-2 tracking-tight focus:outline-none focus:ring-0 placeholder-app-border p-0">
                         
-                        <!-- Input Description -->
                         <textarea onchange="app.updateProjectField('${project.id}', 'description', this.value)" class="w-full bg-transparent border-none text-app-textSecondary text-xs md:text-sm leading-relaxed resize-none focus:outline-none focus:ring-0 p-0" rows="2">${project.description}</textarea>
                         
-                        <!-- Inline Tags -->
                         <div class="flex flex-wrap items-center gap-2 mt-4">
                             ${project.tags.map(tag => `
                                 <div class="px-2 py-1 rounded bg-app-border/50 text-[10px] md:text-xs text-app-textSecondary flex items-center gap-1 group/tag">
@@ -1335,8 +1335,42 @@
                     </div>
 
                     <div class="p-4 md:p-8 flex-1 overflow-y-auto bg-app-bg/50">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
-                            <!-- Sélecteur Responsable -->
+                        
+                        <!-- PIECES JOINTES (Nouveau) -->
+                        <div class="mb-8">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-[10px] md:text-xs font-semibold text-app-textSecondary uppercase tracking-wider flex items-center gap-1.5">
+                                    <i data-lucide="paperclip" class="w-3.5 h-3.5"></i> Fichiers joints (${attachments.length})
+                                </h3>
+                                <div class="relative">
+                                    <input type="file" id="file-upload-${project.id}" class="hidden" onchange="app.handleFileUpload('${project.id}', event)">
+                                    <button onclick="document.getElementById('file-upload-${project.id}').click()" class="text-[10px] md:text-xs text-app-accent hover:text-blue-400 transition-colors flex items-center bg-app-accent/10 px-2 py-1 rounded-md border border-app-accent/20 hover:bg-app-accent/20">
+                                        <i data-lucide="plus" class="w-3 h-3 mr-1"></i> Joindre
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-2">
+                                ${attachments.map(file => {
+                                    const isImage = file.type === 'image';
+                                    const icon = isImage ? 'image' : 'file-text';
+                                    return `
+                                    <div class="flex items-center bg-app-panel border border-app-border rounded-lg p-1.5 pr-2 group/file hover:border-app-textSecondary/50 transition-colors max-w-[200px]">
+                                        <div class="w-6 h-6 rounded bg-app-bg border border-app-border flex items-center justify-center mr-2 shrink-0">
+                                            <i data-lucide="${icon}" class="w-3.5 h-3.5 ${isImage ? 'text-purple-400' : 'text-blue-400'}"></i>
+                                        </div>
+                                        <a href="${file.url}" target="_blank" class="text-xs text-white truncate hover:underline flex-1" title="${file.name}">${file.name}</a>
+                                        <button onclick="app.deleteAttachment('${project.id}', '${file.name}')" class="ml-2 text-app-textSecondary hover:text-red-400 opacity-50 md:opacity-0 md:group-hover/file:opacity-100 transition-opacity">
+                                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                                        </button>
+                                    </div>
+                                    `;
+                                }).join('')}
+                                ${attachments.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucun document attaché.</p>' : ''}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8 border-t border-app-border/50 pt-8">
                             <div class="glass-panel p-3 md:p-4 rounded-xl flex items-center gap-3 md:gap-4 relative group">
                                 <div class="w-8 h-8 md:w-10 md:h-10 rounded-full ${user.color} flex items-center justify-center text-xs md:text-sm font-bold text-white shadow-inner shrink-0">${user.initials}</div>
                                 <div class="flex-1">
@@ -1383,7 +1417,6 @@
                                     </div>
                                     
                                     <div class="flex items-center justify-between sm:justify-end shrink-0 gap-3 ml-7 sm:ml-0">
-                                        <!-- Sélecteur Date Tâche -->
                                         <input type="date" value="${t.dueDate || ''}" onchange="app.updateTaskField('${project.id}', '${t.id}', 'dueDate', this.value)" class="bg-app-bg sm:bg-transparent border border-app-border sm:border-transparent hover:border-app-border focus:border-app-accent rounded px-2 sm:px-1 py-1 sm:py-0.5 text-[10px] ${isOverdue ? 'text-red-400 font-bold' : 'text-app-textSecondary'} cursor-pointer outline-none">
                                         
                                         <button onclick="app.deleteTask('${project.id}', '${t.id}')" class="text-app-textSecondary hover:text-red-400 md:opacity-0 md:group-hover:opacity-100 transition-opacity p-2 -mr-2 sm:p-1 sm:mr-0" title="Supprimer la tâche">
