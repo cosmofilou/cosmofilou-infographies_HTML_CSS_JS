@@ -1,1443 +1,1229 @@
 <!DOCTYPE html>
-<html class="antialiased">
-  <head>
-    <base target="_top">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tailwind Typography Plugin -->
-    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-    <!-- Vue.js 3 -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <!-- Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- SortableJS -->
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-    <!-- Marked -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DT Prox - Direction Technique</title>
     
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
     <script>
-      tailwind.config = {
-        darkMode: 'media', 
-        theme: {
-          extend: {
-            colors: {
-              // Salesforce-like Blue Palette - Adjusted for better dark mode contrast
-              brand: {
-                50: '#f0f9ff',
-                100: '#e0f2fe',
-                200: '#bae6fd',
-                300: '#7dd3fc',
-                400: '#38bdf8',
-                500: '#0ea5e9',
-                600: '#0284c7', // Primary Light Mode
-                700: '#0369a1',
-                800: '#075985',
-                900: '#0c4a6e',
-                950: '#082f49',
-              }
-            },
-            fontFamily: {
-              sans: ['Inter', 'system-ui', 'sans-serif'],
-            },
-            screens: {
-              'xs': '480px',
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        app: {
+                            bg: '#0E0F11',       
+                            panel: '#16181D',    
+                            border: '#22252A',   
+                            hover: '#1C1F26',    
+                            textPrimary: '#EDEDED',
+                            textSecondary: '#8A8F98',
+                            accent: '#5E6AD2',   
+                            success: '#28A745',
+                            warning: '#F5A623',
+                            danger: '#E53E3E',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.2s ease-out',
+                        'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'scale-in': 'scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { transform: 'translateY(10px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                        scaleIn: { '0%': { transform: 'translate(-50%, -48%) scale(0.96)', opacity: '0' }, '100%': { transform: 'translate(-50%, -50%) scale(1)', opacity: '1' } }
+                    }
+                }
             }
-          }
         }
-      }
     </script>
 
     <style>
-      /* CRITICAL FIX: Hide raw templates before Vue loads */
-      [v-cloak] { display: none !important; }
-
-      /* Professional Scrollbar */
-      ::-webkit-scrollbar { width: 8px; height: 8px; }
-      ::-webkit-scrollbar-track { background: transparent; }
-      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-      ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-      @media (prefers-color-scheme: dark) {
-        ::-webkit-scrollbar-thumb { background: #475569; }
-        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-      }
-      
-      .loader {
-        border-top-color: #0284c7; /* Brand Blue */
-        animation: spinner 1.5s linear infinite;
-      }
-      @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-      
-      .fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease; }
-      .fade-enter-from, .fade-leave-to { opacity: 0; }
-
-      .list-enter-active, .list-leave-active { transition: all 0.3s ease; }
-      .list-enter-from, .list-leave-to { opacity: 0; transform: translateX(30px); }
-      
-      input[type="date"] {
-        -webkit-appearance: none;
-        min-height: 2.5rem; 
-      }
-      input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.6; }
-      @media (prefers-color-scheme: dark) {
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
-      }
-
-      .ghost-card { opacity: 0.5; background: #f1f5f9; border: 2px dashed #94a3b8; }
-      @media (prefers-color-scheme: dark) {
-        .ghost-card { background: #1e293b; border-color: #64748b; }
-      }
-      
-      .drag-handle { cursor: grab; }
-      .drag-handle:active { cursor: grabbing; }
-      
-      .project-drag-handle { cursor: move; color: #94a3b8; touch-action: none; padding: 10px; }
-      .project-drag-handle:hover { color: #64748b; background-color: #f1f5f9; border-radius: 6px;}
-      @media (prefers-color-scheme: dark) {
-        .project-drag-handle { color: #64748b; }
-        .project-drag-handle:hover { color: #e2e8f0; background-color: #334155; }
-      }
-
-      /* Pro Markdown Styles */
-      .prose h1, .prose h2, .prose h3 { color: #0f172a; margin-top: 1em; margin-bottom: 0.5em; font-weight: 700; letter-spacing: -0.025em; }
-      .prose p { margin-bottom: 0.8em; line-height: 1.6; color: #334155; }
-      .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 0.8em; color: #334155; }
-      .prose strong { color: #0f172a; font-weight: 600; }
-      .prose a { color: #0284c7; text-decoration: none; font-weight: 500; }
-      .prose a:hover { text-decoration: underline; }
-      
-      @media (prefers-color-scheme: dark) {
-        .prose h1, .prose h2, .prose h3 { color: #f8fafc; }
-        .prose p { color: #cbd5e1; }
-        .prose ul { color: #cbd5e1; }
-        .prose strong { color: #fff; }
-        .prose a { color: #38bdf8; }
-      }
-
-      /* Table Enhancements */
-      .review-table th { position: sticky; top: 0; z-index: 10; font-weight: 600; letter-spacing: 0.05em; }
-      .review-input { background: transparent; border: 1px solid transparent; width: 100%; padding: 6px 8px; border-radius: 6px; transition: all 0.2s; }
-      .review-input:hover, .review-input:focus { outline: none; background: #fff; border-color: #cbd5e1; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
-      @media (prefers-color-scheme: dark) {
-        .review-input:hover, .review-input:focus { background: #1e293b; border-color: #475569; }
-      }
-      
-      .mobile-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 0.25rem; font-weight: 600; }
-      @media (prefers-color-scheme: dark) { .mobile-label { color: #94a3b8; } }
-
-      body { -webkit-overflow-scrolling: touch; }
-    </style>
-  </head>
-  
-  <body class="bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-slate-200 font-sans min-h-screen lg:h-screen lg:overflow-hidden selection:bg-brand-100 dark:selection:bg-brand-900 selection:text-brand-900 dark:selection:text-brand-100">
-
-    <div id="app" class="h-full flex flex-col lg:flex-row relative" v-cloak>
-      
-      <!-- TOASTS -->
-      <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[250] flex flex-col gap-2 pointer-events-none w-full max-w-xs px-4">
-        <transition-group name="fade">
-          <div v-for="toast in toasts" :key="toast.id" 
-               class="pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border min-w-0 w-full backdrop-blur-xl"
-               :class="{
-                 'bg-white/95 border-slate-200 text-slate-800 dark:bg-slate-800/95 dark:border-slate-700 dark:text-white': true
-               }">
-             <div class="w-2 h-2 rounded-full" :class="{
-               'bg-emerald-500': toast.type === 'success',
-               'bg-rose-500': toast.type === 'error',
-               'bg-brand-500': toast.type === 'info'
-             }"></div>
-             <div class="text-sm font-medium truncate flex-1 text-center">{{ toast.message }}</div>
-          </div>
-        </transition-group>
-      </div>
-
-      <!-- MOBILE OVERLAY -->
-      <transition name="fade">
-        <div v-if="sidebarOpen" @click="sidebarOpen = false" class="fixed inset-0 bg-slate-900/50 z-40 lg:hidden backdrop-blur-sm"></div>
-      </transition>
-
-      <!-- MOBILE FAB -->
-      <button v-if="['active', 'dashboard'].includes(currentViewScope)" @click="showNewProjectModal = true" class="lg:hidden fixed bottom-6 right-6 z-50 w-14 h-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-xl shadow-brand-600/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95">
-        <i data-lucide="plus" class="w-8 h-8"></i>
-      </button>
-
-      <!-- SIDEBAR -->
-      <aside class="w-[85vw] sm:w-64 bg-white dark:bg-[#1e293b] border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between shrink-0 transition-transform duration-300 z-50 fixed inset-y-0 left-0 lg:relative lg:translate-x-0 shadow-2xl lg:shadow-none" 
-             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
-        <div>
-          <!-- Brand -->
-          <div class="h-16 lg:h-14 flex items-center px-6 lg:px-5 border-b border-slate-100 dark:border-slate-800 gap-3">
-             <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-brand-700 flex items-center justify-center text-white font-bold text-xs shadow-md ring-1 ring-white/20">DT</div>
-             <div><h1 class="font-bold text-sm text-slate-800 dark:text-slate-100 leading-tight tracking-tight">DT Groupe</h1><p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Proxiserve - Prox-Hydro</p></div>
-             <button @click="sidebarOpen = false" class="lg:hidden ml-auto p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-          </div>
-
-          <!-- Navigation -->
-          <nav class="p-4 lg:p-3 space-y-1">
-            <div class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase px-3 py-2 tracking-wider">Pilotage</div>
-            
-            <button @click="currentViewScope = 'dashboard'; if(isMobile) sidebarOpen = false;" 
-                    :class="currentViewScope === 'dashboard' 
-                      ? 'bg-brand-50 text-brand-700 dark:bg-brand-600 dark:text-white font-semibold shadow-sm' 
-                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'" 
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all">
-              <i data-lucide="layout-grid" class="w-5 h-5 lg:w-4 lg:h-4" :class="currentViewScope === 'dashboard' ? 'text-brand-600 dark:text-white' : 'text-slate-400'"></i> Tableau de Bord
-            </button>
-
-            <button @click="currentViewScope = 'active'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" 
-                    :class="currentViewScope === 'active' && viewType === 'grid' 
-                      ? 'bg-brand-50 text-brand-700 dark:bg-brand-600 dark:text-white font-semibold shadow-sm' 
-                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'" 
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all">
-              <i data-lucide="folder-kanban" class="w-5 h-5 lg:w-4 lg:h-4" :class="currentViewScope === 'active' && viewType === 'grid' ? 'text-brand-600 dark:text-white' : 'text-slate-400'"></i> Projets en cours
-            </button>
-            
-            <button @click="currentViewScope = 'active'; viewType = 'review'; if(isMobile) sidebarOpen = false;" 
-                    :class="viewType === 'review' 
-                      ? 'bg-brand-50 text-brand-700 dark:bg-brand-600 dark:text-white font-semibold shadow-sm' 
-                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'" 
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all">
-              <i data-lucide="presentation" class="w-5 h-5 lg:w-4 lg:h-4" :class="viewType === 'review' ? 'text-brand-600 dark:text-white' : 'text-slate-400'"></i> 🎯 Revue de Projet
-            </button>
-
-            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
-               <div class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase px-3 py-2 tracking-wider">Données</div>
-               
-               <button @click="currentViewScope = 'archived'; viewType = 'grid'; if(isMobile) sidebarOpen = false;" 
-                    :class="currentViewScope === 'archived' 
-                      ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-300' 
-                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'"
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
-                 <i data-lucide="archive" class="w-5 h-5 lg:w-4 lg:h-4 text-slate-400"></i> Archives
-               </button>
-               
-               <button @click="currentViewScope = 'team'; if(isMobile) sidebarOpen = false;" 
-                    :class="currentViewScope === 'team' 
-                      ? 'bg-brand-50 text-brand-700 dark:bg-brand-600 dark:text-white font-semibold shadow-sm' 
-                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'"
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
-                 <i data-lucide="users" class="w-5 h-5 lg:w-4 lg:h-4 text-slate-400"></i> Annuaire Équipe
-               </button>
-               
-               <button @click="currentViewScope = 'kpi'; if(isMobile) sidebarOpen = false;" 
-                    :class="currentViewScope === 'kpi' 
-                      ? 'bg-brand-50 text-brand-700 dark:bg-brand-600 dark:text-white font-semibold shadow-sm' 
-                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'"
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors">
-                 <i data-lucide="pie-chart" class="w-5 h-5 lg:w-4 lg:h-4 text-slate-400"></i> Rapports KPI
-               </button>
-            </div>
-          </nav>
-        </div>
-
-        <div class="border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0f172a] p-4">
-           
-           <!-- NEW: USER SWITCHER DROPDOWN -->
-           <div class="relative" v-click-outside="() => showUserMenu = false">
-              <button @click="showUserMenu = !showUserMenu" class="w-full p-2.5 flex items-center gap-3 bg-white dark:bg-[#1e293b] hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm transition-all group text-left">
-                <img :src="currentUser.avatar" class="w-9 h-9 rounded-md border border-slate-200 dark:border-slate-600 shrink-0">
-                <div class="flex-1 min-w-0">
-                  <p class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">{{ currentUser.name }}</p>
-                  <p class="text-[10px] text-slate-500 truncate">{{ currentUser.email }}</p>
-                </div>
-                <i data-lucide="chevrons-up-down" class="w-4 h-4 text-slate-400 shrink-0"></i>
-              </button>
-
-              <!-- Dropup Menu -->
-              <transition name="fade">
-                <div v-if="showUserMenu" class="absolute bottom-full left-0 w-full mb-2 bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-xl overflow-hidden z-50">
-                  <div class="p-2 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-[#0f172a]">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider pl-2">Changer de compte</p>
-                  </div>
-                  <div class="max-h-60 overflow-y-auto">
-                    <button v-for="user in teamMembers" :key="user.email" @click="switchUser(user)" class="w-full flex items-center gap-3 p-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" :class="currentUser.email === user.email ? 'bg-brand-50 dark:bg-brand-900/20' : ''">
-                       <img :src="user.avatar" class="w-7 h-7 rounded-full border border-slate-200 dark:border-slate-600">
-                       <div class="text-left flex-1 min-w-0">
-                         <p class="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate" :class="currentUser.email === user.email ? 'text-brand-700 dark:text-brand-400' : ''">{{ user.name }}</p>
-                         <p class="text-[9px] text-slate-400 truncate">{{ user.role }}</p>
-                       </div>
-                       <i v-if="currentUser.email === user.email" data-lucide="check" class="w-3 h-3 text-brand-600"></i>
-                    </button>
-                  </div>
-                  <div class="p-1 border-t border-slate-100 dark:border-slate-700">
-                     <button @click="openUserModal(); showUserMenu = false" class="w-full flex items-center justify-center gap-2 p-2 text-xs font-medium text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 transition-colors">
-                        <i data-lucide="settings-2" class="w-3 h-3"></i> Gérer l'équipe
-                     </button>
-                  </div>
-                </div>
-              </transition>
-           </div>
-           
-           <button @click="showLegalModal = true" class="mt-3 text-[10px] text-center w-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">Mentions Légales & RGPD</button>
-        </div>
-      </aside>
-
-      <!-- MAIN CONTENT -->
-      <div class="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-[#0f172a] min-h-0">
+        /* Scrollbar minimaliste */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #22252A; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #333842; }
         
-        <!-- HEADER -->
-        <header class="h-16 lg:h-16 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 sm:px-6 bg-white dark:bg-[#1e293b] sticky top-0 z-30 shrink-0 shadow-sm lg:shadow-none">
-          <div class="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-            <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2 -ml-2 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 rounded-lg"><i data-lucide="menu" class="w-6 h-6"></i></button>
-            
-            <h2 class="text-base sm:text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 truncate tracking-tight">
-               <span v-if="currentViewScope === 'dashboard'" class="text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20 p-1.5 rounded-md"><i data-lucide="layout-grid" class="w-5 h-5"></i></span>
-               <span v-else-if="currentViewScope === 'team'" class="text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20 p-1.5 rounded-md"><i data-lucide="users" class="w-5 h-5"></i></span>
-               <span v-else-if="currentViewScope === 'kpi'" class="text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20 p-1.5 rounded-md"><i data-lucide="pie-chart" class="w-5 h-5"></i></span>
-               <span v-else-if="viewType === 'review'" class="text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20 p-1.5 rounded-md"><i data-lucide="presentation" class="w-5 h-5"></i></span>
-               
-               <span v-if="currentViewScope === 'dashboard'">Tableau de Bord</span>
-               <span v-else-if="currentViewScope === 'team'">Annuaire Équipe</span>
-               <span v-else-if="currentViewScope === 'kpi'">Rapports KPI</span>
-               <span v-else-if="viewType === 'review'">{{ isMobile ? 'Revue Mobile' : 'Cockpit Pilotage' }}</span>
-               <span v-else>{{ currentViewScope === 'active' ? 'Projets' : 'Archives' }}</span>
-            </h2>
-            
-            <div v-if="['active', 'archived'].includes(currentViewScope) && viewType !== 'review'" class="hidden sm:flex bg-slate-100 dark:bg-[#0f172a] rounded-lg p-1 ml-2 border border-slate-200 dark:border-slate-800">
-               <button @click="viewType = 'grid'" :class="viewType === 'grid' ? 'bg-white text-brand-600 shadow-sm dark:bg-[#1e293b] dark:text-brand-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'" class="p-1.5 rounded-md transition-all"><i data-lucide="grid" class="w-4 h-4"></i></button>
-               <button @click="viewType = 'list'" :class="viewType === 'list' ? 'bg-white text-brand-600 shadow-sm dark:bg-[#1e293b] dark:text-brand-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'" class="p-1.5 rounded-md transition-all"><i data-lucide="list" class="w-4 h-4"></i></button>
-            </div>
-          </div>
+        /* Glassmorphism & Transparence */
+        .glass-panel {
+            background: rgba(22, 24, 29, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .glass-modal {
+            background: rgba(14, 15, 17, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .no-select { user-select: none; -webkit-user-select: none; }
+        .ghost-card { opacity: 0.4; border: 1px dashed #5E6AD2; }
 
-          <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        /* Custom selects in modal to look like badges */
+        select.badge-select {
+            appearance: none;
+            outline: none;
+            cursor: pointer;
+            padding-right: 1.5rem;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.25rem center;
+        }
+        select.badge-select option {
+            background-color: #16181D;
+            color: #EDEDED;
+        }
+
+        /* Task Date Input */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.5;
+            cursor: pointer;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-app-bg text-app-textPrimary font-sans antialiased h-screen overflow-hidden flex selection:bg-app-accent selection:text-white">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 border-r border-app-border bg-app-bg flex flex-col transition-all duration-300 z-20 hidden md:flex shrink-0">
+        <div class="h-16 flex items-center px-5 border-b border-app-border">
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-app-accent to-blue-600 flex items-center justify-center mr-3 shadow-lg shadow-app-accent/20 border border-white/10">
+                <i data-lucide="cpu" class="w-4 h-4 text-white"></i>
+            </div>
+            <div>
+                <span class="font-bold text-sm tracking-wide text-white block leading-none">DT Prox</span>
+                <span class="text-[10px] text-app-textSecondary font-medium tracking-wider">DIRECTION TECHNIQUE</span>
+            </div>
+        </div>
+        
+        <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto mt-2">
+            <div class="text-[10px] font-bold text-app-textSecondary mb-2 mt-2 px-3 tracking-wider uppercase">Pilotage</div>
             
-            <!-- Filter Toggle -->
-            <button v-if="currentViewScope === 'active' && viewType !== 'review'" @click="showCompleted = !showCompleted" 
-              class="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg border transition-all text-xs font-semibold shadow-sm"
-              :class="showCompleted ? 'bg-brand-50 text-brand-700 border-brand-200 dark:bg-brand-900/20 dark:text-brand-300 dark:border-brand-800' : 'bg-white text-slate-600 border-slate-200 dark:bg-[#1e293b] dark:text-slate-400 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-[#0f172a]'">
-              <i :data-lucide="showCompleted ? 'eye' : 'eye-off'" class="w-4 h-4"></i>
-              <span class="hidden lg:inline">{{ showCompleted ? 'Masquer terminés' : 'Voir terminés' }}</span>
+            <button onclick="app.navigate('dashboard')" id="nav-dashboard" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Vue d'ensemble
+            </button>
+            <button onclick="app.navigate('projects')" id="nav-projects" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="folder-kanban" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Projets
+            </button>
+            <button onclick="app.navigate('review')" id="nav-review" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="arrow-down-up" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Revue (Priorisation)
+            </button>
+            <button onclick="app.navigate('kpis')" id="nav-kpis" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="bar-chart-3" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> KPIs & Data
             </button>
 
-            <!-- User Filter -->
-            <div v-if="['active', 'archived', 'review'].includes(currentViewScope)" class="relative hidden lg:flex items-center bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 gap-2 shadow-sm">
-               <i data-lucide="filter" class="w-3.5 h-3.5 text-slate-400"></i>
-               <select v-model="selectedUserFilter" class="bg-transparent text-sm text-slate-700 dark:text-slate-300 outline-none cursor-pointer appearance-none pr-6 border-none py-0 w-full font-medium">
-                  <option :value="null" class="bg-white dark:bg-[#1e1e1e]">Tous les membres</option>
-                  <option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option>
-               </select>
-               <i data-lucide="chevron-down" class="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none"></i>
-            </div>
-
-            <button v-if="currentViewScope !== 'dashboard' && currentViewScope !== 'kpi'" class="sm:hidden p-2 text-slate-500 dark:text-slate-400"><i data-lucide="search" class="w-5 h-5"></i></button>
-
-            <div v-if="currentViewScope !== 'dashboard' && currentViewScope !== 'kpi'" class="relative hidden sm:block">
-               <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
-               <input type="text" placeholder="Rechercher..." v-model="searchQuery" class="bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 text-sm rounded-lg pl-9 pr-4 py-2 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 w-32 lg:w-56 placeholder-slate-400 transition-all shadow-sm">
-            </div>
-
-            <button v-if="['active', 'dashboard'].includes(currentViewScope)" @click="showNewProjectModal = true" class="hidden sm:flex bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all items-center gap-2 shadow-md shadow-brand-600/20 active:scale-95">
-              <i data-lucide="plus" class="w-4 h-4"></i> <span class="hidden lg:inline">Nouveau Projet</span>
-              <span class="lg:hidden">Nouveau</span>
+            <div class="text-[10px] font-bold text-app-textSecondary mb-2 mt-6 px-3 tracking-wider uppercase">Organisation</div>
+            
+            <button onclick="app.navigate('team')" id="nav-team" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100"></i> Équipe
             </button>
-
-            <button v-if="currentViewScope === 'team'" @click="openUserModal()" class="hidden sm:flex bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all items-center gap-2 shadow-md shadow-brand-600/20 active:scale-95">
-              <i data-lucide="user-plus" class="w-4 h-4"></i> <span>Ajouter Membre</span>
+            <button onclick="app.navigate('archive')" id="nav-archive" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="archive" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100"></i> Archives
             </button>
-          </div>
+        </nav>
+        
+        <!-- USER SWITCHER BUTTON -->
+        <div class="p-4 border-t border-app-border bg-app-panel/30 cursor-pointer hover:bg-app-hover transition-colors" onclick="app.openUserSwitcher()">
+            <button id="sidebar-user" class="w-full flex items-center px-2 py-1.5 rounded-md text-sm text-app-textSecondary hover:text-white transition-colors group">
+                <!-- Rendu dynamique JS -->
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col relative min-w-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')]">
+        
+        <!-- TOPBAR -->
+        <header class="h-16 border-b border-app-border glass-panel flex items-center justify-between px-6 z-10 sticky top-0">
+            <div class="flex items-center">
+                <button class="md:hidden mr-4 text-app-textSecondary hover:text-white">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+                <div class="text-sm font-medium flex items-center">
+                    <span class="text-app-textSecondary" id="breadcrumb-root">DT Prox</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 mx-2 text-app-border"></i>
+                    <span id="current-view-title" class="text-white font-semibold">Vue d'ensemble</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button onclick="app.toggleCommandPalette()" class="flex items-center bg-app-bg border border-app-border hover:border-app-accent/50 rounded-lg px-3 py-1.5 text-sm text-app-textSecondary transition-all w-56 shadow-sm group">
+                    <i data-lucide="search" class="w-4 h-4 mr-2 opacity-50 group-hover:text-app-accent transition-colors"></i>
+                    <span class="flex-1 text-left opacity-70">Rechercher...</span>
+                    <kbd class="hidden sm:inline-block text-[10px] font-mono bg-app-panel border border-app-border px-1.5 py-0.5 rounded text-app-textSecondary">⌘K</kbd>
+                </button>
+                <button onclick="app.openCreateProjectModal()" class="w-8 h-8 rounded-full bg-app-accent hover:bg-app-accent/80 flex items-center justify-center text-white shadow-lg shadow-app-accent/20 transition-all" title="Créer un projet">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+            </div>
         </header>
 
-        <!-- MAIN SCROLL AREA -->
-        <main ref="scrollContainer" class="flex-1 overflow-auto p-4 sm:p-8 relative lg:overflow-auto h-auto lg:h-full">
-          
-          <div v-if="loading" class="grid grid-cols-1 md:grid-cols-3 gap-6 p-2">
-             <div v-for="i in 6" class="h-64 bg-slate-200 dark:bg-slate-800 rounded-xl animate-pulse-custom"></div>
-          </div>
-
-          <div v-else class="pb-20 lg:pb-0 max-w-7xl mx-auto"> 
-            
-            <!-- VIEW: DASHBOARD -->
-            <div v-if="currentViewScope === 'dashboard'">
-               <div class="flex flex-col gap-8">
-                  
-                  <!-- Welcome Banner -->
-                  <div class="flex items-end justify-between border-b border-slate-200 dark:border-slate-800 pb-6">
-                     <div>
-                        <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Bonjour, {{ currentUser.name ? currentUser.name.split(' ')[0] : 'Invité' }} 👋</h2>
-                        <p class="text-slate-500 dark:text-slate-400 text-base">Voici la synthèse de l'activité. <span class="hidden sm:inline">Vous avez <strong>{{ kpiData.tasksPending }} tâches</strong> en cours.</span></p>
-                     </div>
-                     <div class="hidden sm:block text-right">
-                        <div class="inline-flex items-center gap-3 bg-white dark:bg-[#1e293b] px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
-                           <div class="text-right">
-                              <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Progression Globale</p>
-                              <p class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{{ kpiData.globalProgress }}%</p>
-                           </div>
-                           <!-- REAL CIRCULAR GAUGE -->
-                           <div class="relative h-12 w-12 flex items-center justify-center">
-                              <svg class="h-full w-full -rotate-90 transform" viewBox="0 0 36 36">
-                                <path class="text-slate-100 dark:text-slate-700" stroke-width="4" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                <path class="text-brand-500 transition-all duration-1000 ease-out" :stroke-dasharray="100 + ', ' + 100" :stroke-dashoffset="100 - kpiData.globalProgress" stroke-width="4" stroke="currentColor" fill="none" stroke-linecap="round" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                              </svg>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-
-                  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                     
-                     <!-- COL 1 & 2: TOP PRIORITY PROJECTS -->
-                     <div class="lg:col-span-2 space-y-5">
-                        <div class="flex items-center gap-2 mb-2">
-                           <div class="p-1.5 bg-rose-100 dark:bg-rose-900/30 rounded-md text-rose-600 dark:text-rose-400"><i data-lucide="flame" class="w-5 h-5"></i></div>
-                           <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Top 3 Priorités</h3>
-                        </div>
-
-                        <div v-for="project in dashboardData.topProjects" :key="project.id" 
-                             @click="openProjectDetails(project)"
-                             class="group bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700/60 hover:border-brand-400 dark:hover:border-brand-500 rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg relative overflow-hidden">
-                           
-                           <!-- Rank Badge -->
-                           <div class="absolute top-0 right-0 bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-slate-100 dark:border-slate-700/50">
-                              #{{ project.rank || '?' }}
-                           </div>
-
-                           <div class="flex items-start gap-5">
-                              <div class="text-4xl bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700">{{ project.emoji }}</div>
-                              <div class="flex-1 min-w-0">
-                                 <div class="flex items-center gap-2 mb-2">
-                                    <span :class="getPriorityClass(project.priorite)" class="px-2.5 py-0.5 rounded-full text-[10px] border font-semibold">{{ project.priorite }}</span>
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] border bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 font-medium">{{ project.status }}</span>
-                                 </div>
-                                 <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">{{ project.nom }}</h4>
-                                 <div class="flex items-center gap-6 text-sm text-slate-500 dark:text-slate-400 mt-2">
-                                    <span class="flex items-center gap-1.5"><i data-lucide="user" class="w-3.5 h-3.5"></i> {{ project.owner }}</span>
-                                    <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> {{ formatDate(project.deadline) }}</span>
-                                    <span class="flex items-center gap-1.5 hidden sm:flex"><i data-lucide="list-checks" class="w-3.5 h-3.5"></i> {{ getTasksByProject(project.id).filter(t => t.status!=='Terminé').length }} restants</span>
-                                 </div>
-                              </div>
-                              <div class="hidden sm:block text-right self-center pl-4 border-l border-slate-100 dark:border-slate-700/50">
-                                 <div class="text-3xl font-black text-slate-900 dark:text-white">{{ project.progress }}%</div>
-                              </div>
-                           </div>
-                           
-                           <!-- Progress Bar -->
-                           <div class="mt-5 h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                              <div class="h-full bg-gradient-to-r from-rose-500 to-amber-500" :style="{ width: project.progress + '%' }"></div>
-                           </div>
-                        </div>
-                        
-                        <div v-if="dashboardData.topProjects.length === 0" class="text-center py-12 bg-white dark:bg-[#1e293b] rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-500">
-                           Aucun projet prioritaire détecté. Commencez par en créer un !
-                        </div>
-                     </div>
-
-                     <!-- COL 3: URGENT TASKS -->
-                     <div class="space-y-6">
-                        
-                        <!-- Overdue Tasks -->
-                        <div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-                           <div class="bg-rose-50 dark:bg-rose-900/10 px-5 py-3 border-b border-rose-100 dark:border-rose-900/20 flex justify-between items-center">
-                              <h3 class="text-sm font-bold text-rose-700 dark:text-rose-400 flex items-center gap-2"><i data-lucide="alert-circle" class="w-4 h-4"></i> Urgences ({{ dashboardData.allOverdue.length }})</h3>
-                           </div>
-                           <div class="divide-y divide-slate-100 dark:divide-slate-800 max-h-[350px] overflow-y-auto">
-                              <div v-for="task in dashboardData.allOverdue" :key="task.id" class="p-4 hover:bg-slate-50 dark:hover:bg-[#252525] transition-colors cursor-pointer group" @click="openProjectDetails(projects.find(p=>p.id===task.project_id))">
-                                 <div class="flex justify-between items-start mb-1.5">
-                                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 line-clamp-1 w-2/3 uppercase tracking-wide">{{ projects.find(p=>p.id===task.project_id)?.nom }}</span>
-                                    <span class="text-[10px] font-bold text-rose-600 bg-rose-100 dark:bg-rose-900/30 dark:text-rose-300 px-2 py-0.5 rounded-full">{{ formatDateShort(task.due_date) }}</span>
-                                 </div>
-                                 <p class="text-sm text-slate-800 dark:text-slate-200 font-medium line-clamp-2 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">{{ task.titre }}</p>
-                                 <div class="mt-3 flex items-center justify-between">
-                                    <div class="flex items-center gap-2"><img :src="getUserAvatar(task.assignee)" class="w-5 h-5 rounded-full ring-1 ring-white dark:ring-slate-700"> <span class="text-xs text-slate-500">{{ task.assignee }}</span></div>
-                                 </div>
-                              </div>
-                              <div v-if="dashboardData.allOverdue.length === 0" class="p-8 text-center text-sm text-slate-500 dark:text-slate-400 italic">
-                                 Tout est à jour. Bravo ! 🎉
-                              </div>
-                           </div>
-                        </div>
-
-                        <!-- My Upcoming Tasks -->
-                        <div class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-                           <div class="bg-slate-50 dark:bg-[#252525] px-5 py-3 border-b border-slate-200 dark:border-slate-700">
-                              <h3 class="text-sm font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2"><i data-lucide="calendar-clock" class="w-4 h-4 text-brand-500"></i> Ma Semaine</h3>
-                           </div>
-                           <div class="divide-y divide-slate-100 dark:divide-slate-800">
-                              <div v-for="task in dashboardData.myTasks" :key="task.id" class="p-4 hover:bg-slate-50 dark:hover:bg-[#252525] transition-colors flex items-start gap-3">
-                                 <div class="mt-1.5 w-2 h-2 rounded-full bg-brand-500 shrink-0"></div>
-                                 <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{{ task.titre }}</p>
-                                    <p class="text-[11px] text-slate-500 truncate mt-0.5">{{ formatDateShort(task.due_date) }} • {{ projects.find(p=>p.id===task.project_id)?.nom }}</p>
-                                 </div>
-                              </div>
-                               <div v-if="dashboardData.myTasks.length === 0" class="p-8 text-center text-sm text-slate-500 italic">
-                                 Rien de prévu cette semaine.
-                              </div>
-                           </div>
-                        </div>
-
-                     </div>
-                  </div>
-               </div>
+        <!-- DYNAMIC CONTENT CONTAINER -->
+        <div id="app-content" class="flex-1 overflow-y-auto p-6 md:p-8 relative">
+            <div id="initial-loader" class="absolute inset-0 flex flex-col items-center justify-center z-50">
+                <div class="w-12 h-12 relative flex items-center justify-center">
+                    <div class="absolute inset-0 border-t-2 border-app-accent rounded-full animate-spin"></div>
+                    <i data-lucide="cpu" class="w-5 h-5 text-app-accent"></i>
+                </div>
+                <p class="text-sm text-app-textSecondary mt-4 font-medium tracking-wide">Initialisation DT Prox...</p>
             </div>
-
-            <!-- VIEW: REVIEW (COCKPIT) -->
-            <div v-if="viewType === 'review' && currentViewScope !== 'dashboard' && currentViewScope !== 'team' && currentViewScope !== 'kpi'" class="h-full flex flex-col">
-               
-               <div class="hidden sm:flex items-start gap-4 mb-6 p-5 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm">
-                  <div class="p-3 bg-brand-100 dark:bg-brand-500/20 rounded-xl shrink-0"><i data-lucide="sliders" class="w-6 h-6 text-brand-600 dark:text-brand-400"></i></div>
-                  <div>
-                     <h3 class="text-slate-900 dark:text-white font-bold text-lg">Réunion de Pilotage</h3>
-                     <p class="text-sm text-slate-500 dark:text-slate-400 max-w-2xl mt-1">
-                        Utilisez les poignées <i data-lucide="grip-vertical" class="w-3 h-3 inline"></i> pour définir l'ordre de priorité global. <br>
-                        Les modifications sont répercutées instantanément sur tous les affichages.
-                     </p>
-                     <button @click="exportToCSV" class="mt-3 text-xs flex items-center gap-1.5 text-brand-600 dark:text-brand-400 hover:underline font-medium bg-brand-50 dark:bg-brand-900/20 px-3 py-1.5 rounded-full w-fit"><i data-lucide="download" class="w-3 h-3"></i> Exporter le compte-rendu (CSV)</button>
-                  </div>
-               </div>
-
-               <div class="sm:hidden mb-4 px-1 flex justify-between items-center">
-                  <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Glissez pour prioriser <i data-lucide="arrow-down-up" class="w-3 h-3 inline ml-1"></i></p>
-                  <button @click="exportToCSV" class="text-xs text-brand-600"><i data-lucide="download" class="w-4 h-4"></i></button>
-               </div>
-
-               <!-- DESKTOP TABLE -->
-               <div class="hidden sm:block bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden flex-1 overflow-y-auto shadow-sm">
-                  <table class="w-full text-left text-sm review-table">
-                     <thead class="bg-slate-50 dark:bg-[#0f172a] text-slate-500 dark:text-slate-400 font-semibold text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700">
-                        <tr>
-                           <th class="px-4 py-3 w-12 text-center bg-slate-50 dark:bg-[#0f172a]"></th>
-                           <th class="px-4 py-3 min-w-[280px] bg-slate-50 dark:bg-[#0f172a]">Projet</th>
-                           <th class="px-4 py-3 w-40 bg-slate-50 dark:bg-[#0f172a]">Propriétaire</th>
-                           <th class="px-4 py-3 w-36 bg-slate-50 dark:bg-[#0f172a]">Deadline</th>
-                           <th class="px-4 py-3 w-32 bg-slate-50 dark:bg-[#0f172a]">Priorité</th>
-                           <th class="px-4 py-3 w-32 bg-slate-50 dark:bg-[#0f172a]">Statut</th>
-                           <th class="px-4 py-3 min-w-[250px] bg-slate-50 dark:bg-[#0f172a]">Décision Séance</th>
-                        </tr>
-                     </thead>
-                     <tbody :ref="el => { if(el) initProjectSortable(el) }" class="divide-y divide-slate-100 dark:divide-slate-800">
-                        <tr v-for="(project, index) in filteredProjects" :key="project.id" :data-id="project.id" class="hover:bg-slate-50 dark:hover:bg-[#252525] group transition-colors">
-                           <td class="px-4 py-3 text-center align-top pt-4">
-                              <div class="project-drag-handle w-8 h-8 mx-auto flex items-center justify-center rounded cursor-move hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                                <i data-lucide="grip-vertical" class="w-4 h-4 text-slate-400 dark:text-slate-500"></i>
-                              </div>
-                           </td>
-                           <td class="px-4 py-3 align-top">
-                              <div class="flex items-center gap-3 mb-1">
-                                 <button @click="openProjectDetails(project)" class="p-1 hover:bg-brand-100 dark:hover:bg-brand-500/20 rounded text-brand-600 dark:text-brand-400 transition-colors"><i data-lucide="maximize-2" class="w-4 h-4"></i></button>
-                                 <span class="text-xl">{{ project.emoji }}</span>
-                                 <input v-model="project.nom" @change="updateProject(project)" class="review-input font-bold text-slate-900 dark:text-white text-sm" />
-                                 <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i>
-                              </div>
-                              <div class="pl-8 opacity-80 transition-opacity"><input v-model="project.description" @change="updateProject(project)" class="review-input text-xs text-slate-500 dark:text-slate-400 italic" placeholder="Description..." /></div>
-                           </td>
-                           <td class="px-4 py-3 align-top"><select v-model="project.owner" @change="updateProject(project)" class="review-input bg-transparent text-slate-700 dark:text-slate-300 text-xs py-1"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select></td>
-                           <td class="px-4 py-3 align-top"><input type="date" :value="toInputDate(project.deadline)" @input="e => { project.deadline = new Date(e.target.value); updateProject(project); }" class="review-input text-xs font-mono py-1" :class="isOverdueProject(project) ? 'text-rose-600 dark:text-rose-400 font-bold border-rose-200 dark:border-rose-900/50 bg-rose-50 dark:bg-rose-900/10' : 'text-slate-500 dark:text-slate-400'"></td>
-                           <td class="px-4 py-3 align-top"><select v-model="project.priorite" @change="updateProject(project)" class="review-input text-xs font-bold py-1 border" :class="{'text-rose-600 border-rose-200 bg-rose-50 dark:text-rose-400 dark:border-rose-900/50 dark:bg-rose-900/10': project.priorite === 'Haute', 'text-amber-600 border-amber-200 bg-amber-50 dark:text-amber-400 dark:border-amber-900/50 dark:bg-amber-900/10': project.priorite === 'Moyenne', 'text-brand-600 border-brand-200 bg-brand-50 dark:text-brand-400 dark:border-brand-900/50 dark:bg-brand-900/10': project.priorite === 'Basse'}"><option value="Haute" class="bg-white dark:bg-[#202020]">🔥 Haute</option><option value="Moyenne" class="bg-white dark:bg-[#202020]">⚡ Moyenne</option><option value="Basse" class="bg-white dark:bg-[#202020]">☕ Basse</option></select></td>
-                           <td class="px-4 py-3 align-top"><select v-model="project.status" @change="updateProject(project)" class="review-input text-xs font-medium py-1 rounded-full text-center" :class="{'text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-900/20': project.status === 'Terminé', 'text-amber-700 bg-amber-50 dark:text-amber-400 dark:bg-amber-900/20': project.status === 'En cours', 'text-slate-500 bg-slate-100 dark:text-slate-400 dark:bg-slate-700/20': project.status === 'En pause', 'text-rose-700 bg-rose-50 dark:text-rose-400 dark:bg-rose-900/20': project.status === 'Annulé'}"><option value="En cours" class="bg-white dark:bg-[#202020]">En cours</option><option value="Terminé" class="bg-white dark:bg-[#202020]">Terminé</option><option value="En pause" class="bg-white dark:bg-[#202020]">En pause</option><option value="Annulé" class="bg-white dark:bg-[#202020]">Annulé</option></select></td>
-                           <td class="px-4 py-3 align-top"><textarea v-model="project.meeting_notes" @change="updateProject(project)" placeholder="Note de décision..." rows="1" class="review-input text-xs text-brand-700 dark:text-brand-200 bg-brand-50 dark:bg-brand-900/10 border-brand-100 dark:border-brand-900/20 placeholder-brand-300 dark:placeholder-brand-500/50 resize-none focus:h-20 focus:absolute focus:z-20 focus:w-64 focus:shadow-xl"></textarea></td>
-                        </tr>
-                     </tbody>
-                  </table>
-               </div>
-               
-               <!-- MOBILE REVIEW CARDS (FIXED CLICKABLE AREA) -->
-               <div class="sm:hidden space-y-4" :ref="el => { if(el) initProjectSortable(el) }">
-                  <div v-for="(project, index) in filteredProjects" :key="project.id" :data-id="project.id" class="bg-white dark:bg-[#1e293b] rounded-xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
-                     <div class="flex items-start justify-between mb-4">
-                        <div class="flex items-center gap-3">
-                           <div class="text-3xl">{{ project.emoji }}</div>
-                           <div class="flex-1">
-                              <button @click="openProjectDetails(project)" class="font-bold text-slate-900 dark:text-white text-lg text-left leading-tight active:text-brand-500 transition-colors flex items-center gap-2">
-                                {{ project.nom }}
-                                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
-                              </button>
-                           </div>
-                        </div>
-                        <div class="project-drag-handle p-3 -mr-2 text-slate-400"><i data-lucide="grip-vertical" class="w-7 h-7"></i></div>
-                     </div>
-                     <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div><div class="mobile-label">Priorité</div><select v-model="project.priorite" @change="updateProject(project)" class="w-full bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-slate-200 dark:border-slate-700 h-12 sm:h-10"><option value="Haute">🔥 Haute</option><option value="Moyenne">⚡ Moyenne</option><option value="Basse">☕ Basse</option></select></div>
-                        <div><div class="mobile-label">Statut</div><select v-model="project.status" @change="updateProject(project)" class="w-full bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-slate-200 dark:border-slate-700 h-12 sm:h-10"><option value="En cours">En cours</option><option value="Terminé">Terminé</option><option value="En pause">En pause</option><option value="Annulé">Annulé</option></select></div>
-                     </div>
-                     <div class="mb-4"><div class="mobile-label">Deadline</div><input type="date" :value="toInputDate(project.deadline)" @input="e => { project.deadline = new Date(e.target.value); updateProject(project); }" class="w-full bg-slate-50 dark:bg-[#0f172a] text-slate-900 dark:text-white text-base sm:text-sm rounded-lg p-2 border border-slate-200 dark:border-slate-700 h-12 sm:h-10"></div>
-                     <div><div class="mobile-label">Notes Décision</div><textarea v-model="project.meeting_notes" @change="updateProject(project)" placeholder="Notes de séance..." rows="2" class="w-full bg-brand-50 dark:bg-brand-900/20 text-brand-900 dark:text-brand-200 text-base sm:text-sm rounded-lg p-3 border border-brand-100 dark:border-brand-900/30 resize-none"></textarea></div>
-                  </div>
-               </div>
-            </div>
-
-            <!-- VIEW: GRID -->
-            <div v-if="viewType === 'grid' && currentViewScope !== 'dashboard' && currentViewScope !== 'team' && currentViewScope !== 'kpi'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
-              <div v-for="project in filteredProjects" :key="project.id" :data-id="project.id"
-                  @click="openProjectDetails(project)"
-                  class="group bg-white dark:bg-[#1e293b] border-l-4 border-y border-r border-slate-200 dark:border-slate-800 hover:border-r-brand-300 dark:hover:border-r-brand-600 rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg relative overflow-hidden flex flex-col h-auto min-h-[18rem] active:scale-[0.99]"
-                  :class="{
-                     'border-l-emerald-500': project.status === 'Terminé',
-                     'border-l-amber-500': project.status === 'En cours',
-                     'border-l-slate-400': project.status === 'En pause',
-                     'border-l-rose-500': project.status === 'Annulé'
-                  }">
-                
-                <div class="flex justify-between items-start mb-4">
-                  <div class="w-14 h-14 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-3xl shadow-inner border border-slate-100 dark:border-slate-700">{{ project.emoji || '📁' }}</div>
-                  
-                  <!-- IMPROVED STATUS & PRIO ALIGNMENT + OPEN BUTTON -->
-                  <div class="flex items-center gap-2">
-                     <span :class="getPriorityClass(project.priorite)" class="text-[10px] uppercase font-bold px-2 py-1 rounded-md border shadow-sm">{{ project.priorite }}</span>
-                     <span :class="getProjectStatusClass(project.status)" class="px-2 py-1 rounded-md text-[10px] font-medium border shadow-sm">{{ project.status }}</span>
-                     
-                     <!-- Open Button Moved Here -->
-                     <button @click.stop="openProjectDetails(project)" class="p-1 text-slate-400 hover:text-brand-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors ml-1" title="Ouvrir la fiche">
-                        <i data-lucide="maximize-2" class="w-4 h-4"></i>
-                     </button>
-                  </div>
-                </div>
-
-                <div class="mb-2">
-                  <h3 class="text-slate-900 dark:text-white font-bold text-lg leading-tight group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-2">
-                     {{ project.nom }}
-                     <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i>
-                  </h3>
-                  <!-- Priority moved below title -->
-                  <div class="flex items-center gap-2 mt-1.5">
-                     <span :class="getPriorityClass(project.priorite)" class="text-[10px] font-bold px-1.5 py-0.5 rounded border flex items-center gap-1">
-                        <i data-lucide="flag" class="w-3 h-3"></i> {{ project.priorite }}
-                     </span>
-                  </div>
-                </div>
-                
-                <div class="flex flex-wrap gap-1 mt-2 mb-4">
-                   <span v-for="tag in project.tags" :key="tag" class="px-2 py-0.5 bg-brand-50 dark:bg-brand-900/20 text-brand-700 dark:text-brand-300 text-[10px] rounded-full border border-brand-100 dark:border-brand-900/30 font-medium">{{ tag }}</span>
-                </div>
-
-                <div class="flex items-center gap-2 mb-5 pb-4 border-b border-slate-100 dark:border-slate-800">
-                   <img :src="getUserAvatar(project.owner)" class="w-6 h-6 rounded-full border border-slate-100 dark:border-slate-600 shadow-sm">
-                   <p class="text-xs text-slate-600 dark:text-slate-400 font-semibold">{{ project.owner }}</p>
-                </div>
-
-                <div class="text-xs text-slate-500 dark:text-slate-400 mb-4 line-clamp-3 leading-relaxed opacity-90 flex-1" v-html="stripMarkdown(project.description) || 'Aucune description...'"></div>
-
-                <div class="mt-auto">
-                  <div class="flex justify-between text-[10px] text-slate-400 mb-1.5 font-bold uppercase tracking-wide"><span>Avancement</span><span>{{ project.progress }}%</span></div>
-                  <div class="h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-brand-500 to-indigo-600 transition-all duration-500" :style="{ width: project.progress + '%' }"></div></div>
-                </div>
-              </div>
-
-              <!-- Add Card -->
-              <div @click="showNewProjectModal = true" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-5 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:border-brand-400 dark:hover:border-brand-500 hover:text-brand-500 dark:hover:text-brand-400 hover:bg-brand-50/50 dark:hover:bg-[#1e293b] cursor-pointer transition-all min-h-[18rem]">
-                 <div class="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><i data-lucide="plus" class="w-8 h-8 text-slate-400"></i></div><span class="text-sm font-bold">Créer un projet</span>
-              </div>
-            </div>
-
-            <!-- VIEW: LIST -->
-            <div v-if="viewType === 'list' && currentViewScope !== 'dashboard' && currentViewScope !== 'team' && currentViewScope !== 'kpi'" class="bg-white dark:bg-[#1e293b] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-               <div class="overflow-x-auto">
-                 <table class="w-full text-left text-sm whitespace-nowrap">
-                   <thead class="bg-slate-50 dark:bg-[#252525] text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700 font-medium text-xs uppercase tracking-wider">
-                     <tr><th class="px-6 py-4 w-12"></th><th class="px-6 py-4">Nom du projet</th><th class="px-6 py-4">État</th><th class="px-6 py-4">Propriétaire</th><th class="px-6 py-4">Priorité</th><th class="px-6 py-4">Progression</th><th class="px-6 py-4 text-right">Deadline</th></tr>
-                   </thead>
-                   <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
-                     <tr v-for="project in filteredProjects" :key="project.id" :data-id="project.id" @click="openProjectDetails(project)" class="hover:bg-slate-50 dark:hover:bg-[#252525] cursor-pointer transition-colors group">
-                       <td class="pl-6 py-4 text-2xl">{{ project.emoji || '📁' }}</td>
-                       <td class="px-6 py-4 font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400">
-                          {{ project.nom }} <i v-if="hasDateConflict(project)" data-lucide="alert-triangle" class="inline w-3 h-3 text-amber-500 ml-1"></i>
-                       </td>
-                       <td class="px-6 py-4"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border" :class="getProjectStatusClass(project.status)">{{ project.status }}</span></td>
-                       <td class="px-6 py-4 text-slate-600 dark:text-slate-300 flex items-center gap-2"><img :src="getUserAvatar(project.owner)" class="w-6 h-6 rounded-full border border-slate-200 dark:border-slate-600">{{ project.owner }}</td>
-                       <td class="px-6 py-4"><span :class="getPriorityClass(project.priorite)" class="px-2.5 py-1 rounded-md border text-[10px] font-bold tracking-wide shadow-sm">{{ project.priorite }}</span></td>
-                       <td class="px-6 py-4 w-48"><div class="flex items-center gap-3"><span class="text-xs font-mono text-slate-500 dark:text-slate-400 w-8 text-right">{{ project.progress }}%</span><div class="h-2 flex-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div class="h-full bg-brand-500" :style="{ width: project.progress + '%' }"></div></div></div></td>
-                       <td class="px-6 py-4 text-right text-slate-500 dark:text-slate-400 text-xs font-mono">{{ formatDate(project.deadline) }}</td>
-                     </tr>
-                   </tbody>
-                 </table>
-               </div>
-               <div class="sm:hidden space-y-3 p-4">
-                  <div v-for="project in filteredProjects" :key="project.id" @click="openProjectDetails(project)" class="bg-white dark:bg-[#1e293b] rounded-xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 active:scale-[0.98] transition-transform">
-                     <div class="text-3xl shrink-0">{{ project.emoji || '📁' }}</div>
-                     <div class="flex-1 min-w-0">
-                        <h4 class="font-bold text-slate-900 dark:text-white truncate">{{ project.nom }}</h4>
-                        <div class="flex items-center gap-2 text-xs text-slate-500 mt-1"><span class="px-2 py-0.5 rounded border" :class="getProjectStatusClass(project.status)">{{ project.status }}</span><span>•</span><span :class="{'text-rose-500 font-bold': isOverdueProject(project)}">{{ formatDateShort(project.deadline) }}</span></div>
-                     </div>
-                     <div class="shrink-0 flex flex-col items-end gap-1"><span :class="getPriorityClass(project.priorite)" class="px-2 py-0.5 rounded text-[10px] border">{{ project.priorite }}</span><span class="text-xs font-mono text-slate-400">{{ project.progress }}%</span></div>
-                  </div>
-               </div>
-            </div>
-
-          </div>
-        </main>
-      </div>
-
-      <!-- MODALS -->
-      <transition name="fade">
-        <div v-if="activeProject" class="fixed inset-0 bg-black/60 backdrop-blur-[2px] z-[200] flex justify-center items-center p-0 sm:p-4 sm:justify-end" @click.self="activeProject = null">
-          <div class="w-full h-full sm:h-full sm:max-w-3xl bg-white dark:bg-[#1e293b] border-l border-slate-200 dark:border-slate-700 shadow-2xl flex flex-col transform transition-transform duration-300">
-            <div class="h-14 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center px-4 bg-slate-50 dark:bg-[#0f172a] shrink-0">
-               <div class="flex gap-2 text-slate-500 dark:text-slate-400 text-xs items-center truncate">
-                 <button @click="activeProject = null" class="flex items-center gap-1 hover:text-slate-900 dark:hover:text-white"><i data-lucide="chevron-left" class="w-4 h-4"></i> Retour</button>
-               </div>
-               <button @click="activeProject = null" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"><i data-lucide="x" class="w-6 h-6"></i></button>
-            </div>
-            
-            <div class="flex-1 overflow-y-auto p-5 sm:p-8 sm:px-12 bg-slate-50 dark:bg-[#0f172a]">
-              <!-- Project Header Info -->
-              <div class="mb-8">
-                 <div class="text-6xl mb-4 text-center sm:text-left">{{ activeProject.emoji || '📁' }}</div>
-                 <h1 class="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white mb-6 leading-tight text-center sm:text-left">{{ activeProject.nom }}</h1>
-                 
-                 <!-- NEW: STATUS & PRIORITY PROMINENT BADGES - UPDATED WITH TAGS -->
-                 <div class="flex flex-wrap items-center gap-3 mb-8 justify-center sm:justify-start">
-                     <!-- Big Status Select -->
-                     <div class="relative group">
-                         <select v-model="activeProject.status" @change="updateProject(activeProject)" 
-                                 class="appearance-none pl-4 pr-10 py-2 rounded-full font-bold text-sm cursor-pointer transition-all shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#f8fafc] dark:focus:ring-offset-[#1e293b]"
-                                 :class="getProjectStatusClass(activeProject.status)">
-                             <option value="En cours" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">En cours</option>
-                             <option value="Terminé" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">Terminé</option>
-                             <option value="En pause" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">En pause</option>
-                             <option value="Annulé" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">Annulé</option>
-                         </select>
-                         <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-50 pointer-events-none group-hover:opacity-80"></i>
-                     </div>
-                     
-                     <!-- Priority Editable Dropdown -->
-                     <div class="relative group">
-                        <select v-model="activeProject.priorite" @change="updateProject(activeProject)"
-                           class="appearance-none px-3 py-2 rounded-full text-xs font-bold border flex items-center gap-1.5 shadow-sm cursor-pointer pr-8"
-                           :class="getPriorityClass(activeProject.priorite)">
-                           <option value="Haute" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">🔥 Haute</option>
-                           <option value="Moyenne" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">⚡ Moyenne</option>
-                           <option value="Basse" class="bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white">☕ Basse</option>
-                        </select>
-                         <i data-lucide="chevron-down" class="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 opacity-50 pointer-events-none"></i>
-                     </div>
-                     
-                     <!-- OPEN BUTTON IN HEADER -->
-                     <button @click="openProjectDetails(activeProject)" class="hidden sm:flex items-center justify-center p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 hover:text-brand-600 transition-colors" title="Rafraîchir / Ouvrir">
-                        <i data-lucide="maximize-2" class="w-4 h-4"></i>
-                     </button>
-                 </div>
-
-                 <!-- FUNC 1: TAGS EDIT -->
-                 <div class="mb-6 flex flex-wrap gap-2 justify-center sm:justify-start">
-                    <span v-for="(tag, i) in activeProject.tags" :key="i" class="px-3 py-1 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 text-xs rounded-full border border-brand-200 dark:border-brand-800 flex items-center gap-1">
-                       {{ tag }} <button @click="removeTag(activeProject, i)" class="hover:text-brand-900 dark:hover:text-white"><i data-lucide="x" class="w-3 h-3"></i></button>
-                    </span>
-                    <input @keyup.enter="addTag(activeProject, $event)" placeholder="+ Tag" class="px-3 py-1 bg-slate-100 dark:bg-[#2c2c2c] text-xs rounded-full border-none outline-none w-20 focus:w-32 transition-all text-slate-900 dark:text-white placeholder-slate-400">
-                 </div>
-
-                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm bg-white dark:bg-[#1e293b] p-4 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                    <div class="flex items-center justify-between sm:justify-start gap-2 border-b sm:border-b-0 border-slate-100 dark:border-slate-800 pb-2 sm:pb-0">
-                       <span class="text-slate-400 flex items-center gap-2"><i data-lucide="user" class="w-4 h-4"></i> Owner</span>
-                       <span class="font-medium text-slate-900 dark:text-white flex items-center gap-2"><img :src="getUserAvatar(activeProject.owner)" class="w-5 h-5 rounded-full"> {{ activeProject.owner }}</span>
-                    </div>
-                    <div class="flex items-center justify-between sm:justify-start gap-2 border-b sm:border-b-0 border-slate-100 dark:border-slate-800 pb-2 sm:pb-0">
-                       <span class="text-slate-400 flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4"></i> Fin</span>
-                       <span class="font-mono text-slate-900 dark:text-white">{{ formatDate(activeProject.deadline) }}</span>
-                    </div>
-                 </div>
-              </div>
-
-              <!-- Desc -->
-              <div class="mb-10">
-                 <div class="flex justify-between items-center mb-3">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Contexte</h3>
-                    <button @click="toggleEditDesc" class="text-xs text-brand-600 dark:text-brand-400 font-medium hover:underline">{{ isEditingDesc ? 'Terminer' : 'Modifier' }}</button>
-                 </div>
-                 <div class="bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-[#333] rounded-xl p-5 text-slate-700 dark:text-slate-300 min-h-[100px] shadow-sm">
-                    <div v-if="!isEditingDesc" @dblclick="isEditingDesc = true" class="prose prose-invert prose-sm max-w-none" v-html="renderMarkdown(activeProject.description) || '<p class=\'text-slate-400 italic\'>Aucune description. Double-cliquez pour ajouter du contenu...</p>'"></div>
-                    <textarea v-else ref="descInput" v-model="activeProject.description" class="w-full bg-transparent border-none outline-none resize-none text-base sm:text-sm leading-relaxed h-full min-h-[150px] text-slate-900 dark:text-slate-200" @blur="isEditingDesc = false"></textarea>
-                 </div>
-              </div>
-
-              <!-- Tasks -->
-              <div class="border-t border-slate-200 dark:border-slate-800 pt-8 pb-10">
-                <div class="flex justify-between items-center mb-6"><h3 class="text-lg font-bold text-slate-900 dark:text-white">Tâches</h3><span class="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs px-2 py-1 rounded-full">{{ getTasksByProject(activeProject.id).length }}</span></div>
-                
-                <!-- ERGO 2: BATCH TASK ENTRY (Refocus after add) -->
-                <div class="flex flex-col sm:flex-row gap-3 mb-6">
-                   <div class="flex gap-2 flex-1 bg-white dark:bg-[#1e293b] p-1 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
-                      <button @click="addTask" class="bg-brand-600 text-white w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="plus" class="w-5 h-5"></i></button>
-                      <input ref="taskInputRef" v-model="newTaskTitle" @keyup.enter="addTask" type="text" placeholder="Nouvelle tâche..." class="flex-1 bg-transparent text-base sm:text-sm px-2 outline-none text-slate-900 dark:text-white placeholder-slate-400">
-                   </div>
-                   <div class="flex gap-2">
-                      <input type="date" v-model="newTaskDate" class="flex-1 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-300 outline-none px-3 h-12 sm:h-auto font-mono">
-                      <select v-model="newTaskAssignee" class="flex-1 bg-white dark:bg-[#1e293b] border border-slate-200 dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-300 outline-none px-3 h-12 sm:h-auto"><option v-for="user in teamMembers" :value="user.name">{{ user.name }}</option></select>
-                   </div>
-                </div>
-
-                <div class="space-y-8">
-                   <div v-for="status in ['À faire', 'En cours', 'Terminé']" :key="status">
-                     <div class="flex items-center gap-3 mb-3 select-none">
-                        <span class="px-2.5 py-1 rounded-md text-xs font-bold tracking-wide uppercase" :class="getStatusColor(status)">{{ status }}</span>
-                        <div class="h-[1px] bg-slate-200 dark:bg-slate-800 flex-1"></div>
-                     </div>
-                     <div :ref="el => { if(el) initSortable(el, status) }" class="space-y-2 min-h-[20px]" :data-status="status">
-                        <div v-for="task in getTasksByStatus(status)" :key="task.id" :data-id="task.id" class="drag-handle bg-white dark:bg-[#1e293b] p-3 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm flex items-start gap-3 active:scale-[0.98] transition-transform">
-                           <button @click.stop="cycleStatus(task)" class="mt-0.5 w-6 h-6 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center shrink-0" :class="task.status === 'Terminé' ? 'bg-brand-500 border-brand-500' : 'border-slate-300 dark:border-slate-600'"><i v-if="task.status === 'Terminé'" data-lucide="check" class="w-4 h-4 text-white"></i></button>
-                           <div class="flex-1 min-w-0" @click="startEdit(task)">
-                              <p class="text-base sm:text-sm font-medium truncate" :class="task.status === 'Terminé' ? 'text-slate-400 line-through' : 'text-slate-900 dark:text-slate-100'">{{ task.titre }}</p>
-                              <div class="flex items-center gap-3 mt-1.5">
-                                 <div v-if="task.due_date" class="flex items-center gap-1 text-[10px] font-mono" :class="isOverdue(task) ? 'text-rose-500 font-bold' : 'text-slate-400'"><i data-lucide="calendar" class="w-3 h-3"></i> {{ formatDateShort(task.due_date) }}</div>
-                                 <div class="flex items-center gap-1.5"><img :src="getUserAvatar(task.assignee)" class="w-4 h-4 rounded-full"> <span class="text-[10px] text-slate-500">{{ task.assignee }}</span></div>
-                              </div>
-                           </div>
-                           <button @click.stop="deleteTask(task)" class="text-slate-400 hover:text-rose-500 p-2"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
-                        </div>
-                     </div>
-                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </transition>
-      
-      <!-- New Project Modal -->
-       <div v-if="showNewProjectModal" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
-        <div class="bg-white dark:bg-[#1e293b] w-full max-w-md p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xl">
-           <h2 class="text-xl font-bold mb-6 text-slate-900 dark:text-white flex items-center gap-2"><div class="w-8 h-8 rounded bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 dark:text-brand-400"><i data-lucide="plus" class="w-5 h-5"></i></div> Nouveau Projet</h2>
-           <div class="space-y-4">
-             <div class="flex gap-3">
-               <div class="w-16"><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Emoji</label><input v-model="newProjectForm.emoji" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-center text-xl outline-none focus:border-brand-500 text-slate-900 dark:text-white h-12 sm:h-10" placeholder="📁"></div>
-               <div class="flex-1"><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Nom du projet</label><input v-model="newProjectForm.nom" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white focus:border-brand-500 outline-none transition-colors h-12 sm:h-10 text-base sm:text-sm" placeholder="Ex: Déploiement Salesforce"></div>
-             </div>
-             
-             <!-- ADDED DEADLINE FIELD -->
-             <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Deadline</label><input type="date" v-model="newProjectForm.deadline_str" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none h-12 sm:h-10 font-mono"></div>
+    </main>
 
-             <div class="grid grid-cols-2 gap-4">
-               <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Propriétaire</label><select v-model="newProjectForm.owner" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none appearance-none h-12 sm:h-10 text-base sm:text-sm"><option v-for="user in teamMembers" :value="user.name" class="bg-white dark:bg-[#1e1e1e]">{{ user.name }}</option></select></div>
-               <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Priorité</label><select v-model="newProjectForm.priorite" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none appearance-none h-12 sm:h-10 text-base sm:text-sm"><option value="Haute" class="bg-white dark:bg-[#1e1e1e]">🔥 Haute</option><option value="Moyenne" class="bg-white dark:bg-[#1e1e1e]">⚡ Moyenne</option><option value="Basse" class="bg-white dark:bg-[#1e1e1e]">☕ Basse</option></select></div>
-             </div>
-             <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Description</label><textarea v-model="newProjectForm.description" rows="3" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none resize-none text-base sm:text-sm" placeholder="Contexte du projet..."></textarea></div>
-           </div>
-           <div class="flex justify-end gap-3 mt-8"><button @click="showNewProjectModal = false" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white px-4 py-2 text-sm font-medium">Annuler</button><button @click="createProject" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-brand-600/10 transition-all active:scale-95">Créer le projet</button></div>
-        </div>
-      </div>
-
-      <!-- NEW: USER EDIT MODAL -->
-      <div v-if="showUserModal" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4">
-        <div class="bg-white dark:bg-[#1e293b] w-full max-w-md p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xl">
-          <h2 class="text-xl font-bold mb-6 text-slate-900 dark:text-white">{{ editingUser ? 'Modifier' : 'Ajouter' }} un membre</h2>
-          <div class="space-y-4">
-            <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Nom Complet</label><input v-model="newUserForm.name" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none h-12 sm:h-10 text-base sm:text-sm"></div>
-            <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Email</label><input v-model="newUserForm.email" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none h-12 sm:h-10 text-base sm:text-sm"></div>
-            <div><label class="block text-xs text-slate-500 uppercase font-bold mb-1.5">Rôle</label>
-              <select v-model="newUserForm.role" class="w-full bg-slate-50 dark:bg-[#151515] border border-slate-300 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white outline-none h-12 sm:h-10 text-base sm:text-sm appearance-none">
-                <option value="User" class="bg-white dark:bg-[#1e1e1e]">User</option>
-                <option value="Admin" class="bg-white dark:bg-[#1e1e1e]">Admin</option>
-                <option value="Manager" class="bg-white dark:bg-[#1e1e1e]">Manager</option>
-                <option value="Dev" class="bg-white dark:bg-[#1e1e1e]">Dev</option>
-                <option value="Tech Lead" class="bg-white dark:bg-[#1e1e1e]">Tech Lead</option>
-              </select>
+    <!-- PROJECT MODAL (Détail & Édition) -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="app.closeModal('project-modal')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl glass-modal rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-in max-h-[85vh]">
+            <div id="modal-content" class="flex flex-col h-full overflow-y-auto p-0 relative">
+                <!-- Rendu dynamique ici -->
             </div>
-          </div>
-          <div class="flex justify-end gap-3 mt-8">
-            <button @click="showUserModal = false" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white px-4 py-2 text-sm font-medium">Annuler</button>
-            <button @click="saveUser" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-brand-600/10 transition-all active:scale-95">{{ editingUser ? 'Mettre à jour' : 'Ajouter' }}</button>
-          </div>
         </div>
-      </div>
-
-      <div v-if="showLegalModal" class="fixed inset-0 bg-slate-900/80 flex items-center justify-center z-[200] backdrop-blur-sm px-4"><div class="bg-white dark:bg-[#1e293b] w-full max-w-2xl p-8 rounded-xl border border-slate-200 dark:border-slate-700 relative max-h-[80vh] overflow-y-auto"><button @click="showLegalModal = false" class="absolute top-6 right-6 text-slate-500 hover:text-slate-800 dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button><h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 border-b border-slate-200 dark:border-slate-700 pb-4">Mentions Légales</h2><div class="text-sm text-slate-600 dark:text-slate-300 space-y-6 leading-relaxed"><section><h3 class="text-slate-900 dark:text-white font-bold mb-2">1. Éditeur</h3><p>Direction Technique Groupe Proxiserve.</p></section><div class="text-xs text-slate-500 mt-8 border-t border-slate-200 dark:border-slate-800 pt-4 flex justify-between items-center"><span>© {{ new Date().getFullYear() }} Proxiserve - Prox-Hydro.</span></div></div></div></div>
-
     </div>
 
-    <!-- MOCKING SYSTEM -->
+    <!-- CREATE PROJECT MODAL -->
+    <div id="create-project-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="app.closeModal('create-project-modal')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg glass-modal rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-in">
+            <div class="p-6 border-b border-app-border">
+                <h2 class="text-xl font-bold text-white">Nouveau Projet</h2>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Nom du projet</label>
+                    <input type="text" id="new-project-name" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent" placeholder="Ex: Déploiement Fibre Optique">
+                </div>
+                <div>
+                    <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Description</label>
+                    <textarea id="new-project-desc" rows="3" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent" placeholder="Objectifs, contexte..."></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Priorité</label>
+                        <select id="new-project-priority" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
+                            <option value="critique">Critique</option>
+                            <option value="haute">Haute</option>
+                            <option value="normale" selected>Normale</option>
+                            <option value="basse">Basse</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Échéance</label>
+                        <input type="date" id="new-project-date" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-app-border flex justify-end gap-3 bg-app-bg/50">
+                <button onclick="app.closeModal('create-project-modal')" class="px-4 py-2 rounded-lg text-sm font-medium text-app-textSecondary hover:text-white transition-colors">Annuler</button>
+                <button onclick="app.createProject()" class="px-4 py-2 rounded-lg text-sm font-medium bg-app-accent text-white hover:bg-app-accent/80 transition-colors shadow-lg shadow-app-accent/20">Créer le projet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- USER SWITCHER MODAL -->
+    <div id="user-switcher-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="app.closeModal('user-switcher-modal')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm glass-modal rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-in">
+            <div class="p-4 border-b border-app-border">
+                <h3 class="text-sm font-semibold text-white uppercase tracking-wider">Changer d'utilisateur</h3>
+            </div>
+            <div class="p-2 space-y-1" id="user-switcher-list">
+                <!-- Rendu dynamique JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- COMMAND PALETTE (CMD+K) -->
+    <div id="command-palette" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="app.toggleCommandPalette()"></div>
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-lg glass-modal rounded-xl shadow-2xl overflow-hidden flex flex-col animate-slide-up">
+            <div class="flex items-center px-4 border-b border-app-border">
+                <i data-lucide="search" class="w-5 h-5 text-app-accent mr-3"></i>
+                <input type="text" id="cmd-input" class="flex-1 bg-transparent border-none py-4 text-white placeholder-app-textSecondary focus:outline-none focus:ring-0 text-lg" placeholder="Chercher un projet, une tâche...">
+                <kbd class="text-[10px] font-mono bg-app-panel border border-app-border px-1.5 py-0.5 rounded text-app-textSecondary">ESC</kbd>
+            </div>
+            <div class="max-h-64 overflow-y-auto p-2" id="cmd-results">
+                <div class="px-3 py-2 text-xs font-semibold text-app-textSecondary tracking-wider">SUGGESTIONS</div>
+                <button onclick="app.openCreateProjectModal(); app.toggleCommandPalette()" class="w-full flex items-center px-3 py-2 rounded-lg hover:bg-app-hover text-left group transition-colors">
+                    <i data-lucide="plus" class="w-4 h-4 mr-3 text-app-accent group-hover:text-white"></i>
+                    <span class="text-sm text-app-textPrimary">Créer un nouveau projet</span>
+                </button>
+                <button onclick="app.navigate('projects'); app.toggleCommandPalette()" class="w-full flex items-center px-3 py-2 rounded-lg hover:bg-app-hover text-left group transition-colors">
+                    <i data-lucide="folder" class="w-4 h-4 mr-3 text-app-textSecondary group-hover:text-white"></i>
+                    <span class="text-sm text-app-textPrimary">Voir tous les projets</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- APPLICATION SCRIPT -->
     <script>
-      (function() {
-        if (typeof google === 'undefined') {
-          console.warn("⚠️ Mode Prévisualisation: Mock Activé - Génération de données massives");
-          
-          const USERS = [
-             { name: 'Aurélien Da Costa', email: 'a.dacosta@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Aurélien+Da+Costa&background=0284c7&color=fff', role: 'Admin' },
-             { name: 'Sophie Martin', email: 's.martin@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Sophie+Martin&background=e11d48&color=fff', role: 'Manager' },
-             { name: 'Thomas Dubreuil', email: 't.dubreuil@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Thomas+Dubreuil&background=059669&color=fff', role: 'Dev' },
-             { name: 'Julie Leroy', email: 'j.leroy@prox-hydro.fr', avatar: 'https://ui-avatars.com/api/?name=Julie+Leroy&background=d97706&color=fff', role: 'User' },
-             { name: 'Marc Voisin', email: 'm.voisin@proxiserve.fr', avatar: 'https://ui-avatars.com/api/?name=Marc+Voisin&background=7c3aed&color=fff', role: 'Tech Lead' }
-          ];
+        const app = {
+            state: {
+                currentView: 'dashboard',
+                projectsViewMode: 'grid', // 'grid' | 'list'
+                isLoading: true,
+                projects: [],
+                users: [],
+                currentUserId: 'U1', // Utilisateur par défaut
+                filters: {
+                    user: 'me', // 'me', 'all', ou ID spécifique
+                    status: 'all',
+                    priority: 'all'
+                }
+            },
 
-          // Data Generators
-          const PROJECT_TEMPLATES = [
-            { nom: 'Déploiement Fibre Optique Zone Nord', emoji: '📡', tags: ['Infra', 'Réseau'] },
-            { nom: 'Migration Serveurs Cloud AWS', emoji: '☁️', tags: ['Cloud', 'DevOps', 'Urgent'] },
-            { nom: 'App Mobile Techniciens V2', emoji: '📱', tags: ['Mobile', 'Terrain'] },
-            { nom: 'Refonte Portail Client Extranet', emoji: '💻', tags: ['Web', 'UX'] },
-            { nom: 'Audit Sécurité ISO 27001', emoji: '🔒', tags: ['Sécurité', 'Compliance'] },
-            { nom: 'Mise à jour Flotte Tablettes', emoji: '📟', tags: ['Matériel', 'Logistique'] },
-            { nom: 'Intégration API Partenaire EDF', emoji: '🔌', tags: ['Backend', 'API'] },
-            { nom: 'Optimisation BDD CRM', emoji: '🗄️', tags: ['Data', 'Performance'] },
-            { nom: 'Dashboard KPI Temps Réel', emoji: '📊', tags: ['BI', 'Management'] },
-            { nom: 'Formation Sécurité Électrique', emoji: '🎓', tags: ['RH', 'Formation'] },
-            { nom: 'Déploiement Salesforce Agence Sud', emoji: '🦄', tags: ['CRM', 'Salesforce'] },
-            { nom: 'Campagne E-mailing Q3', emoji: '📧', tags: ['Marketing'] }
-          ];
-
-          const TASK_TEMPLATES = [
-            'Analyse des besoins', 'Rédaction spécifications', 'Maquettage UI/UX', 'Développement Backend API',
-            'Intégration Frontend', 'Tests unitaires', 'Recette utilisateur (UAT)', 'Déploiement en pré-prod',
-            'Correctifs bugs critiques', 'Réunion de lancement', 'Formation des administrateurs', 'Documentation technique',
-            'Achat licences', 'Configuration serveurs', 'Validation budget'
-          ];
-
-          const STATUSES_PROJ = ['En cours', 'En cours', 'En cours', 'En pause', 'Terminé', 'Annulé'];
-          const PRIORITIES = ['Haute', 'Moyenne', 'Moyenne', 'Basse'];
-          const STATUSES_TASK = ['À faire', 'En cours', 'Terminé'];
-
-          const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
-          const getRandomDate = (start, end) => new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-
-          // GENERATE DATA
-          const genProjects = [];
-          const genTasks = [];
-
-          PROJECT_TEMPLATES.forEach((tpl, index) => {
-             const pid = 'p' + index;
-             const owner = getRandom(USERS).name;
-             const status = getRandom(STATUSES_PROJ);
-             
-             // Create Project
-             genProjects.push({
-                id: pid,
-                nom: tpl.nom,
-                emoji: tpl.emoji,
-                tags: tpl.tags,
-                description: `Projet stratégique pour la **DT Groupe**. \n\nCe projet vise à améliorer l'efficacité opérationnelle sur le périmètre ${tpl.tags[0]}.\n\n*Objectifs :*\n- Optimiser les processus\n- Réduire les coûts de 15%\n- Améliorer la satisfaction client`,
-                owner: owner,
-                status: status,
-                priorite: getRandom(PRIORITIES),
-                deadline: getRandomDate(new Date(2023, 0, 1), new Date(2025, 11, 31)), 
-                created_at: new Date(),
-                archived: status === 'Terminé' && Math.random() > 0.7, 
-                rank: index + 1,
-                meeting_notes: Math.random() > 0.7 ? "Point bloquant sur le budget à revoir." : ""
-             });
-
-             // Create 8 to 12 tasks per project
-             const numTasks = Math.floor(Math.random() * 5) + 8; 
-             for(let i=0; i<numTasks; i++) {
-                const tStatus = getRandom(STATUSES_TASK);
-                const isLate = Math.random() > 0.8; // 20% chance of being late if not done
-                let tDate = new Date();
+            init() {
+                lucide.createIcons();
+                this.setupEventListeners();
                 
-                if(tStatus === 'Terminé') {
-                   tDate = getRandomDate(new Date(2023, 0, 1), new Date()); // Past date
-                } else if (isLate) {
-                   tDate = getRandomDate(new Date(2023, 0, 1), new Date()); // Past date but not done
-                } else {
-                   tDate = getRandomDate(new Date(), new Date(2025, 11, 31)); // Future date
-                }
-
-                genTasks.push({
-                   id: pid + '_t' + i,
-                   project_id: pid,
-                   titre: getRandom(TASK_TEMPLATES) + (Math.random() > 0.5 ? ' - Phase ' + (i+1) : ''),
-                   status: tStatus,
-                   assignee: getRandom(USERS).name,
-                   due_date: tDate
-                });
-             }
-          });
-
-          const MOCK_DATA = {
-            currentUser: USERS[0],
-            team: USERS,
-            projects: genProjects,
-            tasks: genTasks
-          };
-
-          const mockServer = {
-            getAllData: () => JSON.parse(JSON.stringify(MOCK_DATA)),
-            createTask: (d) => ({...d, id: 'mock-t-'+Date.now(), status: d.status || 'À faire'}),
-            createProject: (d) => ({...d, id: 'mock-p-'+Date.now(), status: 'En cours', progress: 0, rank: 999, tags: []}),
-            updateProject: (p) => p,
-            updateTaskStatus: () => true,
-            updateTaskDetails: (t) => t, 
-            deleteTask: (id) => true,
-            updateProjectOrder: (order) => true,
-            // USER CRUD MOCKS
-            saveUser: (u) => ({...u, avatar: `https://ui-avatars.com/api/?name=${u.name}&background=random&color=fff&size=24`}),
-            deleteUser: (index) => true
-          };
-          
-          const createMockRunner = (handlers = {}) => {
-            const runner = {
-              withSuccessHandler: (fn) => createMockRunner({ ...handlers, success: fn }),
-              withFailureHandler: (fn) => createMockRunner({ ...handlers, failure: fn }),
-            };
-            Object.keys(mockServer).forEach(method => {
-              runner[method] = (...args) => {
+                // Simulation récupération de données complexes
                 setTimeout(() => {
-                   const result = mockServer[method](...args);
-                   if (handlers.success) handlers.success(result);
-                   if(method === 'createTask') MOCK_DATA.tasks.push(result);
-                   if(method === 'createProject') MOCK_DATA.projects.push(result);
-                }, 400); // Simulate network latency
-              };
-            });
-            return runner;
-          };
-          window.google = { script: { run: createMockRunner() } };
-        }
-      })();
-    </script>
+                    this.state.users = [
+                        { id: "U1", name: "Jean Dupont", role: "Directeur Tech", initials: "JD", color: "bg-blue-600" },
+                        { id: "U2", name: "Sarah Connor", role: "Lead DevOps", initials: "SC", color: "bg-purple-600" },
+                        { id: "U3", name: "Alan Turing", role: "Archi Data", initials: "AT", color: "bg-emerald-600" }
+                    ];
 
-    <script>
-      const { createApp, ref, computed, onMounted, onUpdated, nextTick, watch } = Vue;
+                    // Obtenir la date d'aujourd'hui, hier et dans 3 jours pour la démo
+                    const today = new Date();
+                    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+                    const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 2);
 
-      const toInputDate = (d) => {
-         if (!d) return new Date().toISOString().split('T')[0];
-         return new Date(d).toISOString().split('T')[0];
-      };
+                    const dToday = today.toISOString().split('T')[0];
+                    const dYesterday = yesterday.toISOString().split('T')[0];
+                    const dTomorrow = tomorrow.toISOString().split('T')[0];
 
-      const app = createApp({
-        setup() {
-          const loading = ref(true);
-          const projects = ref([]);
-          const tasks = ref([]);
-          const teamMembers = ref([]);
-          const currentUser = ref({});
-          const toasts = ref([]); 
-          const showCompleted = ref(false); // Default false for standard view
-          
-          const sidebarOpen = ref(false); // Default closed on mobile
-          const isMobile = ref(window.innerWidth < 1024);
-          
-          const currentViewScope = ref('dashboard'); 
-          const viewType = ref('grid'); 
-          const searchQuery = ref("");
-          const selectedUserFilter = ref(null);
-          
-          const scrollContainer = ref(null); 
+                    this.state.projects = [
+                        {
+                            id: "PRJ-01",
+                            name: "Migration Cloud AWS 2026",
+                            description: "Basculement de l'infrastructure legacy vers une architecture serverless AWS. Impact majeur sur les coûts OPEX.",
+                            status: "in-progress", 
+                            priority: "critique", 
+                            progress: 0, 
+                            tags: ["Infra", "Cloud", "SecOps"],
+                            managerId: "U1", // Changé pour la démo
+                            dueDate: "2026-06-30",
+                            tasks: [
+                                { id: "T-1", title: "Audit de sécurité", status: "done", dueDate: dYesterday },
+                                { id: "T-2", title: "Setup VPC", status: "done", dueDate: dToday },
+                                { id: "T-3", title: "Migration Base de données", status: "in-progress", dueDate: dYesterday }, // En retard !
+                                { id: "T-4", title: "Tests de charge", status: "todo", dueDate: dTomorrow }
+                            ]
+                        },
+                        {
+                            id: "PRJ-02",
+                            name: "Refonte API Core V3",
+                            description: "Réécriture de l'API monolithique en microservices Go pour supporter x10 de charge.",
+                            status: "in-progress",
+                            priority: "haute",
+                            tags: ["Backend", "Go", "Perf"],
+                            managerId: "U1",
+                            dueDate: "2026-08-15",
+                            tasks: [
+                                { id: "T-5", title: "Design System Architecture", status: "done", dueDate: dYesterday },
+                                { id: "T-6", title: "Endpoint Auth", status: "todo", dueDate: dToday }, // A faire ajd
+                                { id: "T-7", title: "Endpoint Users", status: "todo", dueDate: "2026-04-10" }
+                            ]
+                        },
+                        {
+                            id: "PRJ-03",
+                            name: "Intégration Agent IA Support",
+                            description: "Mise en place d'un agent conversationnel RAG pour le support de niveau 1.",
+                            status: "todo",
+                            priority: "normale",
+                            tags: ["IA", "Support"],
+                            managerId: "U3",
+                            dueDate: "2026-09-01",
+                            tasks: [
+                                { id: "T-8", title: "Sélection modèle LLM", status: "done", dueDate: "2026-01-15" },
+                                { id: "T-9", title: "Indexation doc interne", status: "todo", dueDate: dTomorrow }
+                            ]
+                        },
+                        {
+                            id: "PRJ-04",
+                            name: "Décommissionnement Legacy V1",
+                            description: "Extinction des vieux serveurs on-premise suite à la migration V2.",
+                            status: "done",
+                            priority: "basse",
+                            tags: ["Infra", "Cleanup"],
+                            managerId: "U2",
+                            dueDate: "2026-01-15",
+                            tasks: [
+                                { id: "T-11", title: "Backup final", status: "done", dueDate: "2026-01-10" },
+                                { id: "T-12", title: "Arrêt machines", status: "done", dueDate: "2026-01-14" }
+                            ]
+                        }
+                    ];
 
-          const activeProject = ref(null);
-          const isEditingDesc = ref(false); 
-          const newTaskTitle = ref("");
-          const newTaskAssignee = ref("");
-          const newTaskDate = ref(toInputDate(new Date())); 
-          const taskInputRef = ref(null); // Ref for input focus
-          
-          const editingTaskId = ref(null);
-          const editTaskForm = ref({});
-          const showNewProjectModal = ref(false);
-          const showLegalModal = ref(false);
-          
-          // User CRUD States
-          const showTeamModal = ref(false); // Used only on mobile sidebar navigation to open the view
-          const showKPIModal = ref(false); // Used only on mobile sidebar navigation to open the view
-          
-          const showUserMenu = ref(false); // User Switcher State
-          const showUserModal = ref(false);
-          const editingUser = ref(null);
-          const newUserForm = ref({ name: '', email: '', role: 'User' });
-          
-          const newProjectForm = ref({ nom: '', emoji: '📁', owner: '', priorite: 'Moyenne', description: '', deadline_str: toInputDate(new Date()) }); 
+                    this.state.isLoading = false;
+                    document.getElementById('initial-loader')?.remove();
+                    this.updateSidebarUserDisplay();
+                    this.navigate('dashboard');
+                }, 800);
+            },
 
-          // Window Resize Listener for Responsive Logic
-          window.addEventListener('resize', () => {
-             isMobile.value = window.innerWidth < 1024;
-             if(!isMobile.value) sidebarOpen.value = false; // Reset when going to desktop
-          });
-
-          // FORCE ICON REFRESH ON VIEW CHANGE
-          watch([viewType, currentViewScope], () => {
-             nextTick(() => {
-                if (window.lucide) window.lucide.createIcons();
-             });
-          });
-
-          // WATCH MODALS TO REFRESH ICONS
-          watch([showLegalModal, showNewProjectModal, activeProject, showUserModal, showUserMenu], () => {
-             nextTick(() => {
-                if (window.lucide) window.lucide.createIcons();
-             });
-          });
-          
-          const enrichedProjects = computed(() => {
-            const sortedProjects = [...projects.value].sort((a, b) => (a.rank || 0) - (b.rank || 0));
-            return sortedProjects.map(p => {
-              const pTasks = tasks.value.filter(t => t.project_id === p.id);
-              const total = pTasks.length;
-              const done = pTasks.filter(t => t.status === 'Terminé').length;
-              const progress = total === 0 ? 0 : Math.round((done / total) * 100);
-              return { ...p, progress, tasksTotal: total };
-            });
-          });
-
-          const filteredProjects = computed(() => {
-             let base = enrichedProjects.value;
-             
-             if (currentViewScope.value === 'active') {
-                base = base.filter(p => !p.archived);
-                if (!showCompleted.value) {
-                   base = base.filter(p => p.status !== 'Terminé' && p.status !== 'Annulé');
-                }
-             } else {
-                base = base.filter(p => p.archived || p.status === 'Terminé' || p.status === 'Annulé');
-             }
-
-             if (searchQuery.value) {
-                const q = searchQuery.value.toLowerCase();
-                base = base.filter(p => p.nom.toLowerCase().includes(q) || p.owner.toLowerCase().includes(q));
-             }
-             if (selectedUserFilter.value) base = base.filter(p => p.owner === selectedUserFilter.value);
-             return base;
-          });
-          
-          // User Filter for Team View
-          const filteredTeam = computed(() => {
-             if (!searchQuery.value) return teamMembers.value;
-             const q = searchQuery.value.toLowerCase();
-             return teamMembers.value.filter(u => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q));
-          });
-
-          const kpiData = computed(() => {
-             const activeProjs = enrichedProjects.value.filter(p => !p.archived && p.status !== 'Terminé' && p.status !== 'Annulé');
-             const allTasks = tasks.value;
-             const activeProjects = activeProjs.length;
-             const tasksPending = allTasks.filter(t => t.status !== 'Terminé').length;
-             const tasksDone = allTasks.filter(t => t.status === 'Terminé').length;
-             const totalProgress = activeProjs.reduce((acc, p) => acc + p.progress, 0);
-             const globalProgress = activeProjects ? Math.round(totalProgress / activeProjects) : 0;
-             const userStats = teamMembers.value.map(user => {
-               const count = allTasks.filter(t => t.assignee === user.name && t.status !== 'Terminé').length;
-               return { name: user.name, count };
-             }).sort((a,b) => b.count - a.count);
-             const maxTasks = Math.max(...userStats.map(u => u.count)) || 1;
-             return { activeProjects, tasksPending, tasksDone, globalProgress, userStats, maxTasks, topProjects: activeProjs.sort((a,b) => b.progress - a.progress).slice(0, 5) };
-          });
-          
-          const dashboardData = computed(() => {
-             const now = new Date();
-             now.setHours(0,0,0,0);
-             
-             const topProjects = enrichedProjects.value
-                .filter(p => !p.archived && p.status !== 'Terminé' && p.status !== 'Annulé')
-                .sort((a, b) => {
-                   const prioScore = { 'Haute': 3, 'Moyenne': 2, 'Basse': 1 };
-                   if (prioScore[b.priorite] !== prioScore[a.priorite]) return prioScore[b.priorite] - prioScore[a.priorite];
-                   return (a.rank || 0) - (b.rank || 0);
-                })
-                .slice(0, 3);
-
-             const allOverdue = tasks.value.filter(t => {
-                if(t.status === 'Terminé' || !t.due_date) return false;
-                const due = new Date(t.due_date);
-                return due < now;
-             }).sort((a,b) => new Date(a.due_date) - new Date(b.due_date));
-
-             const myTasks = tasks.value.filter(t => {
-                if(t.status === 'Terminé' || !t.due_date) return false;
-                if(t.assignee !== currentUser.value.name) return false;
-                const due = new Date(t.due_date);
-                return due >= now; 
-             }).sort((a,b) => new Date(a.due_date) - new Date(b.due_date)).slice(0, 5);
-             
-             return { topProjects, allOverdue, myTasks };
-          });
-
-          const getTasksByProject = (pid) => tasks.value.filter(t => t.project_id === pid);
-          const getTasksByStatus = (status) => activeProject.value ? tasks.value.filter(t => t.project_id === activeProject.value.id && t.status === status) : [];
-
-          const loadData = () => {
-            loading.value = true;
-            google.script.run.withSuccessHandler((data) => {
-                projects.value = data.projects;
-                tasks.value = data.tasks;
-                if(data.team) teamMembers.value = data.team;
-                if(data.currentUser) {
-                   currentUser.value = data.currentUser;
-                   newTaskAssignee.value = data.currentUser.name;
-                   newProjectForm.value.owner = data.currentUser.name;
-                }
-                loading.value = false;
-                initIcons();
-              }).getAllData();
-          };
-
-          const showToast = (message, type = 'info') => {
-             const id = Date.now();
-             const icon = type === 'success' ? 'check-circle' : (type === 'error' ? 'alert-circle' : 'info');
-             toasts.value.push({ id, message, type, icon });
-             setTimeout(() => { toasts.value = toasts.value.filter(t => t.id !== id); }, 3000);
-             nextTick(() => initIcons());
-          };
-
-          const renderMarkdown = (text) => text ? marked.parse(text) : '';
-          const stripMarkdown = (text) => text ? text.replace(/[*#_]/g, '') : '';
-
-          const initSortable = (el, status) => {
-             if (el._sortable) return;
-             const isMobileDrag = window.innerWidth < 1024;
-             el._sortable = new Sortable(el, {
-               group: 'tasks', animation: 150, ghostClass: 'ghost-card', handle: '.drag-handle', disabled: isMobileDrag, delay: 200, delayOnTouchOnly: true,
-               onEnd: (evt) => {
-                  const itemEl = evt.item;
-                  const newStatus = evt.to.getAttribute('data-status');
-                  const taskId = itemEl.getAttribute('data-id');
-                  if (!newStatus || !taskId) return;
-                  const task = tasks.value.find(t => t.id == taskId);
-                  if (task && task.status !== newStatus) {
-                     const oldStatus = task.status;
-                     task.status = newStatus;
-                     google.script.run.withSuccessHandler(() => showToast('Statut mis à jour', 'success')).withFailureHandler(() => { task.status = oldStatus; showToast('Erreur', 'error'); }).updateTaskStatus(task.id, newStatus);
-                  }
-               }
-             });
-          };
-
-          const initProjectSortable = (el) => {
-             if (el._sortable) return;
-             el._sortable = new Sortable(el, {
-               animation: 150, ghostClass: 'ghost-card', handle: '.project-drag-handle',
-               onEnd: (evt) => {
-                  const itemEl = evt.item;
-                  const newIndex = evt.newIndex;
-                  const oldIndex = evt.oldIndex;
-                  if (newIndex === oldIndex) return;
-                  const visibleProjects = filteredProjects.value;
-                  const movedItem = visibleProjects[oldIndex];
-                  visibleProjects.splice(oldIndex, 1);
-                  visibleProjects.splice(newIndex, 0, movedItem);
-                  visibleProjects.forEach((p, idx) => {
-                     const mainProj = projects.value.find(mp => mp.id === p.id);
-                     if(mainProj) mainProj.rank = idx + 1;
-                  });
-                  projects.value = [...projects.value]; 
-                  const orderMap = visibleProjects.map((p, idx) => ({ id: p.id, rank: idx + 1 }));
-                  google.script.run.withSuccessHandler(() => showToast('Priorités mises à jour', 'success')).withFailureHandler(() => showToast('Erreur', 'error')).updateProjectOrder(orderMap);
-               }
-             });
-          };
-
-          const updateProject = (project) => {
-             google.script.run.withSuccessHandler(() => showToast('Projet mis à jour', 'success')).withFailureHandler(() => showToast('Erreur sauvegarde', 'error')).updateProject(project);
-          };
-
-          const isOverdueProject = (project) => {
-             if (!project.deadline || project.status === 'Terminé') return false;
-             return new Date(project.deadline) < new Date();
-          };
-          const hasDateConflict = (project) => {
-             if (!project.deadline) return false;
-             const projDead = new Date(project.deadline);
-             const pTasks = getTasksByProject(project.id);
-             return pTasks.some(t => t.due_date && new Date(t.due_date) > projDead);
-          };
-
-          const openProjectDetails = (project) => { activeProject.value = project; initIcons(); };
-          const toggleEditDesc = () => { isEditingDesc.value = !isEditingDesc.value; };
-          const addTag = (project, event) => {
-             const val = event.target.value.trim();
-             if (val && (!project.tags || !project.tags.includes(val))) {
-                if(!project.tags) project.tags = [];
-                project.tags.push(val);
-                updateProject(project);
-                event.target.value = '';
-             }
-          };
-          const removeTag = (project, index) => {
-             project.tags.splice(index, 1);
-             updateProject(project);
-          };
-          const exportToCSV = () => {
-             const headers = ["Projet", "Propriétaire", "Deadline", "Priorité", "Statut", "Avancement", "Notes"];
-             const rows = filteredProjects.value.map(p => [
-                p.nom, p.owner, formatDateShort(p.deadline), p.priorite, p.status, p.progress + '%', p.meeting_notes || ''
-             ]);
-             let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + rows.map(e => e.join(",")).join("\n");
-             const encodedUri = encodeURI(csvContent);
-             const link = document.createElement("a");
-             link.setAttribute("href", encodedUri);
-             link.setAttribute("download", "revue_projets_dt.csv");
-             document.body.appendChild(link);
-             link.click();
-             document.body.removeChild(link);
-             showToast('Export CSV généré', 'success');
-          };
-
-          const addTask = () => {
-            if (!newTaskTitle.value.trim() || !activeProject.value) return;
-            const tempId = 'temp_' + Date.now();
-            const taskPayload = {
-              project_id: activeProject.value.id, titre: newTaskTitle.value, assignee: newTaskAssignee.value || currentUser.value.name,
-              due_date: new Date(newTaskDate.value), status: 'À faire'
-            };
-            tasks.value.push({ ...taskPayload, id: tempId });
-            newTaskTitle.value = "";
-            google.script.run.withSuccessHandler((serverTask) => {
-                const idx = tasks.value.findIndex(t => t.id === tempId);
-                if (idx !== -1) tasks.value[idx] = serverTask;
-                showToast('Tâche ajoutée', 'success');
-                initIcons();
-              }).createTask(taskPayload);
-            nextTick(() => { if(taskInputRef.value) taskInputRef.value.focus(); });
-          };
-
-          const cycleStatus = (task) => {
-            const map = { 'À faire': 'En cours', 'En cours': 'Terminé', 'Terminé': 'À faire' };
-            const oldStatus = task.status;
-            task.status = map[oldStatus];
-            google.script.run.withSuccessHandler(() => showToast('Statut mis à jour', 'success')).withFailureHandler(() => { task.status = oldStatus; showToast('Erreur', 'error'); }).updateTaskStatus(task.id, task.status);
-          };
-
-          const startEdit = (task) => {
-            editingTaskId.value = task.id;
-            editTaskForm.value = { ...task, due_date_str: toInputDate(task.due_date) };
-            nextTick(() => { const inputs = document.querySelectorAll('input'); });
-            initIcons();
-          };
-          const cancelEdit = () => { editingTaskId.value = null; editTaskForm.value = {}; };
-          const saveEdit = () => {
-             if (!editingTaskId.value) return;
-             const idx = tasks.value.findIndex(t => t.id === editingTaskId.value);
-             if (idx !== -1) {
-                tasks.value[idx].titre = editTaskForm.value.titre;
-                tasks.value[idx].assignee = editTaskForm.value.assignee;
-                tasks.value[idx].due_date = new Date(editTaskForm.value.due_date_str);
-             }
-             google.script.run.withSuccessHandler(() => showToast('Tâche modifiée', 'success')).updateTaskDetails(editTaskForm.value);
-             cancelEdit();
-          };
-          const deleteTask = (task) => {
-             if(!confirm('Supprimer cette tâche ?')) return;
-             tasks.value = tasks.value.filter(t => t.id !== task.id);
-             google.script.run.withSuccessHandler(() => showToast('Tâche supprimée', 'info')).deleteTask(task.id);
-          };
-
-          const createProject = () => {
-             if(!newProjectForm.value.nom) { showToast('Le nom du projet est requis', 'error'); return; }
-             showNewProjectModal.value = false;
-             loading.value = true;
-             const minRank = Math.min(...projects.value.map(p => p.rank || 0), 0);
-             newProjectForm.value.rank = minRank - 1;
-             if(newProjectForm.value.deadline_str) newProjectForm.value.deadline = new Date(newProjectForm.value.deadline_str);
-             google.script.run.withSuccessHandler((newP) => {
-                projects.value.push(newP);
-                loading.value = false;
-                newProjectForm.value = { nom: '', emoji: '📁', owner: currentUser.value.name || '', priorite: 'Moyenne', description: '', deadline_str: toInputDate(new Date()) };
-                showToast('Projet créé avec succès', 'success');
-                if(scrollContainer.value) scrollContainer.value.scrollTop = 0;
-                initIcons();
-             }).createProject(newProjectForm.value);
-          };
-          
-          // User CRUD Methods
-          const openUserModal = (user = null) => {
-            editingUser.value = user;
-            if(user) {
-              newUserForm.value = { ...user };
-            } else {
-              newUserForm.value = { name: '', email: '', role: 'User' };
-            }
-            showUserModal.value = true;
-          };
-          
-          const saveUser = () => {
-            if(!newUserForm.value.name || !newUserForm.value.email) {
-              showToast('Nom et email requis', 'error');
-              return;
-            }
+            // --- USER MANAGEMENT ---
             
-            showUserModal.value = false;
+            updateSidebarUserDisplay() {
+                const user = this.getUser(this.state.currentUserId);
+                document.getElementById('sidebar-user').innerHTML = `
+                    <div class="w-6 h-6 rounded-full ${user.color} flex items-center justify-center mr-3 text-[10px] font-bold text-white shadow-sm">${user.initials}</div>
+                    <div class="text-left flex-1">
+                        <div class="text-xs font-medium text-white">${user.name}</div>
+                        <div class="text-[10px] text-app-textSecondary">${user.role}</div>
+                    </div>
+                    <i data-lucide="chevron-up" class="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity"></i>
+                `;
+                lucide.createIcons();
+            },
+
+            openUserSwitcher() {
+                const list = document.getElementById('user-switcher-list');
+                list.innerHTML = this.state.users.map(u => `
+                    <button onclick="app.switchUser('${u.id}')" class="w-full flex items-center p-3 rounded-lg hover:bg-app-hover transition-colors ${this.state.currentUserId === u.id ? 'bg-app-bg border border-app-border' : ''}">
+                        <div class="w-8 h-8 rounded-full ${u.color} flex items-center justify-center text-xs font-bold text-white mr-3">${u.initials}</div>
+                        <div class="text-left flex-1">
+                            <div class="text-sm font-medium text-white">${u.name}</div>
+                            <div class="text-[10px] text-app-textSecondary">${u.role}</div>
+                        </div>
+                        ${this.state.currentUserId === u.id ? '<i data-lucide="check" class="w-4 h-4 text-app-accent"></i>' : ''}
+                    </button>
+                `).join('');
+                document.getElementById('user-switcher-modal').classList.remove('hidden');
+                lucide.createIcons();
+            },
+
+            switchUser(userId) {
+                this.state.currentUserId = userId;
+                this.updateSidebarUserDisplay();
+                this.closeModal('user-switcher-modal');
+                this.render(); // Re-render everything with new context
+            },
+
+            // --- CRUD ACTIONS ---
+
+            updateProjectField(projectId, field, value) {
+                const proj = this.state.projects.find(p => p.id === projectId);
+                if (proj) {
+                    proj[field] = value;
+                    this.render();
+                    console.log(`GAS Sync: Updated ${projectId} ${field} to ${value}`);
+                }
+            },
+
+            deleteProject(projectId) {
+                if(confirm("Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible.")) {
+                    this.state.projects = this.state.projects.filter(p => p.id !== projectId);
+                    this.closeModal('project-modal');
+                    this.render();
+                    console.log(`GAS Sync: Deleted project ${projectId}`);
+                }
+            },
+
+            addTask(projectId) {
+                const title = prompt("Titre de la nouvelle tâche :");
+                if (title && title.trim() !== "") {
+                    const proj = this.state.projects.find(p => p.id === projectId);
+                    proj.tasks.push({
+                        id: `T-${Date.now().toString().slice(-4)}`,
+                        title: title,
+                        status: 'todo',
+                        dueDate: new Date().toISOString().split('T')[0] // Aujourd'hui par défaut
+                    });
+                    proj.progress = this.calculateProjectProgress(proj);
+                    this.openProjectModal(projectId); // Refresh modal
+                    this.render(); // Refresh UI behind
+                }
+            },
+
+            updateTaskField(projectId, taskId, field, value) {
+                const proj = this.state.projects.find(p => p.id === projectId);
+                const task = proj.tasks.find(t => t.id === taskId);
+                if (task) {
+                    task[field] = value;
+                    this.openProjectModal(projectId); // Refresh modal immediately
+                    this.render(); // Refresh background
+                }
+            },
+
+            deleteTask(projectId, taskId) {
+                if(confirm("Supprimer cette tâche ?")) {
+                    const proj = this.state.projects.find(p => p.id === projectId);
+                    proj.tasks = proj.tasks.filter(t => t.id !== taskId);
+                    proj.progress = this.calculateProjectProgress(proj);
+                    this.openProjectModal(projectId);
+                    this.render();
+                }
+            },
+
+            addTag(projectId) {
+                const tag = prompt("Entrez le nom du nouveau tag (ex: SecOps, Frontend...) :");
+                if (tag && tag.trim() !== "") {
+                    const proj = this.state.projects.find(p => p.id === projectId);
+                    if (!proj.tags.includes(tag.trim())) {
+                        proj.tags.push(tag.trim());
+                        this.openProjectModal(projectId); // Refresh modal
+                        this.render(); // Refresh background
+                    }
+                }
+            },
+
+            removeTag(projectId, tagToRemove) {
+                const proj = this.state.projects.find(p => p.id === projectId);
+                proj.tags = proj.tags.filter(tag => tag !== tagToRemove);
+                this.openProjectModal(projectId); // Refresh modal
+                this.render(); // Refresh background
+            },
+
+            openCreateProjectModal() {
+                document.getElementById('create-project-modal').classList.remove('hidden');
+            },
+
+            createProject() {
+                const name = document.getElementById('new-project-name').value;
+                const desc = document.getElementById('new-project-desc').value;
+                const priority = document.getElementById('new-project-priority').value;
+                const date = document.getElementById('new-project-date').value || "2026-12-31";
+
+                if (!name) return alert("Le nom du projet est requis.");
+
+                const newProj = {
+                    id: `PRJ-${Math.floor(Math.random() * 1000)}`,
+                    name: name,
+                    description: desc,
+                    status: "todo",
+                    priority: priority,
+                    progress: 0,
+                    tags: ["Nouveau"],
+                    managerId: this.state.currentUserId,
+                    dueDate: date,
+                    tasks: []
+                };
+
+                this.state.projects.unshift(newProj);
+                this.closeModal('create-project-modal');
+                document.getElementById('new-project-name').value = '';
+                document.getElementById('new-project-desc').value = '';
+                
+                this.navigate('projects');
+            },
+
+            // --- HELPERS (Test-Time Compute) ---
+            calculateProjectProgress(project) {
+                if (!project.tasks || project.tasks.length === 0) return 0;
+                const done = project.tasks.filter(t => t.status === 'done').length;
+                return Math.round((done / project.tasks.length) * 100);
+            },
             
-            if(editingUser.value) {
-              // Update
-              const idx = teamMembers.value.findIndex(u => u.email === editingUser.value.email);
-              if(idx !== -1) {
-                // In a real app, update via backend. Here we update mock state locally first for responsiveness
-                // Assuming saveUser returns updated user
-                google.script.run.withSuccessHandler((updatedUser) => {
-                  teamMembers.value[idx] = updatedUser;
-                  showToast('Membre mis à jour', 'success');
-                }).saveUser(newUserForm.value);
-              }
-            } else {
-              // Create
-              google.script.run.withSuccessHandler((newUser) => {
-                teamMembers.value.push(newUser);
-                showToast('Membre ajouté', 'success');
-              }).saveUser(newUserForm.value);
+            getUser(id) {
+                return this.state.users.find(u => u.id === id) || { name: 'Inconnu', initials: '?', color: 'bg-gray-600' };
+            },
+
+            getPriorityStyle(priority) {
+                const styles = {
+                    'critique': { icon: 'alert-triangle', color: 'text-app-danger', bg: 'bg-app-danger/10', border: 'border-app-danger/20' },
+                    'haute': { icon: 'chevron-up', color: 'text-app-warning', bg: 'bg-app-warning/10', border: 'border-app-warning/20' },
+                    'normale': { icon: 'minus', color: 'text-app-accent', bg: 'bg-app-accent/10', border: 'border-app-accent/20' },
+                    'basse': { icon: 'chevron-down', color: 'text-app-textSecondary', bg: 'bg-app-panel', border: 'border-app-border' },
+                };
+                return styles[priority] || styles['normale'];
+            },
+
+            getStatusStyle(status) {
+                const styles = {
+                    'todo': { label: 'À faire', color: 'text-app-textSecondary', border: 'border-app-border' },
+                    'in-progress': { label: 'En cours', color: 'text-app-accent', border: 'border-app-accent/50' },
+                    'blocked': { label: 'Bloqué', color: 'text-app-danger', border: 'border-app-danger/50' },
+                    'done': { label: 'Terminé', color: 'text-app-success', border: 'border-app-success/50' },
+                };
+                return styles[status] || styles['todo'];
+            },
+
+            isDateOverdue(dateString) {
+                if (!dateString) return false;
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const dueDate = new Date(dateString);
+                return dueDate < today;
+            },
+
+            formatDateDisplay(dateString) {
+                if (!dateString) return "Aucune date";
+                const date = new Date(dateString);
+                return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+            },
+
+            setFilter(type, value) {
+                this.state.filters[type] = value;
+                this.render();
+            },
+
+            // --- NAVIGATION ---
+            navigate(view) {
+                this.state.currentView = view;
+                
+                const titles = {
+                    'dashboard': 'Vue d\'ensemble',
+                    'projects': 'Projets',
+                    'review': 'Revue & Priorisation',
+                    'kpis': 'Indicateurs (KPIs)',
+                    'team': 'Gestion d\'Équipe',
+                    'archive': 'Archives'
+                };
+                document.getElementById('current-view-title').textContent = titles[view];
+                
+                // Update Sidebar
+                document.querySelectorAll('aside nav button').forEach(b => {
+                    b.classList.remove('bg-app-hover', 'text-white');
+                    b.classList.add('text-app-textSecondary');
+                });
+                const activeBtn = document.getElementById(`nav-${view}`);
+                if(activeBtn) {
+                    activeBtn.classList.remove('text-app-textSecondary');
+                    activeBtn.classList.add('bg-app-hover', 'text-white');
+                }
+                
+                this.render();
+            },
+
+            // --- ROUTER RENDERING ---
+            render() {
+                const container = document.getElementById('app-content');
+                if (this.state.isLoading) return;
+
+                // Calcul des progressions
+                this.state.projects.forEach(p => { p.progress = this.calculateProjectProgress(p); });
+
+                switch(this.state.currentView) {
+                    case 'dashboard': container.innerHTML = this.buildDashboardView(); break;
+                    case 'projects': container.innerHTML = this.buildProjectsView(); break;
+                    case 'review': container.innerHTML = this.buildReviewView(); break;
+                    case 'kpis': container.innerHTML = this.buildKPIView(); break;
+                    case 'team': container.innerHTML = this.buildTeamView(); break;
+                    case 'archive': container.innerHTML = this.buildArchiveView(); break;
+                }
+                
+                lucide.createIcons();
+
+                if (this.state.currentView === 'review') {
+                    this.setupDragAndDrop();
+                }
+            },
+
+            // ==========================================
+            // VUES (VIEWS)
+            // ==========================================
+
+            // 1. DASHBOARD
+            buildDashboardView() {
+                const active = this.state.projects.filter(p => p.status !== 'done' && p.status !== 'blocked');
+                const blocked = this.state.projects.filter(p => p.status === 'blocked');
+                
+                // Calcul global
+                let totalTasks = 0, doneTasks = 0;
+                this.state.projects.filter(p => p.status !== 'done').forEach(p => {
+                    totalTasks += p.tasks.length;
+                    doneTasks += p.tasks.filter(t => t.status === 'done').length;
+                });
+                const globalProgress = totalTasks === 0 ? 0 : Math.round((doneTasks / totalTasks) * 100);
+
+                const myActiveProjects = this.state.projects.filter(p => p.managerId === this.state.currentUserId && p.status !== 'done');
+
+                // Tâches Urgentes pour l'utilisateur actuel
+                let myUrgentTasks = [];
+                myActiveProjects.forEach(p => {
+                    p.tasks.filter(t => t.status !== 'done' && t.dueDate).forEach(t => {
+                        myUrgentTasks.push({ ...t, projectId: p.id, projectName: p.name });
+                    });
+                });
+                // Tri par date d'échéance croissante
+                myUrgentTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+                const topUrgentTasks = myUrgentTasks.slice(0, 5); // Garder le top 5
+
+                return `
+                    <div class="max-w-6xl mx-auto animate-fade-in pb-10">
+                        <div class="flex flex-col lg:flex-row gap-6 mb-8">
+                            <!-- Tuile Globale -->
+                            <div class="glass-panel rounded-2xl p-6 flex-1 flex flex-col justify-between">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h2 class="text-sm font-medium text-app-textSecondary uppercase tracking-wider">Avancement Portefeuille</h2>
+                                    <i data-lucide="activity" class="w-5 h-5 text-app-accent"></i>
+                                </div>
+                                <div class="flex items-end space-x-4 mb-2">
+                                    <span class="text-5xl font-bold text-white">${globalProgress}%</span>
+                                    <span class="text-sm text-app-textSecondary mb-1.5">des tâches en cours terminées</span>
+                                </div>
+                                <div class="w-full bg-app-bg rounded-full h-1.5 mt-4 overflow-hidden">
+                                  <div class="bg-gradient-to-r from-app-accent to-blue-500 h-1.5 rounded-full transition-all duration-1000" style="width: ${globalProgress}%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Tâches Urgentes / En Retard -->
+                            <div class="glass-panel rounded-2xl p-5 flex-1 lg:max-w-md border-t-2 border-t-app-danger flex flex-col">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="text-sm font-semibold text-white">Mes Tâches Urgentes</span>
+                                    <i data-lucide="clock" class="w-4 h-4 text-app-textSecondary"></i>
+                                </div>
+                                <div class="flex-1 flex flex-col gap-2 overflow-y-auto">
+                                    ${topUrgentTasks.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucune tâche urgente.</p>' : ''}
+                                    ${topUrgentTasks.map(t => {
+                                        const overdue = this.isDateOverdue(t.dueDate);
+                                        return `
+                                        <div onclick="app.openProjectModal('${t.projectId}')" class="flex items-center justify-between p-2 rounded-lg bg-app-bg/50 border border-transparent hover:border-app-border cursor-pointer transition-colors group">
+                                            <div class="flex flex-col flex-1 min-w-0">
+                                                <span class="text-sm text-white font-medium truncate group-hover:text-app-accent transition-colors">${t.title}</span>
+                                                <span class="text-[10px] text-app-textSecondary truncate">${t.projectName}</span>
+                                            </div>
+                                            <div class="flex items-center shrink-0 ml-3">
+                                                <span class="text-[10px] px-2 py-0.5 rounded-full font-medium ${overdue ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-app-panel text-app-textSecondary border border-app-border'}">
+                                                    ${overdue ? 'En retard' : this.formatDateDisplay(t.dueDate)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    `}).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- KPIs intégrés au Dashboard -->
+                        ${this.buildKPIView(true)}
+
+                        <h3 class="text-lg font-semibold text-white mb-4 mt-8">Mes Projets Prioritaires</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                            ${myActiveProjects
+                                .filter(p => p.priority === 'critique' || p.priority === 'haute')
+                                .map(p => this.renderProjectCard(p)).join('')}
+                            ${myActiveProjects.filter(p => p.priority === 'critique' || p.priority === 'haute').length === 0 ? '<p class="text-app-textSecondary text-sm">Aucun projet critique ou haut actuellement.</p>' : ''}
+                        </div>
+                    </div>
+                `;
+            },
+
+            // 2. PROJETS (Liste / Grille)
+            buildProjectsView() {
+                // Filtrage dynamique
+                let filteredProjects = this.state.projects.filter(p => p.status !== 'done');
+                
+                if (this.state.filters.user === 'me') {
+                    filteredProjects = filteredProjects.filter(p => p.managerId === this.state.currentUserId);
+                } else if (this.state.filters.user !== 'all') {
+                    filteredProjects = filteredProjects.filter(p => p.managerId === this.state.filters.user);
+                }
+
+                if (this.state.filters.status !== 'all') {
+                    filteredProjects = filteredProjects.filter(p => p.status === this.state.filters.status);
+                }
+
+                const isGrid = this.state.projectsViewMode === 'grid';
+
+                return `
+                    <div class="max-w-7xl mx-auto animate-fade-in h-full flex flex-col pb-4">
+                        <div class="flex justify-between items-center mb-6 shrink-0">
+                            <div class="flex space-x-2">
+                                <select onchange="app.setFilter('user', this.value)" class="bg-app-panel border border-app-border text-white text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-app-accent">
+                                    <option value="me" ${this.state.filters.user === 'me' ? 'selected' : ''}>Mes projets</option>
+                                    <option value="all" ${this.state.filters.user === 'all' ? 'selected' : ''}>Tous les projets</option>
+                                    <optgroup label="Par équipe">
+                                        ${this.state.users.filter(u => u.id !== this.state.currentUserId).map(u => 
+                                            `<option value="${u.id}" ${this.state.filters.user === u.id ? 'selected' : ''}>${u.name}</option>`
+                                        ).join('')}
+                                    </optgroup>
+                                </select>
+                                <select onchange="app.setFilter('status', this.value)" class="bg-app-panel border border-app-border text-white text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-app-accent">
+                                    <option value="all" ${this.state.filters.status === 'all' ? 'selected' : ''}>Tous les statuts</option>
+                                    <option value="todo" ${this.state.filters.status === 'todo' ? 'selected' : ''}>À faire</option>
+                                    <option value="in-progress" ${this.state.filters.status === 'in-progress' ? 'selected' : ''}>En cours</option>
+                                    <option value="blocked" ${this.state.filters.status === 'blocked' ? 'selected' : ''}>Bloqué</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Toggle View -->
+                            <div class="flex bg-app-panel rounded-lg p-1 border border-app-border">
+                                <button onclick="app.state.projectsViewMode='grid'; app.render()" class="p-1.5 rounded-md ${isGrid ? 'bg-app-hover text-white shadow' : 'text-app-textSecondary hover:text-white'} transition-all">
+                                    <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                                </button>
+                                <button onclick="app.state.projectsViewMode='list'; app.render()" class="p-1.5 rounded-md ${!isGrid ? 'bg-app-hover text-white shadow' : 'text-app-textSecondary hover:text-white'} transition-all">
+                                    <i data-lucide="list" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 overflow-y-auto">
+                            ${filteredProjects.length === 0 ? '<div class="text-center p-10 text-app-textSecondary">Aucun projet ne correspond à ces filtres.</div>' : ''}
+                            ${isGrid 
+                                ? `<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">${filteredProjects.map(p => this.renderProjectCard(p)).join('')}</div>`
+                                : `<div class="flex flex-col gap-3">${filteredProjects.map(p => this.renderProjectListItem(p)).join('')}</div>`
+                            }
+                        </div>
+                    </div>
+                `;
+            },
+
+            // 3. REVUE (Drag & Drop Kanban par Priorité)
+            buildReviewView() {
+                const columns = [
+                    { id: 'critique', title: 'Critique', bg: 'bg-app-danger/5' },
+                    { id: 'haute', title: 'Haute', bg: 'bg-app-warning/5' },
+                    { id: 'normale', title: 'Normale', bg: 'bg-app-accent/5' },
+                    { id: 'basse', title: 'Basse', bg: 'bg-app-bg' }
+                ];
+
+                return `
+                    <div class="h-full flex flex-col animate-fade-in pb-4">
+                        <p class="text-app-textSecondary text-sm mb-6 shrink-0">Glissez-déposez les projets pour réorganiser la priorité globale.</p>
+                        
+                        <div class="flex-1 flex gap-4 overflow-x-auto">
+                            ${columns.map(col => {
+                                const projs = this.state.projects.filter(p => p.priority === col.id && p.status !== 'done');
+                                return `
+                                <div class="flex flex-col min-w-[300px] w-[300px] shrink-0">
+                                    <div class="flex items-center justify-between mb-3 px-2">
+                                        <h3 class="text-sm font-semibold text-white uppercase tracking-wider">${col.title}</h3>
+                                        <span class="text-xs bg-app-border px-2 py-0.5 rounded-full text-app-textSecondary">${projs.length}</span>
+                                    </div>
+                                    <div class="kanban-column flex-1 ${col.bg} border border-app-border/50 rounded-xl p-3 flex flex-col gap-3 overflow-y-auto transition-colors" data-priority="${col.id}">
+                                        ${projs.map(p => this.renderMiniCard(p)).join('')}
+                                    </div>
+                                </div>
+                                `
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            },
+
+            // 4. KPIS (Mock Visuel)
+            buildKPIView(isEmbedded = false) {
+                const wrapperClass = isEmbedded ? "mb-8" : "max-w-5xl mx-auto animate-fade-in pb-10";
+                const titleHtml = isEmbedded ? "" : `<h2 class="text-xl font-semibold text-white mb-6">Performance de Livraison</h2>`;
+
+                return `
+                    <div class="${wrapperClass}">
+                        ${titleHtml}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            
+                            <div class="glass-panel p-6 rounded-2xl">
+                                <h3 class="text-sm text-app-textSecondary mb-6">Tâches complétées vs Créées (30 jours)</h3>
+                                <div class="flex items-end h-40 gap-2 w-full">
+                                    ${[40, 60, 30, 80, 50, 90, 70].map((h, i) => `
+                                        <div class="flex-1 flex gap-1 items-end h-full group relative">
+                                            <div class="w-1/2 bg-app-border rounded-t-sm h-[${Math.max(10, h-20)}%]"></div>
+                                            <div class="w-1/2 bg-app-accent rounded-t-sm h-[${h}%] group-hover:bg-blue-400 transition-colors"></div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="flex justify-between mt-4 text-xs text-app-textSecondary">
+                                    <span>Semaine -3</span>
+                                    <span>Aujourd'hui</span>
+                                </div>
+                            </div>
+
+                            <div class="glass-panel p-6 rounded-2xl">
+                                <h3 class="text-sm text-app-textSecondary mb-6">Répartition par Tag</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <div class="flex justify-between text-xs mb-1"><span class="text-white">Infra</span> <span class="text-app-textSecondary">45%</span></div>
+                                        <div class="w-full bg-app-bg h-2 rounded-full overflow-hidden"><div class="bg-blue-500 w-[45%] h-full"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-xs mb-1"><span class="text-white">Backend</span> <span class="text-app-textSecondary">30%</span></div>
+                                        <div class="w-full bg-app-bg h-2 rounded-full overflow-hidden"><div class="bg-purple-500 w-[30%] h-full"></div></div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-xs mb-1"><span class="text-white">SecOps</span> <span class="text-app-textSecondary">25%</span></div>
+                                        <div class="w-full bg-app-bg h-2 rounded-full overflow-hidden"><div class="bg-emerald-500 w-[25%] h-full"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                `;
+            },
+
+            // 5. EQUIPE
+            buildTeamView() {
+                return `
+                    <div class="max-w-5xl mx-auto animate-fade-in pb-10">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-semibold text-white">Membres DT Prox</h2>
+                            <button class="px-3 py-1.5 bg-app-panel border border-app-border rounded-lg text-sm hover:text-white transition-all flex items-center">
+                                <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Ajouter
+                            </button>
+                        </div>
+                        <div class="glass-panel rounded-2xl overflow-hidden border border-app-border">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-app-bg/50 border-b border-app-border text-app-textSecondary">
+                                    <tr>
+                                        <th class="px-6 py-4 font-medium">Utilisateur</th>
+                                        <th class="px-6 py-4 font-medium">Rôle</th>
+                                        <th class="px-6 py-4 font-medium">Projets gérés</th>
+                                        <th class="px-6 py-4 font-medium text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-app-border/50">
+                                    ${this.state.users.map(u => {
+                                        const count = this.state.projects.filter(p => p.managerId === u.id && p.status !== 'done').length;
+                                        return `
+                                        <tr class="hover:bg-app-hover/50 transition-colors">
+                                            <td class="px-6 py-4 flex items-center gap-3">
+                                                <div class="w-8 h-8 rounded-full ${u.color} flex items-center justify-center text-xs font-bold text-white shadow-inner">${u.initials}</div>
+                                                <span class="font-medium text-white">${u.name}</span>
+                                                ${this.state.currentUserId === u.id ? '<span class="text-[9px] bg-app-accent/20 text-app-accent px-1.5 py-0.5 rounded uppercase font-bold">Vous</span>' : ''}
+                                            </td>
+                                            <td class="px-6 py-4 text-app-textSecondary">${u.role}</td>
+                                            <td class="px-6 py-4">
+                                                <span class="px-2.5 py-1 bg-app-bg border border-app-border rounded-full text-xs font-mono text-white">${count} actif(s)</span>
+                                            </td>
+                                            <td class="px-6 py-4 text-right">
+                                                <button class="text-app-textSecondary hover:text-white"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+                                            </td>
+                                        </tr>
+                                    `}).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            },
+
+            // 6. ARCHIVES
+            buildArchiveView() {
+                const doneProjects = this.state.projects.filter(p => p.status === 'done');
+                return `
+                    <div class="max-w-5xl mx-auto animate-fade-in pb-10">
+                        <h2 class="text-xl font-semibold text-white mb-6">Projets Terminés (${doneProjects.length})</h2>
+                        <div class="flex flex-col gap-3">
+                            ${doneProjects.map(p => this.renderProjectListItem(p)).join('')}
+                        </div>
+                    </div>
+                `;
+            },
+
+            // --- COMPOSANTS UI RENDERS ---
+
+            renderProjectCard(project) {
+                const user = this.getUser(project.managerId);
+                const pStyle = this.getPriorityStyle(project.priority);
+                const sStyle = this.getStatusStyle(project.status);
+
+                return `
+                    <div onclick="app.openProjectModal('${project.id}')" class="glass-panel p-5 rounded-2xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all group relative overflow-hidden flex flex-col h-56">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-[10px] font-mono text-app-textSecondary border border-app-border bg-app-bg px-2 py-0.5 rounded shadow-sm">${project.id}</span>
+                            <div class="flex gap-2">
+                                <span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded flex items-center gap-1 ${pStyle.bg} ${pStyle.color} border ${pStyle.border}">
+                                    <i data-lucide="${pStyle.icon}" class="w-3 h-3"></i> ${project.priority}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-base font-semibold text-white leading-tight mb-2 group-hover:text-app-accent transition-colors">${project.name}</h3>
+                        
+                        <div class="flex flex-wrap gap-1 mb-auto">
+                            ${project.tags.slice(0, 3).map(tag => `<span class="text-[10px] px-1.5 py-0.5 rounded-sm bg-app-border text-app-textSecondary">${tag}</span>`).join('')}
+                        </div>
+
+                        <div class="pt-4 mt-4 border-t border-app-border/50 flex items-center justify-between">
+                            <div class="flex items-center gap-3 w-2/3">
+                                <div class="w-6 h-6 rounded-full ${user.color} flex items-center justify-center text-[9px] font-bold text-white shrink-0">${user.initials}</div>
+                                <div class="w-full">
+                                    <div class="flex justify-between text-[10px] text-app-textSecondary mb-1">
+                                        <span>Progression</span>
+                                        <span>${project.progress}%</span>
+                                    </div>
+                                    <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-app-accent h-full rounded-full" style="width: ${project.progress}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="text-[10px] ${sStyle.color} border ${sStyle.border} px-1.5 py-0.5 rounded-full bg-app-bg">${sStyle.label}</span>
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderProjectListItem(project) {
+                const user = this.getUser(project.managerId);
+                const pStyle = this.getPriorityStyle(project.priority);
+                const sStyle = this.getStatusStyle(project.status);
+
+                return `
+                    <div onclick="app.openProjectModal('${project.id}')" class="glass-panel p-3 rounded-xl cursor-pointer hover:border-app-textSecondary/30 hover:bg-app-hover transition-all flex items-center gap-4">
+                        <span class="text-xs font-mono text-app-textSecondary w-16">${project.id}</span>
+                        <div class="flex-1 font-medium text-white text-sm truncate">${project.name}</div>
+                        <div class="w-32">
+                            <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-app-accent h-full rounded-full" style="width: ${project.progress}%"></div>
+                            </div>
+                        </div>
+                        <div class="w-24 flex gap-1">
+                             ${project.tags.slice(0, 2).map(tag => `<span class="text-[10px] px-1.5 py-0.5 rounded-sm bg-app-border text-app-textSecondary truncate">${tag}</span>`).join('')}
+                        </div>
+                        <div class="w-24 text-center">
+                            <span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded flex inline-flex items-center gap-1 ${pStyle.bg} ${pStyle.color}">
+                                <i data-lucide="${pStyle.icon}" class="w-3 h-3"></i> ${project.priority}
+                            </span>
+                        </div>
+                        <div class="w-24 text-right">
+                             <span class="text-[10px] ${sStyle.color}">${sStyle.label}</span>
+                        </div>
+                        <div class="w-8 h-8 rounded-full ${user.color} flex items-center justify-center text-[10px] font-bold text-white shrink-0">${user.initials}</div>
+                    </div>
+                `;
+            },
+
+            renderMiniCard(project) {
+                return `
+                    <div class="bg-app-panel border border-app-border p-3 rounded-lg shadow-sm cursor-grab active:cursor-grabbing hover:border-app-accent/40 transition-colors group relative no-select" 
+                         draggable="true" data-id="${project.id}">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[10px] font-mono text-app-textSecondary">${project.id}</span>
+                            <div class="text-xs font-medium text-white">${project.progress}%</div>
+                        </div>
+                        <p class="text-sm font-medium text-white leading-snug truncate">${project.name}</p>
+                    </div>
+                `;
+            },
+
+            // --- DRAG AND DROP (Revue) ---
+            setupDragAndDrop() {
+                const cards = document.querySelectorAll('[draggable="true"]');
+                const columns = document.querySelectorAll('.kanban-column');
+
+                cards.forEach(card => {
+                    card.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', card.dataset.id);
+                        setTimeout(() => card.classList.add('ghost-card', 'opacity-50'), 0);
+                    });
+                    card.addEventListener('dragend', () => card.classList.remove('ghost-card', 'opacity-50'));
+                });
+
+                columns.forEach(col => {
+                    col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('bg-app-hover/50'); });
+                    col.addEventListener('dragleave', () => col.classList.remove('bg-app-hover/50'));
+                    col.addEventListener('drop', e => {
+                        e.preventDefault();
+                        col.classList.remove('bg-app-hover/50');
+                        const projectId = e.dataTransfer.getData('text/plain');
+                        const newPriority = col.dataset.priority;
+                        
+                        const proj = this.state.projects.find(p => p.id === projectId);
+                        if (proj && proj.priority !== newPriority) {
+                            proj.priority = newPriority;
+                            this.render();
+                        }
+                    });
+                });
+            },
+
+            // --- MODALE PROJET (Édition) ---
+            openProjectModal(id) {
+                const project = this.state.projects.find(p => p.id === id);
+                if (!project) return;
+                
+                const user = this.getUser(project.managerId);
+                const pStyle = this.getPriorityStyle(project.priority);
+                const sStyle = this.getStatusStyle(project.status);
+
+                const modalHtml = `
+                    <div class="p-8 border-b border-app-border/50 bg-gradient-to-b from-app-panel to-transparent">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <span class="px-2 py-1 bg-app-bg border border-app-border rounded-md text-xs font-mono text-app-textSecondary">${project.id}</span>
+                                
+                                <!-- Select Priorité -->
+                                <div class="relative">
+                                    <select onchange="app.updateProjectField('${project.id}', 'priority', this.value)" class="badge-select px-2.5 py-1 text-[11px] uppercase font-bold rounded flex items-center ${pStyle.bg} ${pStyle.color} border ${pStyle.border}">
+                                        <option value="critique" ${project.priority === 'critique' ? 'selected' : ''}>Critique</option>
+                                        <option value="haute" ${project.priority === 'haute' ? 'selected' : ''}>Haute</option>
+                                        <option value="normale" ${project.priority === 'normale' ? 'selected' : ''}>Normale</option>
+                                        <option value="basse" ${project.priority === 'basse' ? 'selected' : ''}>Basse</option>
+                                    </select>
+                                </div>
+
+                                <!-- Select Statut -->
+                                <div class="relative">
+                                    <select onchange="app.updateProjectField('${project.id}', 'status', this.value)" class="badge-select px-2.5 py-1 text-[11px] uppercase font-bold rounded bg-app-bg border ${sStyle.border} ${sStyle.color}">
+                                        <option value="todo" ${project.status === 'todo' ? 'selected' : ''}>À faire</option>
+                                        <option value="in-progress" ${project.status === 'in-progress' ? 'selected' : ''}>En cours</option>
+                                        <option value="blocked" ${project.status === 'blocked' ? 'selected' : ''}>Bloqué</option>
+                                        <option value="done" ${project.status === 'done' ? 'selected' : ''}>Terminé</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button onclick="app.closeModal('project-modal')" class="text-app-textSecondary hover:text-white bg-app-bg p-1.5 rounded-full hover:bg-app-hover transition-colors">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Input Nom du projet -->
+                        <input type="text" onchange="app.updateProjectField('${project.id}', 'name', this.value)" value="${project.name}" class="w-full bg-transparent border-none text-3xl font-bold text-white mb-2 tracking-tight focus:outline-none focus:ring-0 placeholder-app-border p-0">
+                        
+                        <!-- Input Description -->
+                        <textarea onchange="app.updateProjectField('${project.id}', 'description', this.value)" class="w-full bg-transparent border-none text-app-textSecondary text-sm leading-relaxed resize-none focus:outline-none focus:ring-0 p-0" rows="2">${project.description}</textarea>
+                        
+                        <!-- Inline Tags -->
+                        <div class="flex flex-wrap items-center gap-2 mt-4">
+                            ${project.tags.map(tag => `
+                                <div class="px-2 py-1 rounded bg-app-border/50 text-xs text-app-textSecondary flex items-center gap-1 group/tag">
+                                    <i data-lucide="tag" class="w-3 h-3"></i>${tag}
+                                    <button onclick="app.removeTag('${project.id}', '${tag}')" class="hidden group-hover/tag:block hover:text-red-400 ml-1" title="Supprimer">
+                                        <i data-lucide="x" class="w-3 h-3"></i>
+                                    </button>
+                                </div>
+                            `).join('')}
+                            <button onclick="app.addTag('${project.id}')" class="px-2 py-1 rounded border border-dashed border-app-border text-xs text-app-textSecondary hover:text-white hover:border-app-accent transition-colors flex items-center gap-1">
+                                <i data-lucide="plus" class="w-3 h-3"></i> Tag
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-8 flex-1 overflow-y-auto bg-app-bg/50">
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+                            <!-- Sélecteur Responsable -->
+                            <div class="glass-panel p-4 rounded-xl flex items-center gap-4 relative group">
+                                <div class="w-10 h-10 rounded-full ${user.color} flex items-center justify-center text-sm font-bold text-white shadow-inner shrink-0">${user.initials}</div>
+                                <div class="flex-1">
+                                    <div class="text-[10px] text-app-textSecondary uppercase font-semibold tracking-wider">Responsable</div>
+                                    <select onchange="app.updateProjectField('${project.id}', 'managerId', this.value)" class="w-full bg-transparent border-none text-sm text-white font-medium p-0 focus:outline-none appearance-none cursor-pointer">
+                                        ${this.state.users.map(u => `<option value="${u.id}" ${project.managerId === u.id ? 'selected' : ''} class="bg-app-panel text-white">${u.name}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-app-textSecondary absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </div>
+
+                            <div class="glass-panel p-4 rounded-xl flex items-center gap-4 relative group">
+                                <div class="w-10 h-10 rounded-full bg-app-panel border border-app-border flex items-center justify-center text-app-textSecondary shrink-0">
+                                    <i data-lucide="calendar" class="w-5 h-5"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-[10px] text-app-textSecondary uppercase font-semibold tracking-wider">Échéance globale</div>
+                                    <input type="date" onchange="app.updateProjectField('${project.id}', 'dueDate', this.value)" value="${project.dueDate}" class="w-full bg-transparent border-none text-sm text-white font-medium p-0 focus:outline-none cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tasks Section -->
+                        <div class="mb-4 flex items-center justify-between">
+                            <h3 class="text-sm font-semibold text-white uppercase tracking-wider">Avancement Tâches (${project.progress}%)</h3>
+                            <button onclick="app.addTask('${project.id}')" class="text-xs text-app-accent hover:text-blue-400 flex items-center"><i data-lucide="plus" class="w-3 h-3 mr-1"></i> Ajouter</button>
+                        </div>
+                        
+                        <div class="w-full bg-app-panel rounded-full h-2 mb-4 overflow-hidden border border-app-border">
+                            <div class="bg-app-accent h-full rounded-full transition-all duration-500" style="width: ${project.progress}%"></div>
+                        </div>
+
+                        <div class="space-y-2 mb-8">
+                            ${project.tasks.map(t => {
+                                const isDone = t.status === 'done';
+                                const isOverdue = !isDone && this.isDateOverdue(t.dueDate);
+                                return `
+                                <div class="flex items-center justify-between p-3 rounded-lg border border-transparent hover:border-app-border hover:bg-app-hover transition-colors group">
+                                    <div class="flex items-center flex-1 min-w-0 pr-4 cursor-pointer" onclick="app.toggleTaskFromModal('${project.id}', '${t.id}')">
+                                        <div class="w-5 h-5 rounded border flex items-center justify-center mr-4 shrink-0 transition-colors ${isDone ? 'bg-app-accent border-app-accent text-white' : 'border-app-textSecondary group-hover:border-app-accent group-hover:bg-app-accent/10'}">
+                                            ${isDone ? '<i data-lucide="check" class="w-3 h-3"></i>' : ''}
+                                        </div>
+                                        <span class="text-sm truncate ${isDone ? 'text-app-textSecondary line-through' : 'text-white'}">${t.title}</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center shrink-0 gap-3">
+                                        <!-- Sélecteur Date Tâche -->
+                                        <input type="date" value="${t.dueDate || ''}" onchange="app.updateTaskField('${project.id}', '${t.id}', 'dueDate', this.value)" class="bg-transparent border border-transparent hover:border-app-border focus:border-app-accent rounded px-1 py-0.5 text-[10px] ${isOverdue ? 'text-red-400 font-bold' : 'text-app-textSecondary'} cursor-pointer outline-none">
+                                        
+                                        <button onclick="app.deleteTask('${project.id}', '${t.id}')" class="text-app-textSecondary hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1" title="Supprimer la tâche">
+                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `}).join('')}
+                            ${project.tasks.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucune tâche pour le moment.</p>' : ''}
+                        </div>
+
+                        <!-- Footer Actions -->
+                        <div class="border-t border-app-border/50 pt-6 flex justify-end">
+                             <button onclick="app.deleteProject('${project.id}')" class="text-xs text-red-400 hover:text-red-300 flex items-center px-3 py-2 rounded-lg hover:bg-red-400/10 transition-colors">
+                                <i data-lucide="trash-2" class="w-3 h-3 mr-1.5"></i> Supprimer ce projet
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('modal-content').innerHTML = modalHtml;
+                const modal = document.getElementById('project-modal');
+                modal.classList.remove('hidden');
+                lucide.createIcons();
+            },
+
+            closeModal(modalId) {
+                document.getElementById(modalId).classList.add('hidden');
+                this.render(); 
+            },
+
+            toggleTaskFromModal(projectId, taskId) {
+                const project = this.state.projects.find(p => p.id === projectId);
+                const task = project.tasks.find(t => t.id === taskId);
+                task.status = task.status === 'done' ? 'todo' : 'done';
+                project.progress = this.calculateProjectProgress(project); 
+                
+                this.openProjectModal(projectId);
+                console.log(`GAS: Update task ${taskId} to ${task.status}`);
+            },
+
+            toggleCommandPalette() {
+                const palette = document.getElementById('command-palette');
+                const input = document.getElementById('cmd-input');
+                if (palette.classList.contains('hidden')) {
+                    palette.classList.remove('hidden');
+                    input.value = '';
+                    setTimeout(() => input.focus(), 50);
+                } else {
+                    palette.classList.add('hidden');
+                }
+            },
+
+            setupEventListeners() {
+                document.addEventListener('keydown', (e) => {
+                    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                        e.preventDefault();
+                        this.toggleCommandPalette();
+                    }
+                    if (e.key === 'Escape') {
+                        document.getElementById('command-palette').classList.add('hidden');
+                        document.getElementById('project-modal').classList.add('hidden');
+                        document.getElementById('user-switcher-modal').classList.add('hidden');
+                        document.getElementById('create-project-modal').classList.add('hidden');
+                        this.render();
+                    }
+                });
             }
-          };
-          
-          const deleteUser = (index) => {
-            if(!confirm('Supprimer ce membre ?')) return;
-            const user = teamMembers.value[index];
-            google.script.run.withSuccessHandler(() => {
-              teamMembers.value.splice(index, 1);
-              showToast('Membre supprimé', 'info');
-            }).deleteUser(index); // Passing index for mock simplicity, usually ID
-          };
-          
-          // Switch User Method
-          const switchUser = (user) => {
-             currentUser.value = user;
-             showUserMenu.value = false;
-             showToast(`Connecté en tant que ${user.name}`, 'success');
-             // Optionally refresh data if permissions/views depend on user
-             // loadData(); 
-          };
+        };
 
-          const getPriorityClass = (p) => {
-            switch(p) {
-              case 'Haute': return 'text-red-600 bg-red-100 border-red-200 dark:text-red-400 dark:border-red-900/50 dark:bg-red-900/20';
-              case 'Moyenne': return 'text-yellow-600 bg-yellow-100 border-yellow-200 dark:text-yellow-400 dark:border-yellow-900/50 dark:bg-yellow-900/20';
-              default: return 'text-blue-600 bg-blue-100 border-blue-200 dark:text-blue-400 dark:border-blue-900/50 dark:bg-blue-900/20';
-            }
-          };
-          const getProjectStatusClass = (s) => {
-             switch(s) {
-                case 'Terminé': return 'text-green-700 bg-green-100 border-green-200 dark:text-green-400 dark:border-green-900/50 dark:bg-green-900/20';
-                case 'En cours': return 'text-yellow-700 bg-yellow-100 border-yellow-200 dark:text-yellow-400 dark:border-yellow-900/50 dark:bg-yellow-900/20';
-                case 'En pause': return 'text-slate-600 bg-slate-100 border-slate-200 dark:text-slate-400 dark:border-slate-700 dark:bg-slate-800';
-                case 'Annulé': return 'text-red-700 bg-red-100 border-red-200 dark:text-red-400 dark:border-red-900/50 dark:bg-red-900/20';
-                default: return 'text-slate-600 bg-slate-100 border-slate-200';
-             }
-          };
-          const getStatusColor = (s) => {
-             if (s === 'À faire') return 'bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-200';
-             if (s === 'En cours') return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200';
-             return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
-          };
-          const getUserAvatar = (name) => {
-             const user = teamMembers.value.find(u => u.name === name);
-             if(user) return user.avatar;
-             return `https://ui-avatars.com/api/?name=${name || '?'}&background=random&color=fff&size=24`;
-          };
-          const formatDate = (d) => d ? new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-          const formatDateShort = (d) => d ? new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '';
-          const isOverdue = (task) => {
-             if(!task.due_date || task.status === 'Terminé') return false;
-             const now = new Date(); now.setHours(0,0,0,0);
-             return new Date(task.due_date) < now;
-          };
-
-          const initIcons = () => nextTick(() => { if (window.lucide) window.lucide.createIcons(); });
-
-          onMounted(() => loadData());
-          onUpdated(() => initIcons());
-
-          return {
-            loading, sidebarOpen, isMobile, currentViewScope, viewType, searchQuery, selectedUserFilter, toasts, showCompleted,
-            activeProject, isEditingDesc, newTaskTitle, newTaskAssignee, newTaskDate, taskInputRef, scrollContainer,
-            showNewProjectModal, showLegalModal, showTeamModal, showKPIModal, showUserModal, showUserMenu,
-            newProjectForm, newUserForm, filteredProjects, filteredTeam, getTasksByProject, getTasksByStatus, teamMembers, currentUser, kpiData, 
-            dashboardData, projects, tasks, editingUser,
-            openProjectDetails, toggleEditDesc, addTask, cycleStatus, createProject, updateProject, isOverdueProject,
-            editingTaskId, editTaskForm, startEdit, cancelEdit, saveEdit, deleteTask,
-            getPriorityClass, getProjectStatusClass, getStatusColor, getUserAvatar, formatDate, formatDateShort, isOverdue,
-            initSortable, initProjectSortable, renderMarkdown, stripMarkdown, toInputDate,
-            addTag, removeTag, hasDateConflict, exportToCSV,
-            openUserModal, saveUser, deleteUser, switchUser
-          };
-        }
-      });
-      
-      app.directive('click-outside', {
-        beforeMount(el, binding) {
-          el.clickOutsideEvent = (event) => {
-            if (!(el === event.target || el.contains(event.target))) {
-              binding.value(event);
-            }
-          };
-          document.body.addEventListener('click', el.clickOutsideEvent);
-        },
-        unmounted(el) {
-          document.body.removeEventListener('click', el.clickOutsideEvent);
-        },
-      });
-
-      app.mount('#app');
+        // Boot
+        document.addEventListener('DOMContentLoaded', () => app.init());
     </script>
-  </body>
+</body>
 </html>
