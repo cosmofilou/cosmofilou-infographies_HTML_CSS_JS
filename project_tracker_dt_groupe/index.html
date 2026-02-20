@@ -10,11 +10,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS (CDN) -->
+    <!-- ⚠️ ATTENTION ARCHITECTURE PROD : Tailwind CDN est utilisé pour le prototype. 
+         En vraie production, on pré-compile le CSS (Tailwind CLI) pour optimiser le temps de chargement. -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- ⚡ PERF : Morphdom pour l'Optimistic UI (Virtual DOM diffing) - Évite le DOM Thrashing -->
+    <script src="https://unpkg.com/morphdom@2.7.0/dist/morphdom-umd.js"></script>
 
     <!-- Tailwind Configuration -->
     <script>
@@ -53,13 +57,11 @@
     </script>
 
     <style>
-        /* Scrollbar minimaliste */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #22252A; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #333842; }
         
-        /* Glassmorphism & Transparence */
         .glass-panel {
             background: rgba(22, 24, 29, 0.65);
             backdrop-filter: blur(16px);
@@ -78,7 +80,6 @@
         .no-select { user-select: none; -webkit-user-select: none; }
         .ghost-card { opacity: 0.4; border: 1px dashed #5E6AD2; }
 
-        /* Custom selects in modal to look like badges */
         select.badge-select {
             appearance: none;
             outline: none;
@@ -93,7 +94,6 @@
             color: #EDEDED;
         }
 
-        /* Task Date Input */
         input[type="date"]::-webkit-calendar-picker-indicator {
             filter: invert(1);
             opacity: 0.5;
@@ -106,8 +106,7 @@
 </head>
 <body class="bg-app-bg text-app-textPrimary font-sans antialiased h-screen overflow-hidden flex selection:bg-app-accent selection:text-white">
 
-    <!-- SIDEBAR BACKDROP (Mobile uniquement) -->
-    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden md:hidden transition-opacity opacity-0" onclick="app.toggleSidebar()"></div>
+    <div id="sidebar-backdrop" data-action="toggle-sidebar" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden md:hidden transition-opacity opacity-0"></div>
 
     <!-- SIDEBAR -->
     <aside id="sidebar" class="w-64 border-r border-app-border bg-app-bg flex flex-col transition-transform duration-300 z-40 fixed inset-y-0 left-0 -translate-x-full md:relative md:translate-x-0 shrink-0">
@@ -119,7 +118,7 @@
                 <span class="font-bold text-sm tracking-wide text-white block leading-none">DT Prox</span>
                 <span class="text-[10px] text-app-textSecondary font-medium tracking-wider">DIRECTION TECHNIQUE</span>
             </div>
-            <button class="ml-auto md:hidden text-app-textSecondary hover:text-white" onclick="app.toggleSidebar()">
+            <button class="ml-auto md:hidden text-app-textSecondary hover:text-white" data-action="toggle-sidebar">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
@@ -127,41 +126,35 @@
         <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto mt-2">
             <div class="text-[10px] font-bold text-app-textSecondary mb-2 mt-2 px-3 tracking-wider uppercase">Pilotage</div>
             
-            <button onclick="app.navigate('dashboard')" id="nav-dashboard" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+            <button data-action="navigate" data-view="dashboard" id="nav-dashboard" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
                 <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Vue d'ensemble
             </button>
-            <button onclick="app.navigate('projects')" id="nav-projects" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+            <button data-action="navigate" data-view="projects" id="nav-projects" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
                 <i data-lucide="folder-kanban" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Projets
             </button>
-            <button onclick="app.navigate('review')" id="nav-review" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+            <button data-action="navigate" data-view="review" id="nav-review" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
                 <i data-lucide="arrow-down-up" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Revue (Priorisation)
             </button>
-            <button onclick="app.navigate('roadmap')" id="nav-roadmap" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+            <button data-action="navigate" data-view="roadmap" id="nav-roadmap" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
                 <i data-lucide="calendar-days" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Roadmap
             </button>
 
             <div class="text-[10px] font-bold text-app-textSecondary mb-2 mt-6 px-3 tracking-wider uppercase">Organisation</div>
             
-            <button onclick="app.navigate('team')" id="nav-team" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+            <button data-action="navigate" data-view="team" id="nav-team" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
                 <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100"></i> Équipe
             </button>
-            <button onclick="app.navigate('archive')" id="nav-archive" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+            <button data-action="navigate" data-view="archive" id="nav-archive" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
                 <i data-lucide="archive" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100"></i> Archives
             </button>
         </nav>
         
-        <!-- Mentions Légales & Version -->
         <div class="px-4 pb-4 pt-2 text-center select-none">
-            <p class="text-[9px] text-app-textSecondary/50 font-medium tracking-wider uppercase">
-                © 2026 DT Prox
-            </p>
-            <p class="text-[9px] text-app-textSecondary/40 mt-1">
-                v1.2.0 • <a href="#" class="hover:text-app-textSecondary transition-colors">Mentions légales</a>
-            </p>
+            <p class="text-[9px] text-app-textSecondary/50 font-medium tracking-wider uppercase">© 2026 DT Prox</p>
+            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.3.0 • Secure & Optimistic</p>
         </div>
 
-        <!-- USER SWITCHER BUTTON -->
-        <div class="p-4 border-t border-app-border bg-app-panel/30 cursor-pointer hover:bg-app-hover transition-colors" onclick="app.openUserSwitcher()">
+        <div class="p-4 border-t border-app-border bg-app-panel/30 cursor-pointer hover:bg-app-hover transition-colors" data-action="open-user-switcher">
             <button id="sidebar-user" class="w-full flex items-center px-2 py-1.5 rounded-md text-sm text-app-textSecondary hover:text-white transition-colors group">
                 <!-- Rendu dynamique JS -->
             </button>
@@ -174,7 +167,7 @@
         <!-- TOPBAR -->
         <header class="h-16 border-b border-app-border glass-panel flex items-center justify-between px-4 md:px-6 z-10 sticky top-0">
             <div class="flex items-center">
-                <button class="md:hidden mr-4 text-app-textSecondary hover:text-white p-1" onclick="app.toggleSidebar()">
+                <button class="md:hidden mr-4 text-app-textSecondary hover:text-white p-1" data-action="toggle-sidebar">
                     <i data-lucide="menu" class="w-5 h-5"></i>
                 </button>
                 <div class="text-sm font-medium flex items-center hidden sm:flex">
@@ -182,23 +175,21 @@
                     <i data-lucide="chevron-right" class="w-4 h-4 mx-2 text-app-border"></i>
                     <span id="current-view-title" class="text-white font-semibold">Vue d'ensemble</span>
                 </div>
-                <!-- Titre simplifié sur mobile -->
                 <span id="current-view-title-mobile" class="text-white font-semibold text-sm sm:hidden">Vue d'ensemble</span>
             </div>
             
             <div class="flex items-center space-x-2 md:space-x-4">
-                <button onclick="app.toggleCommandPalette()" class="flex items-center bg-app-bg border border-app-border hover:border-app-accent/50 rounded-lg px-2 md:px-3 py-1.5 text-sm text-app-textSecondary transition-all w-8 md:w-56 shadow-sm group justify-center md:justify-start">
+                <button data-action="toggle-cmd" class="flex items-center bg-app-bg border border-app-border hover:border-app-accent/50 rounded-lg px-2 md:px-3 py-1.5 text-sm text-app-textSecondary transition-all w-8 md:w-56 shadow-sm group justify-center md:justify-start">
                     <i data-lucide="search" class="w-4 h-4 opacity-50 group-hover:text-app-accent transition-colors md:mr-2"></i>
                     <span class="flex-1 text-left opacity-70 hidden md:inline">Rechercher...</span>
                     <kbd class="hidden sm:inline-block text-[10px] font-mono bg-app-panel border border-app-border px-1.5 py-0.5 rounded text-app-textSecondary">⌘K</kbd>
                 </button>
                 
-                <!-- BOUTON EXPORT -->
-                <button onclick="app.exportData()" class="w-8 h-8 rounded-full bg-app-panel border border-app-border hover:bg-app-hover hover:border-app-textSecondary/50 flex items-center justify-center text-app-textSecondary hover:text-white shadow-sm transition-all shrink-0" title="Exporter les données (CSV)">
+                <button data-action="export-data" class="w-8 h-8 rounded-full bg-app-panel border border-app-border hover:bg-app-hover hover:border-app-textSecondary/50 flex items-center justify-center text-app-textSecondary hover:text-white shadow-sm transition-all shrink-0" title="Exporter les données (CSV)">
                     <i data-lucide="download" class="w-4 h-4"></i>
                 </button>
 
-                <button onclick="app.openCreateProjectModal()" class="w-8 h-8 rounded-full bg-app-accent hover:bg-app-accent/80 flex items-center justify-center text-white shadow-lg shadow-app-accent/20 transition-all shrink-0" title="Créer un projet">
+                <button data-action="open-create-modal" class="w-8 h-8 rounded-full bg-app-accent hover:bg-app-accent/80 flex items-center justify-center text-white shadow-lg shadow-app-accent/20 transition-all shrink-0" title="Créer un projet">
                     <i data-lucide="plus" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -218,21 +209,21 @@
 
     <!-- PROJECT MODAL (Détail & Édition) -->
     <div id="project-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="app.closeModal('project-modal')"></div>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" data-action="close-modal" data-modal-id="project-modal"></div>
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full md:h-auto md:max-h-[85vh] md:max-w-2xl glass-modal rounded-none md:rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-in">
             <div id="modal-content" class="flex flex-col h-full overflow-y-auto p-0 relative">
-                <!-- Rendu dynamique ici -->
+                <!-- Rendu dynamique Morphdom ici -->
             </div>
         </div>
     </div>
 
     <!-- CREATE PROJECT MODAL -->
     <div id="create-project-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="app.closeModal('create-project-modal')"></div>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" data-action="close-modal" data-modal-id="create-project-modal"></div>
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full md:h-auto md:max-w-lg glass-modal rounded-none md:rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-in">
             <div class="p-6 border-b border-app-border flex justify-between items-center">
                 <h2 class="text-xl font-bold text-white">Nouveau Projet</h2>
-                <button onclick="app.closeModal('create-project-modal')" class="text-app-textSecondary hover:text-white md:hidden">
+                <button data-action="close-modal" data-modal-id="create-project-modal" class="text-app-textSecondary hover:text-white md:hidden">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -262,19 +253,19 @@
                 </div>
             </div>
             <div class="p-6 border-t border-app-border flex justify-end gap-3 bg-app-bg/50 shrink-0">
-                <button onclick="app.closeModal('create-project-modal')" class="px-4 py-2 rounded-lg text-sm font-medium text-app-textSecondary hover:text-white transition-colors hidden md:block">Annuler</button>
-                <button onclick="app.createProject()" class="w-full md:w-auto px-4 py-3 md:py-2 rounded-lg text-sm font-medium bg-app-accent text-white hover:bg-app-accent/80 transition-colors shadow-lg shadow-app-accent/20">Créer le projet</button>
+                <button data-action="close-modal" data-modal-id="create-project-modal" class="px-4 py-2 rounded-lg text-sm font-medium text-app-textSecondary hover:text-white transition-colors hidden md:block">Annuler</button>
+                <button data-action="create-project" class="w-full md:w-auto px-4 py-3 md:py-2 rounded-lg text-sm font-medium bg-app-accent text-white hover:bg-app-accent/80 transition-colors shadow-lg shadow-app-accent/20">Créer le projet</button>
             </div>
         </div>
     </div>
 
     <!-- USER SWITCHER MODAL -->
     <div id="user-switcher-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="app.closeModal('user-switcher-modal')"></div>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" data-action="close-modal" data-modal-id="user-switcher-modal"></div>
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full md:h-auto md:max-w-sm glass-modal rounded-none md:rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-in">
             <div class="p-4 border-b border-app-border flex justify-between items-center">
                 <h3 class="text-sm font-semibold text-white uppercase tracking-wider">Changer d'utilisateur</h3>
-                <button onclick="app.closeModal('user-switcher-modal')" class="text-app-textSecondary hover:text-white md:hidden">
+                <button data-action="close-modal" data-modal-id="user-switcher-modal" class="text-app-textSecondary hover:text-white md:hidden">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -286,21 +277,21 @@
 
     <!-- COMMAND PALETTE (CMD+K) -->
     <div id="command-palette" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="app.toggleCommandPalette()"></div>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" data-action="toggle-cmd"></div>
         <div class="absolute top-0 md:top-1/4 left-1/2 -translate-x-1/2 w-full h-full md:h-auto md:max-w-lg glass-modal rounded-none md:rounded-xl shadow-2xl overflow-hidden flex flex-col animate-slide-up">
             <div class="flex items-center px-4 border-b border-app-border shrink-0">
                 <i data-lucide="search" class="w-5 h-5 text-app-accent mr-3"></i>
                 <input type="text" id="cmd-input" class="flex-1 bg-transparent border-none py-4 text-white placeholder-app-textSecondary focus:outline-none focus:ring-0 text-lg" placeholder="Chercher un projet, une tâche...">
                 <kbd class="hidden md:inline-block text-[10px] font-mono bg-app-panel border border-app-border px-1.5 py-0.5 rounded text-app-textSecondary">ESC</kbd>
-                <button onclick="app.toggleCommandPalette()" class="md:hidden text-app-textSecondary ml-2"><i data-lucide="x" class="w-5 h-5"></i></button>
+                <button data-action="toggle-cmd" class="md:hidden text-app-textSecondary ml-2"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div class="max-h-[calc(100vh-60px)] md:max-h-64 overflow-y-auto p-2" id="cmd-results">
                 <div class="px-3 py-2 text-xs font-semibold text-app-textSecondary tracking-wider">SUGGESTIONS</div>
-                <button onclick="app.openCreateProjectModal(); app.toggleCommandPalette()" class="w-full flex items-center px-3 py-2 rounded-lg hover:bg-app-hover text-left group transition-colors">
+                <button data-action="open-create-modal" class="w-full flex items-center px-3 py-2 rounded-lg hover:bg-app-hover text-left group transition-colors">
                     <i data-lucide="plus" class="w-4 h-4 mr-3 text-app-accent group-hover:text-white"></i>
                     <span class="text-sm text-app-textPrimary">Créer un nouveau projet</span>
                 </button>
-                <button onclick="app.navigate('projects'); app.toggleCommandPalette()" class="w-full flex items-center px-3 py-2 rounded-lg hover:bg-app-hover text-left group transition-colors">
+                <button data-action="navigate" data-view="projects" class="w-full flex items-center px-3 py-2 rounded-lg hover:bg-app-hover text-left group transition-colors">
                     <i data-lucide="folder" class="w-4 h-4 mr-3 text-app-textSecondary group-hover:text-white"></i>
                     <span class="text-sm text-app-textPrimary">Voir tous les projets</span>
                 </button>
@@ -313,23 +304,22 @@
         const app = {
             state: {
                 currentView: 'dashboard',
-                projectsViewMode: 'grid', // 'grid' | 'list'
+                projectsViewMode: 'grid',
                 isLoading: true,
                 projects: [],
                 users: [],
-                currentUserId: 'U1', // Utilisateur par défaut
+                currentUserId: 'U1',
+                currentModalProjectId: null,
                 filters: {
-                    user: 'me', // 'me', 'all', ou ID spécifique
+                    user: 'me',
                     status: 'all',
                     priority: 'all'
                 }
             },
 
             init() {
-                lucide.createIcons();
-                this.setupEventListeners();
+                this.setupEventListeners(); // Event Delegation Globale (Architecture)
                 
-                // Simulation récupération de données complexes
                 setTimeout(() => {
                     this.state.users = [
                         { id: "U1", name: "Jean Dupont", role: "Directeur Tech", initials: "JD", color: "bg-blue-600" },
@@ -337,11 +327,9 @@
                         { id: "U3", name: "Alan Turing", role: "Archi Data", initials: "AT", color: "bg-emerald-600" }
                     ];
 
-                    // Obtenir la date d'aujourd'hui, hier et dans 3 jours pour la démo
                     const today = new Date();
                     const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
                     const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 2);
-
                     const dToday = today.toISOString().split('T')[0];
                     const dYesterday = yesterday.toISOString().split('T')[0];
                     const dTomorrow = tomorrow.toISOString().split('T')[0];
@@ -351,12 +339,8 @@
                             id: "PRJ-01",
                             name: "Migration Cloud AWS 2026",
                             description: "Basculement de l'infrastructure legacy vers une architecture serverless AWS. Impact majeur sur les coûts OPEX.",
-                            status: "in-progress", 
-                            priority: "critique", 
-                            progress: 0, 
-                            tags: ["Infra", "Cloud", "SecOps"],
-                            managerId: "U1",
-                            dueDate: "2026-06-30",
+                            status: "in-progress", priority: "critique", progress: 0, 
+                            tags: ["Infra", "Cloud", "SecOps"], managerId: "U1", dueDate: "2026-06-30",
                             attachments: [
                                 { name: "Architecture_V2.png", url: "#", type: "image" },
                                 { name: "Couts_Opex.pdf", url: "#", type: "pdf" }
@@ -372,12 +356,8 @@
                             id: "PRJ-02",
                             name: "Refonte API Core V3",
                             description: "Réécriture de l'API monolithique en microservices Go pour supporter x10 de charge.",
-                            status: "in-progress",
-                            priority: "haute",
-                            tags: ["Backend", "Go", "Perf"],
-                            managerId: "U1",
-                            dueDate: "2026-08-15",
-                            attachments: [],
+                            status: "in-progress", priority: "haute", tags: ["Backend", "Go", "Perf"],
+                            managerId: "U1", dueDate: "2026-08-15", attachments: [],
                             tasks: [
                                 { id: "T-5", title: "Design System Architecture", status: "done", dueDate: dYesterday },
                                 { id: "T-6", title: "Endpoint Auth", status: "in-progress", dueDate: dToday }, 
@@ -388,12 +368,8 @@
                             id: "PRJ-03",
                             name: "Intégration Agent IA Support",
                             description: "Mise en place d'un agent conversationnel RAG pour le support de niveau 1.",
-                            status: "todo",
-                            priority: "normale",
-                            tags: ["IA", "Support"],
-                            managerId: "U3",
-                            dueDate: "2026-09-01",
-                            attachments: [],
+                            status: "todo", priority: "normale", tags: ["IA", "Support"],
+                            managerId: "U3", dueDate: "2026-09-01", attachments: [],
                             tasks: [
                                 { id: "T-8", title: "Sélection modèle LLM", status: "done", dueDate: "2026-01-15" },
                                 { id: "T-9", title: "Indexation doc interne", status: "todo", dueDate: dTomorrow }
@@ -403,12 +379,8 @@
                             id: "PRJ-04",
                             name: "Audit Sécurité Externe",
                             description: "Audit commandité par la direction avant lancement public.",
-                            status: "blocked",
-                            priority: "haute",
-                            tags: ["SecOps"],
-                            managerId: "U2",
-                            dueDate: "2026-03-01",
-                            attachments: [],
+                            status: "blocked", priority: "haute", tags: ["SecOps"],
+                            managerId: "U2", dueDate: "2026-03-01", attachments: [],
                             tasks: [
                                 { id: "T-10", title: "Sélection prestataire", status: "done", dueDate: dYesterday },
                                 { id: "T-11", title: "Accès VPN", status: "blocked", dueDate: dToday }
@@ -423,37 +395,93 @@
                 }, 800);
             },
 
-            // --- EXPORT DATA ---
+            // --- 🛡️ SECURITE (Prévention XSS) ---
+            esc(str) {
+                if (str == null) return '';
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            },
+
+            // --- 🔄 ARCHITECTURE DE MUTATION (Optimistic UI & Rollback) ---
+            async mutate(actionName, mutationFn) {
+                // 1. Sauvegarde l'état précédent (Snapshot)
+                const previousState = JSON.stringify(this.state.projects);
+                
+                try {
+                    // 2. Applique la mutation en local
+                    mutationFn();
+                    this.state.projects.forEach(p => { p.progress = this.calculateProjectProgress(p); });
+                    
+                    // 3. Rendu instantané (très rapide grâce à Morphdom)
+                    this.renderAll();
+
+                    // 4. Appel Réseau Mocké (GAS)
+                    await new Promise((resolve, reject) => {
+                        // Simulation : 15% de chances que l'appel échoue (erreur réseau/timeout)
+                        setTimeout(() => Math.random() < 0.15 ? reject(new Error('Erreur réseau mockée')) : resolve(), 600);
+                    });
+                    
+                    // Optionnel: on pourrait logguer un succès silencieux
+                    // console.log(`${actionName} synchronisé.`);
+                } catch (error) {
+                    // 5. ROLLBACK en cas d'échec !
+                    this.state.projects = JSON.parse(previousState);
+                    this.renderAll(); // On restaure l'UI à son état d'avant clic
+                    this.showToast(`Échec réseau. Annulation : ${actionName}`, 'error');
+                    console.error(`GAS Sync Failed: ${actionName}`, error);
+                }
+            },
+
+            // --- UI TOASTS ---
+            showToast(message, type = 'success') {
+                let container = document.getElementById('toast-container');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'toast-container';
+                    container.className = 'fixed bottom-4 right-4 z-[100] flex flex-col gap-2';
+                    document.body.appendChild(container);
+                }
+                const toast = document.createElement('div');
+                const isError = type === 'error';
+                toast.className = `flex items-center px-4 py-3 rounded-lg shadow-xl border ${isError ? 'bg-red-950/90 border-red-900 text-red-200' : 'bg-app-panel border-app-border text-white'} text-sm font-medium animate-slide-up glass-panel`;
+                toast.innerHTML = `<i data-lucide="${isError ? 'alert-octagon' : 'check-circle-2'}" class="w-4 h-4 mr-2 ${isError ? 'text-red-400' : 'text-app-success'}"></i>${this.esc(message)}`;
+                container.appendChild(toast);
+                lucide.createIcons({ root: toast });
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(10px)';
+                    toast.style.transition = 'all 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 4000);
+            },
+
             exportData() {
                 const bom = "\uFEFF";
                 let csvContent = "ID;Nom du Projet;Statut;Priorité;Échéance;Responsable;Progression (%)\n";
-                
                 this.state.projects.forEach(p => {
                     const user = this.getUser(p.managerId);
                     const safeName = p.name.replace(/"/g, '""');
                     csvContent += `${p.id};"${safeName}";${p.status};${p.priority};${p.dueDate};"${user.name}";${p.progress}\n`;
                 });
-
                 const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement("a");
                 const url = URL.createObjectURL(blob);
-                
                 link.setAttribute("href", url);
                 link.setAttribute("download", `dt_prox_export_${new Date().toISOString().split('T')[0]}.csv`);
                 link.style.visibility = 'hidden';
-                
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                
-                console.log("GAS Sync: Demande d'exportation déclenchée en CSV.");
+                this.showToast("Export CSV généré", "success");
             },
 
-            // --- MOBILE SIDEBAR MANAGEMENT ---
             toggleSidebar() {
                 const sidebar = document.getElementById('sidebar');
                 const backdrop = document.getElementById('sidebar-backdrop');
-                
                 if (sidebar.classList.contains('-translate-x-full')) {
                     sidebar.classList.remove('-translate-x-full');
                     backdrop.classList.remove('hidden');
@@ -468,20 +496,17 @@
             closeSidebarIfMobile() {
                 if (window.innerWidth < 768) {
                     const sidebar = document.getElementById('sidebar');
-                    if (!sidebar.classList.contains('-translate-x-full')) {
-                        this.toggleSidebar();
-                    }
+                    if (!sidebar.classList.contains('-translate-x-full')) this.toggleSidebar();
                 }
             },
 
-            // --- USER MANAGEMENT ---
             updateSidebarUserDisplay() {
                 const user = this.getUser(this.state.currentUserId);
                 document.getElementById('sidebar-user').innerHTML = `
                     <div class="w-6 h-6 rounded-full ${user.color} flex items-center justify-center mr-3 text-[10px] font-bold text-white shadow-sm">${user.initials}</div>
                     <div class="text-left flex-1">
-                        <div class="text-xs font-medium text-white">${user.name}</div>
-                        <div class="text-[10px] text-app-textSecondary">${user.role}</div>
+                        <div class="text-xs font-medium text-white">${this.esc(user.name)}</div>
+                        <div class="text-[10px] text-app-textSecondary">${this.esc(user.role)}</div>
                     </div>
                     <i data-lucide="chevron-up" class="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity"></i>
                 `;
@@ -492,132 +517,96 @@
                 this.closeSidebarIfMobile();
                 const list = document.getElementById('user-switcher-list');
                 list.innerHTML = this.state.users.map(u => `
-                    <button onclick="app.switchUser('${u.id}')" class="w-full flex items-center p-3 rounded-lg hover:bg-app-hover transition-colors ${this.state.currentUserId === u.id ? 'bg-app-bg border border-app-border' : ''}">
+                    <button data-action="switch-user" data-user-id="${u.id}" class="w-full flex items-center p-3 rounded-lg hover:bg-app-hover transition-colors ${this.state.currentUserId === u.id ? 'bg-app-bg border border-app-border' : ''}">
                         <div class="w-8 h-8 rounded-full ${u.color} flex items-center justify-center text-xs font-bold text-white mr-3">${u.initials}</div>
                         <div class="text-left flex-1">
-                            <div class="text-sm font-medium text-white">${u.name}</div>
-                            <div class="text-[10px] text-app-textSecondary">${u.role}</div>
+                            <div class="text-sm font-medium text-white">${this.esc(u.name)}</div>
+                            <div class="text-[10px] text-app-textSecondary">${this.esc(u.role)}</div>
                         </div>
                         ${this.state.currentUserId === u.id ? '<i data-lucide="check" class="w-4 h-4 text-app-accent"></i>' : ''}
                     </button>
                 `).join('');
                 document.getElementById('user-switcher-modal').classList.remove('hidden');
-                lucide.createIcons();
+                lucide.createIcons({ root: list });
             },
 
             switchUser(userId) {
                 this.state.currentUserId = userId;
                 this.updateSidebarUserDisplay();
                 this.closeModal('user-switcher-modal');
-                this.render();
-            },
-
-            // --- CRUD ACTIONS ---
-            updateProjectField(projectId, field, value) {
-                const proj = this.state.projects.find(p => p.id === projectId);
-                if (proj) {
-                    proj[field] = value;
-                    this.render();
-                    console.log(`GAS Sync: Updated ${projectId} ${field} to ${value}`);
-                }
-            },
-
-            deleteProject(projectId) {
-                if(confirm("Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible.")) {
-                    this.state.projects = this.state.projects.filter(p => p.id !== projectId);
-                    this.closeModal('project-modal');
-                    this.render();
-                    console.log(`GAS Sync: Deleted project ${projectId}`);
-                }
             },
 
             addTask(projectId) {
                 const title = prompt("Titre de la nouvelle tâche :");
                 if (title && title.trim() !== "") {
-                    const proj = this.state.projects.find(p => p.id === projectId);
-                    proj.tasks.push({
-                        id: `T-${Date.now().toString().slice(-4)}`,
-                        title: title,
-                        status: 'todo',
-                        dueDate: new Date().toISOString().split('T')[0]
+                    this.mutate('Ajout de tâche', () => {
+                        const proj = this.state.projects.find(p => p.id === projectId);
+                        proj.tasks.push({
+                            id: `T-${Date.now().toString().slice(-4)}`,
+                            title: title.trim(),
+                            status: 'todo',
+                            dueDate: new Date().toISOString().split('T')[0]
+                        });
                     });
-                    proj.progress = this.calculateProjectProgress(proj);
-                    this.openProjectModal(projectId);
-                    this.render();
-                }
-            },
-
-            updateTaskField(projectId, taskId, field, value) {
-                const proj = this.state.projects.find(p => p.id === projectId);
-                const task = proj.tasks.find(t => t.id === taskId);
-                if (task) {
-                    task[field] = value;
-                    this.openProjectModal(projectId);
-                    this.render();
                 }
             },
 
             deleteTask(projectId, taskId) {
                 if(confirm("Supprimer cette tâche ?")) {
-                    const proj = this.state.projects.find(p => p.id === projectId);
-                    proj.tasks = proj.tasks.filter(t => t.id !== taskId);
-                    proj.progress = this.calculateProjectProgress(proj);
-                    this.openProjectModal(projectId);
-                    this.render();
+                    this.mutate('Suppression de tâche', () => {
+                        const proj = this.state.projects.find(p => p.id === projectId);
+                        proj.tasks = proj.tasks.filter(t => t.id !== taskId);
+                    });
                 }
             },
 
             addTag(projectId) {
                 const tag = prompt("Entrez le nom du nouveau tag (ex: SecOps, Frontend...) :");
                 if (tag && tag.trim() !== "") {
-                    const proj = this.state.projects.find(p => p.id === projectId);
-                    if (!proj.tags.includes(tag.trim())) {
-                        proj.tags.push(tag.trim());
-                        this.openProjectModal(projectId);
-                        this.render();
-                    }
+                    this.mutate('Ajout de tag', () => {
+                        const proj = this.state.projects.find(p => p.id === projectId);
+                        if (!proj.tags.includes(tag.trim())) proj.tags.push(tag.trim());
+                    });
                 }
             },
 
             removeTag(projectId, tagToRemove) {
-                const proj = this.state.projects.find(p => p.id === projectId);
-                proj.tags = proj.tags.filter(tag => tag !== tagToRemove);
-                this.openProjectModal(projectId);
-                this.render();
+                this.mutate('Suppression de tag', () => {
+                    const proj = this.state.projects.find(p => p.id === projectId);
+                    proj.tags = proj.tags.filter(tag => tag !== tagToRemove);
+                });
             },
 
-            // --- FILE UPLOAD (Mock Drive) ---
+            deleteProject(projectId) {
+                if(confirm("Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible.")) {
+                    this.mutate('Suppression de projet', () => {
+                        this.state.projects = this.state.projects.filter(p => p.id !== projectId);
+                        document.getElementById('project-modal').classList.add('hidden');
+                        this.state.currentModalProjectId = null;
+                    });
+                }
+            },
+
             handleFileUpload(projectId, event) {
                 const file = event.target.files[0];
                 if (!file) return;
 
-                console.log(`GAS Sync: Préparation de l'envoi vers Google Drive du fichier: ${file.name}`);
-                
-                // MOCK : Simule l'upload vers Google Drive et la récupération d'URL
-                setTimeout(() => {
+                this.mutate('Upload fichier', () => {
                     const proj = this.state.projects.find(p => p.id === projectId);
                     if(!proj.attachments) proj.attachments = [];
-                    
                     let type = "file";
                     if (file.type.includes('image')) type = "image";
                     else if (file.type.includes('pdf')) type = "pdf";
-
-                    proj.attachments.push({
-                        name: file.name,
-                        url: "#", // Ici on mettrait l'URL retournée par DriveApp
-                        type: type
-                    });
-                    
-                    this.openProjectModal(projectId);
-                    this.render();
-                }, 800);
+                    proj.attachments.push({ name: file.name, url: "#", type: type });
+                });
             },
 
             deleteAttachment(projectId, attachmentName) {
                 if(confirm("Détacher ce fichier du projet ? (Il restera sur Drive)")) {
-                    const proj = this.state.projects.find(p => p.id === projectId);
-                    proj.attachments = proj.attachments.filter(a => a.name !== attachmentName);
-                    this.openProjectModal(projectId);
+                    this.mutate('Suppression pièce jointe', () => {
+                        const proj = this.state.projects.find(p => p.id === projectId);
+                        proj.attachments = proj.attachments.filter(a => a.name !== attachmentName);
+                    });
                 }
             },
 
@@ -634,29 +623,21 @@
 
                 if (!name) return alert("Le nom du projet est requis.");
 
-                const newProj = {
-                    id: `PRJ-${Math.floor(Math.random() * 1000)}`,
-                    name: name,
-                    description: desc,
-                    status: "todo",
-                    priority: priority,
-                    progress: 0,
-                    tags: ["Nouveau"],
-                    managerId: this.state.currentUserId,
-                    dueDate: date,
-                    attachments: [],
-                    tasks: []
-                };
-
-                this.state.projects.unshift(newProj);
+                this.mutate('Création de projet', () => {
+                    this.state.projects.unshift({
+                        id: `PRJ-${Math.floor(Math.random() * 1000)}`,
+                        name: name, description: desc, status: "todo", priority: priority,
+                        progress: 0, tags: ["Nouveau"], managerId: this.state.currentUserId,
+                        dueDate: date, attachments: [], tasks: []
+                    });
+                });
+                
                 this.closeModal('create-project-modal');
                 document.getElementById('new-project-name').value = '';
                 document.getElementById('new-project-desc').value = '';
-                
                 this.navigate('projects');
             },
 
-            // --- HELPERS (Test-Time Compute) ---
             calculateProjectProgress(project) {
                 if (!project.tasks || project.tasks.length === 0) return 0;
                 const done = project.tasks.filter(t => t.status === 'done').length;
@@ -703,21 +684,16 @@
 
             setFilter(type, value) {
                 this.state.filters[type] = value;
-                this.render();
+                this.renderAll();
             },
 
-            // --- NAVIGATION ---
             navigate(view) {
                 this.state.currentView = view;
                 this.closeSidebarIfMobile();
                 
                 const titles = {
-                    'dashboard': 'Vue d\'ensemble',
-                    'projects': 'Projets',
-                    'review': 'Revue & Priorisation',
-                    'roadmap': 'Roadmap & Échéances',
-                    'team': 'Gestion d\'Équipe',
-                    'archive': 'Archives'
+                    'dashboard': 'Vue d\'ensemble', 'projects': 'Projets', 'review': 'Revue & Priorisation',
+                    'roadmap': 'Roadmap & Échéances', 'team': 'Gestion d\'Équipe', 'archive': 'Archives'
                 };
                 document.getElementById('current-view-title').textContent = titles[view];
                 document.getElementById('current-view-title-mobile').textContent = titles[view];
@@ -731,44 +707,97 @@
                     activeBtn.classList.remove('text-app-textSecondary');
                     activeBtn.classList.add('bg-app-hover', 'text-white');
                 }
-                
-                this.render();
+                this.renderAll();
             },
 
-            // --- ROUTER RENDERING ---
-            render() {
+            openProjectModal(id) {
+                this.state.currentModalProjectId = id;
+                document.getElementById('project-modal').classList.remove('hidden');
+                this.renderModal();
+            },
+
+            closeModal(modalId) {
+                document.getElementById(modalId).classList.add('hidden');
+                if (modalId === 'project-modal') this.state.currentModalProjectId = null;
+            },
+
+            toggleCommandPalette() {
+                const palette = document.getElementById('command-palette');
+                const input = document.getElementById('cmd-input');
+                if (palette.classList.contains('hidden')) {
+                    palette.classList.remove('hidden');
+                    input.value = '';
+                    setTimeout(() => input.focus(), 50);
+                } else {
+                    palette.classList.add('hidden');
+                }
+            },
+
+            // --- ⚡ MOTEUR DE RENDU HAUTE PERFORMANCE (Morphdom) ---
+            renderAll() {
+                this.renderMain();
+                this.renderModal();
+            },
+
+            renderMain() {
                 const container = document.getElementById('app-content');
                 if (this.state.isLoading) return;
 
-                this.state.projects.forEach(p => { p.progress = this.calculateProjectProgress(p); });
-
+                let html = '';
                 switch(this.state.currentView) {
-                    case 'dashboard': container.innerHTML = this.buildDashboardView(); break;
-                    case 'projects': container.innerHTML = this.buildProjectsView(); break;
-                    case 'review': container.innerHTML = this.buildReviewView(); break;
-                    case 'roadmap': container.innerHTML = this.buildRoadmapView(); break;
-                    case 'team': container.innerHTML = this.buildTeamView(); break;
-                    case 'archive': container.innerHTML = this.buildArchiveView(); break;
+                    case 'dashboard': html = this.buildDashboardView(); break;
+                    case 'projects': html = this.buildProjectsView(); break;
+                    case 'review': html = this.buildReviewView(); break;
+                    case 'roadmap': html = this.buildRoadmapView(); break;
+                    case 'team': html = this.buildTeamView(); break;
+                    case 'archive': html = this.buildArchiveView(); break;
                 }
                 
-                lucide.createIcons();
-
-                if (this.state.currentView === 'review') {
-                    this.setupDragAndDrop();
+                const newMarkup = `<div>${html}</div>`;
+                if (window.morphdom) {
+                    morphdom(container, newMarkup, { childrenOnly: true });
+                } else {
+                    container.innerHTML = html;
                 }
+                lucide.createIcons({ root: container });
+            },
+
+            renderModal() {
+                if (!this.state.currentModalProjectId) return;
+                const project = this.state.projects.find(p => p.id === this.state.currentModalProjectId);
+                if (!project) return;
+
+                const container = document.getElementById('modal-content');
+                const html = this.buildProjectModalContent(project);
+                
+                const newMarkup = `<div>${html}</div>`;
+                if (window.morphdom) {
+                    // On demande à morphdom de ne pas écraser les inputs qui ont le focus
+                    morphdom(container, newMarkup, { 
+                        childrenOnly: true,
+                        onBeforeElUpdated: function(fromEl, toEl) {
+                            if (fromEl.tagName === 'INPUT' || fromEl.tagName === 'TEXTAREA') {
+                                if (fromEl === document.activeElement) return false;
+                            }
+                            return true;
+                        }
+                    });
+                } else {
+                    container.innerHTML = html;
+                }
+                lucide.createIcons({ root: container });
             },
 
             // ==========================================
-            // VUES (VIEWS)
+            // BUILDERS DE VUES HTML
+            // (Note: Retrait de tous les 'onclick', passage aux 'data-action')
             // ==========================================
 
-            // 1. DASHBOARD (Optimisé)
             buildDashboardView() {
                 const currentUser = this.getUser(this.state.currentUserId);
                 const activeProjects = this.state.projects.filter(p => p.status !== 'done');
                 const blockedProjects = activeProjects.filter(p => p.status === 'blocked');
                 
-                // Calcul de la santé globale des tâches
                 let totalTasks = 0, doneTasks = 0, inProgressTasks = 0, blockedTasks = 0, todoTasks = 0;
                 activeProjects.forEach(p => {
                     p.tasks.forEach(t => {
@@ -780,7 +809,6 @@
                     });
                 });
 
-                // Pourcentages pour la barre segmentée
                 const pctDone = totalTasks ? Math.round((doneTasks / totalTasks) * 100) : 0;
                 const pctInProgress = totalTasks ? Math.round((inProgressTasks / totalTasks) * 100) : 0;
                 const pctBlocked = totalTasks ? Math.round((blockedTasks / totalTasks) * 100) : 0;
@@ -788,7 +816,6 @@
 
                 const myActiveProjects = this.state.projects.filter(p => p.managerId === this.state.currentUserId && p.status !== 'done');
 
-                // Tâches Urgentes
                 let myUrgentTasks = [];
                 myActiveProjects.forEach(p => {
                     p.tasks.filter(t => t.status !== 'done' && t.dueDate).forEach(t => {
@@ -802,14 +829,12 @@
                     <div class="max-w-6xl mx-auto animate-fade-in pb-10">
                         <div class="flex flex-col xl:flex-row gap-4 md:gap-6 mb-8">
                             
-                            <!-- TUILE SANTE DU PORTEFEUILLE (Health Overview) -->
                             <div class="glass-panel rounded-2xl p-5 md:p-6 flex-1 flex flex-col justify-between border border-app-border/80 relative overflow-hidden">
-                                <!-- Effet de lumière subtil -->
                                 <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 rounded-full bg-app-accent/10 blur-3xl pointer-events-none"></div>
 
                                 <div class="flex items-start justify-between mb-6">
                                     <div>
-                                        <h2 class="text-lg md:text-xl font-bold text-white mb-1">Bonjour, ${currentUser.name.split(' ')[0]} 👋</h2>
+                                        <h2 class="text-lg md:text-xl font-bold text-white mb-1">Bonjour, ${this.esc(currentUser.name.split(' ')[0])} 👋</h2>
                                         <p class="text-xs md:text-sm text-app-textSecondary">Voici l'état de santé du portefeuille technique.</p>
                                     </div>
                                     <div class="w-10 h-10 rounded-full bg-app-bg border border-app-border flex items-center justify-center text-app-textSecondary shrink-0">
@@ -817,7 +842,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- 4 Micro KPIs -->
                                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-8 mt-2">
                                     <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
                                         <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Projets Actifs</div>
@@ -837,7 +861,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Barre Segmentée -->
                                 <div class="mt-auto">
                                     <div class="flex justify-between items-end mb-2">
                                         <span class="text-xs md:text-sm font-medium text-app-success">${pctDone}% Complété</span>
@@ -849,7 +872,6 @@
                                         <div class="bg-app-border transition-all duration-1000" style="width: ${pctTodo}%" title="À faire: ${pctTodo}%"></div>
                                         <div class="bg-red-500 transition-all duration-1000" style="width: ${pctBlocked}%" title="Bloquées: ${pctBlocked}%"></div>
                                     </div>
-                                    <!-- Légende -->
                                     <div class="flex gap-4 mt-3">
                                         <div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-blue-500"></div><span class="text-[9px] text-app-textSecondary">En cours</span></div>
                                         <div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-app-border"></div><span class="text-[9px] text-app-textSecondary">À faire</span></div>
@@ -858,7 +880,6 @@
                                 </div>
                             </div>
 
-                            <!-- Tâches Urgentes / En Retard -->
                             <div class="glass-panel rounded-2xl p-4 md:p-5 flex-1 xl:max-w-md border-t-2 border-t-app-danger flex flex-col bg-gradient-to-b from-app-panel to-transparent">
                                 <div class="flex items-center justify-between mb-4">
                                     <span class="text-sm font-semibold text-white">Mes Tâches Urgentes</span>
@@ -869,10 +890,10 @@
                                     ${topUrgentTasks.map(t => {
                                         const overdue = this.isDateOverdue(t.dueDate);
                                         return `
-                                        <div onclick="app.openProjectModal('${t.projectId}')" class="flex items-center justify-between p-2.5 rounded-lg bg-app-bg border border-app-border/50 hover:border-app-border cursor-pointer transition-colors group">
+                                        <div data-action="open-project" data-project-id="${t.projectId}" class="flex items-center justify-between p-2.5 rounded-lg bg-app-bg border border-app-border/50 hover:border-app-border cursor-pointer transition-colors group">
                                             <div class="flex flex-col flex-1 min-w-0 pr-3">
-                                                <span class="text-sm text-white font-medium truncate group-hover:text-app-accent transition-colors leading-tight">${t.title}</span>
-                                                <span class="text-[10px] text-app-textSecondary truncate mt-0.5">${t.projectName}</span>
+                                                <span class="text-sm text-white font-medium truncate group-hover:text-app-accent transition-colors leading-tight">${this.esc(t.title)}</span>
+                                                <span class="text-[10px] text-app-textSecondary truncate mt-0.5">${this.esc(t.projectName)}</span>
                                             </div>
                                             <div class="flex items-center shrink-0">
                                                 <span class="text-[10px] px-2 py-1 rounded-md font-medium ${overdue ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-app-panel text-app-textSecondary border border-app-border'}">
@@ -889,7 +910,7 @@
 
                         <div class="flex items-center justify-between mb-4 mt-10">
                             <h3 class="text-lg font-semibold text-white">Mes Projets Prioritaires</h3>
-                            <button onclick="app.navigate('projects')" class="text-xs text-app-textSecondary hover:text-white flex items-center transition-colors">
+                            <button data-action="navigate" data-view="projects" class="text-xs text-app-textSecondary hover:text-white flex items-center transition-colors">
                                 Voir tout <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
                             </button>
                         </div>
@@ -903,7 +924,6 @@
                 `;
             },
 
-            // 2. PROJETS (Liste / Grille)
             buildProjectsView() {
                 let filteredProjects = this.state.projects.filter(p => p.status !== 'done');
                 
@@ -923,16 +943,16 @@
                     <div class="max-w-7xl mx-auto animate-fade-in h-full flex flex-col pb-4">
                         <div class="flex flex-wrap gap-3 justify-between items-center mb-6 shrink-0">
                             <div class="flex space-x-2 w-full sm:w-auto">
-                                <select onchange="app.setFilter('user', this.value)" class="flex-1 sm:flex-none bg-app-panel border border-app-border text-white text-xs sm:text-sm rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-app-accent">
+                                <select data-action="set-filter" data-filter-type="user" class="flex-1 sm:flex-none bg-app-panel border border-app-border text-white text-xs sm:text-sm rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-app-accent">
                                     <option value="me" ${this.state.filters.user === 'me' ? 'selected' : ''}>Mes projets</option>
                                     <option value="all" ${this.state.filters.user === 'all' ? 'selected' : ''}>Tous</option>
                                     <optgroup label="Par équipe">
                                         ${this.state.users.filter(u => u.id !== this.state.currentUserId).map(u => 
-                                            `<option value="${u.id}" ${this.state.filters.user === u.id ? 'selected' : ''}>${u.name}</option>`
+                                            `<option value="${u.id}" ${this.state.filters.user === u.id ? 'selected' : ''}>${this.esc(u.name)}</option>`
                                         ).join('')}
                                     </optgroup>
                                 </select>
-                                <select onchange="app.setFilter('status', this.value)" class="flex-1 sm:flex-none bg-app-panel border border-app-border text-white text-xs sm:text-sm rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-app-accent">
+                                <select data-action="set-filter" data-filter-type="status" class="flex-1 sm:flex-none bg-app-panel border border-app-border text-white text-xs sm:text-sm rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-app-accent">
                                     <option value="all" ${this.state.filters.status === 'all' ? 'selected' : ''}>Statuts</option>
                                     <option value="todo" ${this.state.filters.status === 'todo' ? 'selected' : ''}>À faire</option>
                                     <option value="in-progress" ${this.state.filters.status === 'in-progress' ? 'selected' : ''}>En cours</option>
@@ -941,10 +961,10 @@
                             </div>
                             
                             <div class="flex bg-app-panel rounded-lg p-1 border border-app-border shrink-0 ml-auto">
-                                <button onclick="app.state.projectsViewMode='grid'; app.render()" class="p-1.5 rounded-md ${isGrid ? 'bg-app-hover text-white shadow' : 'text-app-textSecondary hover:text-white'} transition-all">
+                                <button data-action="set-view-mode" data-mode="grid" class="p-1.5 rounded-md ${isGrid ? 'bg-app-hover text-white shadow' : 'text-app-textSecondary hover:text-white'} transition-all">
                                     <i data-lucide="layout-grid" class="w-4 h-4"></i>
                                 </button>
-                                <button onclick="app.state.projectsViewMode='list'; app.render()" class="p-1.5 rounded-md ${!isGrid ? 'bg-app-hover text-white shadow' : 'text-app-textSecondary hover:text-white'} transition-all">
+                                <button data-action="set-view-mode" data-mode="list" class="p-1.5 rounded-md ${!isGrid ? 'bg-app-hover text-white shadow' : 'text-app-textSecondary hover:text-white'} transition-all">
                                     <i data-lucide="list" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -961,7 +981,6 @@
                 `;
             },
 
-            // 3. REVUE (Drag & Drop Kanban par Priorité)
             buildReviewView() {
                 const columns = [
                     { id: 'critique', title: 'Critique', bg: 'bg-app-danger/5' },
@@ -994,7 +1013,6 @@
                 `;
             },
 
-            // 4. ROADMAP (Nouvelle vue chronologique)
             buildRoadmapView() {
                 const sortedProjects = [...this.state.projects]
                     .filter(p => p.status !== 'done')
@@ -1027,23 +1045,22 @@
 
                     html += `
                         <div class="relative pl-6 md:pl-10 group">
-                            <!-- Point de timeline -->
                             <div class="absolute w-2 h-2 bg-app-border group-hover:bg-white rounded-full -left-1 top-6 transition-colors"></div>
                             
-                            <div onclick="app.openProjectModal('${p.id}')" class="glass-panel p-3 md:p-4 rounded-xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3 md:gap-4">
+                            <div data-action="open-project" data-project-id="${p.id}" class="glass-panel p-3 md:p-4 rounded-xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3 md:gap-4">
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-center gap-2 md:gap-3 mb-1">
                                         <span class="text-[10px] md:text-xs font-mono text-app-textSecondary bg-app-bg px-1.5 py-0.5 rounded border border-app-border">${p.id}</span>
-                                        <h4 class="text-sm md:text-base font-semibold text-white truncate group-hover:text-app-accent transition-colors">${p.name}</h4>
+                                        <h4 class="text-sm md:text-base font-semibold text-white truncate group-hover:text-app-accent transition-colors">${this.esc(p.name)}</h4>
                                     </div>
-                                    <p class="text-xs md:text-sm text-app-textSecondary line-clamp-1 mb-2">${p.description}</p>
+                                    <p class="text-xs md:text-sm text-app-textSecondary line-clamp-1 mb-2">${this.esc(p.description)}</p>
                                     <div class="flex items-center gap-2">
                                         <span class="px-2 py-0.5 text-[9px] md:text-[10px] uppercase font-bold rounded flex inline-flex items-center gap-1 ${pStyle.bg} ${pStyle.color}">
                                             <i data-lucide="${pStyle.icon}" class="w-3 h-3"></i> ${p.priority}
                                         </span>
                                         <div class="flex items-center gap-1 ml-2 text-[10px] text-app-textSecondary">
                                             <div class="w-4 h-4 rounded-full ${user.color} flex items-center justify-center font-bold text-white shrink-0">${user.initials}</div>
-                                            <span class="hidden sm:inline">${user.name}</span>
+                                            <span class="hidden sm:inline">${this.esc(user.name)}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1080,7 +1097,6 @@
                 return html;
             },
 
-            // HTML helper pour Dashboard
             buildKPIView() {
                 const userWorkload = this.state.users.map(u => {
                     const activeProjs = this.state.projects.filter(p => p.managerId === u.id && p.status !== 'done');
@@ -1126,7 +1142,7 @@
                                             <div class="flex justify-between items-center text-[10px] md:text-xs mb-1.5">
                                                 <div class="flex items-center gap-2">
                                                     <div class="w-4 h-4 rounded-full ${u.color} flex items-center justify-center text-[8px] font-bold text-white">${u.initials}</div>
-                                                    <span class="text-white">${u.name}</span>
+                                                    <span class="text-white">${this.esc(u.name)}</span>
                                                 </div>
                                                 <span class="text-app-textSecondary font-mono">${u.count} projet(s)</span>
                                             </div>
@@ -1153,7 +1169,7 @@
                                         return `
                                         <div>
                                             <div class="flex justify-between text-[10px] md:text-xs mb-1.5">
-                                                <span class="text-white flex items-center gap-1.5"><i data-lucide="tag" class="w-3 h-3 text-app-textSecondary"></i>${tagName}</span> 
+                                                <span class="text-white flex items-center gap-1.5"><i data-lucide="tag" class="w-3 h-3 text-app-textSecondary"></i>${this.esc(tagName)}</span> 
                                                 <span class="text-app-textSecondary font-mono">${pct}%</span>
                                             </div>
                                             <div class="w-full bg-app-bg h-1.5 md:h-2 rounded-full overflow-hidden">
@@ -1170,7 +1186,6 @@
                 `;
             },
 
-            // 5. EQUIPE
             buildTeamView() {
                 return `
                     <div class="max-w-5xl mx-auto animate-fade-in pb-10">
@@ -1197,10 +1212,10 @@
                                         <tr class="hover:bg-app-hover/50 transition-colors">
                                             <td class="px-4 md:px-6 py-4 flex items-center gap-3">
                                                 <div class="w-8 h-8 rounded-full ${u.color} flex items-center justify-center text-xs font-bold text-white shadow-inner shrink-0">${u.initials}</div>
-                                                <span class="font-medium text-white truncate">${u.name}</span>
+                                                <span class="font-medium text-white truncate">${this.esc(u.name)}</span>
                                                 ${this.state.currentUserId === u.id ? '<span class="text-[9px] bg-app-accent/20 text-app-accent px-1.5 py-0.5 rounded uppercase font-bold shrink-0">Vous</span>' : ''}
                                             </td>
-                                            <td class="px-4 md:px-6 py-4 text-app-textSecondary">${u.role}</td>
+                                            <td class="px-4 md:px-6 py-4 text-app-textSecondary">${this.esc(u.role)}</td>
                                             <td class="px-4 md:px-6 py-4">
                                                 <span class="px-2.5 py-1 bg-app-bg border border-app-border rounded-full text-xs font-mono text-white">${count} actif(s)</span>
                                             </td>
@@ -1216,7 +1231,6 @@
                 `;
             },
 
-            // 6. ARCHIVES
             buildArchiveView() {
                 const doneProjects = this.state.projects.filter(p => p.status === 'done');
                 return `
@@ -1229,15 +1243,13 @@
                 `;
             },
 
-            // --- COMPOSANTS UI RENDERS ---
-
             renderProjectCard(project) {
                 const user = this.getUser(project.managerId);
                 const pStyle = this.getPriorityStyle(project.priority);
                 const sStyle = this.getStatusStyle(project.status);
 
                 return `
-                    <div onclick="app.openProjectModal('${project.id}')" class="glass-panel p-4 md:p-5 rounded-2xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all group relative overflow-hidden flex flex-col h-56">
+                    <div data-action="open-project" data-project-id="${project.id}" class="glass-panel p-4 md:p-5 rounded-2xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all group relative overflow-hidden flex flex-col h-56">
                         <div class="flex justify-between items-start mb-3">
                             <span class="text-[10px] font-mono text-app-textSecondary border border-app-border bg-app-bg px-2 py-0.5 rounded shadow-sm">${project.id}</span>
                             <div class="flex gap-2">
@@ -1247,10 +1259,10 @@
                             </div>
                         </div>
                         
-                        <h3 class="text-sm md:text-base font-semibold text-white leading-tight mb-2 group-hover:text-app-accent transition-colors">${project.name}</h3>
+                        <h3 class="text-sm md:text-base font-semibold text-white leading-tight mb-2 group-hover:text-app-accent transition-colors">${this.esc(project.name)}</h3>
                         
                         <div class="flex flex-wrap gap-1 mb-auto">
-                            ${project.tags.slice(0, 3).map(tag => `<span class="text-[9px] md:text-[10px] px-1.5 py-0.5 rounded-sm bg-app-border text-app-textSecondary">${tag}</span>`).join('')}
+                            ${project.tags.slice(0, 3).map(tag => `<span class="text-[9px] md:text-[10px] px-1.5 py-0.5 rounded-sm bg-app-border text-app-textSecondary">${this.esc(tag)}</span>`).join('')}
                         </div>
 
                         <div class="pt-4 mt-4 border-t border-app-border/50 flex items-center justify-between">
@@ -1278,12 +1290,12 @@
                 const sStyle = this.getStatusStyle(project.status);
 
                 return `
-                    <div onclick="app.openProjectModal('${project.id}')" class="glass-panel p-3 rounded-xl cursor-pointer hover:border-app-textSecondary/30 hover:bg-app-hover transition-all flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4">
+                    <div data-action="open-project" data-project-id="${project.id}" class="glass-panel p-3 rounded-xl cursor-pointer hover:border-app-textSecondary/30 hover:bg-app-hover transition-all flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4">
                         <span class="text-xs font-mono text-app-textSecondary w-full md:w-16 order-1 md:order-none flex justify-between md:block">
                             ${project.id}
                             <span class="md:hidden text-[10px] ${sStyle.color}">${sStyle.label}</span>
                         </span>
-                        <div class="w-full md:flex-1 font-medium text-white text-sm truncate order-2 md:order-none">${project.name}</div>
+                        <div class="w-full md:flex-1 font-medium text-white text-sm truncate order-2 md:order-none">${this.esc(project.name)}</div>
                         <div class="w-full md:w-32 order-4 md:order-none flex items-center gap-2">
                             <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
                                 <div class="bg-app-accent h-full rounded-full" style="width: ${project.progress}%"></div>
@@ -1291,7 +1303,7 @@
                             <span class="text-[10px] text-app-textSecondary md:hidden">${project.progress}%</span>
                         </div>
                         <div class="w-auto md:w-24 flex gap-1 order-3 md:order-none">
-                             ${project.tags.slice(0, 2).map(tag => `<span class="text-[10px] px-1.5 py-0.5 rounded-sm bg-app-border text-app-textSecondary truncate">${tag}</span>`).join('')}
+                             ${project.tags.slice(0, 2).map(tag => `<span class="text-[10px] px-1.5 py-0.5 rounded-sm bg-app-border text-app-textSecondary truncate">${this.esc(tag)}</span>`).join('')}
                         </div>
                         <div class="w-auto md:w-24 text-center order-3 md:order-none">
                             <span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded inline-flex items-center gap-1 ${pStyle.bg} ${pStyle.color}">
@@ -1308,63 +1320,26 @@
 
             renderMiniCard(project) {
                 return `
-                    <div class="bg-app-panel border border-app-border p-3 rounded-lg shadow-sm cursor-grab active:cursor-grabbing hover:border-app-accent/40 transition-colors group relative no-select" 
+                    <div class="kanban-card bg-app-panel border border-app-border p-3 rounded-lg shadow-sm cursor-grab active:cursor-grabbing hover:border-app-accent/40 transition-colors group relative no-select" 
                          draggable="true" data-id="${project.id}">
                         <div class="flex justify-between items-start mb-2">
                             <span class="text-[10px] font-mono text-app-textSecondary">${project.id}</span>
                             <div class="text-xs font-medium text-white">${project.progress}%</div>
                         </div>
-                        <p class="text-sm font-medium text-white leading-snug truncate">${project.name}</p>
+                        <p class="text-sm font-medium text-white leading-snug truncate">${this.esc(project.name)}</p>
                     </div>
                 `;
             },
 
-            // --- DRAG AND DROP (Revue) ---
-            setupDragAndDrop() {
-                const cards = document.querySelectorAll('[draggable="true"]');
-                const columns = document.querySelectorAll('.kanban-column');
-
-                cards.forEach(card => {
-                    card.addEventListener('touchstart', (e) => {}, {passive: true}); 
-                    
-                    card.addEventListener('dragstart', (e) => {
-                        e.dataTransfer.setData('text/plain', card.dataset.id);
-                        setTimeout(() => card.classList.add('ghost-card', 'opacity-50'), 0);
-                    });
-                    card.addEventListener('dragend', () => card.classList.remove('ghost-card', 'opacity-50'));
-                });
-
-                columns.forEach(col => {
-                    col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('bg-app-hover/50'); });
-                    col.addEventListener('dragleave', () => col.classList.remove('bg-app-hover/50'));
-                    col.addEventListener('drop', e => {
-                        e.preventDefault();
-                        col.classList.remove('bg-app-hover/50');
-                        const projectId = e.dataTransfer.getData('text/plain');
-                        const newPriority = col.dataset.priority;
-                        
-                        const proj = this.state.projects.find(p => p.id === projectId);
-                        if (proj && proj.priority !== newPriority) {
-                            proj.priority = newPriority;
-                            this.render();
-                        }
-                    });
-                });
-            },
-
-            // --- MODALE PROJET (Édition) ---
-            openProjectModal(id) {
-                const project = this.state.projects.find(p => p.id === id);
-                if (!project) return;
-                
+            buildProjectModalContent(project) {
                 const user = this.getUser(project.managerId);
                 const pStyle = this.getPriorityStyle(project.priority);
                 const sStyle = this.getStatusStyle(project.status);
                 const attachments = project.attachments || [];
 
-                const modalHtml = `
+                return `
                     <div class="p-4 md:p-8 border-b border-app-border/50 bg-gradient-to-b from-app-panel to-transparent shrink-0 pt-8 md:pt-8">
-                        <button onclick="app.closeModal('project-modal')" class="absolute top-4 right-4 text-app-textSecondary hover:text-white bg-app-bg/80 md:bg-app-bg p-1.5 rounded-full hover:bg-app-hover transition-colors z-10">
+                        <button data-action="close-modal" data-modal-id="project-modal" class="absolute top-4 right-4 text-app-textSecondary hover:text-white bg-app-bg/80 md:bg-app-bg p-1.5 rounded-full hover:bg-app-hover transition-colors z-10">
                             <i data-lucide="x" class="w-5 h-5"></i>
                         </button>
                         
@@ -1373,7 +1348,7 @@
                                 <span class="px-2 py-1 bg-app-bg border border-app-border rounded-md text-[10px] md:text-xs font-mono text-app-textSecondary">${project.id}</span>
                                 
                                 <div class="relative">
-                                    <select onchange="app.updateProjectField('${project.id}', 'priority', this.value)" class="badge-select px-2 md:px-2.5 py-1 text-[10px] md:text-[11px] uppercase font-bold rounded flex items-center ${pStyle.bg} ${pStyle.color} border ${pStyle.border}">
+                                    <select data-action="update-project" data-project-id="${project.id}" data-field="priority" class="badge-select px-2 md:px-2.5 py-1 text-[10px] md:text-[11px] uppercase font-bold rounded flex items-center ${pStyle.bg} ${pStyle.color} border ${pStyle.border}">
                                         <option value="critique" ${project.priority === 'critique' ? 'selected' : ''}>Critique</option>
                                         <option value="haute" ${project.priority === 'haute' ? 'selected' : ''}>Haute</option>
                                         <option value="normale" ${project.priority === 'normale' ? 'selected' : ''}>Normale</option>
@@ -1382,7 +1357,7 @@
                                 </div>
 
                                 <div class="relative">
-                                    <select onchange="app.updateProjectField('${project.id}', 'status', this.value)" class="badge-select px-2 md:px-2.5 py-1 text-[10px] md:text-[11px] uppercase font-bold rounded bg-app-bg border ${sStyle.border} ${sStyle.color}">
+                                    <select data-action="update-project" data-project-id="${project.id}" data-field="status" class="badge-select px-2 md:px-2.5 py-1 text-[10px] md:text-[11px] uppercase font-bold rounded bg-app-bg border ${sStyle.border} ${sStyle.color}">
                                         <option value="todo" ${project.status === 'todo' ? 'selected' : ''}>À faire</option>
                                         <option value="in-progress" ${project.status === 'in-progress' ? 'selected' : ''}>En cours</option>
                                         <option value="blocked" ${project.status === 'blocked' ? 'selected' : ''}>Bloqué</option>
@@ -1392,20 +1367,20 @@
                             </div>
                         </div>
                         
-                        <input type="text" onchange="app.updateProjectField('${project.id}', 'name', this.value)" value="${project.name}" class="w-full bg-transparent border-none text-xl md:text-3xl font-bold text-white mb-2 tracking-tight focus:outline-none focus:ring-0 placeholder-app-border p-0">
+                        <input type="text" data-action="update-project" data-project-id="${project.id}" data-field="name" value="${this.esc(project.name)}" class="w-full bg-transparent border-none text-xl md:text-3xl font-bold text-white mb-2 tracking-tight focus:outline-none focus:ring-0 placeholder-app-border p-0">
                         
-                        <textarea onchange="app.updateProjectField('${project.id}', 'description', this.value)" class="w-full bg-transparent border-none text-app-textSecondary text-xs md:text-sm leading-relaxed resize-none focus:outline-none focus:ring-0 p-0" rows="2">${project.description}</textarea>
+                        <textarea data-action="update-project" data-project-id="${project.id}" data-field="description" class="w-full bg-transparent border-none text-app-textSecondary text-xs md:text-sm leading-relaxed resize-none focus:outline-none focus:ring-0 p-0" rows="2">${this.esc(project.description)}</textarea>
                         
                         <div class="flex flex-wrap items-center gap-2 mt-4">
                             ${project.tags.map(tag => `
                                 <div class="px-2 py-1 rounded bg-app-border/50 text-[10px] md:text-xs text-app-textSecondary flex items-center gap-1 group/tag">
-                                    <i data-lucide="tag" class="w-3 h-3"></i>${tag}
-                                    <button onclick="app.removeTag('${project.id}', '${tag}')" class="md:hidden md:group-hover/tag:block hover:text-red-400 ml-1" title="Supprimer">
+                                    <i data-lucide="tag" class="w-3 h-3"></i>${this.esc(tag)}
+                                    <button data-action="remove-tag" data-project-id="${project.id}" data-tag="${this.esc(tag)}" class="md:hidden md:group-hover/tag:block hover:text-red-400 ml-1" title="Supprimer">
                                         <i data-lucide="x" class="w-3 h-3"></i>
                                     </button>
                                 </div>
                             `).join('')}
-                            <button onclick="app.addTag('${project.id}')" class="px-2 py-1 rounded border border-dashed border-app-border text-[10px] md:text-xs text-app-textSecondary hover:text-white hover:border-app-accent transition-colors flex items-center gap-1">
+                            <button data-action="add-tag" data-project-id="${project.id}" class="px-2 py-1 rounded border border-dashed border-app-border text-[10px] md:text-xs text-app-textSecondary hover:text-white hover:border-app-accent transition-colors flex items-center gap-1">
                                 <i data-lucide="plus" class="w-3 h-3"></i> Tag
                             </button>
                         </div>
@@ -1413,15 +1388,14 @@
 
                     <div class="p-4 md:p-8 flex-1 overflow-y-auto bg-app-bg/50">
                         
-                        <!-- PIECES JOINTES (Nouveau) -->
                         <div class="mb-8">
                             <div class="flex items-center justify-between mb-3">
                                 <h3 class="text-[10px] md:text-xs font-semibold text-app-textSecondary uppercase tracking-wider flex items-center gap-1.5">
                                     <i data-lucide="paperclip" class="w-3.5 h-3.5"></i> Fichiers joints (${attachments.length})
                                 </h3>
                                 <div class="relative">
-                                    <input type="file" id="file-upload-${project.id}" class="hidden" onchange="app.handleFileUpload('${project.id}', event)">
-                                    <button onclick="document.getElementById('file-upload-${project.id}').click()" class="text-[10px] md:text-xs text-app-accent hover:text-blue-400 transition-colors flex items-center bg-app-accent/10 px-2 py-1 rounded-md border border-app-accent/20 hover:bg-app-accent/20">
+                                    <input type="file" id="file-upload-${project.id}" class="hidden" data-action="upload-file" data-project-id="${project.id}">
+                                    <button data-action="trigger-upload" data-target="file-upload-${project.id}" class="text-[10px] md:text-xs text-app-accent hover:text-blue-400 transition-colors flex items-center bg-app-accent/10 px-2 py-1 rounded-md border border-app-accent/20 hover:bg-app-accent/20">
                                         <i data-lucide="plus" class="w-3 h-3 mr-1"></i> Joindre
                                     </button>
                                 </div>
@@ -1436,8 +1410,8 @@
                                         <div class="w-6 h-6 rounded bg-app-bg border border-app-border flex items-center justify-center mr-2 shrink-0">
                                             <i data-lucide="${icon}" class="w-3.5 h-3.5 ${isImage ? 'text-purple-400' : 'text-blue-400'}"></i>
                                         </div>
-                                        <a href="${file.url}" target="_blank" class="text-xs text-white truncate hover:underline flex-1" title="${file.name}">${file.name}</a>
-                                        <button onclick="app.deleteAttachment('${project.id}', '${file.name}')" class="ml-2 text-app-textSecondary hover:text-red-400 opacity-50 md:opacity-0 md:group-hover/file:opacity-100 transition-opacity">
+                                        <a href="${file.url}" target="_blank" class="text-xs text-white truncate hover:underline flex-1" title="${this.esc(file.name)}">${this.esc(file.name)}</a>
+                                        <button data-action="delete-attachment" data-project-id="${project.id}" data-attachment-name="${this.esc(file.name)}" class="ml-2 text-app-textSecondary hover:text-red-400 opacity-50 md:opacity-0 md:group-hover/file:opacity-100 transition-opacity">
                                             <i data-lucide="x" class="w-3.5 h-3.5"></i>
                                         </button>
                                     </div>
@@ -1452,8 +1426,8 @@
                                 <div class="w-8 h-8 md:w-10 md:h-10 rounded-full ${user.color} flex items-center justify-center text-xs md:text-sm font-bold text-white shadow-inner shrink-0">${user.initials}</div>
                                 <div class="flex-1">
                                     <div class="text-[9px] md:text-[10px] text-app-textSecondary uppercase font-semibold tracking-wider">Responsable</div>
-                                    <select onchange="app.updateProjectField('${project.id}', 'managerId', this.value)" class="w-full bg-transparent border-none text-xs md:text-sm text-white font-medium p-0 focus:outline-none appearance-none cursor-pointer">
-                                        ${this.state.users.map(u => `<option value="${u.id}" ${project.managerId === u.id ? 'selected' : ''} class="bg-app-panel text-white">${u.name}</option>`).join('')}
+                                    <select data-action="update-project" data-project-id="${project.id}" data-field="managerId" class="w-full bg-transparent border-none text-xs md:text-sm text-white font-medium p-0 focus:outline-none appearance-none cursor-pointer">
+                                        ${this.state.users.map(u => `<option value="${u.id}" ${project.managerId === u.id ? 'selected' : ''} class="bg-app-panel text-white">${this.esc(u.name)}</option>`).join('')}
                                     </select>
                                 </div>
                                 <i data-lucide="chevron-down" class="w-4 h-4 text-app-textSecondary absolute right-4 opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity pointer-events-none"></i>
@@ -1465,7 +1439,7 @@
                                 </div>
                                 <div class="flex-1">
                                     <div class="text-[9px] md:text-[10px] text-app-textSecondary uppercase font-semibold tracking-wider">Échéance globale</div>
-                                    <input type="date" onchange="app.updateProjectField('${project.id}', 'dueDate', this.value)" value="${project.dueDate}" class="w-full bg-transparent border-none text-xs md:text-sm text-white font-medium p-0 focus:outline-none cursor-pointer">
+                                    <input type="date" data-action="update-project" data-project-id="${project.id}" data-field="dueDate" value="${project.dueDate}" class="w-full bg-transparent border-none text-xs md:text-sm text-white font-medium p-0 focus:outline-none cursor-pointer">
                                 </div>
                             </div>
                         </div>
@@ -1473,7 +1447,7 @@
                         <!-- Tasks Section -->
                         <div class="mb-4 flex items-center justify-between">
                             <h3 class="text-xs md:text-sm font-semibold text-white uppercase tracking-wider">Avancement (${project.progress}%)</h3>
-                            <button onclick="app.addTask('${project.id}')" class="text-xs text-app-accent hover:text-blue-400 flex items-center p-2 -mr-2"><i data-lucide="plus" class="w-3 h-3 mr-1"></i> Ajouter</button>
+                            <button data-action="add-task" data-project-id="${project.id}" class="text-xs text-app-accent hover:text-blue-400 flex items-center p-2 -mr-2"><i data-lucide="plus" class="w-3 h-3 mr-1"></i> Ajouter</button>
                         </div>
                         
                         <div class="w-full bg-app-panel rounded-full h-1.5 md:h-2 mb-4 overflow-hidden border border-app-border">
@@ -1486,17 +1460,17 @@
                                 const isOverdue = !isDone && this.isDateOverdue(t.dueDate);
                                 return `
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg border border-app-border/50 hover:border-app-border hover:bg-app-hover transition-colors group gap-2">
-                                    <div class="flex items-center flex-1 min-w-0 cursor-pointer" onclick="app.toggleTaskFromModal('${project.id}', '${t.id}')">
+                                    <div class="flex items-center flex-1 min-w-0 cursor-pointer" data-action="toggle-task" data-project-id="${project.id}" data-task-id="${t.id}">
                                         <div class="w-4 h-4 md:w-5 md:h-5 rounded border flex items-center justify-center mr-3 shrink-0 transition-colors ${isDone ? 'bg-app-accent border-app-accent text-white' : 'border-app-textSecondary group-hover:border-app-accent group-hover:bg-app-accent/10'}">
                                             ${isDone ? '<i data-lucide="check" class="w-3 h-3"></i>' : ''}
                                         </div>
-                                        <span class="text-xs md:text-sm truncate ${isDone ? 'text-app-textSecondary line-through' : 'text-white'}">${t.title}</span>
+                                        <span class="text-xs md:text-sm truncate ${isDone ? 'text-app-textSecondary line-through' : 'text-white'}">${this.esc(t.title)}</span>
                                     </div>
                                     
                                     <div class="flex items-center justify-between sm:justify-end shrink-0 gap-3 ml-7 sm:ml-0">
-                                        <input type="date" value="${t.dueDate || ''}" onchange="app.updateTaskField('${project.id}', '${t.id}', 'dueDate', this.value)" class="bg-app-bg sm:bg-transparent border border-app-border sm:border-transparent hover:border-app-border focus:border-app-accent rounded px-2 sm:px-1 py-1 sm:py-0.5 text-[10px] ${isOverdue ? 'text-red-400 font-bold' : 'text-app-textSecondary'} cursor-pointer outline-none">
+                                        <input type="date" value="${t.dueDate || ''}" data-action="update-task" data-project-id="${project.id}" data-task-id="${t.id}" data-field="dueDate" class="bg-app-bg sm:bg-transparent border border-app-border sm:border-transparent hover:border-app-border focus:border-app-accent rounded px-2 sm:px-1 py-1 sm:py-0.5 text-[10px] ${isOverdue ? 'text-red-400 font-bold' : 'text-app-textSecondary'} cursor-pointer outline-none">
                                         
-                                        <button onclick="app.deleteTask('${project.id}', '${t.id}')" class="text-app-textSecondary hover:text-red-400 md:opacity-0 md:group-hover:opacity-100 transition-opacity p-2 -mr-2 sm:p-1 sm:mr-0" title="Supprimer la tâche">
+                                        <button data-action="delete-task" data-project-id="${project.id}" data-task-id="${t.id}" class="text-app-textSecondary hover:text-red-400 md:opacity-0 md:group-hover:opacity-100 transition-opacity p-2 -mr-2 sm:p-1 sm:mr-0" title="Supprimer la tâche">
                                             <i data-lucide="trash-2" class="w-4 h-4"></i>
                                         </button>
                                     </div>
@@ -1507,47 +1481,75 @@
 
                         <!-- Footer Actions -->
                         <div class="border-t border-app-border/50 pt-6 flex justify-end pb-4 md:pb-0">
-                             <button onclick="app.deleteProject('${project.id}')" class="text-xs text-red-400 hover:text-red-300 flex items-center px-3 py-2 rounded-lg hover:bg-red-400/10 transition-colors">
+                             <button data-action="delete-project" data-project-id="${project.id}" class="text-xs text-red-400 hover:text-red-300 flex items-center px-3 py-2 rounded-lg hover:bg-red-400/10 transition-colors">
                                 <i data-lucide="trash-2" class="w-3 h-3 mr-1.5"></i> Supprimer ce projet
                             </button>
                         </div>
                     </div>
                 `;
-
-                document.getElementById('modal-content').innerHTML = modalHtml;
-                const modal = document.getElementById('project-modal');
-                modal.classList.remove('hidden');
-                lucide.createIcons();
             },
 
-            closeModal(modalId) {
-                document.getElementById(modalId).classList.add('hidden');
-                this.render(); 
-            },
-
-            toggleTaskFromModal(projectId, taskId) {
-                const project = this.state.projects.find(p => p.id === projectId);
-                const task = project.tasks.find(t => t.id === taskId);
-                task.status = task.status === 'done' ? 'todo' : 'done';
-                project.progress = this.calculateProjectProgress(project); 
-                
-                this.openProjectModal(projectId);
-                console.log(`GAS: Update task ${taskId} to ${task.status}`);
-            },
-
-            toggleCommandPalette() {
-                const palette = document.getElementById('command-palette');
-                const input = document.getElementById('cmd-input');
-                if (palette.classList.contains('hidden')) {
-                    palette.classList.remove('hidden');
-                    input.value = '';
-                    setTimeout(() => input.focus(), 50);
-                } else {
-                    palette.classList.add('hidden');
-                }
-            },
-
+            // --- 🎯 EVENT DELEGATION GLOBALE ---
             setupEventListeners() {
+                // 1. Délégation globale des clics
+                document.addEventListener('click', (e) => {
+                    const target = e.target.closest('[data-action]');
+                    if (!target) return;
+                    
+                    const action = target.dataset.action;
+                    const d = target.dataset;
+
+                    switch(action) {
+                        case 'navigate': this.navigate(d.view); break;
+                        case 'toggle-sidebar': this.toggleSidebar(); break;
+                        case 'open-user-switcher': this.openUserSwitcher(); break;
+                        case 'switch-user': this.switchUser(d.userId); break;
+                        case 'toggle-cmd': this.toggleCommandPalette(); break;
+                        case 'export-data': this.exportData(); break;
+                        case 'open-create-modal': this.openCreateProjectModal(); break;
+                        case 'close-modal': this.closeModal(d.modalId); break;
+                        case 'create-project': this.createProject(); break;
+                        case 'open-project': this.openProjectModal(d.projectId); break;
+                        case 'set-view-mode': this.state.projectsViewMode = d.mode; this.renderAll(); break;
+                        case 'add-task': this.addTask(d.projectId); break;
+                        case 'toggle-task': this.toggleTaskFromModal(d.projectId, d.taskId); break;
+                        case 'delete-task': this.deleteTask(d.projectId, d.taskId); break;
+                        case 'delete-project': this.deleteProject(d.projectId); break;
+                        case 'add-tag': this.addTag(d.projectId); break;
+                        case 'remove-tag': this.removeTag(d.projectId, d.tag); break;
+                        case 'trigger-upload': document.getElementById(d.target).click(); break;
+                        case 'delete-attachment': this.deleteAttachment(d.projectId, d.attachmentName); break;
+                    }
+                });
+
+                // 2. Délégation globale des changements d'inputs
+                document.addEventListener('change', (e) => {
+                    const target = e.target.closest('[data-action]');
+                    if (!target) return;
+                    
+                    const action = target.dataset.action;
+                    const d = target.dataset;
+
+                    switch(action) {
+                        case 'set-filter': this.setFilter(d.filterType, target.value); break;
+                        case 'update-project': 
+                            this.mutate('Mise à jour projet', () => {
+                                const p = this.state.projects.find(x => x.id === d.projectId);
+                                if(p) p[d.field] = target.value;
+                            });
+                            break;
+                        case 'update-task':
+                            this.mutate('Mise à jour tâche', () => {
+                                const p = this.state.projects.find(x => x.id === d.projectId);
+                                const t = p?.tasks.find(x => x.id === d.taskId);
+                                if(t) t[d.field] = target.value;
+                            });
+                            break;
+                        case 'upload-file': this.handleFileUpload(d.projectId, e); break;
+                    }
+                });
+
+                // 3. Raccourcis Clavier
                 document.addEventListener('keydown', (e) => {
                     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                         e.preventDefault();
@@ -1555,12 +1557,58 @@
                     }
                     if (e.key === 'Escape') {
                         document.getElementById('command-palette').classList.add('hidden');
-                        document.getElementById('project-modal').classList.add('hidden');
-                        document.getElementById('user-switcher-modal').classList.add('hidden');
-                        document.getElementById('create-project-modal').classList.add('hidden');
-                        this.render();
+                        this.closeModal('project-modal');
+                        this.closeModal('user-switcher-modal');
+                        this.closeModal('create-project-modal');
                     }
                 });
+
+                // 4. Drag and Drop Global (Vue Revue)
+                document.addEventListener('dragstart', (e) => {
+                    const card = e.target.closest('.kanban-card');
+                    if (card) {
+                        e.dataTransfer.setData('text/plain', card.dataset.id);
+                        setTimeout(() => card.classList.add('ghost-card', 'opacity-50'), 0);
+                    }
+                });
+                document.addEventListener('dragend', (e) => {
+                    const card = e.target.closest('.kanban-card');
+                    if (card) card.classList.remove('ghost-card', 'opacity-50');
+                });
+                document.addEventListener('dragover', (e) => {
+                    const col = e.target.closest('.kanban-column');
+                    if (col) {
+                        e.preventDefault();
+                        col.classList.add('bg-app-hover/50');
+                    }
+                });
+                document.addEventListener('dragleave', (e) => {
+                    const col = e.target.closest('.kanban-column');
+                    if (col) col.classList.remove('bg-app-hover/50');
+                });
+                document.addEventListener('drop', (e) => {
+                    const col = e.target.closest('.kanban-column');
+                    if (col) {
+                        e.preventDefault();
+                        col.classList.remove('bg-app-hover/50');
+                        const projectId = e.dataTransfer.getData('text/plain');
+                        const newPriority = col.dataset.priority;
+                        
+                        this.mutate('Changement de priorité', () => {
+                            const proj = this.state.projects.find(p => p.id === projectId);
+                            if (proj && proj.priority !== newPriority) {
+                                proj.priority = newPriority;
+                            }
+                        });
+                    }
+                });
+                
+                // Empeche le swipe de la page sur mobile pendant le drag and drop
+                document.addEventListener('touchstart', (e) => {
+                    if (e.target.closest('.kanban-card')) {
+                         // Configuration passive
+                    }
+                }, {passive: true});
             }
         };
 
