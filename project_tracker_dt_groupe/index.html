@@ -130,8 +130,8 @@
             <button onclick="app.navigate('review')" id="nav-review" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
                 <i data-lucide="arrow-down-up" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Revue (Priorisation)
             </button>
-            <button onclick="app.navigate('kpis')" id="nav-kpis" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
-                <i data-lucide="bar-chart-3" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> KPIs & Data
+            <button onclick="app.navigate('roadmap')" id="nav-roadmap" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="calendar-days" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Roadmap
             </button>
 
             <div class="text-[10px] font-bold text-app-textSecondary mb-2 mt-6 px-3 tracking-wider uppercase">Organisation</div>
@@ -589,7 +589,7 @@
                     'dashboard': 'Vue d\'ensemble',
                     'projects': 'Projets',
                     'review': 'Revue & Priorisation',
-                    'kpis': 'Indicateurs (KPIs)',
+                    'roadmap': 'Roadmap & Échéances',
                     'team': 'Gestion d\'Équipe',
                     'archive': 'Archives'
                 };
@@ -621,7 +621,7 @@
                     case 'dashboard': container.innerHTML = this.buildDashboardView(); break;
                     case 'projects': container.innerHTML = this.buildProjectsView(); break;
                     case 'review': container.innerHTML = this.buildReviewView(); break;
-                    case 'kpis': container.innerHTML = this.buildKPIView(); break;
+                    case 'roadmap': container.innerHTML = this.buildRoadmapView(); break;
                     case 'team': container.innerHTML = this.buildTeamView(); break;
                     case 'archive': container.innerHTML = this.buildArchiveView(); break;
                 }
@@ -709,7 +709,7 @@
                         </div>
 
                         <!-- KPIs intégrés au Dashboard -->
-                        ${this.buildKPIView(true)}
+                        ${this.buildKPIView()}
 
                         <h3 class="text-lg font-semibold text-white mb-4 mt-8">Mes Projets Prioritaires</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -815,14 +815,98 @@
                 `;
             },
 
-            // 4. KPIS (Mock Visuel)
-            buildKPIView(isEmbedded = false) {
-                const wrapperClass = isEmbedded ? "mb-8" : "max-w-5xl mx-auto animate-fade-in pb-10";
-                const titleHtml = isEmbedded ? "" : `<h2 class="text-xl font-semibold text-white mb-6">Performance de Livraison</h2>`;
+            // 4. ROADMAP (Nouvelle vue chronologique)
+            buildRoadmapView() {
+                // Trier les projets par date d'échéance croissante
+                const sortedProjects = [...this.state.projects]
+                    .filter(p => p.status !== 'done')
+                    .sort((a, b) => new Date(a.dueDate || "2099-12-31") - new Date(b.dueDate || "2099-12-31"));
 
+                let html = `
+                    <div class="max-w-5xl mx-auto animate-fade-in pb-10">
+                        <p class="text-app-textSecondary text-sm mb-8">Vue chronologique des livrables de la Direction Technique.</p>
+                        <div class="relative border-l-2 border-app-border ml-3 md:ml-4 space-y-8 pb-8">
+                `;
+
+                let currentMonthYear = "";
+
+                sortedProjects.forEach(p => {
+                    const dateObj = new Date(p.dueDate || "2099-12-31");
+                    const monthYear = dateObj.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+                    
+                    // Ajouter un séparateur de mois si on change de mois
+                    if (monthYear !== currentMonthYear) {
+                        html += `
+                            <div class="relative pl-8 md:pl-10 mt-6 mb-2">
+                                <div class="absolute w-3 h-3 bg-app-accent rounded-full -left-1.5 top-1.5 shadow-[0_0_10px_rgba(94,106,210,0.8)]"></div>
+                                <h3 class="text-sm font-bold text-app-accent capitalize tracking-widest uppercase">${monthYear}</h3>
+                            </div>
+                        `;
+                        currentMonthYear = monthYear;
+                    }
+
+                    const pStyle = this.getPriorityStyle(p.priority);
+                    const user = this.getUser(p.managerId);
+
+                    html += `
+                        <div class="relative pl-8 md:pl-10 group">
+                            <!-- Point de timeline -->
+                            <div class="absolute w-2 h-2 bg-app-border group-hover:bg-white rounded-full -left-1 top-6 transition-colors"></div>
+                            
+                            <div onclick="app.openProjectModal('${p.id}')" class="glass-panel p-4 rounded-xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-3 mb-1">
+                                        <span class="text-xs font-mono text-app-textSecondary bg-app-bg px-1.5 py-0.5 rounded border border-app-border">${p.id}</span>
+                                        <h4 class="text-base font-semibold text-white truncate group-hover:text-app-accent transition-colors">${p.name}</h4>
+                                    </div>
+                                    <p class="text-sm text-app-textSecondary line-clamp-1 mb-2">${p.description}</p>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded flex inline-flex items-center gap-1 ${pStyle.bg} ${pStyle.color}">
+                                            <i data-lucide="${pStyle.icon}" class="w-3 h-3"></i> ${p.priority}
+                                        </span>
+                                        <div class="flex items-center gap-1 ml-2 text-[10px] text-app-textSecondary">
+                                            <div class="w-4 h-4 rounded-full ${user.color} flex items-center justify-center font-bold text-white shrink-0">${user.initials}</div>
+                                            ${user.name}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center gap-6 shrink-0 md:border-l md:border-app-border md:pl-6">
+                                    <div class="text-right">
+                                        <div class="text-[10px] text-app-textSecondary uppercase tracking-wider mb-1">Échéance</div>
+                                        <div class="text-sm font-medium ${this.isDateOverdue(p.dueDate) ? 'text-red-400' : 'text-white'} flex items-center gap-1.5">
+                                            <i data-lucide="calendar" class="w-3.5 h-3.5 opacity-50"></i>
+                                            ${this.formatDateDisplay(p.dueDate)}
+                                        </div>
+                                    </div>
+                                    <div class="relative w-12 h-12 flex items-center justify-center">
+                                        <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                                            <path class="text-app-border" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                            <path class="text-app-accent transition-all duration-1000" stroke-dasharray="${p.progress}, 100" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        </svg>
+                                        <span class="absolute text-[10px] font-bold text-white">${p.progress}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                if (sortedProjects.length === 0) {
+                    html += `<p class="pl-8 md:pl-10 text-app-textSecondary">Aucun projet actif à afficher.</p>`;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+                return html;
+            },
+
+            // HTML helper pour Dashboard
+            buildKPIView() {
                 return `
-                    <div class="${wrapperClass}">
-                        ${titleHtml}
+                    <div class="mb-8">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             
                             <div class="glass-panel p-6 rounded-2xl">
