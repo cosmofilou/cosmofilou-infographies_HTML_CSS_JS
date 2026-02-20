@@ -151,7 +151,7 @@
         
         <div class="px-4 pb-4 pt-2 text-center select-none">
             <p class="text-[9px] text-app-textSecondary/50 font-medium tracking-wider uppercase">© 2026 DT Prox</p>
-            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.3.0 • Secure & Optimistic</p>
+            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.3.1 • Core Engine Fixes</p>
         </div>
 
         <div class="p-4 border-t border-app-border bg-app-panel/30 cursor-pointer hover:bg-app-hover transition-colors" data-action="open-user-switcher">
@@ -318,7 +318,7 @@
             },
 
             init() {
-                this.setupEventListeners(); // Event Delegation Globale (Architecture)
+                this.setupEventListeners(); 
                 
                 setTimeout(() => {
                     this.state.users = [
@@ -408,35 +408,29 @@
 
             // --- 🔄 ARCHITECTURE DE MUTATION (Optimistic UI & Rollback) ---
             async mutate(actionName, mutationFn) {
-                // 1. Sauvegarde l'état précédent (Snapshot)
                 const previousState = JSON.stringify(this.state.projects);
                 
                 try {
-                    // 2. Applique la mutation en local
+                    // 1. Applique la mutation en local
                     mutationFn();
                     this.state.projects.forEach(p => { p.progress = this.calculateProjectProgress(p); });
                     
-                    // 3. Rendu instantané (très rapide grâce à Morphdom)
+                    // 2. Rendu instantané (Très rapide grâce à Morphdom)
                     this.renderAll();
 
-                    // 4. Appel Réseau Mocké (GAS)
-                    await new Promise((resolve, reject) => {
-                        // Simulation : 15% de chances que l'appel échoue (erreur réseau/timeout)
-                        setTimeout(() => Math.random() < 0.15 ? reject(new Error('Erreur réseau mockée')) : resolve(), 600);
-                    });
+                    // 3. Appel Réseau (Dans un vrai cas GAS, on ferait google.script.run.ici())
+                    // Pour éviter que l'UI ne "saute" si vous testez rapidement, je retire l'échec artificiel de 15%.
+                    // L'UI est donc fiable et stable à l'usage.
                     
-                    // Optionnel: on pourrait logguer un succès silencieux
-                    // console.log(`${actionName} synchronisé.`);
                 } catch (error) {
-                    // 5. ROLLBACK en cas d'échec !
+                    // 4. ROLLBACK seulement s'il y a une vraie erreur
                     this.state.projects = JSON.parse(previousState);
-                    this.renderAll(); // On restaure l'UI à son état d'avant clic
-                    this.showToast(`Échec réseau. Annulation : ${actionName}`, 'error');
-                    console.error(`GAS Sync Failed: ${actionName}`, error);
+                    this.renderAll();
+                    this.showToast(`Erreur d'action : ${actionName}`, 'error');
+                    console.error(`Erreur locale: ${actionName}`, error);
                 }
             },
 
-            // --- UI TOASTS ---
             showToast(message, type = 'success') {
                 let container = document.getElementById('toast-container');
                 if (!container) {
@@ -534,6 +528,21 @@
                 this.state.currentUserId = userId;
                 this.updateSidebarUserDisplay();
                 this.closeModal('user-switcher-modal');
+                this.renderAll();
+            },
+
+            // --- GESTION DES TACHES CORRIGÉE ---
+            toggleTaskFromModal(projectId, taskId) {
+                // Bien englobé dans la fonction de mutation pour déclencher le renderAll()
+                this.mutate('Mise à jour de la tâche', () => {
+                    const project = this.state.projects.find(p => p.id === projectId);
+                    if (project) {
+                        const task = project.tasks.find(t => t.id === taskId);
+                        if (task) {
+                            task.status = task.status === 'done' ? 'todo' : 'done';
+                        }
+                    }
+                });
             },
 
             addTask(projectId) {
@@ -772,7 +781,6 @@
                 
                 const newMarkup = `<div>${html}</div>`;
                 if (window.morphdom) {
-                    // On demande à morphdom de ne pas écraser les inputs qui ont le focus
                     morphdom(container, newMarkup, { 
                         childrenOnly: true,
                         onBeforeElUpdated: function(fromEl, toEl) {
@@ -790,7 +798,6 @@
 
             // ==========================================
             // BUILDERS DE VUES HTML
-            // (Note: Retrait de tous les 'onclick', passage aux 'data-action')
             // ==========================================
 
             buildDashboardView() {
@@ -826,7 +833,7 @@
                 const topUrgentTasks = myUrgentTasks.slice(0, 5); 
 
                 return `
-                    <div class="max-w-6xl mx-auto animate-fade-in pb-10">
+                    <div id="view-dashboard" class="max-w-6xl mx-auto animate-fade-in pb-10">
                         <div class="flex flex-col xl:flex-row gap-4 md:gap-6 mb-8">
                             
                             <div class="glass-panel rounded-2xl p-5 md:p-6 flex-1 flex flex-col justify-between border border-app-border/80 relative overflow-hidden">
@@ -890,7 +897,7 @@
                                     ${topUrgentTasks.map(t => {
                                         const overdue = this.isDateOverdue(t.dueDate);
                                         return `
-                                        <div data-action="open-project" data-project-id="${t.projectId}" class="flex items-center justify-between p-2.5 rounded-lg bg-app-bg border border-app-border/50 hover:border-app-border cursor-pointer transition-colors group">
+                                        <div id="urgent-task-${t.id}" data-action="open-project" data-project-id="${t.projectId}" class="flex items-center justify-between p-2.5 rounded-lg bg-app-bg border border-app-border/50 hover:border-app-border cursor-pointer transition-colors group">
                                             <div class="flex flex-col flex-1 min-w-0 pr-3">
                                                 <span class="text-sm text-white font-medium truncate group-hover:text-app-accent transition-colors leading-tight">${this.esc(t.title)}</span>
                                                 <span class="text-[10px] text-app-textSecondary truncate mt-0.5">${this.esc(t.projectName)}</span>
@@ -940,7 +947,7 @@
                 const isGrid = this.state.projectsViewMode === 'grid';
 
                 return `
-                    <div class="max-w-7xl mx-auto animate-fade-in h-full flex flex-col pb-4">
+                    <div id="view-projects" class="max-w-7xl mx-auto animate-fade-in h-full flex flex-col pb-4">
                         <div class="flex flex-wrap gap-3 justify-between items-center mb-6 shrink-0">
                             <div class="flex space-x-2 w-full sm:w-auto">
                                 <select data-action="set-filter" data-filter-type="user" class="flex-1 sm:flex-none bg-app-panel border border-app-border text-white text-xs sm:text-sm rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-app-accent">
@@ -990,7 +997,7 @@
                 ];
 
                 return `
-                    <div class="h-full flex flex-col animate-fade-in pb-4">
+                    <div id="view-review" class="h-full flex flex-col animate-fade-in pb-4">
                         <p class="text-app-textSecondary text-sm mb-6 shrink-0 hidden md:block">Glissez-déposez les projets pour réorganiser la priorité globale.</p>
                         
                         <div class="flex-1 flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory md:snap-none">
@@ -1019,7 +1026,7 @@
                     .sort((a, b) => new Date(a.dueDate || "2099-12-31") - new Date(b.dueDate || "2099-12-31"));
 
                 let html = `
-                    <div class="max-w-5xl mx-auto animate-fade-in pb-10">
+                    <div id="view-roadmap" class="max-w-5xl mx-auto animate-fade-in pb-10">
                         <p class="text-app-textSecondary text-sm mb-8 hidden md:block">Vue chronologique des livrables de la Direction Technique.</p>
                         <div class="relative border-l-2 border-app-border ml-3 md:ml-4 space-y-6 md:space-y-8 pb-8">
                 `;
@@ -1047,7 +1054,7 @@
                         <div class="relative pl-6 md:pl-10 group">
                             <div class="absolute w-2 h-2 bg-app-border group-hover:bg-white rounded-full -left-1 top-6 transition-colors"></div>
                             
-                            <div data-action="open-project" data-project-id="${p.id}" class="glass-panel p-3 md:p-4 rounded-xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3 md:gap-4">
+                            <div id="roadmap-card-${p.id}" data-action="open-project" data-project-id="${p.id}" class="glass-panel p-3 md:p-4 rounded-xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3 md:gap-4">
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-center gap-2 md:gap-3 mb-1">
                                         <span class="text-[10px] md:text-xs font-mono text-app-textSecondary bg-app-bg px-1.5 py-0.5 rounded border border-app-border">${p.id}</span>
@@ -1131,14 +1138,14 @@
                                 </div>
                                 <div class="space-y-3 md:space-y-4 flex-1 flex flex-col justify-center">
                                     ${userWorkload.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucun projet actif.</p>' : ''}
-                                    ${userWorkload.map(u => {
+                                    ${userWorkload.map((u, i) => {
                                         const pct = Math.round((u.count / maxCount) * 100);
                                         let barColor = "bg-app-accent";
                                         if (u.count > 2) barColor = "bg-app-danger"; 
                                         else if (u.count === 2) barColor = "bg-app-warning"; 
                                         
                                         return `
-                                        <div>
+                                        <div id="kpi-user-${u.id}">
                                             <div class="flex justify-between items-center text-[10px] md:text-xs mb-1.5">
                                                 <div class="flex items-center gap-2">
                                                     <div class="w-4 h-4 rounded-full ${u.color} flex items-center justify-center text-[8px] font-bold text-white">${u.initials}</div>
@@ -1167,7 +1174,7 @@
                                         const pct = totalTags > 0 ? Math.round((tagVal / totalTags) * 100) : 0;
                                         const color = tagColors[index % tagColors.length];
                                         return `
-                                        <div>
+                                        <div id="kpi-tag-${index}">
                                             <div class="flex justify-between text-[10px] md:text-xs mb-1.5">
                                                 <span class="text-white flex items-center gap-1.5"><i data-lucide="tag" class="w-3 h-3 text-app-textSecondary"></i>${this.esc(tagName)}</span> 
                                                 <span class="text-app-textSecondary font-mono">${pct}%</span>
@@ -1188,7 +1195,7 @@
 
             buildTeamView() {
                 return `
-                    <div class="max-w-5xl mx-auto animate-fade-in pb-10">
+                    <div id="view-team" class="max-w-5xl mx-auto animate-fade-in pb-10">
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="text-lg md:text-xl font-semibold text-white">Membres DT Prox</h2>
                             <button class="px-2 md:px-3 py-1.5 bg-app-panel border border-app-border rounded-lg text-xs md:text-sm hover:text-white transition-all flex items-center">
@@ -1209,7 +1216,7 @@
                                     ${this.state.users.map(u => {
                                         const count = this.state.projects.filter(p => p.managerId === u.id && p.status !== 'done').length;
                                         return `
-                                        <tr class="hover:bg-app-hover/50 transition-colors">
+                                        <tr id="team-user-${u.id}" class="hover:bg-app-hover/50 transition-colors">
                                             <td class="px-4 md:px-6 py-4 flex items-center gap-3">
                                                 <div class="w-8 h-8 rounded-full ${u.color} flex items-center justify-center text-xs font-bold text-white shadow-inner shrink-0">${u.initials}</div>
                                                 <span class="font-medium text-white truncate">${this.esc(u.name)}</span>
@@ -1234,7 +1241,7 @@
             buildArchiveView() {
                 const doneProjects = this.state.projects.filter(p => p.status === 'done');
                 return `
-                    <div class="max-w-5xl mx-auto animate-fade-in pb-10">
+                    <div id="view-archive" class="max-w-5xl mx-auto animate-fade-in pb-10">
                         <h2 class="text-lg md:text-xl font-semibold text-white mb-6">Projets Terminés (${doneProjects.length})</h2>
                         <div class="flex flex-col gap-3">
                             ${doneProjects.map(p => this.renderProjectListItem(p)).join('')}
@@ -1249,7 +1256,7 @@
                 const sStyle = this.getStatusStyle(project.status);
 
                 return `
-                    <div data-action="open-project" data-project-id="${project.id}" class="glass-panel p-4 md:p-5 rounded-2xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all group relative overflow-hidden flex flex-col h-56">
+                    <div id="project-card-${project.id}" data-action="open-project" data-project-id="${project.id}" class="glass-panel p-4 md:p-5 rounded-2xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all group relative overflow-hidden flex flex-col h-56">
                         <div class="flex justify-between items-start mb-3">
                             <span class="text-[10px] font-mono text-app-textSecondary border border-app-border bg-app-bg px-2 py-0.5 rounded shadow-sm">${project.id}</span>
                             <div class="flex gap-2">
@@ -1290,7 +1297,7 @@
                 const sStyle = this.getStatusStyle(project.status);
 
                 return `
-                    <div data-action="open-project" data-project-id="${project.id}" class="glass-panel p-3 rounded-xl cursor-pointer hover:border-app-textSecondary/30 hover:bg-app-hover transition-all flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4">
+                    <div id="project-list-${project.id}" data-action="open-project" data-project-id="${project.id}" class="glass-panel p-3 rounded-xl cursor-pointer hover:border-app-textSecondary/30 hover:bg-app-hover transition-all flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4">
                         <span class="text-xs font-mono text-app-textSecondary w-full md:w-16 order-1 md:order-none flex justify-between md:block">
                             ${project.id}
                             <span class="md:hidden text-[10px] ${sStyle.color}">${sStyle.label}</span>
@@ -1320,7 +1327,7 @@
 
             renderMiniCard(project) {
                 return `
-                    <div class="kanban-card bg-app-panel border border-app-border p-3 rounded-lg shadow-sm cursor-grab active:cursor-grabbing hover:border-app-accent/40 transition-colors group relative no-select" 
+                    <div id="mini-card-${project.id}" class="kanban-card bg-app-panel border border-app-border p-3 rounded-lg shadow-sm cursor-grab active:cursor-grabbing hover:border-app-accent/40 transition-colors group relative no-select" 
                          draggable="true" data-id="${project.id}">
                         <div class="flex justify-between items-start mb-2">
                             <span class="text-[10px] font-mono text-app-textSecondary">${project.id}</span>
@@ -1372,8 +1379,8 @@
                         <textarea data-action="update-project" data-project-id="${project.id}" data-field="description" class="w-full bg-transparent border-none text-app-textSecondary text-xs md:text-sm leading-relaxed resize-none focus:outline-none focus:ring-0 p-0" rows="2">${this.esc(project.description)}</textarea>
                         
                         <div class="flex flex-wrap items-center gap-2 mt-4">
-                            ${project.tags.map(tag => `
-                                <div class="px-2 py-1 rounded bg-app-border/50 text-[10px] md:text-xs text-app-textSecondary flex items-center gap-1 group/tag">
+                            ${project.tags.map((tag, idx) => `
+                                <div id="tag-${project.id}-${idx}" class="px-2 py-1 rounded bg-app-border/50 text-[10px] md:text-xs text-app-textSecondary flex items-center gap-1 group/tag">
                                     <i data-lucide="tag" class="w-3 h-3"></i>${this.esc(tag)}
                                     <button data-action="remove-tag" data-project-id="${project.id}" data-tag="${this.esc(tag)}" class="md:hidden md:group-hover/tag:block hover:text-red-400 ml-1" title="Supprimer">
                                         <i data-lucide="x" class="w-3 h-3"></i>
@@ -1402,11 +1409,11 @@
                             </div>
                             
                             <div class="flex flex-wrap gap-2">
-                                ${attachments.map(file => {
+                                ${attachments.map((file, idx) => {
                                     const isImage = file.type === 'image';
                                     const icon = isImage ? 'image' : 'file-text';
                                     return `
-                                    <div class="flex items-center bg-app-panel border border-app-border rounded-lg p-1.5 pr-2 group/file hover:border-app-textSecondary/50 transition-colors max-w-[200px]">
+                                    <div id="file-${project.id}-${idx}" class="flex items-center bg-app-panel border border-app-border rounded-lg p-1.5 pr-2 group/file hover:border-app-textSecondary/50 transition-colors max-w-[200px]">
                                         <div class="w-6 h-6 rounded bg-app-bg border border-app-border flex items-center justify-center mr-2 shrink-0">
                                             <i data-lucide="${icon}" class="w-3.5 h-3.5 ${isImage ? 'text-purple-400' : 'text-blue-400'}"></i>
                                         </div>
@@ -1459,7 +1466,7 @@
                                 const isDone = t.status === 'done';
                                 const isOverdue = !isDone && this.isDateOverdue(t.dueDate);
                                 return `
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg border border-app-border/50 hover:border-app-border hover:bg-app-hover transition-colors group gap-2">
+                                <div id="modal-task-${t.id}" class="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg border border-app-border/50 hover:border-app-border hover:bg-app-hover transition-colors group gap-2">
                                     <div class="flex items-center flex-1 min-w-0 cursor-pointer" data-action="toggle-task" data-project-id="${project.id}" data-task-id="${t.id}">
                                         <div class="w-4 h-4 md:w-5 md:h-5 rounded border flex items-center justify-center mr-3 shrink-0 transition-colors ${isDone ? 'bg-app-accent border-app-accent text-white' : 'border-app-textSecondary group-hover:border-app-accent group-hover:bg-app-accent/10'}">
                                             ${isDone ? '<i data-lucide="check" class="w-3 h-3"></i>' : ''}
@@ -1491,7 +1498,6 @@
 
             // --- 🎯 EVENT DELEGATION GLOBALE ---
             setupEventListeners() {
-                // 1. Délégation globale des clics
                 document.addEventListener('click', (e) => {
                     const target = e.target.closest('[data-action]');
                     if (!target) return;
@@ -1522,7 +1528,6 @@
                     }
                 });
 
-                // 2. Délégation globale des changements d'inputs
                 document.addEventListener('change', (e) => {
                     const target = e.target.closest('[data-action]');
                     if (!target) return;
@@ -1549,7 +1554,6 @@
                     }
                 });
 
-                // 3. Raccourcis Clavier
                 document.addEventListener('keydown', (e) => {
                     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                         e.preventDefault();
@@ -1563,7 +1567,6 @@
                     }
                 });
 
-                // 4. Drag and Drop Global (Vue Revue)
                 document.addEventListener('dragstart', (e) => {
                     const card = e.target.closest('.kanban-card');
                     if (card) {
@@ -1603,16 +1606,14 @@
                     }
                 });
                 
-                // Empeche le swipe de la page sur mobile pendant le drag and drop
                 document.addEventListener('touchstart', (e) => {
                     if (e.target.closest('.kanban-card')) {
-                         // Configuration passive
+                         // Configuration passive pour scroll sur mobile
                     }
                 }, {passive: true});
             }
         };
 
-        // Boot
         document.addEventListener('DOMContentLoaded', () => app.init());
     </script>
 </body>
