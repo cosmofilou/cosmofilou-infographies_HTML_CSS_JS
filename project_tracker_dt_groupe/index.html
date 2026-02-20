@@ -151,7 +151,7 @@
         
         <div class="px-4 pb-4 pt-2 text-center select-none">
             <p class="text-[9px] text-app-textSecondary/50 font-medium tracking-wider uppercase">© 2026 DT Prox</p>
-            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.3.1 • Core Engine Fixes</p>
+            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.4.0 • Product Planning</p>
         </div>
 
         <div class="p-4 border-t border-app-border bg-app-panel/30 cursor-pointer hover:bg-app-hover transition-colors" data-action="open-user-switcher">
@@ -238,6 +238,16 @@
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
+                        <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Trimestre cible</label>
+                        <select id="new-project-quarter" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
+                            <option value="TBD">À définir</option>
+                            <option value="Q1 2026">Q1 2026</option>
+                            <option value="Q2 2026">Q2 2026</option>
+                            <option value="Q3 2026">Q3 2026</option>
+                            <option value="Q4 2026">Q4 2026</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Priorité</label>
                         <select id="new-project-priority" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
                             <option value="critique">Critique</option>
@@ -245,10 +255,6 @@
                             <option value="normale" selected>Normale</option>
                             <option value="basse">Basse</option>
                         </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Échéance</label>
-                        <input type="date" id="new-project-date" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
                     </div>
                 </div>
             </div>
@@ -313,7 +319,8 @@
                 filters: {
                     user: 'me',
                     status: 'all',
-                    priority: 'all'
+                    priority: 'all',
+                    quarter: 'all' // NOUVEAU FILTRE
                 }
             },
 
@@ -340,7 +347,8 @@
                             name: "Migration Cloud AWS 2026",
                             description: "Basculement de l'infrastructure legacy vers une architecture serverless AWS. Impact majeur sur les coûts OPEX.",
                             status: "in-progress", priority: "critique", progress: 0, 
-                            tags: ["Infra", "Cloud", "SecOps"], managerId: "U1", dueDate: "2026-06-30",
+                            tags: ["Infra", "Cloud", "SecOps"], managerId: "U1", 
+                            dueDate: "2026-06-30", quarter: "Q2 2026", // NOUVEAU
                             attachments: [
                                 { name: "Architecture_V2.png", url: "#", type: "image" },
                                 { name: "Couts_Opex.pdf", url: "#", type: "pdf" }
@@ -356,11 +364,12 @@
                             id: "PRJ-02",
                             name: "Refonte API Core V3",
                             description: "Réécriture de l'API monolithique en microservices Go pour supporter x10 de charge.",
-                            status: "in-progress", priority: "haute", tags: ["Backend", "Go", "Perf"],
-                            managerId: "U1", dueDate: "2026-08-15", attachments: [],
+                            status: "todo", priority: "haute", tags: ["Backend", "Go", "Perf"],
+                            managerId: "U1", dueDate: "2026-08-15", quarter: "Q3 2026",
+                            attachments: [],
                             tasks: [
                                 { id: "T-5", title: "Design System Architecture", status: "done", dueDate: dYesterday },
-                                { id: "T-6", title: "Endpoint Auth", status: "in-progress", dueDate: dToday }, 
+                                { id: "T-6", title: "Endpoint Auth", status: "todo", dueDate: dToday }, 
                                 { id: "T-7", title: "Endpoint Users", status: "todo", dueDate: "2026-04-10" }
                             ]
                         },
@@ -368,8 +377,10 @@
                             id: "PRJ-03",
                             name: "Intégration Agent IA Support",
                             description: "Mise en place d'un agent conversationnel RAG pour le support de niveau 1.",
-                            status: "todo", priority: "normale", tags: ["IA", "Support"],
-                            managerId: "U3", dueDate: "2026-09-01", attachments: [],
+                            status: "refinement", // NOUVEAU STATUT
+                            priority: "normale", tags: ["IA", "Support"],
+                            managerId: "U3", dueDate: "2026-09-01", quarter: "Q3 2026",
+                            attachments: [],
                             tasks: [
                                 { id: "T-8", title: "Sélection modèle LLM", status: "done", dueDate: "2026-01-15" },
                                 { id: "T-9", title: "Indexation doc interne", status: "todo", dueDate: dTomorrow }
@@ -380,11 +391,22 @@
                             name: "Audit Sécurité Externe",
                             description: "Audit commandité par la direction avant lancement public.",
                             status: "blocked", priority: "haute", tags: ["SecOps"],
-                            managerId: "U2", dueDate: "2026-03-01", attachments: [],
+                            managerId: "U2", dueDate: "2026-03-01", quarter: "Q1 2026",
+                            attachments: [],
                             tasks: [
                                 { id: "T-10", title: "Sélection prestataire", status: "done", dueDate: dYesterday },
                                 { id: "T-11", title: "Accès VPN", status: "blocked", dueDate: dToday }
                             ]
+                        },
+                        {
+                            id: "PRJ-05",
+                            name: "Passage au SSO Okta",
+                            description: "Intégration de l'authentification unique pour tous les outils internes.",
+                            status: "backlog", // NOUVEAU STATUT
+                            priority: "normale", tags: ["Auth", "SecOps"],
+                            managerId: "U1", dueDate: "", quarter: "TBD",
+                            attachments: [],
+                            tasks: []
                         }
                     ];
 
@@ -411,19 +433,10 @@
                 const previousState = JSON.stringify(this.state.projects);
                 
                 try {
-                    // 1. Applique la mutation en local
                     mutationFn();
                     this.state.projects.forEach(p => { p.progress = this.calculateProjectProgress(p); });
-                    
-                    // 2. Rendu instantané (Très rapide grâce à Morphdom)
                     this.renderAll();
-
-                    // 3. Appel Réseau (Dans un vrai cas GAS, on ferait google.script.run.ici())
-                    // Pour éviter que l'UI ne "saute" si vous testez rapidement, je retire l'échec artificiel de 15%.
-                    // L'UI est donc fiable et stable à l'usage.
-                    
                 } catch (error) {
-                    // 4. ROLLBACK seulement s'il y a une vraie erreur
                     this.state.projects = JSON.parse(previousState);
                     this.renderAll();
                     this.showToast(`Erreur d'action : ${actionName}`, 'error');
@@ -455,11 +468,11 @@
 
             exportData() {
                 const bom = "\uFEFF";
-                let csvContent = "ID;Nom du Projet;Statut;Priorité;Échéance;Responsable;Progression (%)\n";
+                let csvContent = "ID;Nom du Projet;Trimestre;Statut;Priorité;Échéance;Responsable;Progression (%)\n";
                 this.state.projects.forEach(p => {
                     const user = this.getUser(p.managerId);
                     const safeName = p.name.replace(/"/g, '""');
-                    csvContent += `${p.id};"${safeName}";${p.status};${p.priority};${p.dueDate};"${user.name}";${p.progress}\n`;
+                    csvContent += `${p.id};"${safeName}";${p.quarter || 'TBD'};${p.status};${p.priority};${p.dueDate};"${user.name}";${p.progress}\n`;
                 });
                 const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement("a");
@@ -531,9 +544,7 @@
                 this.renderAll();
             },
 
-            // --- GESTION DES TACHES CORRIGÉE ---
             toggleTaskFromModal(projectId, taskId) {
-                // Bien englobé dans la fonction de mutation pour déclencher le renderAll()
                 this.mutate('Mise à jour de la tâche', () => {
                     const project = this.state.projects.find(p => p.id === projectId);
                     if (project) {
@@ -628,16 +639,17 @@
                 const name = document.getElementById('new-project-name').value;
                 const desc = document.getElementById('new-project-desc').value;
                 const priority = document.getElementById('new-project-priority').value;
-                const date = document.getElementById('new-project-date').value || "2026-12-31";
+                const quarter = document.getElementById('new-project-quarter').value;
+                const date = document.getElementById('new-project-date').value || "";
 
                 if (!name) return alert("Le nom du projet est requis.");
 
                 this.mutate('Création de projet', () => {
                     this.state.projects.unshift({
                         id: `PRJ-${Math.floor(Math.random() * 1000)}`,
-                        name: name, description: desc, status: "todo", priority: priority,
+                        name: name, description: desc, status: "backlog", priority: priority,
                         progress: 0, tags: ["Nouveau"], managerId: this.state.currentUserId,
-                        dueDate: date, attachments: [], tasks: []
+                        quarter: quarter, dueDate: date, attachments: [], tasks: []
                     });
                 });
                 
@@ -669,12 +681,14 @@
 
             getStatusStyle(status) {
                 const styles = {
-                    'todo': { label: 'À faire', color: 'text-app-textSecondary', border: 'border-app-border' },
+                    'backlog': { label: 'Backlog', color: 'text-app-textSecondary', border: 'border-app-border' },
+                    'refinement': { label: 'En affinage', color: 'text-purple-400', border: 'border-purple-400/30' },
+                    'todo': { label: 'Prêt (To Do)', color: 'text-blue-300', border: 'border-blue-300/30' },
                     'in-progress': { label: 'En cours', color: 'text-app-accent', border: 'border-app-accent/50' },
                     'blocked': { label: 'Bloqué', color: 'text-app-danger', border: 'border-app-danger/50' },
                     'done': { label: 'Terminé', color: 'text-app-success', border: 'border-app-success/50' },
                 };
-                return styles[status] || styles['todo'];
+                return styles[status] || { label: 'Inconnu', color: 'text-app-textSecondary', border: 'border-app-border' };
             },
 
             isDateOverdue(dateString) {
@@ -802,11 +816,19 @@
 
             buildDashboardView() {
                 const currentUser = this.getUser(this.state.currentUserId);
-                const activeProjects = this.state.projects.filter(p => p.status !== 'done');
-                const blockedProjects = activeProjects.filter(p => p.status === 'blocked');
+                const nonArchivedProjects = this.state.projects.filter(p => p.status !== 'done' && p.status !== 'canceled');
                 
+                let inProgressProjs = 0, refinementProjs = 0, blockedProjs = 0, readyProjs = 0;
+                nonArchivedProjects.forEach(p => {
+                    if (p.status === 'in-progress') inProgressProjs++;
+                    else if (p.status === 'refinement' || p.status === 'backlog') refinementProjs++;
+                    else if (p.status === 'blocked') blockedProjs++;
+                    else readyProjs++;
+                });
+
+                // Calcul global sur les Tâches
                 let totalTasks = 0, doneTasks = 0, inProgressTasks = 0, blockedTasks = 0, todoTasks = 0;
-                activeProjects.forEach(p => {
+                nonArchivedProjects.forEach(p => {
                     p.tasks.forEach(t => {
                         totalTasks++;
                         if (t.status === 'done') doneTasks++;
@@ -821,7 +843,7 @@
                 const pctBlocked = totalTasks ? Math.round((blockedTasks / totalTasks) * 100) : 0;
                 const pctTodo = totalTasks ? Math.round((todoTasks / totalTasks) * 100) : 0;
 
-                const myActiveProjects = this.state.projects.filter(p => p.managerId === this.state.currentUserId && p.status !== 'done');
+                const myActiveProjects = nonArchivedProjects.filter(p => p.managerId === this.state.currentUserId);
 
                 let myUrgentTasks = [];
                 myActiveProjects.forEach(p => {
@@ -836,13 +858,14 @@
                     <div id="view-dashboard" class="max-w-6xl mx-auto animate-fade-in pb-10">
                         <div class="flex flex-col xl:flex-row gap-4 md:gap-6 mb-8">
                             
+                            <!-- Health Overview TUILE -->
                             <div class="glass-panel rounded-2xl p-5 md:p-6 flex-1 flex flex-col justify-between border border-app-border/80 relative overflow-hidden">
                                 <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 rounded-full bg-app-accent/10 blur-3xl pointer-events-none"></div>
 
                                 <div class="flex items-start justify-between mb-6">
                                     <div>
                                         <h2 class="text-lg md:text-xl font-bold text-white mb-1">Bonjour, ${this.esc(currentUser.name.split(' ')[0])} 👋</h2>
-                                        <p class="text-xs md:text-sm text-app-textSecondary">Voici l'état de santé du portefeuille technique.</p>
+                                        <p class="text-xs md:text-sm text-app-textSecondary">Voici l'état de la Roadmap Produit.</p>
                                     </div>
                                     <div class="w-10 h-10 rounded-full bg-app-bg border border-app-border flex items-center justify-center text-app-textSecondary shrink-0">
                                         <i data-lucide="activity" class="w-5 h-5"></i>
@@ -851,38 +874,33 @@
                                 
                                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-8 mt-2">
                                     <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
-                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Projets Actifs</div>
-                                        <div class="text-xl md:text-2xl font-bold text-white">${activeProjects.length}</div>
+                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Prêts au Dev</div>
+                                        <div class="text-xl md:text-2xl font-bold text-blue-300">${readyProjs}</div>
                                     </div>
-                                    <div class="bg-app-bg/50 border ${blockedProjects.length > 0 ? 'border-red-500/30' : 'border-app-border'} rounded-xl p-3 hover:bg-app-hover transition-colors">
+                                    <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
+                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">En Affinage</div>
+                                        <div class="text-xl md:text-2xl font-bold text-purple-400">${refinementProjs}</div>
+                                    </div>
+                                    <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
+                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Dev en cours</div>
+                                        <div class="text-xl md:text-2xl font-bold text-app-accent">${inProgressProjs}</div>
+                                    </div>
+                                    <div class="bg-app-bg/50 border ${blockedProjs > 0 ? 'border-red-500/30' : 'border-app-border'} rounded-xl p-3 hover:bg-app-hover transition-colors">
                                         <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Bloqués</div>
-                                        <div class="text-xl md:text-2xl font-bold ${blockedProjects.length > 0 ? 'text-red-400' : 'text-white'}">${blockedProjects.length}</div>
-                                    </div>
-                                    <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
-                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Tâches en cours</div>
-                                        <div class="text-xl md:text-2xl font-bold text-blue-400">${inProgressTasks}</div>
-                                    </div>
-                                    <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
-                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Terminées</div>
-                                        <div class="text-xl md:text-2xl font-bold text-app-success">${doneTasks}</div>
+                                        <div class="text-xl md:text-2xl font-bold ${blockedProjs > 0 ? 'text-red-400' : 'text-white'}">${blockedProjs}</div>
                                     </div>
                                 </div>
 
-                                <div class="mt-auto">
+                                <div class="mt-auto border-t border-app-border/50 pt-4">
                                     <div class="flex justify-between items-end mb-2">
-                                        <span class="text-xs md:text-sm font-medium text-app-success">${pctDone}% Complété</span>
-                                        <span class="text-[10px] text-app-textSecondary font-mono uppercase">${totalTasks} Tâches au total</span>
+                                        <span class="text-[10px] md:text-xs font-semibold text-app-textSecondary uppercase tracking-wider">Avancement Tâches</span>
+                                        <span class="text-xs font-medium text-white">${pctDone}% Terminées</span>
                                     </div>
-                                    <div class="w-full bg-app-bg rounded-full h-2 md:h-2.5 flex overflow-hidden border border-app-border gap-0.5">
+                                    <div class="w-full bg-app-bg rounded-full h-1.5 md:h-2 flex overflow-hidden border border-app-border gap-0.5">
                                         <div class="bg-app-success transition-all duration-1000" style="width: ${pctDone}%" title="Terminées: ${pctDone}%"></div>
                                         <div class="bg-blue-500 transition-all duration-1000" style="width: ${pctInProgress}%" title="En cours: ${pctInProgress}%"></div>
                                         <div class="bg-app-border transition-all duration-1000" style="width: ${pctTodo}%" title="À faire: ${pctTodo}%"></div>
                                         <div class="bg-red-500 transition-all duration-1000" style="width: ${pctBlocked}%" title="Bloquées: ${pctBlocked}%"></div>
-                                    </div>
-                                    <div class="flex gap-4 mt-3">
-                                        <div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-blue-500"></div><span class="text-[9px] text-app-textSecondary">En cours</span></div>
-                                        <div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-app-border"></div><span class="text-[9px] text-app-textSecondary">À faire</span></div>
-                                        ${pctBlocked > 0 ? `<div class="flex items-center gap-1.5"><div class="w-2 h-2 rounded-full bg-red-500"></div><span class="text-[9px] text-app-textSecondary">Bloqué</span></div>` : ''}
                                     </div>
                                 </div>
                             </div>
@@ -943,16 +961,20 @@
                 if (this.state.filters.status !== 'all') {
                     filteredProjects = filteredProjects.filter(p => p.status === this.state.filters.status);
                 }
+                
+                if (this.state.filters.quarter && this.state.filters.quarter !== 'all') {
+                    filteredProjects = filteredProjects.filter(p => p.quarter === this.state.filters.quarter);
+                }
 
                 const isGrid = this.state.projectsViewMode === 'grid';
 
                 return `
                     <div id="view-projects" class="max-w-7xl mx-auto animate-fade-in h-full flex flex-col pb-4">
                         <div class="flex flex-wrap gap-3 justify-between items-center mb-6 shrink-0">
-                            <div class="flex space-x-2 w-full sm:w-auto">
+                            <div class="flex flex-wrap space-x-2 w-full sm:w-auto gap-y-2">
                                 <select data-action="set-filter" data-filter-type="user" class="flex-1 sm:flex-none bg-app-panel border border-app-border text-white text-xs sm:text-sm rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-app-accent">
                                     <option value="me" ${this.state.filters.user === 'me' ? 'selected' : ''}>Mes projets</option>
-                                    <option value="all" ${this.state.filters.user === 'all' ? 'selected' : ''}>Tous</option>
+                                    <option value="all" ${this.state.filters.user === 'all' ? 'selected' : ''}>Tous les projets</option>
                                     <optgroup label="Par équipe">
                                         ${this.state.users.filter(u => u.id !== this.state.currentUserId).map(u => 
                                             `<option value="${u.id}" ${this.state.filters.user === u.id ? 'selected' : ''}>${this.esc(u.name)}</option>`
@@ -960,10 +982,21 @@
                                     </optgroup>
                                 </select>
                                 <select data-action="set-filter" data-filter-type="status" class="flex-1 sm:flex-none bg-app-panel border border-app-border text-white text-xs sm:text-sm rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-app-accent">
-                                    <option value="all" ${this.state.filters.status === 'all' ? 'selected' : ''}>Statuts</option>
-                                    <option value="todo" ${this.state.filters.status === 'todo' ? 'selected' : ''}>À faire</option>
+                                    <option value="all" ${this.state.filters.status === 'all' ? 'selected' : ''}>Tous les statuts</option>
+                                    <option value="backlog" ${this.state.filters.status === 'backlog' ? 'selected' : ''}>Backlog</option>
+                                    <option value="refinement" ${this.state.filters.status === 'refinement' ? 'selected' : ''}>En affinage</option>
+                                    <option value="todo" ${this.state.filters.status === 'todo' ? 'selected' : ''}>Prêt (To Do)</option>
                                     <option value="in-progress" ${this.state.filters.status === 'in-progress' ? 'selected' : ''}>En cours</option>
                                     <option value="blocked" ${this.state.filters.status === 'blocked' ? 'selected' : ''}>Bloqué</option>
+                                </select>
+                                <!-- NOUVEAU FILTRE TRIMESTRE -->
+                                <select data-action="set-filter" data-filter-type="quarter" class="flex-1 sm:flex-none bg-app-panel border border-app-border text-white text-xs sm:text-sm rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-app-accent">
+                                    <option value="all" ${this.state.filters.quarter === 'all' ? 'selected' : ''}>Tous trimestres</option>
+                                    <option value="TBD" ${this.state.filters.quarter === 'TBD' ? 'selected' : ''}>À définir</option>
+                                    <option value="Q1 2026" ${this.state.filters.quarter === 'Q1 2026' ? 'selected' : ''}>Q1 2026</option>
+                                    <option value="Q2 2026" ${this.state.filters.quarter === 'Q2 2026' ? 'selected' : ''}>Q2 2026</option>
+                                    <option value="Q3 2026" ${this.state.filters.quarter === 'Q3 2026' ? 'selected' : ''}>Q3 2026</option>
+                                    <option value="Q4 2026" ${this.state.filters.quarter === 'Q4 2026' ? 'selected' : ''}>Q4 2026</option>
                                 </select>
                             </div>
                             
@@ -1023,7 +1056,13 @@
             buildRoadmapView() {
                 const sortedProjects = [...this.state.projects]
                     .filter(p => p.status !== 'done')
-                    .sort((a, b) => new Date(a.dueDate || "2099-12-31") - new Date(b.dueDate || "2099-12-31"));
+                    .sort((a, b) => {
+                        // Tri prioritaire par Quarter si défini
+                        if (a.quarter !== b.quarter && a.quarter !== 'TBD' && b.quarter !== 'TBD') {
+                            return a.quarter.localeCompare(b.quarter);
+                        }
+                        return new Date(a.dueDate || "2099-12-31") - new Date(b.dueDate || "2099-12-31");
+                    });
 
                 let html = `
                     <div id="view-roadmap" class="max-w-5xl mx-auto animate-fade-in pb-10">
@@ -1031,23 +1070,23 @@
                         <div class="relative border-l-2 border-app-border ml-3 md:ml-4 space-y-6 md:space-y-8 pb-8">
                 `;
 
-                let currentMonthYear = "";
+                let currentSection = "";
 
                 sortedProjects.forEach(p => {
-                    const dateObj = new Date(p.dueDate || "2099-12-31");
-                    const monthYear = dateObj.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+                    const sectionName = p.quarter && p.quarter !== 'TBD' ? p.quarter : "À planifier";
                     
-                    if (monthYear !== currentMonthYear) {
+                    if (sectionName !== currentSection) {
                         html += `
                             <div class="relative pl-6 md:pl-10 mt-6 mb-2">
                                 <div class="absolute w-3 h-3 bg-app-accent rounded-full -left-1.5 top-1.5 shadow-[0_0_10px_rgba(94,106,210,0.8)]"></div>
-                                <h3 class="text-sm font-bold text-app-accent capitalize tracking-widest uppercase">${monthYear}</h3>
+                                <h3 class="text-sm font-bold text-app-accent capitalize tracking-widest uppercase">${sectionName}</h3>
                             </div>
                         `;
-                        currentMonthYear = monthYear;
+                        currentSection = sectionName;
                     }
 
                     const pStyle = this.getPriorityStyle(p.priority);
+                    const sStyle = this.getStatusStyle(p.status);
                     const user = this.getUser(p.managerId);
 
                     html += `
@@ -1065,6 +1104,7 @@
                                         <span class="px-2 py-0.5 text-[9px] md:text-[10px] uppercase font-bold rounded flex inline-flex items-center gap-1 ${pStyle.bg} ${pStyle.color}">
                                             <i data-lucide="${pStyle.icon}" class="w-3 h-3"></i> ${p.priority}
                                         </span>
+                                        <span class="text-[9px] md:text-[10px] ${sStyle.color} border ${sStyle.border} px-1.5 py-0.5 rounded-full bg-app-bg">${sStyle.label}</span>
                                         <div class="flex items-center gap-1 ml-2 text-[10px] text-app-textSecondary">
                                             <div class="w-4 h-4 rounded-full ${user.color} flex items-center justify-center font-bold text-white shrink-0">${user.initials}</div>
                                             <span class="hidden sm:inline">${this.esc(user.name)}</span>
@@ -1074,7 +1114,7 @@
                                 
                                 <div class="flex items-center justify-between lg:justify-end gap-4 lg:gap-6 shrink-0 lg:border-l lg:border-app-border lg:pl-6 mt-2 lg:mt-0 pt-2 lg:pt-0 border-t border-app-border/50 lg:border-t-0">
                                     <div class="text-left lg:text-right">
-                                        <div class="text-[10px] text-app-textSecondary uppercase tracking-wider mb-1">Échéance</div>
+                                        <div class="text-[10px] text-app-textSecondary uppercase tracking-wider mb-1">Échéance finale</div>
                                         <div class="text-xs md:text-sm font-medium ${this.isDateOverdue(p.dueDate) ? 'text-red-400' : 'text-white'} flex items-center gap-1.5">
                                             <i data-lucide="calendar" class="w-3 h-3 md:w-3.5 md:h-3.5 opacity-50"></i>
                                             ${this.formatDateDisplay(p.dueDate)}
@@ -1260,6 +1300,7 @@
                         <div class="flex justify-between items-start mb-3">
                             <span class="text-[10px] font-mono text-app-textSecondary border border-app-border bg-app-bg px-2 py-0.5 rounded shadow-sm">${project.id}</span>
                             <div class="flex gap-2">
+                                ${project.quarter && project.quarter !== 'TBD' ? `<span class="px-2 py-0.5 text-[9px] uppercase font-bold rounded flex items-center gap-1 bg-app-panel text-app-textSecondary border border-app-border"><i data-lucide="target" class="w-3 h-3"></i> ${project.quarter}</span>` : ''}
                                 <span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded flex items-center gap-1 ${pStyle.bg} ${pStyle.color} border ${pStyle.border}">
                                     <i data-lucide="${pStyle.icon}" class="w-3 h-3"></i> <span class="hidden sm:inline">${project.priority}</span>
                                 </span>
@@ -1303,14 +1344,16 @@
                             <span class="md:hidden text-[10px] ${sStyle.color}">${sStyle.label}</span>
                         </span>
                         <div class="w-full md:flex-1 font-medium text-white text-sm truncate order-2 md:order-none">${this.esc(project.name)}</div>
+                        
+                        <div class="w-auto md:w-20 text-center order-3 md:order-none hidden sm:block">
+                            ${project.quarter && project.quarter !== 'TBD' ? `<span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded inline-flex items-center gap-1 bg-app-bg text-app-textSecondary border border-app-border"><i data-lucide="target" class="w-3 h-3"></i> ${project.quarter}</span>` : ''}
+                        </div>
+
                         <div class="w-full md:w-32 order-4 md:order-none flex items-center gap-2">
                             <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
                                 <div class="bg-app-accent h-full rounded-full" style="width: ${project.progress}%"></div>
                             </div>
                             <span class="text-[10px] text-app-textSecondary md:hidden">${project.progress}%</span>
-                        </div>
-                        <div class="w-auto md:w-24 flex gap-1 order-3 md:order-none">
-                             ${project.tags.slice(0, 2).map(tag => `<span class="text-[10px] px-1.5 py-0.5 rounded-sm bg-app-border text-app-textSecondary truncate">${this.esc(tag)}</span>`).join('')}
                         </div>
                         <div class="w-auto md:w-24 text-center order-3 md:order-none">
                             <span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded inline-flex items-center gap-1 ${pStyle.bg} ${pStyle.color}">
@@ -1365,7 +1408,9 @@
 
                                 <div class="relative">
                                     <select data-action="update-project" data-project-id="${project.id}" data-field="status" class="badge-select px-2 md:px-2.5 py-1 text-[10px] md:text-[11px] uppercase font-bold rounded bg-app-bg border ${sStyle.border} ${sStyle.color}">
-                                        <option value="todo" ${project.status === 'todo' ? 'selected' : ''}>À faire</option>
+                                        <option value="backlog" ${project.status === 'backlog' ? 'selected' : ''}>Backlog</option>
+                                        <option value="refinement" ${project.status === 'refinement' ? 'selected' : ''}>En affinage</option>
+                                        <option value="todo" ${project.status === 'todo' ? 'selected' : ''}>Prêt (To Do)</option>
                                         <option value="in-progress" ${project.status === 'in-progress' ? 'selected' : ''}>En cours</option>
                                         <option value="blocked" ${project.status === 'blocked' ? 'selected' : ''}>Bloqué</option>
                                         <option value="done" ${project.status === 'done' ? 'selected' : ''}>Terminé</option>
@@ -1428,7 +1473,8 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8 border-t border-app-border/50 pt-8">
+                        <!-- LIGNE 3 COLONNES : Responsable | Trimestre | Echéance -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8 border-t border-app-border/50 pt-8">
                             <div class="glass-panel p-3 md:p-4 rounded-xl flex items-center gap-3 md:gap-4 relative group">
                                 <div class="w-8 h-8 md:w-10 md:h-10 rounded-full ${user.color} flex items-center justify-center text-xs md:text-sm font-bold text-white shadow-inner shrink-0">${user.initials}</div>
                                 <div class="flex-1">
@@ -1442,10 +1488,27 @@
 
                             <div class="glass-panel p-3 md:p-4 rounded-xl flex items-center gap-3 md:gap-4 relative group">
                                 <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-app-panel border border-app-border flex items-center justify-center text-app-textSecondary shrink-0">
+                                    <i data-lucide="target" class="w-4 h-4 md:w-5 md:h-5"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-[9px] md:text-[10px] text-app-textSecondary uppercase font-semibold tracking-wider">Trimestre cible</div>
+                                    <select data-action="update-project" data-project-id="${project.id}" data-field="quarter" class="w-full bg-transparent border-none text-xs md:text-sm text-white font-medium p-0 focus:outline-none appearance-none cursor-pointer">
+                                        <option value="TBD" ${project.quarter === 'TBD' ? 'selected' : ''} class="bg-app-panel text-white">À définir</option>
+                                        <option value="Q1 2026" ${project.quarter === 'Q1 2026' ? 'selected' : ''} class="bg-app-panel text-white">Q1 2026</option>
+                                        <option value="Q2 2026" ${project.quarter === 'Q2 2026' ? 'selected' : ''} class="bg-app-panel text-white">Q2 2026</option>
+                                        <option value="Q3 2026" ${project.quarter === 'Q3 2026' ? 'selected' : ''} class="bg-app-panel text-white">Q3 2026</option>
+                                        <option value="Q4 2026" ${project.quarter === 'Q4 2026' ? 'selected' : ''} class="bg-app-panel text-white">Q4 2026</option>
+                                    </select>
+                                </div>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-app-textSecondary absolute right-4 opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity pointer-events-none"></i>
+                            </div>
+
+                            <div class="glass-panel p-3 md:p-4 rounded-xl flex items-center gap-3 md:gap-4 relative group">
+                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-app-panel border border-app-border flex items-center justify-center text-app-textSecondary shrink-0">
                                     <i data-lucide="calendar" class="w-4 h-4 md:w-5 md:h-5"></i>
                                 </div>
                                 <div class="flex-1">
-                                    <div class="text-[9px] md:text-[10px] text-app-textSecondary uppercase font-semibold tracking-wider">Échéance globale</div>
+                                    <div class="text-[9px] md:text-[10px] text-app-textSecondary uppercase font-semibold tracking-wider">Échéance finale</div>
                                     <input type="date" data-action="update-project" data-project-id="${project.id}" data-field="dueDate" value="${project.dueDate}" class="w-full bg-transparent border-none text-xs md:text-sm text-white font-medium p-0 focus:outline-none cursor-pointer">
                                 </div>
                             </div>
