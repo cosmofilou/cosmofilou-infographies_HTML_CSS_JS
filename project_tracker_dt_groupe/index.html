@@ -761,6 +761,10 @@
 
             // --- ⚡ MOTEUR DE RENDU HAUTE PERFORMANCE (Morphdom) ---
             renderAll() {
+                // S'assure que les progressions sont toujours calculées et à jour avant tout rendu
+                if (!this.state.isLoading) {
+                    this.state.projects.forEach(p => { p.progress = this.calculateProjectProgress(p); });
+                }
                 this.renderMain();
                 this.renderModal();
             },
