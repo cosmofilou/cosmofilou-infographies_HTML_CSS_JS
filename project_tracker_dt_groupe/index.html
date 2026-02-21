@@ -1,38 +1,1683 @@
-<system_config>
-    <role_definition>
-        Tu es un Ingénieur DevOps spécialisé dans l'automatisation Google Workspace et le développement Google Apps Script (GAS). Ton expertise réside dans la création de flux de données robustes entre Gmail, Drive et Google Sheets.
-    </role_definition>
-
-    <constraints>
-        1. NOMENCLATURE : Utilise exclusivement le format `nom_de_fichier_sans_espace_v1.ext` (snake_case). Interdiction totale d'utiliser des espaces.
-        2. STRUCTURE DRIVE : Définis une arborescence logique (ex: `01_factures_entrees`, `02_commandes_en_cours`).
-        3. CODE GAS : Fournis des scripts Apps Script optimisés avec gestion des erreurs (try/catch) et déclencheurs (triggers) temporels.
-        4. TABLEAU DE BORD : La sortie doit inclure la structure d'un Google Sheet faisant office de dashboard hebdomadaire.
-    </constraints>
-
-    <thinking_protocol>
-        Tu dois activer ton processus de réflexion avant de générer la solution :
-        1. ANALYSE DES FLUX : Comment identifier de manière unique une facture vs une commande via les regex Gmail ?
-        2. ARCHITECTURE DRIVE : Quelle est la hiérarchie de dossiers la plus efficace pour éviter les doublons ?
-        3. LOGIQUE DE TRI : Définition des labels Gmail à créer.
-        4. RÉCAPITULATIF : Définition des métriques clés (KPIs) pour le tableau de bord hebdomadaire.
-    </thinking_protocol>
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DT Prox - Direction Technique</title>
     
-    <output_signature>
-        La réponse doit suivre ce schéma technique :
-        - [ARCHITECTURE_SYSTEME] : Arborescence Drive et Liste des Labels Gmail.
-        - [SCRIPT_AUTOMATISATION] : Bloc de code Google Apps Script commenté.
-        - [LOGIQUE_DE_TRI] : Liste des filtres et règles de renommage (ex: `YYYYMMDD_FOURNISSEUR_MONTANT`).
-        - [STRUCTURE_DASHBOARD] : Schéma des colonnes pour le suivi hebdomadaire.
-    </output_signature>
-</system_config>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- ⚠️ ATTENTION ARCHITECTURE PROD : Tailwind CDN est utilisé pour le prototype. 
+         En vraie production, on pré-compile le CSS (Tailwind CLI) pour optimiser le temps de chargement. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-<context_data>
-    ENVIRONNEMENT : Google Cloud Platform / Apps Script.
-    CIBLE : Automatisation Gmail vers Drive.
-    FORMAT : snake_case_obligatoire.
-</context_data>
+    <!-- ⚡ PERF : Morphdom pour l'Optimistic UI (Virtual DOM diffing) - Évite le DOM Thrashing -->
+    <script src="https://unpkg.com/morphdom@2.7.0/dist/morphdom-umd.js"></script>
 
-<user_task>
-    {{user_input}}
-</user_task>
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        app: {
+                            bg: '#0E0F11',       
+                            panel: '#16181D',    
+                            border: '#22252A',   
+                            hover: '#1C1F26',    
+                            textPrimary: '#EDEDED',
+                            textSecondary: '#8A8F98',
+                            accent: '#5E6AD2',   
+                            success: '#28A745',
+                            warning: '#F5A623',
+                            danger: '#E53E3E',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.2s ease-out',
+                        'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'scale-in': 'scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { transform: 'translateY(10px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+                        scaleIn: { '0%': { transform: 'translate(-50%, -48%) scale(0.96)', opacity: '0' }, '100%': { transform: 'translate(-50%, -50%) scale(1)', opacity: '1' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #22252A; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #333842; }
+        
+        .glass-panel {
+            background: rgba(22, 24, 29, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .glass-modal {
+            background: rgba(14, 15, 17, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .no-select { user-select: none; -webkit-user-select: none; }
+        .ghost-card { opacity: 0.4; border: 1px dashed #5E6AD2; }
+
+        select.badge-select {
+            appearance: none;
+            outline: none;
+            cursor: pointer;
+            padding-right: 1.5rem;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.25rem center;
+        }
+        select.badge-select option {
+            background-color: #16181D;
+            color: #EDEDED;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.5;
+            cursor: pointer;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-app-bg text-app-textPrimary font-sans antialiased h-screen overflow-hidden flex selection:bg-app-accent selection:text-white">
+
+    <div id="sidebar-backdrop" data-action="toggle-sidebar" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden md:hidden transition-opacity opacity-0"></div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="w-64 border-r border-app-border bg-app-bg flex flex-col transition-transform duration-300 z-40 fixed inset-y-0 left-0 -translate-x-full md:relative md:translate-x-0 shrink-0">
+        <div class="h-16 flex items-center px-5 border-b border-app-border">
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-app-accent to-blue-600 flex items-center justify-center mr-3 shadow-lg shadow-app-accent/20 border border-white/10">
+                <i data-lucide="cpu" class="w-4 h-4 text-white"></i>
+            </div>
+            <div>
+                <span class="font-bold text-sm tracking-wide text-white block leading-none">DT Prox</span>
+                <span class="text-[10px] text-app-textSecondary font-medium tracking-wider">DIRECTION TECHNIQUE</span>
+            </div>
+            <button class="ml-auto md:hidden text-app-textSecondary hover:text-white" data-action="toggle-sidebar">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        
+        <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto mt-2">
+            <div class="text-[10px] font-bold text-app-textSecondary mb-2 mt-2 px-3 tracking-wider uppercase">Pilotage</div>
+            
+            <button data-action="navigate" data-view="dashboard" id="nav-dashboard" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Vue d'ensemble
+            </button>
+            <button data-action="navigate" data-view="projects" id="nav-projects" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="folder-kanban" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Projets
+            </button>
+            <button data-action="navigate" data-view="review" id="nav-review" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="arrow-down-up" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Revue (Priorisation)
+            </button>
+            <button data-action="navigate" data-view="roadmap" id="nav-roadmap" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="calendar-days" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Roadmap
+            </button>
+
+            <div class="text-[10px] font-bold text-app-textSecondary mb-2 mt-6 px-3 tracking-wider uppercase">Organisation</div>
+            
+            <button data-action="navigate" data-view="team" id="nav-team" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100"></i> Équipe
+            </button>
+            <button data-action="navigate" data-view="archive" id="nav-archive" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="archive" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100"></i> Archives
+            </button>
+        </nav>
+        
+        <div class="px-4 pb-4 pt-2 text-center select-none">
+            <p class="text-[9px] text-app-textSecondary/50 font-medium tracking-wider uppercase">© 2026 DT Prox</p>
+            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.4.0 • Product Planning</p>
+        </div>
+
+        <div class="p-4 border-t border-app-border bg-app-panel/30 cursor-pointer hover:bg-app-hover transition-colors" data-action="open-user-switcher">
+            <button id="sidebar-user" class="w-full flex items-center px-2 py-1.5 rounded-md text-sm text-app-textSecondary hover:text-white transition-colors group">
+                <!-- Rendu dynamique JS -->
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col relative min-w-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')]">
+        
+        <!-- TOPBAR -->
+        <header class="h-16 border-b border-app-border glass-panel flex items-center justify-between px-4 md:px-6 z-10 sticky top-0">
+            <div class="flex items-center">
+                <button class="md:hidden mr-4 text-app-textSecondary hover:text-white p-1" data-action="toggle-sidebar">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+                <div class="text-sm font-medium flex items-center hidden sm:flex">
+                    <span class="text-app-textSecondary" id="breadcrumb-root">DT Prox</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 mx-2 text-app-border"></i>
+                    <span id="current-view-title" class="text-white font-semibold">Vue d'ensemble</span>
+                </div>
+                <span id="current-view-title-mobile" class="text-white font-semibold text-sm sm:hidden">Vue d'ensemble</span>
+            </div>
+            
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <button data-action="toggle-cmd" class="flex items-center bg-app-bg border border-app-border hover:border-app-accent/50 rounded-lg px-2 md:px-3 py-1.5 text-sm text-app-textSecondary transition-all w-8 md:w-56 shadow-sm group justify-center md:justify-start">
+                    <i data-lucide="search" class="w-4 h-4 opacity-50 group-hover:text-app-accent transition-colors md:mr-2"></i>
+                    <span class="flex-1 text-left opacity-70 hidden md:inline">Rechercher...</span>
+                    <kbd class="hidden sm:inline-block text-[10px] font-mono bg-app-panel border border-app-border px-1.5 py-0.5 rounded text-app-textSecondary">⌘K</kbd>
+                </button>
+                
+                <button data-action="export-data" class="w-8 h-8 rounded-full bg-app-panel border border-app-border hover:bg-app-hover hover:border-app-textSecondary/50 flex items-center justify-center text-app-textSecondary hover:text-white shadow-sm transition-all shrink-0" title="Exporter les données (CSV)">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                </button>
+
+                <button data-action="open-create-modal" class="w-8 h-8 rounded-full bg-app-accent hover:bg-app-accent/80 flex items-center justify-center text-white shadow-lg shadow-app-accent/20 transition-all shrink-0" title="Créer un projet">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- DYNAMIC CONTENT CONTAINER -->
+        <div id="app-content" class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+            <div id="initial-loader" class="absolute inset-0 flex flex-col items-center justify-center z-50">
+                <div class="w-12 h-12 relative flex items-center justify-center">
+                    <div class="absolute inset-0 border-t-2 border-app-accent rounded-full animate-spin"></div>
+                    <i data-lucide="cpu" class="w-5 h-5 text-app-accent"></i>
+                </div>
+                <p class="text-sm text-app-textSecondary mt-4 font-medium tracking-wide">Initialisation DT Prox...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- PROJECT MODAL (Détail & Édition) -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" data-action="close-modal" data-modal-id="project-modal"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full md:h-auto md:max-h-[85vh] md:max-w-3xl glass-modal rounded-none md:rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-in">
+            <div id="modal-content" class="flex flex-col h-full overflow-y-auto p-0 relative">
+                <!-- Rendu dynamique Morphdom ici -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CREATE PROJECT MODAL -->
+    <div id="create-project-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" data-action="close-modal" data-modal-id="create-project-modal"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full md:h-auto md:max-w-lg glass-modal rounded-none md:rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-in">
+            <div class="p-6 border-b border-app-border flex justify-between items-center">
+                <h2 class="text-xl font-bold text-white">Nouveau Projet</h2>
+                <button data-action="close-modal" data-modal-id="create-project-modal" class="text-app-textSecondary hover:text-white md:hidden">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4 flex-1 overflow-y-auto">
+                <div>
+                    <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Nom du projet</label>
+                    <input type="text" id="new-project-name" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent" placeholder="Ex: Déploiement Fibre Optique">
+                </div>
+                <div>
+                    <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Description</label>
+                    <textarea id="new-project-desc" rows="3" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent" placeholder="Objectifs, contexte..."></textarea>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Trimestre cible</label>
+                        <select id="new-project-quarter" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
+                            <option value="TBD">À définir</option>
+                            <option value="Q1 2026">Q1 2026</option>
+                            <option value="Q2 2026">Q2 2026</option>
+                            <option value="Q3 2026">Q3 2026</option>
+                            <option value="Q4 2026">Q4 2026</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Priorité</label>
+                        <select id="new-project-priority" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
+                            <option value="critique">Critique</option>
+                            <option value="haute">Haute</option>
+                            <option value="normale" selected>Normale</option>
+                            <option value="basse">Basse</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-app-border flex justify-end gap-3 bg-app-bg/50 shrink-0">
+                <button data-action="close-modal" data-modal-id="create-project-modal" class="px-4 py-2 rounded-lg text-sm font-medium text-app-textSecondary hover:text-white transition-colors hidden md:block">Annuler</button>
+                <button data-action="create-project" class="w-full md:w-auto px-4 py-3 md:py-2 rounded-lg text-sm font-medium bg-app-accent text-white hover:bg-app-accent/80 transition-colors shadow-lg shadow-app-accent/20">Créer le projet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- USER SWITCHER MODAL -->
+    <div id="user-switcher-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" data-action="close-modal" data-modal-id="user-switcher-modal"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full md:h-auto md:max-w-sm glass-modal rounded-none md:rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-scale-in">
+            <div class="p-4 border-b border-app-border flex justify-between items-center">
+                <h3 class="text-sm font-semibold text-white uppercase tracking-wider">Changer d'utilisateur</h3>
+                <button data-action="close-modal" data-modal-id="user-switcher-modal" class="text-app-textSecondary hover:text-white md:hidden">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-2 space-y-1 overflow-y-auto flex-1" id="user-switcher-list">
+                <!-- Rendu dynamique JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- COMMAND PALETTE (CMD+K) -->
+    <div id="command-palette" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" data-action="toggle-cmd"></div>
+        <div class="absolute top-0 md:top-1/4 left-1/2 -translate-x-1/2 w-full h-full md:h-auto md:max-w-lg glass-modal rounded-none md:rounded-xl shadow-2xl overflow-hidden flex flex-col animate-slide-up">
+            <div class="flex items-center px-4 border-b border-app-border shrink-0">
+                <i data-lucide="search" class="w-5 h-5 text-app-accent mr-3"></i>
+                <input type="text" id="cmd-input" class="flex-1 bg-transparent border-none py-4 text-white placeholder-app-textSecondary focus:outline-none focus:ring-0 text-lg" placeholder="Chercher un projet, une tâche...">
+                <kbd class="hidden md:inline-block text-[10px] font-mono bg-app-panel border border-app-border px-1.5 py-0.5 rounded text-app-textSecondary">ESC</kbd>
+                <button data-action="toggle-cmd" class="md:hidden text-app-textSecondary ml-2"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="max-h-[calc(100vh-60px)] md:max-h-64 overflow-y-auto p-2" id="cmd-results">
+                <div class="px-3 py-2 text-xs font-semibold text-app-textSecondary tracking-wider">SUGGESTIONS</div>
+                <button data-action="open-create-modal" class="w-full flex items-center px-3 py-2 rounded-lg hover:bg-app-hover text-left group transition-colors">
+                    <i data-lucide="plus" class="w-4 h-4 mr-3 text-app-accent group-hover:text-white"></i>
+                    <span class="text-sm text-app-textPrimary">Créer un nouveau projet</span>
+                </button>
+                <button data-action="navigate" data-view="projects" class="w-full flex items-center px-3 py-2 rounded-lg hover:bg-app-hover text-left group transition-colors">
+                    <i data-lucide="folder" class="w-4 h-4 mr-3 text-app-textSecondary group-hover:text-white"></i>
+                    <span class="text-sm text-app-textPrimary">Voir tous les projets</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- APPLICATION SCRIPT -->
+    <script>
+        const app = {
+            state: {
+                currentView: 'dashboard',
+                projectsViewMode: 'grid',
+                isLoading: true,
+                projects: [],
+                users: [],
+                currentUserId: 'U1',
+                currentModalProjectId: null,
+                filters: {
+                    user: 'me',
+                    status: 'all',
+                    priority: 'all',
+                    quarter: 'all' // NOUVEAU FILTRE
+                }
+            },
+
+            init() {
+                this.setupEventListeners(); 
+                
+                setTimeout(() => {
+                    this.state.users = [
+                        { id: "U1", name: "Jean Dupont", role: "Directeur Tech", initials: "JD", color: "bg-blue-600" },
+                        { id: "U2", name: "Sarah Connor", role: "Lead DevOps", initials: "SC", color: "bg-purple-600" },
+                        { id: "U3", name: "Alan Turing", role: "Archi Data", initials: "AT", color: "bg-emerald-600" }
+                    ];
+
+                    const today = new Date();
+                    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+                    const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 2);
+                    const dToday = today.toISOString().split('T')[0];
+                    const dYesterday = yesterday.toISOString().split('T')[0];
+                    const dTomorrow = tomorrow.toISOString().split('T')[0];
+
+                    this.state.projects = [
+                        {
+                            id: "PRJ-01",
+                            name: "Migration Cloud AWS 2026",
+                            description: "Basculement de l'infrastructure legacy vers une architecture serverless AWS. Impact majeur sur les coûts OPEX.",
+                            status: "in-progress", priority: "critique", progress: 0, 
+                            tags: ["Infra", "Cloud", "SecOps"], managerId: "U1", 
+                            dueDate: "2026-06-30", quarter: "Q2 2026", // NOUVEAU
+                            attachments: [
+                                { name: "Architecture_V2.png", url: "#", type: "image" },
+                                { name: "Couts_Opex.pdf", url: "#", type: "pdf" }
+                            ],
+                            tasks: [
+                                { id: "T-1", title: "Audit de sécurité", status: "done", dueDate: dYesterday },
+                                { id: "T-2", title: "Setup VPC", status: "done", dueDate: dToday },
+                                { id: "T-3", title: "Migration Base de données", status: "in-progress", dueDate: dYesterday },
+                                { id: "T-4", title: "Tests de charge", status: "todo", dueDate: dTomorrow }
+                            ]
+                        },
+                        {
+                            id: "PRJ-02",
+                            name: "Refonte API Core V3",
+                            description: "Réécriture de l'API monolithique en microservices Go pour supporter x10 de charge.",
+                            status: "todo", priority: "haute", tags: ["Backend", "Go", "Perf"],
+                            managerId: "U1", dueDate: "2026-08-15", quarter: "Q3 2026",
+                            attachments: [],
+                            tasks: [
+                                { id: "T-5", title: "Design System Architecture", status: "done", dueDate: dYesterday },
+                                { id: "T-6", title: "Endpoint Auth", status: "todo", dueDate: dToday }, 
+                                { id: "T-7", title: "Endpoint Users", status: "todo", dueDate: "2026-04-10" }
+                            ]
+                        },
+                        {
+                            id: "PRJ-03",
+                            name: "Intégration Agent IA Support",
+                            description: "Mise en place d'un agent conversationnel RAG pour le support de niveau 1.",
+                            status: "refinement", // NOUVEAU STATUT
+                            priority: "normale", tags: ["IA", "Support"],
+                            managerId: "U3", dueDate: "2026-09-01", quarter: "Q3 2026",
+                            attachments: [],
+                            tasks: [
+                                { id: "T-8", title: "Sélection modèle LLM", status: "done", dueDate: "2026-01-15" },
+                                { id: "T-9", title: "Indexation doc interne", status: "todo", dueDate: dTomorrow }
+                            ]
+                        },
+                        {
+                            id: "PRJ-04",
+                            name: "Audit Sécurité Externe",
+                            description: "Audit commandité par la direction avant lancement public.",
+                            status: "blocked", priority: "haute", tags: ["SecOps"],
+                            managerId: "U2", dueDate: "2026-03-01", quarter: "Q1 2026",
+                            attachments: [],
+                            tasks: [
+                                { id: "T-10", title: "Sélection prestataire", status: "done", dueDate: dYesterday },
+                                { id: "T-11", title: "Accès VPN", status: "blocked", dueDate: dToday }
+                            ]
+                        },
+                        {
+                            id: "PRJ-05",
+                            name: "Passage au SSO Okta",
+                            description: "Intégration de l'authentification unique pour tous les outils internes.",
+                            status: "backlog", // NOUVEAU STATUT
+                            priority: "normale", tags: ["Auth", "SecOps"],
+                            managerId: "U1", dueDate: "", quarter: "TBD",
+                            attachments: [],
+                            tasks: []
+                        }
+                    ];
+
+                    this.state.isLoading = false;
+                    document.getElementById('initial-loader')?.remove();
+                    this.updateSidebarUserDisplay();
+                    this.navigate('dashboard');
+                }, 800);
+            },
+
+            // --- 🛡️ SECURITE (Prévention XSS) ---
+            esc(str) {
+                if (str == null) return '';
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            },
+
+            // --- 🔄 ARCHITECTURE DE MUTATION (Optimistic UI & Rollback) ---
+            async mutate(actionName, mutationFn) {
+                const previousState = JSON.stringify(this.state.projects);
+                
+                try {
+                    mutationFn();
+                    this.state.projects.forEach(p => { p.progress = this.calculateProjectProgress(p); });
+                    this.renderAll();
+                } catch (error) {
+                    this.state.projects = JSON.parse(previousState);
+                    this.renderAll();
+                    this.showToast(`Erreur d'action : ${actionName}`, 'error');
+                    console.error(`Erreur locale: ${actionName}`, error);
+                }
+            },
+
+            showToast(message, type = 'success') {
+                let container = document.getElementById('toast-container');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'toast-container';
+                    container.className = 'fixed bottom-4 right-4 z-[100] flex flex-col gap-2';
+                    document.body.appendChild(container);
+                }
+                const toast = document.createElement('div');
+                const isError = type === 'error';
+                toast.className = `flex items-center px-4 py-3 rounded-lg shadow-xl border ${isError ? 'bg-red-950/90 border-red-900 text-red-200' : 'bg-app-panel border-app-border text-white'} text-sm font-medium animate-slide-up glass-panel`;
+                toast.innerHTML = `<i data-lucide="${isError ? 'alert-octagon' : 'check-circle-2'}" class="w-4 h-4 mr-2 ${isError ? 'text-red-400' : 'text-app-success'}"></i>${this.esc(message)}`;
+                container.appendChild(toast);
+                lucide.createIcons({ root: toast });
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(10px)';
+                    toast.style.transition = 'all 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 4000);
+            },
+
+            exportData() {
+                const bom = "\uFEFF";
+                let csvContent = "ID;Nom du Projet;Trimestre;Statut;Priorité;Échéance;Responsable;Progression (%)\n";
+                this.state.projects.forEach(p => {
+                    const user = this.getUser(p.managerId);
+                    const safeName = p.name.replace(/"/g, '""');
+                    csvContent += `${p.id};"${safeName}";${p.quarter || 'TBD'};${p.status};${p.priority};${p.dueDate};"${user.name}";${p.progress}\n`;
+                });
+                const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement("a");
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", `dt_prox_export_${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                this.showToast("Export CSV généré", "success");
+            },
+
+            toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                const backdrop = document.getElementById('sidebar-backdrop');
+                if (sidebar.classList.contains('-translate-x-full')) {
+                    sidebar.classList.remove('-translate-x-full');
+                    backdrop.classList.remove('hidden');
+                    setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                    backdrop.classList.add('opacity-0');
+                    setTimeout(() => backdrop.classList.add('hidden'), 300);
+                }
+            },
+            
+            closeSidebarIfMobile() {
+                if (window.innerWidth < 768) {
+                    const sidebar = document.getElementById('sidebar');
+                    if (!sidebar.classList.contains('-translate-x-full')) this.toggleSidebar();
+                }
+            },
+
+            updateSidebarUserDisplay() {
+                const user = this.getUser(this.state.currentUserId);
+                document.getElementById('sidebar-user').innerHTML = `
+                    <div class="w-6 h-6 rounded-full ${user.color} flex items-center justify-center mr-3 text-[10px] font-bold text-white shadow-sm">${user.initials}</div>
+                    <div class="text-left flex-1">
+                        <div class="text-xs font-medium text-white">${this.esc(user.name)}</div>
+                        <div class="text-[10px] text-app-textSecondary">${this.esc(user.role)}</div>
+                    </div>
+                    <i data-lucide="chevron-up" class="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity"></i>
+                `;
+                lucide.createIcons();
+            },
+
+            openUserSwitcher() {
+                this.closeSidebarIfMobile();
+                const list = document.getElementById('user-switcher-list');
+                list.innerHTML = this.state.users.map(u => `
+                    <button data-action="switch-user" data-user-id="${u.id}" class="w-full flex items-center p-3 rounded-lg hover:bg-app-hover transition-colors ${this.state.currentUserId === u.id ? 'bg-app-bg border border-app-border' : ''}">
+                        <div class="w-8 h-8 rounded-full ${u.color} flex items-center justify-center text-xs font-bold text-white mr-3">${u.initials}</div>
+                        <div class="text-left flex-1">
+                            <div class="text-sm font-medium text-white">${this.esc(u.name)}</div>
+                            <div class="text-[10px] text-app-textSecondary">${this.esc(u.role)}</div>
+                        </div>
+                        ${this.state.currentUserId === u.id ? '<i data-lucide="check" class="w-4 h-4 text-app-accent"></i>' : ''}
+                    </button>
+                `).join('');
+                document.getElementById('user-switcher-modal').classList.remove('hidden');
+                lucide.createIcons({ root: list });
+            },
+
+            switchUser(userId) {
+                this.state.currentUserId = userId;
+                this.updateSidebarUserDisplay();
+                this.closeModal('user-switcher-modal');
+                this.renderAll();
+            },
+
+            toggleTaskFromModal(projectId, taskId) {
+                this.mutate('Mise à jour de la tâche', () => {
+                    const project = this.state.projects.find(p => p.id === projectId);
+                    if (project) {
+                        const task = project.tasks.find(t => t.id === taskId);
+                        if (task) {
+                            task.status = task.status === 'done' ? 'todo' : 'done';
+                        }
+                    }
+                });
+            },
+
+            addTask(projectId) {
+                const title = prompt("Titre de la nouvelle tâche :");
+                if (title && title.trim() !== "") {
+                    this.mutate('Ajout de tâche', () => {
+                        const proj = this.state.projects.find(p => p.id === projectId);
+                        proj.tasks.push({
+                            id: `T-${Date.now().toString().slice(-4)}`,
+                            title: title.trim(),
+                            status: 'todo',
+                            dueDate: new Date().toISOString().split('T')[0]
+                        });
+                    });
+                }
+            },
+
+            deleteTask(projectId, taskId) {
+                if(confirm("Supprimer cette tâche ?")) {
+                    this.mutate('Suppression de tâche', () => {
+                        const proj = this.state.projects.find(p => p.id === projectId);
+                        proj.tasks = proj.tasks.filter(t => t.id !== taskId);
+                    });
+                }
+            },
+
+            addTag(projectId) {
+                const tag = prompt("Entrez le nom du nouveau tag (ex: SecOps, Frontend...) :");
+                if (tag && tag.trim() !== "") {
+                    this.mutate('Ajout de tag', () => {
+                        const proj = this.state.projects.find(p => p.id === projectId);
+                        if (!proj.tags.includes(tag.trim())) proj.tags.push(tag.trim());
+                    });
+                }
+            },
+
+            removeTag(projectId, tagToRemove) {
+                this.mutate('Suppression de tag', () => {
+                    const proj = this.state.projects.find(p => p.id === projectId);
+                    proj.tags = proj.tags.filter(tag => tag !== tagToRemove);
+                });
+            },
+
+            deleteProject(projectId) {
+                if(confirm("Êtes-vous sûr de vouloir supprimer ce projet ? Cette action est irréversible.")) {
+                    this.mutate('Suppression de projet', () => {
+                        this.state.projects = this.state.projects.filter(p => p.id !== projectId);
+                        document.getElementById('project-modal').classList.add('hidden');
+                        this.state.currentModalProjectId = null;
+                    });
+                }
+            },
+
+            handleFileUpload(projectId, event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                this.mutate('Upload fichier', () => {
+                    const proj = this.state.projects.find(p => p.id === projectId);
+                    if(!proj.attachments) proj.attachments = [];
+                    let type = "file";
+                    if (file.type.includes('image')) type = "image";
+                    else if (file.type.includes('pdf')) type = "pdf";
+                    proj.attachments.push({ name: file.name, url: "#", type: type });
+                });
+            },
+
+            deleteAttachment(projectId, attachmentName) {
+                if(confirm("Détacher ce fichier du projet ? (Il restera sur Drive)")) {
+                    this.mutate('Suppression pièce jointe', () => {
+                        const proj = this.state.projects.find(p => p.id === projectId);
+                        proj.attachments = proj.attachments.filter(a => a.name !== attachmentName);
+                    });
+                }
+            },
+
+            openCreateProjectModal() {
+                this.closeSidebarIfMobile();
+                document.getElementById('create-project-modal').classList.remove('hidden');
+            },
+
+            createProject() {
+                const name = document.getElementById('new-project-name').value;
+                const desc = document.getElementById('new-project-desc').value;
+                const priority = document.getElementById('new-project-priority').value;
+                const quarter = document.getElementById('new-project-quarter').value;
+                const date = document.getElementById('new-project-date').value || "";
+
+                if (!name) return alert("Le nom du projet est requis.");
+
+                this.mutate('Création de projet', () => {
+                    this.state.projects.unshift({
+                        id: `PRJ-${Math.floor(Math.random() * 1000)}`,
+                        name: name, description: desc, status: "backlog", priority: priority,
+                        progress: 0, tags: ["Nouveau"], managerId: this.state.currentUserId,
+                        quarter: quarter, dueDate: date, attachments: [], tasks: []
+                    });
+                });
+                
+                this.closeModal('create-project-modal');
+                document.getElementById('new-project-name').value = '';
+                document.getElementById('new-project-desc').value = '';
+                this.navigate('projects');
+            },
+
+            calculateProjectProgress(project) {
+                if (!project.tasks || project.tasks.length === 0) return 0;
+                const done = project.tasks.filter(t => t.status === 'done').length;
+                return Math.round((done / project.tasks.length) * 100);
+            },
+            
+            getUser(id) {
+                return this.state.users.find(u => u.id === id) || { name: 'Inconnu', initials: '?', color: 'bg-gray-600' };
+            },
+
+            getPriorityStyle(priority) {
+                const styles = {
+                    'critique': { icon: 'alert-triangle', color: 'text-app-danger', bg: 'bg-app-danger/10', border: 'border-app-danger/20' },
+                    'haute': { icon: 'chevron-up', color: 'text-app-warning', bg: 'bg-app-warning/10', border: 'border-app-warning/20' },
+                    'normale': { icon: 'minus', color: 'text-app-accent', bg: 'bg-app-accent/10', border: 'border-app-accent/20' },
+                    'basse': { icon: 'chevron-down', color: 'text-app-textSecondary', bg: 'bg-app-panel', border: 'border-app-border' },
+                };
+                return styles[priority] || styles['normale'];
+            },
+
+            getStatusStyle(status) {
+                const styles = {
+                    'backlog': { label: 'Backlog', color: 'text-app-textSecondary', border: 'border-app-border' },
+                    'refinement': { label: 'En affinage', color: 'text-purple-400', border: 'border-purple-400/30' },
+                    'todo': { label: 'Prêt (To Do)', color: 'text-blue-300', border: 'border-blue-300/30' },
+                    'in-progress': { label: 'En cours', color: 'text-app-accent', border: 'border-app-accent/50' },
+                    'blocked': { label: 'Bloqué', color: 'text-app-danger', border: 'border-app-danger/50' },
+                    'done': { label: 'Terminé', color: 'text-app-success', border: 'border-app-success/50' },
+                };
+                return styles[status] || { label: 'Inconnu', color: 'text-app-textSecondary', border: 'border-app-border' };
+            },
+
+            isDateOverdue(dateString) {
+                if (!dateString) return false;
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const dueDate = new Date(dateString);
+                return dueDate < today;
+            },
+
+            formatDateDisplay(dateString) {
+                if (!dateString) return "Aucune date";
+                const date = new Date(dateString);
+                return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+            },
+
+            setFilter(type, value) {
+                this.state.filters[type] = value;
+                this.renderAll();
+            },
+
+            navigate(view) {
+                this.state.currentView = view;
+                this.closeSidebarIfMobile();
+                
+                const titles = {
+                    'dashboard': 'Vue d\'ensemble', 'projects': 'Projets', 'review': 'Revue & Priorisation',
+                    'roadmap': 'Roadmap & Échéances', 'team': 'Gestion d\'Équipe', 'archive': 'Archives'
+                };
+                document.getElementById('current-view-title').textContent = titles[view];
+                document.getElementById('current-view-title-mobile').textContent = titles[view];
+                
+                document.querySelectorAll('aside nav button').forEach(b => {
+                    b.classList.remove('bg-app-hover', 'text-white');
+                    b.classList.add('text-app-textSecondary');
+                });
+                const activeBtn = document.getElementById(`nav-${view}`);
+                if(activeBtn) {
+                    activeBtn.classList.remove('text-app-textSecondary');
+                    activeBtn.classList.add('bg-app-hover', 'text-white');
+                }
+                this.renderAll();
+            },
+
+            openProjectModal(id) {
+                this.state.currentModalProjectId = id;
+                document.getElementById('project-modal').classList.remove('hidden');
+                this.renderModal();
+            },
+
+            closeModal(modalId) {
+                document.getElementById(modalId).classList.add('hidden');
+                if (modalId === 'project-modal') this.state.currentModalProjectId = null;
+            },
+
+            toggleCommandPalette() {
+                const palette = document.getElementById('command-palette');
+                const input = document.getElementById('cmd-input');
+                if (palette.classList.contains('hidden')) {
+                    palette.classList.remove('hidden');
+                    input.value = '';
+                    setTimeout(() => input.focus(), 50);
+                } else {
+                    palette.classList.add('hidden');
+                }
+            },
+
+            // --- ⚡ MOTEUR DE RENDU HAUTE PERFORMANCE (Morphdom) ---
+            renderAll() {
+                this.renderMain();
+                this.renderModal();
+            },
+
+            renderMain() {
+                const container = document.getElementById('app-content');
+                if (this.state.isLoading) return;
+
+                let html = '';
+                switch(this.state.currentView) {
+                    case 'dashboard': html = this.buildDashboardView(); break;
+                    case 'projects': html = this.buildProjectsView(); break;
+                    case 'review': html = this.buildReviewView(); break;
+                    case 'roadmap': html = this.buildRoadmapView(); break;
+                    case 'team': html = this.buildTeamView(); break;
+                    case 'archive': html = this.buildArchiveView(); break;
+                }
+                
+                const newMarkup = `<div>${html}</div>`;
+                if (window.morphdom) {
+                    morphdom(container, newMarkup, { childrenOnly: true });
+                } else {
+                    container.innerHTML = html;
+                }
+                lucide.createIcons({ root: container });
+            },
+
+            renderModal() {
+                if (!this.state.currentModalProjectId) return;
+                const project = this.state.projects.find(p => p.id === this.state.currentModalProjectId);
+                if (!project) return;
+
+                const container = document.getElementById('modal-content');
+                const html = this.buildProjectModalContent(project);
+                
+                const newMarkup = `<div>${html}</div>`;
+                if (window.morphdom) {
+                    morphdom(container, newMarkup, { 
+                        childrenOnly: true,
+                        onBeforeElUpdated: function(fromEl, toEl) {
+                            if (fromEl.tagName === 'INPUT' || fromEl.tagName === 'TEXTAREA') {
+                                if (fromEl === document.activeElement) return false;
+                            }
+                            return true;
+                        }
+                    });
+                } else {
+                    container.innerHTML = html;
+                }
+                lucide.createIcons({ root: container });
+            },
+
+            // ==========================================
+            // BUILDERS DE VUES HTML
+            // ==========================================
+
+            buildDashboardView() {
+                const currentUser = this.getUser(this.state.currentUserId);
+                const nonArchivedProjects = this.state.projects.filter(p => p.status !== 'done' && p.status !== 'canceled');
+                
+                let inProgressProjs = 0, refinementProjs = 0, blockedProjs = 0, readyProjs = 0;
+                nonArchivedProjects.forEach(p => {
+                    if (p.status === 'in-progress') inProgressProjs++;
+                    else if (p.status === 'refinement' || p.status === 'backlog') refinementProjs++;
+                    else if (p.status === 'blocked') blockedProjs++;
+                    else readyProjs++;
+                });
+
+                // Calcul global sur les Tâches
+                let totalTasks = 0, doneTasks = 0, inProgressTasks = 0, blockedTasks = 0, todoTasks = 0;
+                nonArchivedProjects.forEach(p => {
+                    p.tasks.forEach(t => {
+                        totalTasks++;
+                        if (t.status === 'done') doneTasks++;
+                        else if (t.status === 'in-progress') inProgressTasks++;
+                        else if (t.status === 'blocked') blockedTasks++;
+                        else todoTasks++;
+                    });
+                });
+
+                const pctDone = totalTasks ? Math.round((doneTasks / totalTasks) * 100) : 0;
+                const pctInProgress = totalTasks ? Math.round((inProgressTasks / totalTasks) * 100) : 0;
+                const pctBlocked = totalTasks ? Math.round((blockedTasks / totalTasks) * 100) : 0;
+                const pctTodo = totalTasks ? Math.round((todoTasks / totalTasks) * 100) : 0;
+
+                const myActiveProjects = nonArchivedProjects.filter(p => p.managerId === this.state.currentUserId);
+
+                let myUrgentTasks = [];
+                myActiveProjects.forEach(p => {
+                    p.tasks.filter(t => t.status !== 'done' && t.dueDate).forEach(t => {
+                        myUrgentTasks.push({ ...t, projectId: p.id, projectName: p.name });
+                    });
+                });
+                myUrgentTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+                const topUrgentTasks = myUrgentTasks.slice(0, 5); 
+
+                return `
+                    <div id="view-dashboard" class="max-w-6xl mx-auto animate-fade-in pb-10">
+                        <div class="flex flex-col xl:flex-row gap-4 md:gap-6 mb-8">
+                            
+                            <!-- Health Overview TUILE -->
+                            <div class="glass-panel rounded-2xl p-5 md:p-6 flex-1 flex flex-col justify-between border border-app-border/80 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 rounded-full bg-app-accent/10 blur-3xl pointer-events-none"></div>
+
+                                <div class="flex items-start justify-between mb-6">
+                                    <div>
+                                        <h2 class="text-lg md:text-xl font-bold text-white mb-1">Bonjour, ${this.esc(currentUser.name.split(' ')[0])} 👋</h2>
+                                        <p class="text-xs md:text-sm text-app-textSecondary">Voici l'état de la Roadmap Produit.</p>
+                                    </div>
+                                    <div class="w-10 h-10 rounded-full bg-app-bg border border-app-border flex items-center justify-center text-app-textSecondary shrink-0">
+                                        <i data-lucide="activity" class="w-5 h-5"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-8 mt-2">
+                                    <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
+                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Prêts au Dev</div>
+                                        <div class="text-xl md:text-2xl font-bold text-blue-300">${readyProjs}</div>
+                                    </div>
+                                    <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
+                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">En Affinage</div>
+                                        <div class="text-xl md:text-2xl font-bold text-purple-400">${refinementProjs}</div>
+                                    </div>
+                                    <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
+                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Dev en cours</div>
+                                        <div class="text-xl md:text-2xl font-bold text-app-accent">${inProgressProjs}</div>
+                                    </div>
+                                    <div class="bg-app-bg/50 border ${blockedProjs > 0 ? 'border-red-500/30' : 'border-app-border'} rounded-xl p-3 hover:bg-app-hover transition-colors">
+                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Bloqués</div>
+                                        <div class="text-xl md:text-2xl font-bold ${blockedProjs > 0 ? 'text-red-400' : 'text-white'}">${blockedProjs}</div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-auto border-t border-app-border/50 pt-4">
+                                    <div class="flex justify-between items-end mb-2">
+                                        <span class="text-[10px] md:text-xs font-semibold text-app-textSecondary uppercase tracking-wider">Avancement Tâches</span>
+                                        <span class="text-xs font-medium text-white">${pctDone}% Terminées</span>
+                                    </div>
+                                    <div class="w-full bg-app-bg rounded-full h-1.5 md:h-2 flex overflow-hidden border border-app-border gap-0.5">
+                                        <div class="bg-app-success transition-all duration-1000" style="width: ${pctDone}%" title="Terminées: ${pctDone}%"></div>
+                                        <div class="bg-blue-500 transition-all duration-1000" style="width: ${pctInProgress}%" title="En cours: ${pctInProgress}%"></div>
+                                        <div class="bg-app-border transition-all duration-1000" style="width: ${pctTodo}%" title="À faire: ${pctTodo}%"></div>
+                                        <div class="bg-red-500 transition-all duration-1000" style="width: ${pctBlocked}%" title="Bloquées: ${pctBlocked}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="glass-panel rounded-2xl p-4 md:p-5 flex-1 xl:max-w-md border-t-2 border-t-app-danger flex flex-col bg-gradient-to-b from-app-panel to-transparent">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="text-sm font-semibold text-white">Mes Tâches Urgentes</span>
+                                    <i data-lucide="clock" class="w-4 h-4 text-app-textSecondary"></i>
+                                </div>
+                                <div class="flex-1 flex flex-col gap-2 overflow-y-auto max-h-48 xl:max-h-full">
+                                    ${topUrgentTasks.length === 0 ? '<p class="text-xs text-app-textSecondary italic mt-4">Aucune tâche critique pour le moment.</p>' : ''}
+                                    ${topUrgentTasks.map(t => {
+                                        const overdue = this.isDateOverdue(t.dueDate);
+                                        return `
+                                        <div id="urgent-task-${t.id}" data-action="open-project" data-project-id="${t.projectId}" class="flex items-center justify-between p-2.5 rounded-lg bg-app-bg border border-app-border/50 hover:border-app-border cursor-pointer transition-colors group">
+                                            <div class="flex flex-col flex-1 min-w-0 pr-3">
+                                                <span class="text-sm text-white font-medium truncate group-hover:text-app-accent transition-colors leading-tight">${this.esc(t.title)}</span>
+                                                <span class="text-[10px] text-app-textSecondary truncate mt-0.5">${this.esc(t.projectName)}</span>
+                                            </div>
+                                            <div class="flex items-center shrink-0">
+                                                <span class="text-[10px] px-2 py-1 rounded-md font-medium ${overdue ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-app-panel text-app-textSecondary border border-app-border'}">
+                                                    ${overdue ? 'En retard' : this.formatDateDisplay(t.dueDate)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    `}).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        ${this.buildKPIView()}
+
+                        <div class="flex items-center justify-between mb-4 mt-10">
+                            <h3 class="text-lg font-semibold text-white">Mes Projets Prioritaires</h3>
+                            <button data-action="navigate" data-view="projects" class="text-xs text-app-textSecondary hover:text-white flex items-center transition-colors">
+                                Voir tout <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                            ${myActiveProjects
+                                .filter(p => p.priority === 'critique' || p.priority === 'haute')
+                                .map(p => this.renderProjectCard(p)).join('')}
+                            ${myActiveProjects.filter(p => p.priority === 'critique' || p.priority === 'haute').length === 0 ? '<p class="text-app-textSecondary text-sm col-span-3">Aucun projet critique ou haut actuellement.</p>' : ''}
+                        </div>
+                    </div>
+                `;
+            },
+
+            buildProjectsView() {
+                let filteredProjects = this.state.projects.filter(p => p.status !== 'done');
+                
+                if (this.state.filters.user === 'me') {
+                    filteredProjects = filteredProjects.filter(p => p.managerId === this.state.currentUserId);
+                } else if (this.state.filters.user !== 'all') {
+                    filteredProjects = filteredProjects.filter(p => p.managerId === this.state.filters.user);
+                }
+
+                if (this.state.filters.status !== 'all') {
+                    filteredProjects = filteredProjects.filter(p => p.status === this.state.filters.status);
+                }
+                
+                if (this.state.filters.quarter && this.state.filters.quarter !== 'all') {
+                    filteredProjects = filteredProjects.filter(p => p.quarter === this.state.filters.quarter);
+                }
+
+                const isGrid = this.state.projectsViewMode === 'grid';
+
+                return `
+                    <div id="view-projects" class="max-w-7xl mx-auto animate-fade-in h-full flex flex-col pb-4">
+                        <div class="flex flex-wrap gap-3 justify-between items-center mb-6 shrink-0">
+                            <div class="flex flex-wrap space-x-2 w-full sm:w-auto gap-y-2">
+                                <select data-action="set-filter" data-filter-type="user" class="flex-1 sm:flex-none bg-app-panel border border-app-border text-white text-xs sm:text-sm rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-app-accent">
+                                    <option value="me" ${this.state.filters.user === 'me' ? 'selected' : ''}>Mes projets</option>
+                                    <option value="all" ${this.state.filters.user === 'all' ? 'selected' : ''}>Tous les projets</option>
+                                    <optgroup label="Par équipe">
+                                        ${this.state.users.filter(u => u.id !== this.state.currentUserId).map(u => 
+                                            `<option value="${u.id}" ${this.state.filters.user === u.id ? 'selected' : ''}>${this.esc(u.name)}</option>`
+                                        ).join('')}
+                                    </optgroup>
+                                </select>
+                                <select data-action="set-filter" data-filter-type="status" class="flex-1 sm:flex-none bg-app-panel border border-app-border text-white text-xs sm:text-sm rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-app-accent">
+                                    <option value="all" ${this.state.filters.status === 'all' ? 'selected' : ''}>Tous les statuts</option>
+                                    <option value="backlog" ${this.state.filters.status === 'backlog' ? 'selected' : ''}>Backlog</option>
+                                    <option value="refinement" ${this.state.filters.status === 'refinement' ? 'selected' : ''}>En affinage</option>
+                                    <option value="todo" ${this.state.filters.status === 'todo' ? 'selected' : ''}>Prêt (To Do)</option>
+                                    <option value="in-progress" ${this.state.filters.status === 'in-progress' ? 'selected' : ''}>En cours</option>
+                                    <option value="blocked" ${this.state.filters.status === 'blocked' ? 'selected' : ''}>Bloqué</option>
+                                </select>
+                                <!-- NOUVEAU FILTRE TRIMESTRE -->
+                                <select data-action="set-filter" data-filter-type="quarter" class="flex-1 sm:flex-none bg-app-panel border border-app-border text-white text-xs sm:text-sm rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-app-accent">
+                                    <option value="all" ${this.state.filters.quarter === 'all' ? 'selected' : ''}>Tous trimestres</option>
+                                    <option value="TBD" ${this.state.filters.quarter === 'TBD' ? 'selected' : ''}>À définir</option>
+                                    <option value="Q1 2026" ${this.state.filters.quarter === 'Q1 2026' ? 'selected' : ''}>Q1 2026</option>
+                                    <option value="Q2 2026" ${this.state.filters.quarter === 'Q2 2026' ? 'selected' : ''}>Q2 2026</option>
+                                    <option value="Q3 2026" ${this.state.filters.quarter === 'Q3 2026' ? 'selected' : ''}>Q3 2026</option>
+                                    <option value="Q4 2026" ${this.state.filters.quarter === 'Q4 2026' ? 'selected' : ''}>Q4 2026</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex bg-app-panel rounded-lg p-1 border border-app-border shrink-0 ml-auto">
+                                <button data-action="set-view-mode" data-mode="grid" class="p-1.5 rounded-md ${isGrid ? 'bg-app-hover text-white shadow' : 'text-app-textSecondary hover:text-white'} transition-all">
+                                    <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                                </button>
+                                <button data-action="set-view-mode" data-mode="list" class="p-1.5 rounded-md ${!isGrid ? 'bg-app-hover text-white shadow' : 'text-app-textSecondary hover:text-white'} transition-all">
+                                    <i data-lucide="list" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 overflow-y-auto">
+                            ${filteredProjects.length === 0 ? '<div class="text-center p-10 text-app-textSecondary">Aucun projet ne correspond à ces filtres.</div>' : ''}
+                            ${isGrid 
+                                ? `<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">${filteredProjects.map(p => this.renderProjectCard(p)).join('')}</div>`
+                                : `<div class="flex flex-col gap-3">${filteredProjects.map(p => this.renderProjectListItem(p)).join('')}</div>`
+                            }
+                        </div>
+                    </div>
+                `;
+            },
+
+            buildReviewView() {
+                const columns = [
+                    { id: 'critique', title: 'Critique', bg: 'bg-app-danger/5' },
+                    { id: 'haute', title: 'Haute', bg: 'bg-app-warning/5' },
+                    { id: 'normale', title: 'Normale', bg: 'bg-app-accent/5' },
+                    { id: 'basse', title: 'Basse', bg: 'bg-app-bg' }
+                ];
+
+                return `
+                    <div id="view-review" class="h-full flex flex-col animate-fade-in pb-4">
+                        <p class="text-app-textSecondary text-sm mb-6 shrink-0 hidden md:block">Glissez-déposez les projets pour réorganiser la priorité globale.</p>
+                        
+                        <div class="flex-1 flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory md:snap-none">
+                            ${columns.map(col => {
+                                const projs = this.state.projects.filter(p => p.priority === col.id && p.status !== 'done');
+                                return `
+                                <div class="flex flex-col min-w-[280px] md:min-w-[300px] w-[280px] md:w-[300px] shrink-0 snap-center">
+                                    <div class="flex items-center justify-between mb-3 px-2">
+                                        <h3 class="text-sm font-semibold text-white uppercase tracking-wider">${col.title}</h3>
+                                        <span class="text-xs bg-app-border px-2 py-0.5 rounded-full text-app-textSecondary">${projs.length}</span>
+                                    </div>
+                                    <div class="kanban-column flex-1 ${col.bg} border border-app-border/50 rounded-xl p-2 md:p-3 flex flex-col gap-2 md:gap-3 overflow-y-auto transition-colors" data-priority="${col.id}">
+                                        ${projs.map(p => this.renderMiniCard(p)).join('')}
+                                    </div>
+                                </div>
+                                `
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            },
+
+            buildRoadmapView() {
+                const sortedProjects = [...this.state.projects]
+                    .filter(p => p.status !== 'done')
+                    .sort((a, b) => {
+                        // Tri prioritaire par Quarter si défini
+                        if (a.quarter !== b.quarter && a.quarter !== 'TBD' && b.quarter !== 'TBD') {
+                            return a.quarter.localeCompare(b.quarter);
+                        }
+                        return new Date(a.dueDate || "2099-12-31") - new Date(b.dueDate || "2099-12-31");
+                    });
+
+                let html = `
+                    <div id="view-roadmap" class="max-w-5xl mx-auto animate-fade-in pb-10">
+                        <p class="text-app-textSecondary text-sm mb-8 hidden md:block">Vue chronologique des livrables de la Direction Technique.</p>
+                        <div class="relative border-l-2 border-app-border ml-3 md:ml-4 space-y-6 md:space-y-8 pb-8">
+                `;
+
+                let currentSection = "";
+
+                sortedProjects.forEach(p => {
+                    const sectionName = p.quarter && p.quarter !== 'TBD' ? p.quarter : "À planifier";
+                    
+                    if (sectionName !== currentSection) {
+                        html += `
+                            <div class="relative pl-6 md:pl-10 mt-6 mb-2">
+                                <div class="absolute w-3 h-3 bg-app-accent rounded-full -left-1.5 top-1.5 shadow-[0_0_10px_rgba(94,106,210,0.8)]"></div>
+                                <h3 class="text-sm font-bold text-app-accent capitalize tracking-widest uppercase">${sectionName}</h3>
+                            </div>
+                        `;
+                        currentSection = sectionName;
+                    }
+
+                    const pStyle = this.getPriorityStyle(p.priority);
+                    const sStyle = this.getStatusStyle(p.status);
+                    const user = this.getUser(p.managerId);
+
+                    html += `
+                        <div class="relative pl-6 md:pl-10 group">
+                            <div class="absolute w-2 h-2 bg-app-border group-hover:bg-white rounded-full -left-1 top-6 transition-colors"></div>
+                            
+                            <div id="roadmap-card-${p.id}" data-action="open-project" data-project-id="${p.id}" class="glass-panel p-3 md:p-4 rounded-xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-3 md:gap-4">
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2 md:gap-3 mb-1">
+                                        <span class="text-[10px] md:text-xs font-mono text-app-textSecondary bg-app-bg px-1.5 py-0.5 rounded border border-app-border">${p.id}</span>
+                                        <h4 class="text-sm md:text-base font-semibold text-white truncate group-hover:text-app-accent transition-colors">${this.esc(p.name)}</h4>
+                                    </div>
+                                    <p class="text-xs md:text-sm text-app-textSecondary line-clamp-1 mb-2">${this.esc(p.description)}</p>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2 py-0.5 text-[9px] md:text-[10px] uppercase font-bold rounded flex inline-flex items-center gap-1 ${pStyle.bg} ${pStyle.color}">
+                                            <i data-lucide="${pStyle.icon}" class="w-3 h-3"></i> ${p.priority}
+                                        </span>
+                                        <span class="text-[9px] md:text-[10px] ${sStyle.color} border ${sStyle.border} px-1.5 py-0.5 rounded-full bg-app-bg">${sStyle.label}</span>
+                                        <div class="flex items-center gap-1 ml-2 text-[10px] text-app-textSecondary">
+                                            <div class="w-4 h-4 rounded-full ${user.color} flex items-center justify-center font-bold text-white shrink-0">${user.initials}</div>
+                                            <span class="hidden sm:inline">${this.esc(user.name)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between lg:justify-end gap-4 lg:gap-6 shrink-0 lg:border-l lg:border-app-border lg:pl-6 mt-2 lg:mt-0 pt-2 lg:pt-0 border-t border-app-border/50 lg:border-t-0">
+                                    <div class="text-left lg:text-right">
+                                        <div class="text-[10px] text-app-textSecondary uppercase tracking-wider mb-1">Échéance finale</div>
+                                        <div class="text-xs md:text-sm font-medium ${this.isDateOverdue(p.dueDate) ? 'text-red-400' : 'text-white'} flex items-center gap-1.5">
+                                            <i data-lucide="calendar" class="w-3 h-3 md:w-3.5 md:h-3.5 opacity-50"></i>
+                                            ${this.formatDateDisplay(p.dueDate)}
+                                        </div>
+                                    </div>
+                                    <div class="relative w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
+                                        <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                                            <path class="text-app-border" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                            <path class="text-app-accent transition-all duration-1000" stroke-dasharray="${p.progress}, 100" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        </svg>
+                                        <span class="absolute text-[9px] md:text-[10px] font-bold text-white">${p.progress}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                if (sortedProjects.length === 0) {
+                    html += `<p class="pl-8 md:pl-10 text-app-textSecondary">Aucun projet actif à afficher.</p>`;
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+                return html;
+            },
+
+            buildKPIView() {
+                const userWorkload = this.state.users.map(u => {
+                    const activeProjs = this.state.projects.filter(p => p.managerId === u.id && p.status !== 'done');
+                    return { ...u, count: activeProjs.length };
+                }).sort((a, b) => b.count - a.count).slice(0, 4); 
+                
+                const maxCount = Math.max(...userWorkload.map(u => u.count), 1); 
+
+                const tagCounts = {};
+                let totalTags = 0;
+                this.state.projects.filter(p => p.status !== 'done').forEach(p => {
+                    p.tags.forEach(tag => {
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                        totalTags++;
+                    });
+                });
+                
+                const sortedTags = Object.entries(tagCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 3); 
+                    
+                const tagColors = ['bg-blue-500', 'bg-purple-500', 'bg-emerald-500'];
+
+                return `
+                    <div class="mb-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            
+                            <div class="glass-panel p-5 md:p-6 rounded-2xl flex flex-col h-48 md:h-56">
+                                <div class="flex justify-between items-start mb-4 md:mb-6">
+                                    <h3 class="text-xs md:text-sm text-app-textSecondary">Charge par collaborateur</h3>
+                                    <i data-lucide="users" class="w-4 h-4 text-app-textSecondary opacity-50"></i>
+                                </div>
+                                <div class="space-y-3 md:space-y-4 flex-1 flex flex-col justify-center">
+                                    ${userWorkload.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucun projet actif.</p>' : ''}
+                                    ${userWorkload.map((u, i) => {
+                                        const pct = Math.round((u.count / maxCount) * 100);
+                                        let barColor = "bg-app-accent";
+                                        if (u.count > 2) barColor = "bg-app-danger"; 
+                                        else if (u.count === 2) barColor = "bg-app-warning"; 
+                                        
+                                        return `
+                                        <div id="kpi-user-${u.id}">
+                                            <div class="flex justify-between items-center text-[10px] md:text-xs mb-1.5">
+                                                <div class="flex items-center gap-2">
+                                                    <div class="w-4 h-4 rounded-full ${u.color} flex items-center justify-center text-[8px] font-bold text-white">${u.initials}</div>
+                                                    <span class="text-white">${this.esc(u.name)}</span>
+                                                </div>
+                                                <span class="text-app-textSecondary font-mono">${u.count} projet(s)</span>
+                                            </div>
+                                            <div class="w-full bg-app-bg h-1.5 md:h-2 rounded-full overflow-hidden">
+                                                <div class="${barColor} h-full rounded-full transition-all duration-1000" style="width: ${pct}%"></div>
+                                            </div>
+                                        </div>
+                                    `}).join('')}
+                                </div>
+                            </div>
+
+                            <div class="glass-panel p-5 md:p-6 rounded-2xl flex flex-col h-48 md:h-56">
+                                <div class="flex justify-between items-start mb-4 md:mb-6">
+                                    <h3 class="text-xs md:text-sm text-app-textSecondary">Répartition par Tag (Actifs)</h3>
+                                    <i data-lucide="pie-chart" class="w-4 h-4 text-app-textSecondary opacity-50"></i>
+                                </div>
+                                <div class="space-y-3 md:space-y-4 flex-1 flex flex-col justify-center">
+                                    ${sortedTags.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucun tag utilisé.</p>' : ''}
+                                    ${sortedTags.map((tagData, index) => {
+                                        const tagName = tagData[0];
+                                        const tagVal = tagData[1];
+                                        const pct = totalTags > 0 ? Math.round((tagVal / totalTags) * 100) : 0;
+                                        const color = tagColors[index % tagColors.length];
+                                        return `
+                                        <div id="kpi-tag-${index}">
+                                            <div class="flex justify-between text-[10px] md:text-xs mb-1.5">
+                                                <span class="text-white flex items-center gap-1.5"><i data-lucide="tag" class="w-3 h-3 text-app-textSecondary"></i>${this.esc(tagName)}</span> 
+                                                <span class="text-app-textSecondary font-mono">${pct}%</span>
+                                            </div>
+                                            <div class="w-full bg-app-bg h-1.5 md:h-2 rounded-full overflow-hidden">
+                                                <div class="${color} h-full transition-all duration-1000" style="width: ${pct}%"></div>
+                                            </div>
+                                        </div>
+                                        `
+                                    }).join('')}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                `;
+            },
+
+            buildTeamView() {
+                return `
+                    <div id="view-team" class="max-w-5xl mx-auto animate-fade-in pb-10">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-lg md:text-xl font-semibold text-white">Membres DT Prox</h2>
+                            <button class="px-2 md:px-3 py-1.5 bg-app-panel border border-app-border rounded-lg text-xs md:text-sm hover:text-white transition-all flex items-center">
+                                <i data-lucide="user-plus" class="w-4 h-4 md:mr-2"></i> <span class="hidden md:inline">Ajouter</span>
+                            </button>
+                        </div>
+                        <div class="glass-panel rounded-2xl border border-app-border overflow-x-auto w-full">
+                            <table class="w-full text-left text-sm min-w-[600px]">
+                                <thead class="bg-app-bg/50 border-b border-app-border text-app-textSecondary">
+                                    <tr>
+                                        <th class="px-4 md:px-6 py-4 font-medium">Utilisateur</th>
+                                        <th class="px-4 md:px-6 py-4 font-medium">Rôle</th>
+                                        <th class="px-4 md:px-6 py-4 font-medium">Projets gérés</th>
+                                        <th class="px-4 md:px-6 py-4 font-medium text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-app-border/50">
+                                    ${this.state.users.map(u => {
+                                        const count = this.state.projects.filter(p => p.managerId === u.id && p.status !== 'done').length;
+                                        return `
+                                        <tr id="team-user-${u.id}" class="hover:bg-app-hover/50 transition-colors">
+                                            <td class="px-4 md:px-6 py-4 flex items-center gap-3">
+                                                <div class="w-8 h-8 rounded-full ${u.color} flex items-center justify-center text-xs font-bold text-white shadow-inner shrink-0">${u.initials}</div>
+                                                <span class="font-medium text-white truncate">${this.esc(u.name)}</span>
+                                                ${this.state.currentUserId === u.id ? '<span class="text-[9px] bg-app-accent/20 text-app-accent px-1.5 py-0.5 rounded uppercase font-bold shrink-0">Vous</span>' : ''}
+                                            </td>
+                                            <td class="px-4 md:px-6 py-4 text-app-textSecondary">${this.esc(u.role)}</td>
+                                            <td class="px-4 md:px-6 py-4">
+                                                <span class="px-2.5 py-1 bg-app-bg border border-app-border rounded-full text-xs font-mono text-white">${count} actif(s)</span>
+                                            </td>
+                                            <td class="px-4 md:px-6 py-4 text-right">
+                                                <button class="text-app-textSecondary hover:text-white"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button>
+                                            </td>
+                                        </tr>
+                                    `}).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            },
+
+            buildArchiveView() {
+                const doneProjects = this.state.projects.filter(p => p.status === 'done');
+                return `
+                    <div id="view-archive" class="max-w-5xl mx-auto animate-fade-in pb-10">
+                        <h2 class="text-lg md:text-xl font-semibold text-white mb-6">Projets Terminés (${doneProjects.length})</h2>
+                        <div class="flex flex-col gap-3">
+                            ${doneProjects.map(p => this.renderProjectListItem(p)).join('')}
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderProjectCard(project) {
+                const user = this.getUser(project.managerId);
+                const pStyle = this.getPriorityStyle(project.priority);
+                const sStyle = this.getStatusStyle(project.status);
+
+                return `
+                    <div id="project-card-${project.id}" data-action="open-project" data-project-id="${project.id}" class="glass-panel p-4 md:p-5 rounded-2xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all group relative overflow-hidden flex flex-col h-56">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-[10px] font-mono text-app-textSecondary border border-app-border bg-app-bg px-2 py-0.5 rounded shadow-sm">${project.id}</span>
+                            <div class="flex gap-2">
+                                ${project.quarter && project.quarter !== 'TBD' ? `<span class="px-2 py-0.5 text-[9px] uppercase font-bold rounded flex items-center gap-1 bg-app-panel text-app-textSecondary border border-app-border"><i data-lucide="target" class="w-3 h-3"></i> ${project.quarter}</span>` : ''}
+                                <span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded flex items-center gap-1 ${pStyle.bg} ${pStyle.color} border ${pStyle.border}">
+                                    <i data-lucide="${pStyle.icon}" class="w-3 h-3"></i> <span class="hidden sm:inline">${project.priority}</span>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-sm md:text-base font-semibold text-white leading-tight mb-2 group-hover:text-app-accent transition-colors">${this.esc(project.name)}</h3>
+                        
+                        <div class="flex flex-wrap gap-1 mb-auto">
+                            ${project.tags.slice(0, 3).map(tag => `<span class="text-[9px] md:text-[10px] px-1.5 py-0.5 rounded-sm bg-app-border text-app-textSecondary">${this.esc(tag)}</span>`).join('')}
+                        </div>
+
+                        <div class="pt-4 mt-4 border-t border-app-border/50 flex items-center justify-between">
+                            <div class="flex items-center gap-2 md:gap-3 w-2/3">
+                                <div class="w-6 h-6 rounded-full ${user.color} flex items-center justify-center text-[9px] font-bold text-white shrink-0">${user.initials}</div>
+                                <div class="w-full">
+                                    <div class="flex justify-between text-[9px] md:text-[10px] text-app-textSecondary mb-1">
+                                        <span>Progression</span>
+                                        <span>${project.progress}%</span>
+                                    </div>
+                                    <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
+                                        <div class="bg-app-accent h-full rounded-full" style="width: ${project.progress}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="text-[9px] md:text-[10px] ${sStyle.color} border ${sStyle.border} px-1.5 py-0.5 rounded-full bg-app-bg">${sStyle.label}</span>
+                        </div>
+                    </div>
+                `;
+            },
+
+            renderProjectListItem(project) {
+                const user = this.getUser(project.managerId);
+                const pStyle = this.getPriorityStyle(project.priority);
+                const sStyle = this.getStatusStyle(project.status);
+
+                return `
+                    <div id="project-list-${project.id}" data-action="open-project" data-project-id="${project.id}" class="glass-panel p-3 rounded-xl cursor-pointer hover:border-app-textSecondary/30 hover:bg-app-hover transition-all flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4">
+                        <span class="text-xs font-mono text-app-textSecondary w-full md:w-16 order-1 md:order-none flex justify-between md:block">
+                            ${project.id}
+                            <span class="md:hidden text-[10px] ${sStyle.color}">${sStyle.label}</span>
+                        </span>
+                        <div class="w-full md:flex-1 font-medium text-white text-sm truncate order-2 md:order-none">${this.esc(project.name)}</div>
+                        
+                        <div class="w-auto md:w-20 text-center order-3 md:order-none hidden sm:block">
+                            ${project.quarter && project.quarter !== 'TBD' ? `<span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded inline-flex items-center gap-1 bg-app-bg text-app-textSecondary border border-app-border"><i data-lucide="target" class="w-3 h-3"></i> ${project.quarter}</span>` : ''}
+                        </div>
+
+                        <div class="w-full md:w-32 order-4 md:order-none flex items-center gap-2">
+                            <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
+                                <div class="bg-app-accent h-full rounded-full" style="width: ${project.progress}%"></div>
+                            </div>
+                            <span class="text-[10px] text-app-textSecondary md:hidden">${project.progress}%</span>
+                        </div>
+                        <div class="w-auto md:w-24 text-center order-3 md:order-none">
+                            <span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded inline-flex items-center gap-1 ${pStyle.bg} ${pStyle.color}">
+                                <i data-lucide="${pStyle.icon}" class="w-3 h-3"></i> <span class="hidden md:inline">${project.priority}</span>
+                            </span>
+                        </div>
+                        <div class="w-24 text-right hidden md:block md:order-none">
+                             <span class="text-[10px] ${sStyle.color}">${sStyle.label}</span>
+                        </div>
+                        <div class="w-8 h-8 rounded-full ${user.color} hidden md:flex items-center justify-center text-[10px] font-bold text-white shrink-0 md:order-none">${user.initials}</div>
+                    </div>
+                `;
+            },
+
+            renderMiniCard(project) {
+                return `
+                    <div id="mini-card-${project.id}" class="kanban-card bg-app-panel border border-app-border p-3 rounded-lg shadow-sm cursor-grab active:cursor-grabbing hover:border-app-accent/40 transition-colors group relative no-select" 
+                         draggable="true" data-id="${project.id}">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[10px] font-mono text-app-textSecondary">${project.id}</span>
+                            <div class="text-xs font-medium text-white">${project.progress}%</div>
+                        </div>
+                        <p class="text-sm font-medium text-white leading-snug truncate">${this.esc(project.name)}</p>
+                    </div>
+                `;
+            },
+
+            buildProjectModalContent(project) {
+                const user = this.getUser(project.managerId);
+                const pStyle = this.getPriorityStyle(project.priority);
+                const sStyle = this.getStatusStyle(project.status);
+                const attachments = project.attachments || [];
+
+                return `
+                    <div class="p-4 md:p-8 border-b border-app-border/50 bg-gradient-to-b from-app-panel to-transparent shrink-0 pt-8 md:pt-8">
+                        <button data-action="close-modal" data-modal-id="project-modal" class="absolute top-4 right-4 text-app-textSecondary hover:text-white bg-app-bg/80 md:bg-app-bg p-1.5 rounded-full hover:bg-app-hover transition-colors z-10">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                        
+                        <div class="flex flex-wrap md:flex-nowrap justify-between items-start mb-4 gap-3">
+                            <div class="flex flex-wrap items-center gap-2 md:gap-3 w-full pr-8 md:pr-0">
+                                <span class="px-2 py-1 bg-app-bg border border-app-border rounded-md text-[10px] md:text-xs font-mono text-app-textSecondary">${project.id}</span>
+                                
+                                <div class="relative">
+                                    <select data-action="update-project" data-project-id="${project.id}" data-field="priority" class="badge-select px-2 md:px-2.5 py-1 text-[10px] md:text-[11px] uppercase font-bold rounded flex items-center ${pStyle.bg} ${pStyle.color} border ${pStyle.border}">
+                                        <option value="critique" ${project.priority === 'critique' ? 'selected' : ''}>Critique</option>
+                                        <option value="haute" ${project.priority === 'haute' ? 'selected' : ''}>Haute</option>
+                                        <option value="normale" ${project.priority === 'normale' ? 'selected' : ''}>Normale</option>
+                                        <option value="basse" ${project.priority === 'basse' ? 'selected' : ''}>Basse</option>
+                                    </select>
+                                </div>
+
+                                <div class="relative">
+                                    <select data-action="update-project" data-project-id="${project.id}" data-field="status" class="badge-select px-2 md:px-2.5 py-1 text-[10px] md:text-[11px] uppercase font-bold rounded bg-app-bg border ${sStyle.border} ${sStyle.color}">
+                                        <option value="backlog" ${project.status === 'backlog' ? 'selected' : ''}>Backlog</option>
+                                        <option value="refinement" ${project.status === 'refinement' ? 'selected' : ''}>En affinage</option>
+                                        <option value="todo" ${project.status === 'todo' ? 'selected' : ''}>Prêt (To Do)</option>
+                                        <option value="in-progress" ${project.status === 'in-progress' ? 'selected' : ''}>En cours</option>
+                                        <option value="blocked" ${project.status === 'blocked' ? 'selected' : ''}>Bloqué</option>
+                                        <option value="done" ${project.status === 'done' ? 'selected' : ''}>Terminé</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <input type="text" data-action="update-project" data-project-id="${project.id}" data-field="name" value="${this.esc(project.name)}" class="w-full bg-transparent border-none text-xl md:text-3xl font-bold text-white mb-2 tracking-tight focus:outline-none focus:ring-0 placeholder-app-border p-0">
+                        
+                        <textarea data-action="update-project" data-project-id="${project.id}" data-field="description" class="w-full bg-transparent border-none text-app-textSecondary text-xs md:text-sm leading-relaxed resize-none focus:outline-none focus:ring-0 p-0" rows="2">${this.esc(project.description)}</textarea>
+                        
+                        <div class="flex flex-wrap items-center gap-2 mt-4">
+                            ${project.tags.map((tag, idx) => `
+                                <div id="tag-${project.id}-${idx}" class="px-2 py-1 rounded bg-app-border/50 text-[10px] md:text-xs text-app-textSecondary flex items-center gap-1 group/tag">
+                                    <i data-lucide="tag" class="w-3 h-3"></i>${this.esc(tag)}
+                                    <button data-action="remove-tag" data-project-id="${project.id}" data-tag="${this.esc(tag)}" class="md:hidden md:group-hover/tag:block hover:text-red-400 ml-1" title="Supprimer">
+                                        <i data-lucide="x" class="w-3 h-3"></i>
+                                    </button>
+                                </div>
+                            `).join('')}
+                            <button data-action="add-tag" data-project-id="${project.id}" class="px-2 py-1 rounded border border-dashed border-app-border text-[10px] md:text-xs text-app-textSecondary hover:text-white hover:border-app-accent transition-colors flex items-center gap-1">
+                                <i data-lucide="plus" class="w-3 h-3"></i> Tag
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 md:p-8 flex-1 overflow-y-auto bg-app-bg/50">
+                        
+                        <div class="mb-8">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-[10px] md:text-xs font-semibold text-app-textSecondary uppercase tracking-wider flex items-center gap-1.5">
+                                    <i data-lucide="paperclip" class="w-3.5 h-3.5"></i> Fichiers joints (${attachments.length})
+                                </h3>
+                                <div class="relative">
+                                    <input type="file" id="file-upload-${project.id}" class="hidden" data-action="upload-file" data-project-id="${project.id}">
+                                    <button data-action="trigger-upload" data-target="file-upload-${project.id}" class="text-[10px] md:text-xs text-app-accent hover:text-blue-400 transition-colors flex items-center bg-app-accent/10 px-2 py-1 rounded-md border border-app-accent/20 hover:bg-app-accent/20">
+                                        <i data-lucide="plus" class="w-3 h-3 mr-1"></i> Joindre
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-2">
+                                ${attachments.map((file, idx) => {
+                                    const isImage = file.type === 'image';
+                                    const icon = isImage ? 'image' : 'file-text';
+                                    return `
+                                    <div id="file-${project.id}-${idx}" class="flex items-center bg-app-panel border border-app-border rounded-lg p-1.5 pr-2 group/file hover:border-app-textSecondary/50 transition-colors max-w-[200px]">
+                                        <div class="w-6 h-6 rounded bg-app-bg border border-app-border flex items-center justify-center mr-2 shrink-0">
+                                            <i data-lucide="${icon}" class="w-3.5 h-3.5 ${isImage ? 'text-purple-400' : 'text-blue-400'}"></i>
+                                        </div>
+                                        <a href="${file.url}" target="_blank" class="text-xs text-white truncate hover:underline flex-1" title="${this.esc(file.name)}">${this.esc(file.name)}</a>
+                                        <button data-action="delete-attachment" data-project-id="${project.id}" data-attachment-name="${this.esc(file.name)}" class="ml-2 text-app-textSecondary hover:text-red-400 opacity-50 md:opacity-0 md:group-hover/file:opacity-100 transition-opacity">
+                                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                                        </button>
+                                    </div>
+                                    `;
+                                }).join('')}
+                                ${attachments.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucun document attaché.</p>' : ''}
+                            </div>
+                        </div>
+
+                        <!-- LIGNE 3 COLONNES : Responsable | Trimestre | Echéance -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8 border-t border-app-border/50 pt-8">
+                            <div class="glass-panel p-3 md:p-4 rounded-xl flex items-center gap-3 md:gap-4 relative group overflow-hidden">
+                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-full ${user.color} flex items-center justify-center text-xs md:text-sm font-bold text-white shadow-inner shrink-0">${user.initials}</div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-[9px] md:text-[10px] text-app-textSecondary uppercase font-semibold tracking-wider truncate">Responsable</div>
+                                    <select data-action="update-project" data-project-id="${project.id}" data-field="managerId" class="w-full bg-transparent border-none text-xs md:text-sm text-white font-medium p-0 focus:outline-none appearance-none cursor-pointer truncate">
+                                        ${this.state.users.map(u => `<option value="${u.id}" ${project.managerId === u.id ? 'selected' : ''} class="bg-app-panel text-white">${this.esc(u.name)}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-app-textSecondary absolute right-4 opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity pointer-events-none shrink-0"></i>
+                            </div>
+
+                            <div class="glass-panel p-3 md:p-4 rounded-xl flex items-center gap-3 md:gap-4 relative group overflow-hidden">
+                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-app-panel border border-app-border flex items-center justify-center text-app-textSecondary shrink-0">
+                                    <i data-lucide="target" class="w-4 h-4 md:w-5 md:h-5"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-[9px] md:text-[10px] text-app-textSecondary uppercase font-semibold tracking-wider truncate">Trimestre cible</div>
+                                    <select data-action="update-project" data-project-id="${project.id}" data-field="quarter" class="w-full bg-transparent border-none text-xs md:text-sm text-white font-medium p-0 focus:outline-none appearance-none cursor-pointer truncate">
+                                        <option value="TBD" ${project.quarter === 'TBD' ? 'selected' : ''} class="bg-app-panel text-white">À définir</option>
+                                        <option value="Q1 2026" ${project.quarter === 'Q1 2026' ? 'selected' : ''} class="bg-app-panel text-white">Q1 2026</option>
+                                        <option value="Q2 2026" ${project.quarter === 'Q2 2026' ? 'selected' : ''} class="bg-app-panel text-white">Q2 2026</option>
+                                        <option value="Q3 2026" ${project.quarter === 'Q3 2026' ? 'selected' : ''} class="bg-app-panel text-white">Q3 2026</option>
+                                        <option value="Q4 2026" ${project.quarter === 'Q4 2026' ? 'selected' : ''} class="bg-app-panel text-white">Q4 2026</option>
+                                    </select>
+                                </div>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-app-textSecondary absolute right-4 opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity pointer-events-none shrink-0"></i>
+                            </div>
+
+                            <div class="glass-panel p-3 md:p-4 rounded-xl flex items-center gap-3 md:gap-4 relative group overflow-hidden">
+                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-app-panel border border-app-border flex items-center justify-center text-app-textSecondary shrink-0">
+                                    <i data-lucide="calendar" class="w-4 h-4 md:w-5 md:h-5"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-[9px] md:text-[10px] text-app-textSecondary uppercase font-semibold tracking-wider truncate">Échéance finale</div>
+                                    <input type="date" data-action="update-project" data-project-id="${project.id}" data-field="dueDate" value="${project.dueDate}" class="w-full bg-transparent border-none text-xs md:text-sm text-white font-medium p-0 focus:outline-none cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tasks Section -->
+                        <div class="mb-4 flex items-center justify-between">
+                            <h3 class="text-xs md:text-sm font-semibold text-white uppercase tracking-wider">Avancement (${project.progress}%)</h3>
+                            <button data-action="add-task" data-project-id="${project.id}" class="text-xs text-app-accent hover:text-blue-400 flex items-center p-2 -mr-2"><i data-lucide="plus" class="w-3 h-3 mr-1"></i> Ajouter</button>
+                        </div>
+                        
+                        <div class="w-full bg-app-panel rounded-full h-1.5 md:h-2 mb-4 overflow-hidden border border-app-border">
+                            <div class="bg-app-accent h-full rounded-full transition-all duration-500" style="width: ${project.progress}%"></div>
+                        </div>
+
+                        <div class="space-y-2 mb-8">
+                            ${project.tasks.map(t => {
+                                const isDone = t.status === 'done';
+                                const isOverdue = !isDone && this.isDateOverdue(t.dueDate);
+                                return `
+                                <div id="modal-task-${t.id}" class="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg border border-app-border/50 hover:border-app-border hover:bg-app-hover transition-colors group gap-2">
+                                    <div class="flex items-center flex-1 min-w-0 cursor-pointer" data-action="toggle-task" data-project-id="${project.id}" data-task-id="${t.id}">
+                                        <div class="w-4 h-4 md:w-5 md:h-5 rounded border flex items-center justify-center mr-3 shrink-0 transition-colors ${isDone ? 'bg-app-accent border-app-accent text-white' : 'border-app-textSecondary group-hover:border-app-accent group-hover:bg-app-accent/10'}">
+                                            ${isDone ? '<i data-lucide="check" class="w-3 h-3"></i>' : ''}
+                                        </div>
+                                        <span class="text-xs md:text-sm truncate ${isDone ? 'text-app-textSecondary line-through' : 'text-white'}">${this.esc(t.title)}</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between sm:justify-end shrink-0 gap-3 ml-7 sm:ml-0">
+                                        <input type="date" value="${t.dueDate || ''}" data-action="update-task" data-project-id="${project.id}" data-task-id="${t.id}" data-field="dueDate" class="bg-app-bg sm:bg-transparent border border-app-border sm:border-transparent hover:border-app-border focus:border-app-accent rounded px-2 sm:px-1 py-1 sm:py-0.5 text-[10px] ${isOverdue ? 'text-red-400 font-bold' : 'text-app-textSecondary'} cursor-pointer outline-none">
+                                        
+                                        <button data-action="delete-task" data-project-id="${project.id}" data-task-id="${t.id}" class="text-app-textSecondary hover:text-red-400 md:opacity-0 md:group-hover:opacity-100 transition-opacity p-2 -mr-2 sm:p-1 sm:mr-0" title="Supprimer la tâche">
+                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `}).join('')}
+                            ${project.tasks.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucune tâche pour le moment.</p>' : ''}
+                        </div>
+
+                        <!-- Footer Actions -->
+                        <div class="border-t border-app-border/50 pt-6 flex justify-end pb-4 md:pb-0">
+                             <button data-action="delete-project" data-project-id="${project.id}" class="text-xs text-red-400 hover:text-red-300 flex items-center px-3 py-2 rounded-lg hover:bg-red-400/10 transition-colors">
+                                <i data-lucide="trash-2" class="w-3 h-3 mr-1.5"></i> Supprimer ce projet
+                            </button>
+                        </div>
+                    </div>
+                `;
+            },
+
+            // --- 🎯 EVENT DELEGATION GLOBALE ---
+            setupEventListeners() {
+                document.addEventListener('click', (e) => {
+                    const target = e.target.closest('[data-action]');
+                    if (!target) return;
+                    
+                    const action = target.dataset.action;
+                    const d = target.dataset;
+
+                    switch(action) {
+                        case 'navigate': this.navigate(d.view); break;
+                        case 'toggle-sidebar': this.toggleSidebar(); break;
+                        case 'open-user-switcher': this.openUserSwitcher(); break;
+                        case 'switch-user': this.switchUser(d.userId); break;
+                        case 'toggle-cmd': this.toggleCommandPalette(); break;
+                        case 'export-data': this.exportData(); break;
+                        case 'open-create-modal': this.openCreateProjectModal(); break;
+                        case 'close-modal': this.closeModal(d.modalId); break;
+                        case 'create-project': this.createProject(); break;
+                        case 'open-project': this.openProjectModal(d.projectId); break;
+                        case 'set-view-mode': this.state.projectsViewMode = d.mode; this.renderAll(); break;
+                        case 'add-task': this.addTask(d.projectId); break;
+                        case 'toggle-task': this.toggleTaskFromModal(d.projectId, d.taskId); break;
+                        case 'delete-task': this.deleteTask(d.projectId, d.taskId); break;
+                        case 'delete-project': this.deleteProject(d.projectId); break;
+                        case 'add-tag': this.addTag(d.projectId); break;
+                        case 'remove-tag': this.removeTag(d.projectId, d.tag); break;
+                        case 'trigger-upload': document.getElementById(d.target).click(); break;
+                        case 'delete-attachment': this.deleteAttachment(d.projectId, d.attachmentName); break;
+                    }
+                });
+
+                document.addEventListener('change', (e) => {
+                    const target = e.target.closest('[data-action]');
+                    if (!target) return;
+                    
+                    const action = target.dataset.action;
+                    const d = target.dataset;
+
+                    switch(action) {
+                        case 'set-filter': this.setFilter(d.filterType, target.value); break;
+                        case 'update-project': 
+                            this.mutate('Mise à jour projet', () => {
+                                const p = this.state.projects.find(x => x.id === d.projectId);
+                                if(p) p[d.field] = target.value;
+                            });
+                            break;
+                        case 'update-task':
+                            this.mutate('Mise à jour tâche', () => {
+                                const p = this.state.projects.find(x => x.id === d.projectId);
+                                const t = p?.tasks.find(x => x.id === d.taskId);
+                                if(t) t[d.field] = target.value;
+                            });
+                            break;
+                        case 'upload-file': this.handleFileUpload(d.projectId, e); break;
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                        e.preventDefault();
+                        this.toggleCommandPalette();
+                    }
+                    if (e.key === 'Escape') {
+                        document.getElementById('command-palette').classList.add('hidden');
+                        this.closeModal('project-modal');
+                        this.closeModal('user-switcher-modal');
+                        this.closeModal('create-project-modal');
+                    }
+                });
+
+                document.addEventListener('dragstart', (e) => {
+                    const card = e.target.closest('.kanban-card');
+                    if (card) {
+                        e.dataTransfer.setData('text/plain', card.dataset.id);
+                        setTimeout(() => card.classList.add('ghost-card', 'opacity-50'), 0);
+                    }
+                });
+                document.addEventListener('dragend', (e) => {
+                    const card = e.target.closest('.kanban-card');
+                    if (card) card.classList.remove('ghost-card', 'opacity-50');
+                });
+                document.addEventListener('dragover', (e) => {
+                    const col = e.target.closest('.kanban-column');
+                    if (col) {
+                        e.preventDefault();
+                        col.classList.add('bg-app-hover/50');
+                    }
+                });
+                document.addEventListener('dragleave', (e) => {
+                    const col = e.target.closest('.kanban-column');
+                    if (col) col.classList.remove('bg-app-hover/50');
+                });
+                document.addEventListener('drop', (e) => {
+                    const col = e.target.closest('.kanban-column');
+                    if (col) {
+                        e.preventDefault();
+                        col.classList.remove('bg-app-hover/50');
+                        const projectId = e.dataTransfer.getData('text/plain');
+                        const newPriority = col.dataset.priority;
+                        
+                        this.mutate('Changement de priorité', () => {
+                            const proj = this.state.projects.find(p => p.id === projectId);
+                            if (proj && proj.priority !== newPriority) {
+                                proj.priority = newPriority;
+                            }
+                        });
+                    }
+                });
+                
+                document.addEventListener('touchstart', (e) => {
+                    if (e.target.closest('.kanban-card')) {
+                         // Configuration passive pour scroll sur mobile
+                    }
+                }, {passive: true});
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => app.init());
+    </script>
+</body>
+</html>
