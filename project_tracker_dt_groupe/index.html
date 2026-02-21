@@ -158,7 +158,7 @@
         
         <div class="px-4 pb-4 pt-2 text-center select-none">
             <p class="text-[9px] text-app-textSecondary/50 font-medium tracking-wider uppercase">© 2026 DT Prox</p>
-            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.7.0 • Smart Quarters</p>
+            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.8.0 • Team Management</p>
         </div>
 
         <div class="p-4 border-t border-app-border bg-app-panel/30 cursor-pointer hover:bg-app-hover transition-colors" data-action="open-user-switcher">
@@ -563,6 +563,38 @@
                 this.renderAll();
             },
 
+            addUser() {
+                const name = prompt("Nom complet du nouveau collaborateur :");
+                if (!name || name.trim() === "") return;
+                
+                const role = prompt("Rôle (ex: Développeur Backend) :") || "Membre";
+                
+                // Calcul des initiales (Max 2 lettres)
+                const parts = name.trim().split(" ");
+                let initials = parts[0].substring(0, 1).toUpperCase();
+                if (parts.length > 1) {
+                    initials += parts[parts.length - 1].substring(0, 1).toUpperCase();
+                } else {
+                    initials += parts[0].substring(1, 2).toUpperCase() || "X";
+                }
+
+                // Couleur aléatoire du cercle
+                const colors = ["bg-blue-600", "bg-purple-600", "bg-emerald-600", "bg-red-600", "bg-orange-600", "bg-pink-600"];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                this.mutate('Ajout de collaborateur', () => {
+                    this.state.users.push({
+                        id: `U${Date.now()}`,
+                        name: name.trim(),
+                        role: role.trim(),
+                        initials: initials,
+                        color: randomColor
+                    });
+                });
+                
+                this.showToast(`Collaborateur ${name} ajouté avec succès.`, "success");
+            },
+
             toggleTaskFromModal(projectId, taskId) {
                 this.mutate('Mise à jour de la tâche', () => {
                     const project = this.state.projects.find(p => p.id === projectId);
@@ -570,10 +602,8 @@
                         const task = project.tasks.find(t => t.id === taskId);
                         if (task) {
                             if (project.type === 'agile') {
-                                // Toggle rapide pour mode Agile : Brouillon <-> Terminé
                                 task.agileStatus = task.agileStatus === 'done' ? 'draft' : 'done';
                             } else {
-                                // Toggle rapide pour mode Simple : A faire <-> Terminé
                                 task.status = task.status === 'done' ? 'todo' : 'done';
                             }
                         }
@@ -591,8 +621,8 @@
                         proj.tasks.push({
                             id: `${isAgile ? 'US' : 'T'}-${Date.now().toString().slice(-4)}`,
                             title: title.trim(),
-                            status: 'todo', // Pour mode simple
-                            agileStatus: 'draft', // Pour mode agile
+                            status: 'todo', 
+                            agileStatus: 'draft', 
                             epic: isAgile ? "SANS EPIC" : undefined,
                             externalRef: isAgile ? "" : undefined,
                             dueDate: new Date().toISOString().split('T')[0]
@@ -678,7 +708,7 @@
                     this.state.projects.unshift({
                         id: `PRJ-${Math.floor(Math.random() * 1000)}`,
                         name: name, description: desc, 
-                        type: type, // SIMPLE OR AGILE
+                        type: type, 
                         status: type === 'agile' ? "backlog" : "todo", 
                         priority: priority,
                         progress: 0, tags: ["Nouveau"], managerId: this.state.currentUserId,
@@ -694,7 +724,6 @@
 
             calculateProjectProgress(project) {
                 if (!project.tasks || project.tasks.length === 0) return 0;
-                // Calcul adaptatif selon le type de projet
                 const done = project.tasks.filter(t => project.type === 'agile' ? t.agileStatus === 'done' : t.status === 'done').length;
                 return Math.round((done / project.tasks.length) * 100);
             },
@@ -742,7 +771,7 @@
                 if (str.includes("FIABILISATION")) return "bg-orange-950/40 text-orange-300 border-orange-900/50";
                 if (str.includes("MOBILITE")) return "bg-pink-950/40 text-pink-300 border-pink-900/50";
                 if (str.includes("PROXIREL")) return "bg-blue-950/40 text-blue-300 border-blue-900/50";
-                return "bg-app-bg text-app-textSecondary border-app-border"; // Default
+                return "bg-app-bg text-app-textSecondary border-app-border"; 
             },
 
             isDateOverdue(dateString) {
@@ -1355,7 +1384,7 @@
                     <div id="view-team" class="max-w-5xl mx-auto animate-fade-in pb-10">
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="text-lg md:text-xl font-semibold text-white">Membres DT Prox</h2>
-                            <button class="px-2 md:px-3 py-1.5 bg-app-panel border border-app-border rounded-lg text-xs md:text-sm hover:text-white transition-all flex items-center">
+                            <button data-action="add-user" class="px-2 md:px-3 py-1.5 bg-app-panel border border-app-border rounded-lg text-xs md:text-sm hover:text-white transition-all flex items-center">
                                 <i data-lucide="user-plus" class="w-4 h-4 md:mr-2"></i> <span class="hidden md:inline">Ajouter</span>
                             </button>
                         </div>
@@ -1521,7 +1550,6 @@
                 const attachments = project.attachments || [];
                 const isAgile = project.type === 'agile';
                 
-                // Injection dynamique des options de trimestres dans la modale
                 const qOptions = this.getRollingQuarters().map(q => `<option value="${q}" ${project.quarter === q ? 'selected' : ''} class="bg-app-panel text-white">${q === 'TBD' ? 'À définir' : q}</option>`).join('');
 
                 return `
@@ -1581,7 +1609,6 @@
 
                     <div class="p-4 md:p-8 flex-1 overflow-y-auto bg-app-bg/50">
                         
-                        <!-- PIECES JOINTES -->
                         <div class="mb-8">
                             <div class="flex items-center justify-between mb-3">
                                 <h3 class="text-[10px] md:text-xs font-semibold text-app-textSecondary uppercase tracking-wider flex items-center gap-1.5">
@@ -1615,7 +1642,6 @@
                             </div>
                         </div>
 
-                        <!-- LIGNE 3 COLONNES -->
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8 border-t border-app-border/50 pt-8">
                             <div class="glass-panel p-3 md:p-4 rounded-xl flex items-center gap-3 md:gap-4 relative group overflow-hidden">
                                 <div class="w-8 h-8 md:w-10 md:h-10 rounded-full ${user.color} flex items-center justify-center text-xs md:text-sm font-bold text-white shadow-inner shrink-0">${user.initials}</div>
@@ -1669,7 +1695,6 @@
                                 const isDone = isAgile ? t.agileStatus === 'done' : t.status === 'done';
                                 const isOverdue = !isDone && this.isDateOverdue(t.dueDate);
                                 
-                                // RENDU AGILE (US avec Epic et Statut complexe)
                                 if (isAgile) {
                                     const epicStyle = this.getEpicColor(t.epic);
                                     const statusConfig = this.getAgileStatusConfig(t.agileStatus);
@@ -1705,7 +1730,6 @@
                                     </div>
                                     `;
                                 } 
-                                // RENDU SIMPLE (To-do list épurée)
                                 else {
                                     return `
                                     <div id="modal-task-${t.id}" class="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg border border-app-border/50 hover:border-app-border hover:bg-app-hover transition-colors group gap-2">
@@ -1769,6 +1793,7 @@
                         case 'remove-tag': this.removeTag(d.projectId, d.tag); break;
                         case 'trigger-upload': document.getElementById(d.target).click(); break;
                         case 'delete-attachment': this.deleteAttachment(d.projectId, d.attachmentName); break;
+                        case 'add-user': this.addUser(); break; // NOUVELLE ACTION POUR AJOUTER UN COLLABORATEUR
                     }
                 });
 
