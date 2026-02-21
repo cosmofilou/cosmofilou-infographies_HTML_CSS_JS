@@ -158,7 +158,7 @@
         
         <div class="px-4 pb-4 pt-2 text-center select-none">
             <p class="text-[9px] text-app-textSecondary/50 font-medium tracking-wider uppercase">© 2026 DT Prox</p>
-            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.6.0 • Hybrid Agile</p>
+            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.7.0 • Smart Quarters</p>
         </div>
 
         <div class="p-4 border-t border-app-border bg-app-panel/30 cursor-pointer hover:bg-app-hover transition-colors" data-action="open-user-switcher">
@@ -262,12 +262,8 @@
                     </div>
                     <div>
                         <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Trimestre cible</label>
+                        <!-- Injecté dynamiquement par JS (getRollingQuarters) -->
                         <select id="new-project-quarter" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
-                            <option value="TBD">À définir</option>
-                            <option value="Q1 2026">Q1 2026</option>
-                            <option value="Q2 2026">Q2 2026</option>
-                            <option value="Q3 2026">Q3 2026</option>
-                            <option value="Q4 2026">Q4 2026</option>
                         </select>
                     </div>
                     <div>
@@ -345,6 +341,10 @@
             init() {
                 this.setupEventListeners(); 
                 
+                // Initialisation dynamique des Trimestres Glissants (Rolling Quarters)
+                const qOptions = this.getRollingQuarters().map(q => `<option value="${q}">${q === 'TBD' ? 'À définir' : q}</option>`).join('');
+                document.getElementById('new-project-quarter').innerHTML = qOptions;
+                
                 setTimeout(() => {
                     this.state.users = [
                         { id: "U1", name: "Jean Dupont", role: "Directeur Tech", initials: "JD", color: "bg-blue-600" },
@@ -357,6 +357,11 @@
                     const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 2);
                     const dYesterday = yesterday.toISOString().split('T')[0];
                     const dTomorrow = tomorrow.toISOString().split('T')[0];
+                    
+                    // Génération intelligente des trimestres pour les données mockées (Current & Next)
+                    const quarters = this.getRollingQuarters();
+                    const currentQ = quarters[1] || "Q1 2026";
+                    const nextQ = quarters[2] || "Q2 2026";
 
                     this.state.projects = [
                         {
@@ -366,7 +371,7 @@
                             status: "in-progress", priority: "critique", progress: 0, 
                             type: "agile", // TYPE AGILE
                             tags: ["Salesforce", "Data"], managerId: "U1", 
-                            dueDate: "2026-09-30", quarter: "Q3 2026",
+                            dueDate: "2026-09-30", quarter: nextQ,
                             attachments: [],
                             tasks: [
                                 { id: "US-1", title: "Workflow pose", epic: "GAP HYDROPLAN", agileStatus: "testing", externalRef: "Gap Analysis Hydroplan", dueDate: dToday },
@@ -385,7 +390,7 @@
                             status: "in-progress", priority: "haute", progress: 0, 
                             type: "simple", // TYPE SIMPLE
                             tags: ["Infra", "Hardware"], managerId: "U2", 
-                            dueDate: "2026-06-30", quarter: "Q2 2026",
+                            dueDate: "2026-06-30", quarter: currentQ,
                             attachments: [],
                             tasks: [
                                 { id: "T-8", title: "Commander les câbles réseau", status: "done", dueDate: dYesterday },
@@ -400,7 +405,7 @@
                             status: "todo", priority: "normale", progress: 0, 
                             type: "simple", // TYPE SIMPLE
                             tags: ["SecOps", "Routine"], managerId: "U1", 
-                            dueDate: "2026-04-15", quarter: "Q2 2026",
+                            dueDate: "2026-04-15", quarter: currentQ,
                             attachments: [],
                             tasks: [
                                 { id: "T-11", title: "Lister les domaines expirant", status: "done", dueDate: "" },
@@ -414,6 +419,21 @@
                     this.updateSidebarUserDisplay();
                     this.navigate('dashboard');
                 }, 800);
+            },
+
+            // --- GENERATEUR DE TRIMESTRES GLISSANTS (Rolling Quarters) ---
+            getRollingQuarters() {
+                const quarters = ['TBD'];
+                const d = new Date();
+                let year = d.getFullYear();
+                let q = Math.floor(d.getMonth() / 3) + 1;
+                // Génère les 6 prochains trimestres automatiquement
+                for(let i = 0; i < 6; i++) {
+                    quarters.push(`Q${q} ${year}`);
+                    q++;
+                    if(q > 4) { q = 1; year++; }
+                }
+                return quarters;
             },
 
             // --- 🛡️ SECURITE (Prévention XSS) ---
@@ -994,7 +1014,6 @@
             },
 
             buildBacklogView() {
-                // Le backlog global ne récupère QUE les tâches des projets de type 'agile'
                 let allUS = [];
                 this.state.projects.filter(p => p.type === 'agile' && p.status !== 'done' && p.status !== 'canceled').forEach(p => {
                     p.tasks.forEach(t => {
@@ -1028,9 +1047,9 @@
                                         const epicStyle = this.getEpicColor(us.epic);
                                         return `
                                         <tr class="group cursor-default">
-                                            <td class="font-medium text-white flex items-center gap-2">
-                                                <i data-lucide="file-text" class="w-3.5 h-3.5 text-app-textSecondary shrink-0"></i>
-                                                <input type="text" data-action="update-task" data-project-id="${us.projectId}" data-task-id="${us.id}" data-field="title" value="${this.esc(us.title)}" class="bg-transparent border-none focus:outline-none focus:ring-0 w-full hover:bg-app-hover rounded px-1 -ml-1 transition-colors">
+                                            <td class="font-medium text-app-textPrimary flex items-center gap-2">
+                                                <i data-lucide="file" class="w-4 h-4 text-app-textSecondary shrink-0 group-hover:text-white transition-colors"></i>
+                                                <input type="text" data-action="update-task" data-project-id="${us.projectId}" data-task-id="${us.id}" data-field="title" value="${this.esc(us.title)}" class="bg-transparent border-none focus:outline-none focus:ring-0 w-full hover:bg-app-hover rounded px-1 -ml-1 transition-colors text-[13px]">
                                             </td>
                                             <td class="text-app-textSecondary truncate">
                                                 <button data-action="open-project" data-project-id="${us.projectId}" class="hover:text-white hover:underline transition-colors">${this.esc(us.projectName)}</button>
@@ -1067,6 +1086,7 @@
                 if (this.state.filters.quarter && this.state.filters.quarter !== 'all') filteredProjects = filteredProjects.filter(p => p.quarter === this.state.filters.quarter);
 
                 const isGrid = this.state.projectsViewMode === 'grid';
+                const qOptions = this.getRollingQuarters().map(q => `<option value="${q}" ${this.state.filters.quarter === q ? 'selected' : ''}>${q === 'TBD' ? 'À définir' : q}</option>`).join('');
 
                 return `
                     <div id="view-projects" class="max-w-7xl mx-auto animate-fade-in h-full flex flex-col pb-4">
@@ -1091,11 +1111,7 @@
                                 </select>
                                 <select data-action="set-filter" data-filter-type="quarter" class="flex-1 sm:flex-none bg-app-panel border border-app-border text-white text-xs sm:text-sm rounded-lg px-2 sm:px-3 py-1.5 focus:outline-none focus:border-app-accent">
                                     <option value="all" ${this.state.filters.quarter === 'all' ? 'selected' : ''}>Tous trimestres</option>
-                                    <option value="TBD" ${this.state.filters.quarter === 'TBD' ? 'selected' : ''}>À définir</option>
-                                    <option value="Q1 2026" ${this.state.filters.quarter === 'Q1 2026' ? 'selected' : ''}>Q1 2026</option>
-                                    <option value="Q2 2026" ${this.state.filters.quarter === 'Q2 2026' ? 'selected' : ''}>Q2 2026</option>
-                                    <option value="Q3 2026" ${this.state.filters.quarter === 'Q3 2026' ? 'selected' : ''}>Q3 2026</option>
-                                    <option value="Q4 2026" ${this.state.filters.quarter === 'Q4 2026' ? 'selected' : ''}>Q4 2026</option>
+                                    ${qOptions}
                                 </select>
                             </div>
                             
@@ -1184,6 +1200,10 @@
                     const pStyle = this.getPriorityStyle(p.priority);
                     const sStyle = this.getStatusStyle(p.status);
                     const user = this.getUser(p.managerId);
+                    
+                    const typeBadge = p.type === 'agile' 
+                        ? `<span class="px-2 py-0.5 text-[9px] uppercase font-bold rounded flex items-center gap-1 bg-purple-500/10 text-purple-400 border border-purple-500/20 shrink-0"><i data-lucide="workflow" class="w-3 h-3"></i> Agile</span>`
+                        : `<span class="px-2 py-0.5 text-[9px] uppercase font-bold rounded flex items-center gap-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0"><i data-lucide="check-square" class="w-3 h-3"></i> Simple</span>`;
 
                     html += `
                         <div class="relative pl-6 md:pl-10 group">
@@ -1194,7 +1214,7 @@
                                     <div class="flex items-center gap-2 md:gap-3 mb-1">
                                         <span class="text-[10px] md:text-xs font-mono text-app-textSecondary bg-app-bg px-1.5 py-0.5 rounded border border-app-border">${p.id}</span>
                                         <h4 class="text-sm md:text-base font-semibold text-white truncate group-hover:text-app-accent transition-colors">${this.esc(p.name)}</h4>
-                                        ${p.type === 'simple' ? `<i data-lucide="list-todo" class="w-3 h-3 text-app-textSecondary ml-1" title="Projet de tâches simples"></i>` : ''}
+                                        ${typeBadge}
                                     </div>
                                     <p class="text-xs md:text-sm text-app-textSecondary line-clamp-1 mb-2">${this.esc(p.description)}</p>
                                     <div class="flex items-center gap-2">
@@ -1391,16 +1411,20 @@
                 const user = this.getUser(project.managerId);
                 const pStyle = this.getPriorityStyle(project.priority);
                 const isAgile = project.type === 'agile';
+                
+                const typeBadge = isAgile 
+                    ? `<span class="px-2 py-0.5 text-[9px] uppercase font-bold rounded flex items-center gap-1 bg-purple-500/10 text-purple-400 border border-purple-500/20 shrink-0"><i data-lucide="workflow" class="w-3 h-3"></i> Agile</span>`
+                    : `<span class="px-2 py-0.5 text-[9px] uppercase font-bold rounded flex items-center gap-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0"><i data-lucide="check-square" class="w-3 h-3"></i> Simple</span>`;
 
                 return `
                     <div id="project-card-${project.id}" data-action="open-project" data-project-id="${project.id}" class="glass-panel p-4 md:p-5 rounded-2xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all group relative overflow-hidden flex flex-col h-56">
                         <div class="flex justify-between items-start mb-3">
                             <span class="text-[10px] font-mono text-app-textSecondary border border-app-border bg-app-bg px-2 py-0.5 rounded shadow-sm flex items-center gap-1">
-                                ${isAgile ? `<i data-lucide="list-tree" class="w-3 h-3 text-app-accent"></i>` : `<i data-lucide="list-todo" class="w-3 h-3 text-blue-400"></i>`}
                                 ${project.id}
                             </span>
                             <div class="flex gap-2">
-                                ${project.quarter && project.quarter !== 'TBD' ? `<span class="px-2 py-0.5 text-[9px] uppercase font-bold rounded flex items-center gap-1 bg-app-panel text-app-textSecondary border border-app-border"><i data-lucide="target" class="w-3 h-3"></i> ${project.quarter}</span>` : ''}
+                                ${typeBadge}
+                                ${project.quarter && project.quarter !== 'TBD' ? `<span class="px-2 py-0.5 text-[9px] uppercase font-bold rounded flex items-center gap-1 bg-app-panel text-app-textSecondary border border-app-border hidden sm:flex"><i data-lucide="target" class="w-3 h-3"></i> ${project.quarter}</span>` : ''}
                                 <span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded flex items-center gap-1 ${pStyle.bg} ${pStyle.color} border ${pStyle.border}">
                                     <i data-lucide="${pStyle.icon}" class="w-3 h-3"></i> <span class="hidden sm:inline">${project.priority}</span>
                                 </span>
@@ -1434,14 +1458,23 @@
             renderProjectListItem(project) {
                 const user = this.getUser(project.managerId);
                 const pStyle = this.getPriorityStyle(project.priority);
+                const isAgile = project.type === 'agile';
+                
+                const typeBadge = isAgile 
+                    ? `<span class="px-2 py-0.5 text-[9px] uppercase font-bold rounded flex items-center gap-1 bg-purple-500/10 text-purple-400 border border-purple-500/20 shrink-0" title="Projet Agile"><i data-lucide="workflow" class="w-3 h-3"></i></span>`
+                    : `<span class="px-2 py-0.5 text-[9px] uppercase font-bold rounded flex items-center gap-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0" title="Projet Simple"><i data-lucide="check-square" class="w-3 h-3"></i></span>`;
 
                 return `
                     <div id="project-list-${project.id}" data-action="open-project" data-project-id="${project.id}" class="glass-panel p-3 rounded-xl cursor-pointer hover:border-app-textSecondary/30 hover:bg-app-hover transition-all flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4">
                         <span class="text-xs font-mono text-app-textSecondary w-full md:w-16 order-1 md:order-none flex justify-between md:block">
                             ${project.id}
                         </span>
+                        
+                        <div class="order-3 md:order-none hidden sm:block">
+                            ${typeBadge}
+                        </div>
+
                         <div class="w-full md:flex-1 font-medium text-white text-sm truncate order-2 md:order-none flex items-center gap-2">
-                            ${project.type === 'simple' ? `<i data-lucide="list-todo" class="w-4 h-4 text-app-textSecondary shrink-0" title="Projet Simple"></i>` : `<i data-lucide="list-tree" class="w-4 h-4 text-app-accent shrink-0" title="Projet Agile"></i>`}
                             ${this.esc(project.name)}
                         </div>
                         
@@ -1481,13 +1514,15 @@
                 `;
             },
 
-            // --- NOUVEAU MODAL HYBRIDE (Simple vs Agile) ---
             buildProjectModalContent(project) {
                 const user = this.getUser(project.managerId);
                 const pStyle = this.getPriorityStyle(project.priority);
                 const sStyle = this.getStatusStyle(project.status);
                 const attachments = project.attachments || [];
                 const isAgile = project.type === 'agile';
+                
+                // Injection dynamique des options de trimestres dans la modale
+                const qOptions = this.getRollingQuarters().map(q => `<option value="${q}" ${project.quarter === q ? 'selected' : ''} class="bg-app-panel text-white">${q === 'TBD' ? 'À définir' : q}</option>`).join('');
 
                 return `
                     <div class="p-4 md:p-8 border-b border-app-border/50 bg-gradient-to-b from-app-panel to-transparent shrink-0 pt-8 md:pt-8">
@@ -1498,7 +1533,7 @@
                         <div class="flex flex-wrap md:flex-nowrap justify-between items-start mb-4 gap-3">
                             <div class="flex flex-wrap items-center gap-2 md:gap-3 w-full pr-8 md:pr-0">
                                 <span class="px-2 py-1 bg-app-bg border border-app-border rounded-md text-[10px] md:text-xs font-mono text-app-textSecondary flex items-center gap-1.5">
-                                    ${isAgile ? '<i data-lucide="list-tree" class="w-3.5 h-3.5 text-app-accent"></i> Agile' : '<i data-lucide="list-todo" class="w-3.5 h-3.5 text-blue-400"></i> Simple'}
+                                    ${isAgile ? '<i data-lucide="workflow" class="w-3.5 h-3.5 text-app-accent"></i> Agile' : '<i data-lucide="check-square" class="w-3.5 h-3.5 text-blue-400"></i> Simple'}
                                 </span>
                                 
                                 <div class="relative">
@@ -1600,11 +1635,7 @@
                                 <div class="flex-1 min-w-0">
                                     <div class="text-[9px] md:text-[10px] text-app-textSecondary uppercase font-semibold tracking-wider truncate">Trimestre cible</div>
                                     <select data-action="update-project" data-project-id="${project.id}" data-field="quarter" class="w-full bg-transparent border-none text-xs md:text-sm text-white font-medium p-0 focus:outline-none appearance-none cursor-pointer truncate">
-                                        <option value="TBD" ${project.quarter === 'TBD' ? 'selected' : ''} class="bg-app-panel text-white">À définir</option>
-                                        <option value="Q1 2026" ${project.quarter === 'Q1 2026' ? 'selected' : ''} class="bg-app-panel text-white">Q1 2026</option>
-                                        <option value="Q2 2026" ${project.quarter === 'Q2 2026' ? 'selected' : ''} class="bg-app-panel text-white">Q2 2026</option>
-                                        <option value="Q3 2026" ${project.quarter === 'Q3 2026' ? 'selected' : ''} class="bg-app-panel text-white">Q3 2026</option>
-                                        <option value="Q4 2026" ${project.quarter === 'Q4 2026' ? 'selected' : ''} class="bg-app-panel text-white">Q4 2026</option>
+                                        ${qOptions}
                                     </select>
                                 </div>
                                 <i data-lucide="chevron-down" class="w-4 h-4 text-app-textSecondary absolute right-4 opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity pointer-events-none shrink-0"></i>
