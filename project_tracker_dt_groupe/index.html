@@ -140,7 +140,7 @@
                 <i data-lucide="folder-kanban" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Projets
             </button>
             <button data-action="navigate" data-view="backlog" id="nav-backlog" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
-                <i data-lucide="list-tree" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Backlog (US)
+                <i data-lucide="list-tree" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Backlog Produit
             </button>
             <button data-action="navigate" data-view="roadmap" id="nav-roadmap" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
                 <i data-lucide="calendar-days" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Roadmap
@@ -158,7 +158,7 @@
         
         <div class="px-4 pb-4 pt-2 text-center select-none">
             <p class="text-[9px] text-app-textSecondary/50 font-medium tracking-wider uppercase">© 2026 DT Prox</p>
-            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.5.0 • Agile Engine</p>
+            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.6.0 • Hybrid Agile</p>
         </div>
 
         <div class="p-4 border-t border-app-border bg-app-panel/30 cursor-pointer hover:bg-app-hover transition-colors" data-action="open-user-switcher">
@@ -245,13 +245,10 @@
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Trimestre cible</label>
-                        <select id="new-project-quarter" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
-                            <option value="TBD">À définir</option>
-                            <option value="Q1 2026">Q1 2026</option>
-                            <option value="Q2 2026">Q2 2026</option>
-                            <option value="Q3 2026">Q3 2026</option>
-                            <option value="Q4 2026">Q4 2026</option>
+                        <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Type de gestion</label>
+                        <select id="new-project-type" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
+                            <option value="simple">Simple (To-Do List)</option>
+                            <option value="agile" selected>Agile (Features / US)</option>
                         </select>
                     </div>
                     <div>
@@ -262,6 +259,20 @@
                             <option value="normale" selected>Normale</option>
                             <option value="basse">Basse</option>
                         </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Trimestre cible</label>
+                        <select id="new-project-quarter" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
+                            <option value="TBD">À définir</option>
+                            <option value="Q1 2026">Q1 2026</option>
+                            <option value="Q2 2026">Q2 2026</option>
+                            <option value="Q3 2026">Q3 2026</option>
+                            <option value="Q4 2026">Q4 2026</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Échéance globale</label>
+                        <input type="date" id="new-project-date" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
                     </div>
                 </div>
             </div>
@@ -342,14 +353,18 @@
                     ];
 
                     const dToday = new Date().toISOString().split('T')[0];
+                    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+                    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 2);
+                    const dYesterday = yesterday.toISOString().split('T')[0];
+                    const dTomorrow = tomorrow.toISOString().split('T')[0];
 
-                    // Données enrichies avec le modèle Agile (Backlog Licorne)
                     this.state.projects = [
                         {
-                            id: "PRJ-05", // Projet basé sur la capture d'écran
+                            id: "PRJ-05", 
                             name: "Licorne Salesforce",
                             description: "Intégration de la nouvelle base de données et des workflows métier.",
                             status: "in-progress", priority: "critique", progress: 0, 
+                            type: "agile", // TYPE AGILE
                             tags: ["Salesforce", "Data"], managerId: "U1", 
                             dueDate: "2026-09-30", quarter: "Q3 2026",
                             attachments: [],
@@ -365,15 +380,31 @@
                         },
                         {
                             id: "PRJ-01",
-                            name: "Migration Cloud AWS 2026",
-                            description: "Basculement de l'infrastructure legacy vers une architecture serverless AWS.",
+                            name: "Migration Serveurs V2",
+                            description: "Migration de l'infrastructure vers la nouvelle baie de serveurs. Action opérationnelle IT.",
                             status: "in-progress", priority: "haute", progress: 0, 
-                            tags: ["Infra", "Cloud"], managerId: "U2", 
+                            type: "simple", // TYPE SIMPLE
+                            tags: ["Infra", "Hardware"], managerId: "U2", 
                             dueDate: "2026-06-30", quarter: "Q2 2026",
                             attachments: [],
                             tasks: [
-                                { id: "US-8", title: "Audit de sécurité", epic: "SECOPS", agileStatus: "done", externalRef: "", dueDate: "" },
-                                { id: "US-9", title: "Migration Base de données", epic: "INFRA", agileStatus: "jira", externalRef: "", dueDate: dToday }
+                                { id: "T-8", title: "Commander les câbles réseau", status: "done", dueDate: dYesterday },
+                                { id: "T-9", title: "Planifier l'arrêt de service (Downtime)", status: "todo", dueDate: dToday },
+                                { id: "T-10", title: "Sauvegarde complète BDD", status: "todo", dueDate: dTomorrow }
+                            ]
+                        },
+                        {
+                            id: "PRJ-06",
+                            name: "Renouvellement Licences SSL",
+                            description: "Action récurrente annuelle pour les domaines publics.",
+                            status: "todo", priority: "normale", progress: 0, 
+                            type: "simple", // TYPE SIMPLE
+                            tags: ["SecOps", "Routine"], managerId: "U1", 
+                            dueDate: "2026-04-15", quarter: "Q2 2026",
+                            attachments: [],
+                            tasks: [
+                                { id: "T-11", title: "Lister les domaines expirant", status: "done", dueDate: "" },
+                                { id: "T-12", title: "Paiement prestataire", status: "todo", dueDate: "" }
                             ]
                         }
                     ];
@@ -435,11 +466,12 @@
 
             exportData() {
                 const bom = "\uFEFF";
-                let csvContent = "ID;Nom du Projet;Trimestre;Statut;Priorité;Échéance;Responsable;Progression (%)\n";
+                let csvContent = "ID;Type;Nom du Projet;Trimestre;Statut;Priorité;Échéance;Responsable;Progression (%)\n";
                 this.state.projects.forEach(p => {
                     const user = this.getUser(p.managerId);
                     const safeName = p.name.replace(/"/g, '""');
-                    csvContent += `${p.id};"${safeName}";${p.quarter || 'TBD'};${p.status};${p.priority};${p.dueDate};"${user.name}";${p.progress}\n`;
+                    const tType = p.type === 'agile' ? "Produit (Agile)" : "Tâches (Simple)";
+                    csvContent += `${p.id};${tType};"${safeName}";${p.quarter || 'TBD'};${p.status};${p.priority};${p.dueDate};"${user.name}";${p.progress}\n`;
                 });
                 const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement("a");
@@ -511,26 +543,47 @@
                 this.renderAll();
             },
 
+            toggleTaskFromModal(projectId, taskId) {
+                this.mutate('Mise à jour de la tâche', () => {
+                    const project = this.state.projects.find(p => p.id === projectId);
+                    if (project) {
+                        const task = project.tasks.find(t => t.id === taskId);
+                        if (task) {
+                            if (project.type === 'agile') {
+                                // Toggle rapide pour mode Agile : Brouillon <-> Terminé
+                                task.agileStatus = task.agileStatus === 'done' ? 'draft' : 'done';
+                            } else {
+                                // Toggle rapide pour mode Simple : A faire <-> Terminé
+                                task.status = task.status === 'done' ? 'todo' : 'done';
+                            }
+                        }
+                    }
+                });
+            },
+
             addTask(projectId) {
-                const title = prompt("Titre de la User Story / Feature :");
+                const proj = this.state.projects.find(p => p.id === projectId);
+                const isAgile = proj.type === 'agile';
+                const title = prompt(`Titre de la nouvelle ${isAgile ? 'User Story' : 'Tâche'} :`);
+                
                 if (title && title.trim() !== "") {
-                    this.mutate('Ajout US', () => {
-                        const proj = this.state.projects.find(p => p.id === projectId);
+                    this.mutate('Ajout', () => {
                         proj.tasks.push({
-                            id: `US-${Date.now().toString().slice(-4)}`,
+                            id: `${isAgile ? 'US' : 'T'}-${Date.now().toString().slice(-4)}`,
                             title: title.trim(),
-                            epic: "SANS EPIC",
-                            agileStatus: 'draft',
-                            externalRef: "",
-                            dueDate: ""
+                            status: 'todo', // Pour mode simple
+                            agileStatus: 'draft', // Pour mode agile
+                            epic: isAgile ? "SANS EPIC" : undefined,
+                            externalRef: isAgile ? "" : undefined,
+                            dueDate: new Date().toISOString().split('T')[0]
                         });
                     });
                 }
             },
 
             deleteTask(projectId, taskId) {
-                if(confirm("Supprimer cette User Story ?")) {
-                    this.mutate('Suppression US', () => {
+                if(confirm("Supprimer cet élément ?")) {
+                    this.mutate('Suppression', () => {
                         const proj = this.state.projects.find(p => p.id === projectId);
                         proj.tasks = proj.tasks.filter(t => t.id !== taskId);
                     });
@@ -594,6 +647,7 @@
             createProject() {
                 const name = document.getElementById('new-project-name').value;
                 const desc = document.getElementById('new-project-desc').value;
+                const type = document.getElementById('new-project-type').value;
                 const priority = document.getElementById('new-project-priority').value;
                 const quarter = document.getElementById('new-project-quarter').value;
                 const date = document.getElementById('new-project-date').value || "";
@@ -603,7 +657,10 @@
                 this.mutate('Création de projet', () => {
                     this.state.projects.unshift({
                         id: `PRJ-${Math.floor(Math.random() * 1000)}`,
-                        name: name, description: desc, status: "backlog", priority: priority,
+                        name: name, description: desc, 
+                        type: type, // SIMPLE OR AGILE
+                        status: type === 'agile' ? "backlog" : "todo", 
+                        priority: priority,
                         progress: 0, tags: ["Nouveau"], managerId: this.state.currentUserId,
                         quarter: quarter, dueDate: date, attachments: [], tasks: []
                     });
@@ -617,8 +674,8 @@
 
             calculateProjectProgress(project) {
                 if (!project.tasks || project.tasks.length === 0) return 0;
-                // Dans le modèle Agile, on considère "done" (4 - Terminé) comme fini
-                const done = project.tasks.filter(t => t.agileStatus === 'done').length;
+                // Calcul adaptatif selon le type de projet
+                const done = project.tasks.filter(t => project.type === 'agile' ? t.agileStatus === 'done' : t.status === 'done').length;
                 return Math.round((done / project.tasks.length) * 100);
             },
             
@@ -640,7 +697,7 @@
                 const styles = {
                     'backlog': { label: 'Backlog', color: 'text-app-textSecondary', border: 'border-app-border' },
                     'refinement': { label: 'En affinage', color: 'text-purple-400', border: 'border-purple-400/30' },
-                    'todo': { label: 'Prêt (To Do)', color: 'text-blue-300', border: 'border-blue-300/30' },
+                    'todo': { label: 'Prêt / À faire', color: 'text-blue-300', border: 'border-blue-300/30' },
                     'in-progress': { label: 'En cours', color: 'text-app-accent', border: 'border-app-accent/50' },
                     'blocked': { label: 'Bloqué', color: 'text-app-danger', border: 'border-app-danger/50' },
                     'done': { label: 'Terminé', color: 'text-app-success', border: 'border-app-success/50' },
@@ -692,7 +749,7 @@
                 this.closeSidebarIfMobile();
                 
                 const titles = {
-                    'dashboard': 'Vue d\'ensemble', 'projects': 'Projets', 'backlog': 'Backlog Agile', 'review': 'Revue & Priorisation',
+                    'dashboard': 'Vue d\'ensemble', 'projects': 'Projets', 'backlog': 'Backlog Produit', 'review': 'Revue & Priorisation',
                     'roadmap': 'Roadmap & Échéances', 'team': 'Gestion d\'Équipe', 'archive': 'Archives'
                 };
                 document.getElementById('current-view-title').textContent = titles[view] || view;
@@ -750,7 +807,7 @@
                 switch(this.state.currentView) {
                     case 'dashboard': html = this.buildDashboardView(); break;
                     case 'projects': html = this.buildProjectsView(); break;
-                    case 'backlog': html = this.buildBacklogView(); break; // NOUVELLE VUE
+                    case 'backlog': html = this.buildBacklogView(); break; 
                     case 'review': html = this.buildReviewView(); break;
                     case 'roadmap': html = this.buildRoadmapView(); break;
                     case 'team': html = this.buildTeamView(); break;
@@ -811,9 +868,14 @@
                 nonArchivedProjects.forEach(p => {
                     p.tasks.forEach(t => {
                         totalTasks++;
-                        if (t.agileStatus === 'done') doneTasks++;
-                        else if (t.agileStatus === 'jira') inProgressTasks++;
-                        else if (t.agileStatus === 'testing') blockedTasks++; // Just for coloring logic in dashboard
+                        // Logique unifiée pour le graphique du dashboard
+                        const isTaskDone = p.type === 'agile' ? t.agileStatus === 'done' : t.status === 'done';
+                        const isTaskBlocked = p.type === 'agile' ? t.agileStatus === 'testing' : t.status === 'blocked'; // Approx pour couleurs
+                        const isTaskInProgress = p.type === 'agile' ? t.agileStatus === 'jira' : t.status === 'in-progress';
+                        
+                        if (isTaskDone) doneTasks++;
+                        else if (isTaskInProgress) inProgressTasks++;
+                        else if (isTaskBlocked) blockedTasks++;
                         else todoTasks++;
                     });
                 });
@@ -825,18 +887,29 @@
 
                 const myActiveProjects = nonArchivedProjects.filter(p => p.managerId === this.state.currentUserId);
 
+                let myUrgentTasks = [];
+                myActiveProjects.forEach(p => {
+                    p.tasks.forEach(t => {
+                        const isDone = p.type === 'agile' ? t.agileStatus === 'done' : t.status === 'done';
+                        if (!isDone && t.dueDate) {
+                            myUrgentTasks.push({ ...t, projectId: p.id, projectName: p.name });
+                        }
+                    });
+                });
+                myUrgentTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+                const topUrgentTasks = myUrgentTasks.slice(0, 5); 
+
                 return `
                     <div id="view-dashboard" class="max-w-6xl mx-auto animate-fade-in pb-10">
                         <div class="flex flex-col xl:flex-row gap-4 md:gap-6 mb-8">
                             
-                            <!-- Health Overview TUILE -->
                             <div class="glass-panel rounded-2xl p-5 md:p-6 flex-1 flex flex-col justify-between border border-app-border/80 relative overflow-hidden">
                                 <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 rounded-full bg-app-accent/10 blur-3xl pointer-events-none"></div>
 
                                 <div class="flex items-start justify-between mb-6">
                                     <div>
                                         <h2 class="text-lg md:text-xl font-bold text-white mb-1">Bonjour, ${this.esc(currentUser.name.split(' ')[0])} 👋</h2>
-                                        <p class="text-xs md:text-sm text-app-textSecondary">Voici l'état de la Roadmap Produit.</p>
+                                        <p class="text-xs md:text-sm text-app-textSecondary">Voici l'état de la Roadmap Produit & Tech.</p>
                                     </div>
                                     <div class="w-10 h-10 rounded-full bg-app-bg border border-app-border flex items-center justify-center text-app-textSecondary shrink-0">
                                         <i data-lucide="activity" class="w-5 h-5"></i>
@@ -845,11 +918,11 @@
                                 
                                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-8 mt-2">
                                     <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
-                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Prêts au Dev</div>
+                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Nouveaux / Prêts</div>
                                         <div class="text-xl md:text-2xl font-bold text-blue-300">${readyProjs}</div>
                                     </div>
                                     <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
-                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">En Affinage</div>
+                                        <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">En Affinage (US)</div>
                                         <div class="text-xl md:text-2xl font-bold text-purple-400">${refinementProjs}</div>
                                     </div>
                                     <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
@@ -864,15 +937,40 @@
 
                                 <div class="mt-auto border-t border-app-border/50 pt-4">
                                     <div class="flex justify-between items-end mb-2">
-                                        <span class="text-[10px] md:text-xs font-semibold text-app-textSecondary uppercase tracking-wider">Avancement Tâches / US</span>
+                                        <span class="text-[10px] md:text-xs font-semibold text-app-textSecondary uppercase tracking-wider">Avancement Global (Tâches & US)</span>
                                         <span class="text-xs font-medium text-white">${pctDone}% Terminées</span>
                                     </div>
                                     <div class="w-full bg-app-bg rounded-full h-1.5 md:h-2 flex overflow-hidden border border-app-border gap-0.5">
                                         <div class="bg-app-success transition-all duration-1000" style="width: ${pctDone}%" title="Terminées: ${pctDone}%"></div>
-                                        <div class="bg-blue-500 transition-all duration-1000" style="width: ${pctInProgress}%" title="En Dev (Jira): ${pctInProgress}%"></div>
-                                        <div class="bg-app-warning transition-all duration-1000" style="width: ${pctBlocked}%" title="À tester: ${pctBlocked}%"></div>
-                                        <div class="bg-app-border transition-all duration-1000" style="width: ${pctTodo}%" title="Refinement/Draft: ${pctTodo}%"></div>
+                                        <div class="bg-blue-500 transition-all duration-1000" style="width: ${pctInProgress}%" title="En Dev: ${pctInProgress}%"></div>
+                                        <div class="bg-app-warning transition-all duration-1000" style="width: ${pctBlocked}%" title="Bloquées / Test: ${pctBlocked}%"></div>
+                                        <div class="bg-app-border transition-all duration-1000" style="width: ${pctTodo}%" title="À faire: ${pctTodo}%"></div>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="glass-panel rounded-2xl p-4 md:p-5 flex-1 xl:max-w-md border-t-2 border-t-app-danger flex flex-col bg-gradient-to-b from-app-panel to-transparent">
+                                <div class="flex items-center justify-between mb-4">
+                                    <span class="text-sm font-semibold text-white">Mes Éléments Urgents</span>
+                                    <i data-lucide="clock" class="w-4 h-4 text-app-textSecondary"></i>
+                                </div>
+                                <div class="flex-1 flex flex-col gap-2 overflow-y-auto max-h-48 xl:max-h-full">
+                                    ${topUrgentTasks.length === 0 ? '<p class="text-xs text-app-textSecondary italic mt-4">Aucune échéance critique.</p>' : ''}
+                                    ${topUrgentTasks.map(t => {
+                                        const overdue = this.isDateOverdue(t.dueDate);
+                                        return `
+                                        <div id="urgent-task-${t.id}" data-action="open-project" data-project-id="${t.projectId}" class="flex items-center justify-between p-2.5 rounded-lg bg-app-bg border border-app-border/50 hover:border-app-border cursor-pointer transition-colors group">
+                                            <div class="flex flex-col flex-1 min-w-0 pr-3">
+                                                <span class="text-sm text-white font-medium truncate group-hover:text-app-accent transition-colors leading-tight">${this.esc(t.title)}</span>
+                                                <span class="text-[10px] text-app-textSecondary truncate mt-0.5">${this.esc(t.projectName)}</span>
+                                            </div>
+                                            <div class="flex items-center shrink-0">
+                                                <span class="text-[10px] px-2 py-1 rounded-md font-medium ${overdue ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-app-panel text-app-textSecondary border border-app-border'}">
+                                                    ${overdue ? 'En retard' : this.formatDateDisplay(t.dueDate)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    `}).join('')}
                                 </div>
                             </div>
                         </div>
@@ -895,11 +993,10 @@
                 `;
             },
 
-            // --- NOUVELLE VUE : BACKLOG AGILE (STYLE NOTION) ---
             buildBacklogView() {
-                // Rassemble toutes les US de tous les projets actifs
+                // Le backlog global ne récupère QUE les tâches des projets de type 'agile'
                 let allUS = [];
-                this.state.projects.filter(p => p.status !== 'done' && p.status !== 'canceled').forEach(p => {
+                this.state.projects.filter(p => p.type === 'agile' && p.status !== 'done' && p.status !== 'canceled').forEach(p => {
                     p.tasks.forEach(t => {
                         allUS.push({ ...t, projectId: p.id, projectName: p.name });
                     });
@@ -909,12 +1006,9 @@
                     <div id="view-backlog" class="max-w-7xl mx-auto animate-fade-in h-full flex flex-col pb-4">
                         <div class="flex justify-between items-center mb-6 shrink-0">
                             <div>
-                                <h2 class="text-xl font-bold text-white mb-1">Backlog Global</h2>
-                                <p class="text-xs text-app-textSecondary">Gestion des User Stories et Features en cours d'affinage.</p>
+                                <h2 class="text-xl font-bold text-white mb-1">Backlog Produit</h2>
+                                <p class="text-xs text-app-textSecondary">Vision globale des User Stories (projets agiles uniquement).</p>
                             </div>
-                            <button class="bg-app-panel border border-app-border text-xs text-white px-3 py-1.5 rounded-lg hover:bg-app-hover transition-colors flex items-center gap-2">
-                                <i data-lucide="filter" class="w-3.5 h-3.5"></i> Filtrer
-                            </button>
                         </div>
 
                         <div class="flex-1 overflow-y-auto glass-panel rounded-xl border border-app-border">
@@ -929,7 +1023,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    ${allUS.length === 0 ? `<tr><td colspan="5" class="text-center py-8 text-app-textSecondary italic">Aucune User Story dans le backlog.</td></tr>` : ''}
+                                    ${allUS.length === 0 ? `<tr><td colspan="5" class="text-center py-8 text-app-textSecondary italic">Aucune User Story dans le backlog actuel.</td></tr>` : ''}
                                     ${allUS.map(us => {
                                         const epicStyle = this.getEpicColor(us.epic);
                                         return `
@@ -1100,6 +1194,7 @@
                                     <div class="flex items-center gap-2 md:gap-3 mb-1">
                                         <span class="text-[10px] md:text-xs font-mono text-app-textSecondary bg-app-bg px-1.5 py-0.5 rounded border border-app-border">${p.id}</span>
                                         <h4 class="text-sm md:text-base font-semibold text-white truncate group-hover:text-app-accent transition-colors">${this.esc(p.name)}</h4>
+                                        ${p.type === 'simple' ? `<i data-lucide="list-todo" class="w-3 h-3 text-app-textSecondary ml-1" title="Projet de tâches simples"></i>` : ''}
                                     </div>
                                     <p class="text-xs md:text-sm text-app-textSecondary line-clamp-1 mb-2">${this.esc(p.description)}</p>
                                     <div class="flex items-center gap-2">
@@ -1295,11 +1390,15 @@
             renderProjectCard(project) {
                 const user = this.getUser(project.managerId);
                 const pStyle = this.getPriorityStyle(project.priority);
+                const isAgile = project.type === 'agile';
 
                 return `
                     <div id="project-card-${project.id}" data-action="open-project" data-project-id="${project.id}" class="glass-panel p-4 md:p-5 rounded-2xl cursor-pointer hover:border-app-accent/50 hover:bg-app-hover transition-all group relative overflow-hidden flex flex-col h-56">
                         <div class="flex justify-between items-start mb-3">
-                            <span class="text-[10px] font-mono text-app-textSecondary border border-app-border bg-app-bg px-2 py-0.5 rounded shadow-sm">${project.id}</span>
+                            <span class="text-[10px] font-mono text-app-textSecondary border border-app-border bg-app-bg px-2 py-0.5 rounded shadow-sm flex items-center gap-1">
+                                ${isAgile ? `<i data-lucide="list-tree" class="w-3 h-3 text-app-accent"></i>` : `<i data-lucide="list-todo" class="w-3 h-3 text-blue-400"></i>`}
+                                ${project.id}
+                            </span>
                             <div class="flex gap-2">
                                 ${project.quarter && project.quarter !== 'TBD' ? `<span class="px-2 py-0.5 text-[9px] uppercase font-bold rounded flex items-center gap-1 bg-app-panel text-app-textSecondary border border-app-border"><i data-lucide="target" class="w-3 h-3"></i> ${project.quarter}</span>` : ''}
                                 <span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded flex items-center gap-1 ${pStyle.bg} ${pStyle.color} border ${pStyle.border}">
@@ -1319,7 +1418,7 @@
                                 <div class="w-6 h-6 rounded-full ${user.color} flex items-center justify-center text-[9px] font-bold text-white shrink-0">${user.initials}</div>
                                 <div class="w-full">
                                     <div class="flex justify-between text-[9px] md:text-[10px] text-app-textSecondary mb-1">
-                                        <span>Progression (US)</span>
+                                        <span>Progression ${isAgile ? '(US)' : '(Tâches)'}</span>
                                         <span>${project.progress}%</span>
                                     </div>
                                     <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
@@ -1341,7 +1440,10 @@
                         <span class="text-xs font-mono text-app-textSecondary w-full md:w-16 order-1 md:order-none flex justify-between md:block">
                             ${project.id}
                         </span>
-                        <div class="w-full md:flex-1 font-medium text-white text-sm truncate order-2 md:order-none">${this.esc(project.name)}</div>
+                        <div class="w-full md:flex-1 font-medium text-white text-sm truncate order-2 md:order-none flex items-center gap-2">
+                            ${project.type === 'simple' ? `<i data-lucide="list-todo" class="w-4 h-4 text-app-textSecondary shrink-0" title="Projet Simple"></i>` : `<i data-lucide="list-tree" class="w-4 h-4 text-app-accent shrink-0" title="Projet Agile"></i>`}
+                            ${this.esc(project.name)}
+                        </div>
                         
                         <div class="w-auto md:w-20 text-center order-3 md:order-none hidden sm:block">
                             ${project.quarter && project.quarter !== 'TBD' ? `<span class="px-2 py-0.5 text-[10px] uppercase font-bold rounded inline-flex items-center gap-1 bg-app-bg text-app-textSecondary border border-app-border"><i data-lucide="target" class="w-3 h-3"></i> ${project.quarter}</span>` : ''}
@@ -1379,12 +1481,13 @@
                 `;
             },
 
-            // --- NOUVEAU MODAL AGILE (User Stories & Epics) ---
+            // --- NOUVEAU MODAL HYBRIDE (Simple vs Agile) ---
             buildProjectModalContent(project) {
                 const user = this.getUser(project.managerId);
                 const pStyle = this.getPriorityStyle(project.priority);
                 const sStyle = this.getStatusStyle(project.status);
                 const attachments = project.attachments || [];
+                const isAgile = project.type === 'agile';
 
                 return `
                     <div class="p-4 md:p-8 border-b border-app-border/50 bg-gradient-to-b from-app-panel to-transparent shrink-0 pt-8 md:pt-8">
@@ -1394,7 +1497,9 @@
                         
                         <div class="flex flex-wrap md:flex-nowrap justify-between items-start mb-4 gap-3">
                             <div class="flex flex-wrap items-center gap-2 md:gap-3 w-full pr-8 md:pr-0">
-                                <span class="px-2 py-1 bg-app-bg border border-app-border rounded-md text-[10px] md:text-xs font-mono text-app-textSecondary">${project.id}</span>
+                                <span class="px-2 py-1 bg-app-bg border border-app-border rounded-md text-[10px] md:text-xs font-mono text-app-textSecondary flex items-center gap-1.5">
+                                    ${isAgile ? '<i data-lucide="list-tree" class="w-3.5 h-3.5 text-app-accent"></i> Agile' : '<i data-lucide="list-todo" class="w-3.5 h-3.5 text-blue-400"></i> Simple'}
+                                </span>
                                 
                                 <div class="relative">
                                     <select data-action="update-project" data-project-id="${project.id}" data-field="priority" class="badge-select px-2 md:px-2.5 py-1 text-[10px] md:text-[11px] uppercase font-bold rounded flex items-center ${pStyle.bg} ${pStyle.color} border ${pStyle.border}">
@@ -1407,8 +1512,10 @@
 
                                 <div class="relative">
                                     <select data-action="update-project" data-project-id="${project.id}" data-field="status" class="badge-select px-2 md:px-2.5 py-1 text-[10px] md:text-[11px] uppercase font-bold rounded bg-app-bg border ${sStyle.border} ${sStyle.color}">
-                                        <option value="backlog" ${project.status === 'backlog' ? 'selected' : ''}>Backlog</option>
-                                        <option value="refinement" ${project.status === 'refinement' ? 'selected' : ''}>En affinage</option>
+                                        ${isAgile ? `
+                                            <option value="backlog" ${project.status === 'backlog' ? 'selected' : ''}>Backlog</option>
+                                            <option value="refinement" ${project.status === 'refinement' ? 'selected' : ''}>En affinage</option>
+                                        ` : ''}
                                         <option value="todo" ${project.status === 'todo' ? 'selected' : ''}>Prêt (To Do)</option>
                                         <option value="in-progress" ${project.status === 'in-progress' ? 'selected' : ''}>En cours</option>
                                         <option value="blocked" ${project.status === 'blocked' ? 'selected' : ''}>Bloqué</option>
@@ -1439,6 +1546,7 @@
 
                     <div class="p-4 md:p-8 flex-1 overflow-y-auto bg-app-bg/50">
                         
+                        <!-- PIECES JOINTES -->
                         <div class="mb-8">
                             <div class="flex items-center justify-between mb-3">
                                 <h3 class="text-[10px] md:text-xs font-semibold text-app-textSecondary uppercase tracking-wider flex items-center gap-1.5">
@@ -1454,12 +1562,12 @@
                             
                             <div class="flex flex-wrap gap-2">
                                 ${attachments.map((file, idx) => {
-                                    const isImage = file.type === 'image';
-                                    const icon = isImage ? 'image' : 'file-text';
+                                    const isImg = file.type === 'image';
+                                    const icon = isImg ? 'image' : 'file-text';
                                     return `
                                     <div id="file-${project.id}-${idx}" class="flex items-center bg-app-panel border border-app-border rounded-lg p-1.5 pr-2 group/file hover:border-app-textSecondary/50 transition-colors max-w-[200px]">
                                         <div class="w-6 h-6 rounded bg-app-bg border border-app-border flex items-center justify-center mr-2 shrink-0">
-                                            <i data-lucide="${icon}" class="w-3.5 h-3.5 ${isImage ? 'text-purple-400' : 'text-blue-400'}"></i>
+                                            <i data-lucide="${icon}" class="w-3.5 h-3.5 ${isImg ? 'text-purple-400' : 'text-blue-400'}"></i>
                                         </div>
                                         <a href="${file.url}" target="_blank" class="text-xs text-white truncate hover:underline flex-1" title="${this.esc(file.name)}">${this.esc(file.name)}</a>
                                         <button data-action="delete-attachment" data-project-id="${project.id}" data-attachment-name="${this.esc(file.name)}" class="ml-2 text-app-textSecondary hover:text-red-400 opacity-50 md:opacity-0 md:group-hover/file:opacity-100 transition-opacity">
@@ -1472,6 +1580,7 @@
                             </div>
                         </div>
 
+                        <!-- LIGNE 3 COLONNES -->
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8 border-t border-app-border/50 pt-8">
                             <div class="glass-panel p-3 md:p-4 rounded-xl flex items-center gap-3 md:gap-4 relative group overflow-hidden">
                                 <div class="w-8 h-8 md:w-10 md:h-10 rounded-full ${user.color} flex items-center justify-center text-xs md:text-sm font-bold text-white shadow-inner shrink-0">${user.initials}</div>
@@ -1512,10 +1621,12 @@
                             </div>
                         </div>
 
-                        <!-- User Stories Section -->
+                        <!-- SECTION TACHES (ADAPTATIVE) -->
                         <div class="mb-4 flex items-center justify-between">
-                            <h3 class="text-xs md:text-sm font-semibold text-white uppercase tracking-wider">Features & US (${project.progress}% Terminé)</h3>
-                            <button data-action="add-task" data-project-id="${project.id}" class="text-xs text-app-accent hover:text-blue-400 flex items-center p-2 -mr-2"><i data-lucide="plus" class="w-3 h-3 mr-1"></i> Nouvelle US</button>
+                            <h3 class="text-xs md:text-sm font-semibold text-white uppercase tracking-wider">
+                                ${isAgile ? 'Features & US' : 'Liste des tâches'} (${project.progress}% Terminé)
+                            </h3>
+                            <button data-action="add-task" data-project-id="${project.id}" class="text-xs text-app-accent hover:text-blue-400 flex items-center p-2 -mr-2"><i data-lucide="plus" class="w-3 h-3 mr-1"></i> ${isAgile ? 'Nouvelle US' : 'Nouvelle Tâche'}</button>
                         </div>
                         
                         <div class="w-full bg-app-panel rounded-full h-1.5 md:h-2 mb-4 overflow-hidden border border-app-border">
@@ -1524,40 +1635,68 @@
 
                         <div class="space-y-2 mb-8">
                             ${project.tasks.map(t => {
-                                const isDone = t.agileStatus === 'done';
-                                const epicStyle = this.getEpicColor(t.epic);
-                                const statusConfig = this.getAgileStatusConfig(t.agileStatus);
+                                const isDone = isAgile ? t.agileStatus === 'done' : t.status === 'done';
+                                const isOverdue = !isDone && this.isDateOverdue(t.dueDate);
                                 
-                                return `
-                                <div id="modal-us-${t.id}" class="flex flex-col xl:flex-row xl:items-center justify-between p-3 rounded-lg border border-app-border/50 hover:border-app-border hover:bg-app-hover transition-colors group gap-3">
-                                    
-                                    <div class="flex flex-col sm:flex-row sm:items-center gap-3 flex-1 min-w-0">
-                                        <div class="flex items-center flex-1 min-w-0">
-                                            <i data-lucide="file-text" class="w-4 h-4 text-app-textSecondary mr-3 shrink-0"></i>
-                                            <input type="text" data-action="update-task" data-project-id="${project.id}" data-task-id="${t.id}" data-field="title" value="${this.esc(t.title)}" class="bg-transparent border-none focus:outline-none focus:ring-0 w-full text-xs md:text-sm ${isDone ? 'text-app-textSecondary line-through' : 'text-white'} hover:bg-app-bg rounded px-1 transition-colors">
+                                // RENDU AGILE (US avec Epic et Statut complexe)
+                                if (isAgile) {
+                                    const epicStyle = this.getEpicColor(t.epic);
+                                    const statusConfig = this.getAgileStatusConfig(t.agileStatus);
+                                    return `
+                                    <div id="modal-us-${t.id}" class="flex flex-col xl:flex-row xl:items-center justify-between p-3 rounded-lg border border-app-border/50 hover:border-app-border hover:bg-app-hover transition-colors group gap-3">
+                                        
+                                        <div class="flex flex-col sm:flex-row sm:items-center gap-3 flex-1 min-w-0">
+                                            <div class="flex items-center flex-1 min-w-0 cursor-pointer" data-action="toggle-task" data-project-id="${project.id}" data-task-id="${t.id}">
+                                                <div class="w-4 h-4 md:w-5 md:h-5 rounded border flex items-center justify-center mr-3 shrink-0 transition-colors ${isDone ? 'bg-app-success border-app-success text-white' : 'border-app-textSecondary group-hover:border-app-success group-hover:bg-app-success/10'}">
+                                                    ${isDone ? '<i data-lucide="check" class="w-3 h-3"></i>' : ''}
+                                                </div>
+                                                <input type="text" data-action="update-task" data-project-id="${project.id}" data-task-id="${t.id}" data-field="title" value="${this.esc(t.title)}" class="bg-transparent border-none focus:outline-none focus:ring-0 w-full text-xs md:text-sm ${isDone ? 'text-app-textSecondary line-through' : 'text-white'} hover:bg-app-bg rounded px-1 transition-colors" onclick="event.stopPropagation()">
+                                            </div>
+                                            
+                                            <div class="flex items-center shrink-0 ml-7 sm:ml-0 w-32">
+                                                <input type="text" data-action="update-task" data-project-id="${project.id}" data-task-id="${t.id}" data-field="epic" value="${this.esc(t.epic)}" placeholder="Epic..." class="text-[9px] uppercase font-bold px-1.5 py-0.5 rounded border bg-transparent focus:outline-none focus:bg-app-bg ${epicStyle} w-full truncate">
+                                            </div>
                                         </div>
                                         
-                                        <div class="flex items-center shrink-0 ml-7 sm:ml-0 w-32">
-                                            <input type="text" data-action="update-task" data-project-id="${project.id}" data-task-id="${t.id}" data-field="epic" value="${this.esc(t.epic)}" placeholder="Epic..." class="text-[9px] uppercase font-bold px-1.5 py-0.5 rounded border bg-transparent focus:outline-none focus:bg-app-bg ${epicStyle} w-full truncate">
+                                        <div class="flex items-center justify-between xl:justify-end shrink-0 gap-3 ml-7 xl:ml-0">
+                                            <select data-action="update-task" data-project-id="${project.id}" data-task-id="${t.id}" data-field="agileStatus" class="badge-select text-[10px] font-bold px-2 py-1 rounded bg-app-bg border border-app-border focus:outline-none focus:border-app-accent ${statusConfig.color}">
+                                                <option value="draft" ${t.agileStatus === 'draft' ? 'selected' : ''}>0 - US à détailler</option>
+                                                <option value="refinement" ${t.agileStatus === 'refinement' ? 'selected' : ''}>1 - Refinement</option>
+                                                <option value="jira" ${t.agileStatus === 'jira' ? 'selected' : ''}>2 - JIRA / Dev</option>
+                                                <option value="testing" ${t.agileStatus === 'testing' ? 'selected' : ''}>3 - À tester</option>
+                                                <option value="done" ${t.agileStatus === 'done' ? 'selected' : ''}>4 - Terminé</option>
+                                            </select>
+
+                                            <button data-action="delete-task" data-project-id="${project.id}" data-task-id="${t.id}" class="text-app-textSecondary hover:text-red-400 xl:opacity-0 xl:group-hover:opacity-100 transition-opacity p-2 -mr-2 sm:p-1 sm:mr-0" title="Supprimer l'US">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
                                         </div>
                                     </div>
-                                    
-                                    <div class="flex items-center justify-between xl:justify-end shrink-0 gap-3 ml-7 xl:ml-0">
-                                        <select data-action="update-task" data-project-id="${project.id}" data-task-id="${t.id}" data-field="agileStatus" class="badge-select text-[10px] font-bold px-2 py-1 rounded bg-app-bg border border-app-border focus:outline-none focus:border-app-accent ${statusConfig.color}">
-                                            <option value="draft" ${t.agileStatus === 'draft' ? 'selected' : ''}>0 - US à détailler</option>
-                                            <option value="refinement" ${t.agileStatus === 'refinement' ? 'selected' : ''}>1 - Refinement</option>
-                                            <option value="jira" ${t.agileStatus === 'jira' ? 'selected' : ''}>2 - JIRA / Dev</option>
-                                            <option value="testing" ${t.agileStatus === 'testing' ? 'selected' : ''}>3 - À tester</option>
-                                            <option value="done" ${t.agileStatus === 'done' ? 'selected' : ''}>4 - Terminé</option>
-                                        </select>
-
-                                        <button data-action="delete-task" data-project-id="${project.id}" data-task-id="${t.id}" class="text-app-textSecondary hover:text-red-400 xl:opacity-0 xl:group-hover:opacity-100 transition-opacity p-2 -mr-2 sm:p-1 sm:mr-0" title="Supprimer l'US">
-                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                        </button>
+                                    `;
+                                } 
+                                // RENDU SIMPLE (To-do list épurée)
+                                else {
+                                    return `
+                                    <div id="modal-task-${t.id}" class="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg border border-app-border/50 hover:border-app-border hover:bg-app-hover transition-colors group gap-2">
+                                        <div class="flex items-center flex-1 min-w-0 cursor-pointer" data-action="toggle-task" data-project-id="${project.id}" data-task-id="${t.id}">
+                                            <div class="w-4 h-4 md:w-5 md:h-5 rounded border flex items-center justify-center mr-3 shrink-0 transition-colors ${isDone ? 'bg-app-accent border-app-accent text-white' : 'border-app-textSecondary group-hover:border-app-accent group-hover:bg-app-accent/10'}">
+                                                ${isDone ? '<i data-lucide="check" class="w-3 h-3"></i>' : ''}
+                                            </div>
+                                            <input type="text" data-action="update-task" data-project-id="${project.id}" data-task-id="${t.id}" data-field="title" value="${this.esc(t.title)}" class="bg-transparent border-none focus:outline-none focus:ring-0 w-full text-xs md:text-sm ${isDone ? 'text-app-textSecondary line-through' : 'text-white'} hover:bg-app-bg rounded px-1 transition-colors" onclick="event.stopPropagation()">
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between sm:justify-end shrink-0 gap-3 ml-7 sm:ml-0">
+                                            <input type="date" value="${t.dueDate || ''}" data-action="update-task" data-project-id="${project.id}" data-task-id="${t.id}" data-field="dueDate" class="bg-app-bg sm:bg-transparent border border-app-border sm:border-transparent hover:border-app-border focus:border-app-accent rounded px-2 sm:px-1 py-1 sm:py-0.5 text-[10px] ${isOverdue ? 'text-red-400 font-bold' : 'text-app-textSecondary'} cursor-pointer outline-none">
+                                            
+                                            <button data-action="delete-task" data-project-id="${project.id}" data-task-id="${t.id}" class="text-app-textSecondary hover:text-red-400 md:opacity-0 md:group-hover:opacity-100 transition-opacity p-2 -mr-2 sm:p-1 sm:mr-0" title="Supprimer la tâche">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            `}).join('')}
-                            ${project.tasks.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucune User Story (US) pour le moment.</p>' : ''}
+                                    `;
+                                }
+                            }).join('')}
+                            ${project.tasks.length === 0 ? `<p class="text-xs text-app-textSecondary italic">Aucune ${isAgile ? 'User Story' : 'tâche'} pour le moment.</p>` : ''}
                         </div>
 
                         <!-- Footer Actions -->
