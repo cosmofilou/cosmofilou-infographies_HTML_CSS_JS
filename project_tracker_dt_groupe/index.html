@@ -96,7 +96,6 @@
             color: #EDEDED;
         }
         
-        /* Table styles for Backlog */
         .notion-table th { font-weight: 500; color: #8A8F98; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.65rem; padding: 0.75rem 1rem; border-bottom: 1px solid #22252A; }
         .notion-table td { padding: 0.5rem 1rem; border-bottom: 1px solid rgba(34, 37, 42, 0.5); font-size: 0.8rem; }
         .notion-table tr:hover td { background-color: rgba(28, 31, 38, 0.5); }
@@ -109,6 +108,10 @@
         input[type="date"]::-webkit-calendar-picker-indicator:hover {
             opacity: 1;
         }
+        
+        /* Cacher la scrollbar mais garder le scroll pour les listes de KPIs */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-app-bg text-app-textPrimary font-sans antialiased h-screen overflow-hidden flex selection:bg-app-accent selection:text-white">
@@ -158,7 +161,7 @@
         
         <div class="px-4 pb-4 pt-2 text-center select-none">
             <p class="text-[9px] text-app-textSecondary/50 font-medium tracking-wider uppercase">© 2026 DT Prox</p>
-            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.8.0 • Team Management</p>
+            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.9.0 • Scalable Dashboards</p>
         </div>
 
         <div class="p-4 border-t border-app-border bg-app-panel/30 cursor-pointer hover:bg-app-hover transition-colors" data-action="open-user-switcher">
@@ -262,7 +265,6 @@
                     </div>
                     <div>
                         <label class="block text-xs text-app-textSecondary uppercase tracking-wider mb-1">Trimestre cible</label>
-                        <!-- Injecté dynamiquement par JS (getRollingQuarters) -->
                         <select id="new-project-quarter" class="w-full bg-app-bg border border-app-border rounded-lg px-3 py-2 text-white focus:outline-none focus:border-app-accent">
                         </select>
                     </div>
@@ -341,7 +343,6 @@
             init() {
                 this.setupEventListeners(); 
                 
-                // Initialisation dynamique des Trimestres Glissants (Rolling Quarters)
                 const qOptions = this.getRollingQuarters().map(q => `<option value="${q}">${q === 'TBD' ? 'À définir' : q}</option>`).join('');
                 document.getElementById('new-project-quarter').innerHTML = qOptions;
                 
@@ -349,16 +350,21 @@
                     this.state.users = [
                         { id: "U1", name: "Jean Dupont", role: "Directeur Tech", initials: "JD", color: "bg-blue-600" },
                         { id: "U2", name: "Sarah Connor", role: "Lead DevOps", initials: "SC", color: "bg-purple-600" },
-                        { id: "U3", name: "Alan Turing", role: "Archi Data", initials: "AT", color: "bg-emerald-600" }
+                        { id: "U3", name: "Alan Turing", role: "Archi Data", initials: "AT", color: "bg-emerald-600" },
+                        { id: "U4", name: "Ada Lovelace", role: "Développeuse", initials: "AL", color: "bg-pink-600" },
+                        { id: "U5", name: "Grace Hopper", role: "QA Engineer", initials: "GH", color: "bg-orange-600" }
                     ];
 
-                    const dToday = new Date().toISOString().split('T')[0];
-                    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-                    const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 2);
+                    const today = new Date();
+                    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+                    const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 2);
+                    const inTwoWeeks = new Date(today); inTwoWeeks.setDate(inTwoWeeks.getDate() + 14);
+                    
+                    const dToday = today.toISOString().split('T')[0];
                     const dYesterday = yesterday.toISOString().split('T')[0];
                     const dTomorrow = tomorrow.toISOString().split('T')[0];
+                    const dInTwoWeeks = inTwoWeeks.toISOString().split('T')[0];
                     
-                    // Génération intelligente des trimestres pour les données mockées (Current & Next)
                     const quarters = this.getRollingQuarters();
                     const currentQ = quarters[1] || "Q1 2026";
                     const nextQ = quarters[2] || "Q2 2026";
@@ -369,17 +375,17 @@
                             name: "Licorne Salesforce",
                             description: "Intégration de la nouvelle base de données et des workflows métier.",
                             status: "in-progress", priority: "critique", progress: 0, 
-                            type: "agile", // TYPE AGILE
-                            tags: ["Salesforce", "Data"], managerId: "U1", 
+                            type: "agile",
+                            tags: ["Salesforce", "Data", "CRM"], managerId: "U1", 
                             dueDate: "2026-09-30", quarter: nextQ,
                             attachments: [],
                             tasks: [
                                 { id: "US-1", title: "Workflow pose", epic: "GAP HYDROPLAN", agileStatus: "testing", externalRef: "Gap Analysis Hydroplan", dueDate: dToday },
                                 { id: "US-2", title: "Résiliation", epic: "GAP HYDROPLAN", agileStatus: "jira", externalRef: "Gap Analysis Hydroplan", dueDate: "" },
                                 { id: "US-3", title: "Suppression lieu & pdm", epic: "FIABILISATION", agileStatus: "jira", externalRef: "Pas présent dans Airsaas", dueDate: "" },
-                                { id: "US-4", title: "Débloquer bouton création contrat", epic: "GAP HYDROPLAN", agileStatus: "draft", externalRef: "Gap Analysis Hydroplan", dueDate: "" },
-                                { id: "US-5", title: "Bascule des traitements d'intégration vers SNOWFLAKE", epic: "FIABILISATION", agileStatus: "testing", externalRef: "Pas présent dans Airsaas", dueDate: "" },
-                                { id: "US-6", title: "Annulation demande de travail", epic: "FIABILISATION", agileStatus: "refinement", externalRef: "Pas présent dans Airsaas", dueDate: "" },
+                                { id: "US-4", title: "Débloquer bouton création", epic: "GAP HYDROPLAN", agileStatus: "draft", externalRef: "Gap Analysis Hydroplan", dueDate: "" },
+                                { id: "US-5", title: "Bascule SNOWFLAKE", epic: "FIABILISATION", agileStatus: "testing", externalRef: "Pas présent dans Airsaas", dueDate: "" },
+                                { id: "US-6", title: "Annulation demande", epic: "FIABILISATION", agileStatus: "refinement", externalRef: "Pas présent dans Airsaas", dueDate: dInTwoWeeks },
                                 { id: "US-7", title: "Calibrage planning", epic: "EXPLOITATION", agileStatus: "refinement", externalRef: "Pas présent dans Airsaas", dueDate: "" }
                             ]
                         },
@@ -388,8 +394,8 @@
                             name: "Migration Serveurs V2",
                             description: "Migration de l'infrastructure vers la nouvelle baie de serveurs. Action opérationnelle IT.",
                             status: "in-progress", priority: "haute", progress: 0, 
-                            type: "simple", // TYPE SIMPLE
-                            tags: ["Infra", "Hardware"], managerId: "U2", 
+                            type: "simple",
+                            tags: ["Infra", "Hardware", "SecOps"], managerId: "U2", 
                             dueDate: "2026-06-30", quarter: currentQ,
                             attachments: [],
                             tasks: [
@@ -403,13 +409,13 @@
                             name: "Renouvellement Licences SSL",
                             description: "Action récurrente annuelle pour les domaines publics.",
                             status: "todo", priority: "normale", progress: 0, 
-                            type: "simple", // TYPE SIMPLE
+                            type: "simple",
                             tags: ["SecOps", "Routine"], managerId: "U1", 
                             dueDate: "2026-04-15", quarter: currentQ,
                             attachments: [],
                             tasks: [
                                 { id: "T-11", title: "Lister les domaines expirant", status: "done", dueDate: "" },
-                                { id: "T-12", title: "Paiement prestataire", status: "todo", dueDate: "" }
+                                { id: "T-12", title: "Paiement prestataire", status: "todo", dueDate: dInTwoWeeks }
                             ]
                         }
                     ];
@@ -421,13 +427,11 @@
                 }, 800);
             },
 
-            // --- GENERATEUR DE TRIMESTRES GLISSANTS (Rolling Quarters) ---
             getRollingQuarters() {
                 const quarters = ['TBD'];
                 const d = new Date();
                 let year = d.getFullYear();
                 let q = Math.floor(d.getMonth() / 3) + 1;
-                // Génère les 6 prochains trimestres automatiquement
                 for(let i = 0; i < 6; i++) {
                     quarters.push(`Q${q} ${year}`);
                     q++;
@@ -436,7 +440,6 @@
                 return quarters;
             },
 
-            // --- 🛡️ SECURITE (Prévention XSS) ---
             esc(str) {
                 if (str == null) return '';
                 return String(str)
@@ -447,7 +450,6 @@
                     .replace(/'/g, '&#039;');
             },
 
-            // --- 🔄 ARCHITECTURE DE MUTATION (Optimistic UI) ---
             async mutate(actionName, mutationFn) {
                 const previousState = JSON.stringify(this.state.projects);
                 try {
@@ -561,38 +563,6 @@
                 this.updateSidebarUserDisplay();
                 this.closeModal('user-switcher-modal');
                 this.renderAll();
-            },
-
-            addUser() {
-                const name = prompt("Nom complet du nouveau collaborateur :");
-                if (!name || name.trim() === "") return;
-                
-                const role = prompt("Rôle (ex: Développeur Backend) :") || "Membre";
-                
-                // Calcul des initiales (Max 2 lettres)
-                const parts = name.trim().split(" ");
-                let initials = parts[0].substring(0, 1).toUpperCase();
-                if (parts.length > 1) {
-                    initials += parts[parts.length - 1].substring(0, 1).toUpperCase();
-                } else {
-                    initials += parts[0].substring(1, 2).toUpperCase() || "X";
-                }
-
-                // Couleur aléatoire du cercle
-                const colors = ["bg-blue-600", "bg-purple-600", "bg-emerald-600", "bg-red-600", "bg-orange-600", "bg-pink-600"];
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-
-                this.mutate('Ajout de collaborateur', () => {
-                    this.state.users.push({
-                        id: `U${Date.now()}`,
-                        name: name.trim(),
-                        role: role.trim(),
-                        initials: initials,
-                        color: randomColor
-                    });
-                });
-                
-                this.showToast(`Collaborateur ${name} ajouté avec succès.`, "success");
             },
 
             toggleTaskFromModal(projectId, taskId) {
@@ -839,7 +809,6 @@
                 }
             },
 
-            // --- ⚡ MOTEUR DE RENDU HAUTE PERFORMANCE (Morphdom) ---
             renderAll() {
                 if (!this.state.isLoading) {
                     this.state.projects.forEach(p => { p.progress = this.calculateProjectProgress(p); });
@@ -917,9 +886,8 @@
                 nonArchivedProjects.forEach(p => {
                     p.tasks.forEach(t => {
                         totalTasks++;
-                        // Logique unifiée pour le graphique du dashboard
                         const isTaskDone = p.type === 'agile' ? t.agileStatus === 'done' : t.status === 'done';
-                        const isTaskBlocked = p.type === 'agile' ? t.agileStatus === 'testing' : t.status === 'blocked'; // Approx pour couleurs
+                        const isTaskBlocked = p.type === 'agile' ? t.agileStatus === 'testing' : t.status === 'blocked'; 
                         const isTaskInProgress = p.type === 'agile' ? t.agileStatus === 'jira' : t.status === 'in-progress';
                         
                         if (isTaskDone) doneTasks++;
@@ -1037,6 +1005,172 @@
                                 .filter(p => p.priority === 'critique' || p.priority === 'haute')
                                 .map(p => this.renderProjectCard(p)).join('')}
                             ${myActiveProjects.filter(p => p.priority === 'critique' || p.priority === 'haute').length === 0 ? '<p class="text-app-textSecondary text-sm col-span-3">Aucun projet critique ou haut actuellement.</p>' : ''}
+                        </div>
+                    </div>
+                `;
+            },
+
+            // --- NOUVEAUX KPIS SCALABLES ---
+            buildKPIView() {
+                // 1. SCALABLE WORKLOAD (Toutes les personnes, conteneur scrollable)
+                const userWorkload = this.state.users.map(u => {
+                    const activeProjs = this.state.projects.filter(p => p.managerId === u.id && p.status !== 'done');
+                    return { ...u, count: activeProjs.length };
+                }).sort((a, b) => b.count - a.count); 
+                
+                const maxCount = Math.max(...userWorkload.map(u => u.count), 1); 
+
+                // 2. SCALABLE TAGS (Barre horizontale segmentée)
+                const tagCounts = {};
+                let totalTags = 0;
+                this.state.projects.filter(p => p.status !== 'done').forEach(p => {
+                    p.tags.forEach(tag => {
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                        totalTags++;
+                    });
+                });
+                
+                const tagPalette = ['bg-blue-500', 'bg-purple-500', 'bg-emerald-500', 'bg-pink-500', 'bg-orange-500', 'bg-teal-500', 'bg-indigo-500', 'bg-rose-500'];
+                const sortedTags = Object.entries(tagCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .map((t, index) => ({
+                        name: t[0],
+                        count: t[1],
+                        pct: totalTags > 0 ? Math.round((t[1] / totalTags) * 100) : 0,
+                        color: tagPalette[index % tagPalette.length]
+                    }));
+
+                // 3. NOUVEAU KPI : Santé des Échéances Globales
+                let overdueCount = 0, atRiskCount = 0, onTrackCount = 0, noDateCount = 0;
+                const todayDate = new Date();
+                todayDate.setHours(0,0,0,0);
+                const nextWeekDate = new Date(todayDate);
+                nextWeekDate.setDate(nextWeekDate.getDate() + 7);
+
+                this.state.projects.filter(p => p.status !== 'done').forEach(p => {
+                    p.tasks.forEach(t => {
+                        const isDone = p.type === 'agile' ? t.agileStatus === 'done' : t.status === 'done';
+                        if (!isDone) {
+                            if (!t.dueDate) {
+                                noDateCount++;
+                            } else {
+                                const d = new Date(t.dueDate);
+                                if (d < todayDate) overdueCount++;
+                                else if (d <= nextWeekDate) atRiskCount++;
+                                else onTrackCount++;
+                            }
+                        }
+                    });
+                });
+                const totalOpenTasksForDeadlines = overdueCount + atRiskCount + onTrackCount + noDateCount;
+
+                return `
+                    <div class="mb-8">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                            
+                            <!-- KPI 1 : Santé des Échéances (Nouveau) -->
+                            <div class="glass-panel p-5 md:p-6 rounded-2xl flex flex-col h-64">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xs md:text-sm font-semibold text-white">Santé des Échéances</h3>
+                                    <i data-lucide="calendar-alert" class="w-4 h-4 text-app-textSecondary opacity-50"></i>
+                                </div>
+                                <p class="text-[10px] text-app-textSecondary mb-6">Sur l'ensemble des tâches actives.</p>
+                                
+                                <div class="space-y-4 flex-1 flex flex-col justify-center">
+                                    ${totalOpenTasksForDeadlines === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucune tâche ouverte.</p>' : ''}
+                                    ${totalOpenTasksForDeadlines > 0 ? `
+                                        <div>
+                                            <div class="flex justify-between text-[10px] md:text-xs mb-1.5">
+                                                <span class="text-red-400 font-medium flex items-center gap-1.5"><i data-lucide="alert-triangle" class="w-3 h-3"></i> En retard</span> 
+                                                <span class="text-app-textSecondary font-mono">${overdueCount}</span>
+                                            </div>
+                                            <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
+                                                <div class="bg-red-500 h-full transition-all duration-1000" style="width: ${Math.round((overdueCount/totalOpenTasksForDeadlines)*100)}%"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between text-[10px] md:text-xs mb-1.5">
+                                                <span class="text-app-warning font-medium flex items-center gap-1.5"><i data-lucide="clock" class="w-3 h-3"></i> À risque (< 7j)</span> 
+                                                <span class="text-app-textSecondary font-mono">${atRiskCount}</span>
+                                            </div>
+                                            <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
+                                                <div class="bg-app-warning h-full transition-all duration-1000" style="width: ${Math.round((atRiskCount/totalOpenTasksForDeadlines)*100)}%"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between text-[10px] md:text-xs mb-1.5">
+                                                <span class="text-app-success font-medium flex items-center gap-1.5"><i data-lucide="check-circle-2" class="w-3 h-3"></i> Dans les temps</span> 
+                                                <span class="text-app-textSecondary font-mono">${onTrackCount}</span>
+                                            </div>
+                                            <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
+                                                <div class="bg-app-success h-full transition-all duration-1000" style="width: ${Math.round((onTrackCount/totalOpenTasksForDeadlines)*100)}%"></div>
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+
+                            <!-- KPI 2 : Charge Collaborateurs (Scalable) -->
+                            <div class="glass-panel p-5 md:p-6 rounded-2xl flex flex-col h-64">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xs md:text-sm font-semibold text-white">Charge de l'équipe</h3>
+                                    <i data-lucide="users" class="w-4 h-4 text-app-textSecondary opacity-50"></i>
+                                </div>
+                                <div class="overflow-y-auto no-scrollbar flex-1 pr-2 space-y-4">
+                                    ${userWorkload.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucun projet actif.</p>' : ''}
+                                    ${userWorkload.map(u => {
+                                        const pct = Math.round((u.count / maxCount) * 100);
+                                        let barColor = "bg-app-accent";
+                                        if (u.count > 2) barColor = "bg-app-danger"; 
+                                        else if (u.count === 2) barColor = "bg-app-warning"; 
+                                        
+                                        return `
+                                        <div>
+                                            <div class="flex justify-between items-center text-[10px] md:text-xs mb-1.5">
+                                                <div class="flex items-center gap-2">
+                                                    <div class="w-4 h-4 rounded-full ${u.color} flex items-center justify-center text-[8px] font-bold text-white shrink-0">${u.initials}</div>
+                                                    <span class="text-white truncate max-w-[100px]">${this.esc(u.name)}</span>
+                                                </div>
+                                                <span class="text-app-textSecondary font-mono shrink-0">${u.count} proj.</span>
+                                            </div>
+                                            <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
+                                                <div class="${barColor} h-full rounded-full transition-all duration-1000" style="width: ${pct}%"></div>
+                                            </div>
+                                        </div>
+                                    `}).join('')}
+                                </div>
+                            </div>
+
+                            <!-- KPI 3 : Répartition par Tag (Scalable Segmented) -->
+                            <div class="glass-panel p-5 md:p-6 rounded-2xl flex flex-col h-64">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xs md:text-sm font-semibold text-white">Répartition Domaines</h3>
+                                    <i data-lucide="pie-chart" class="w-4 h-4 text-app-textSecondary opacity-50"></i>
+                                </div>
+                                
+                                <div class="flex-1 flex flex-col justify-center">
+                                    ${sortedTags.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucun tag utilisé.</p>' : `
+                                        <!-- Barre Segmentée Unique -->
+                                        <div class="w-full bg-app-bg rounded-full h-3 flex overflow-hidden border border-app-border gap-0.5 mb-6">
+                                            ${sortedTags.map(tag => `
+                                                <div class="${tag.color} transition-all duration-1000" style="width: ${tag.pct}%" title="${this.esc(tag.name)}: ${tag.pct}%"></div>
+                                            `).join('')}
+                                        </div>
+                                        
+                                        <!-- Légende Flexible (Flex-wrap) -->
+                                        <div class="flex flex-wrap gap-2 overflow-y-auto no-scrollbar max-h-[100px] content-start">
+                                            ${sortedTags.map(tag => `
+                                                <div class="flex items-center bg-app-bg border border-app-border px-2 py-1 rounded-md">
+                                                    <div class="w-2 h-2 rounded-full ${tag.color} mr-1.5 shrink-0"></div>
+                                                    <span class="text-[9px] text-white font-medium mr-1 truncate max-w-[60px]">${this.esc(tag.name)}</span>
+                                                    <span class="text-[9px] text-app-textSecondary font-mono">${tag.pct}%</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    `}
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 `;
@@ -1290,11 +1424,12 @@
                 return html;
             },
 
+            // --- NOUVEAUX KPIS SCALABLES ---
             buildKPIView() {
                 const userWorkload = this.state.users.map(u => {
                     const activeProjs = this.state.projects.filter(p => p.managerId === u.id && p.status !== 'done');
                     return { ...u, count: activeProjs.length };
-                }).sort((a, b) => b.count - a.count).slice(0, 4); 
+                }).sort((a, b) => b.count - a.count); 
                 
                 const maxCount = Math.max(...userWorkload.map(u => u.count), 1); 
 
@@ -1307,39 +1442,109 @@
                     });
                 });
                 
+                const tagPalette = ['bg-blue-500', 'bg-purple-500', 'bg-emerald-500', 'bg-pink-500', 'bg-orange-500', 'bg-teal-500', 'bg-indigo-500', 'bg-rose-500'];
                 const sortedTags = Object.entries(tagCounts)
                     .sort((a, b) => b[1] - a[1])
-                    .slice(0, 3); 
-                    
-                const tagColors = ['bg-blue-500', 'bg-purple-500', 'bg-emerald-500'];
+                    .map((t, index) => ({
+                        name: t[0],
+                        count: t[1],
+                        pct: totalTags > 0 ? Math.round((t[1] / totalTags) * 100) : 0,
+                        color: tagPalette[index % tagPalette.length]
+                    }));
+
+                let overdueCount = 0, atRiskCount = 0, onTrackCount = 0, noDateCount = 0;
+                const todayDate = new Date();
+                todayDate.setHours(0,0,0,0);
+                const nextWeekDate = new Date(todayDate);
+                nextWeekDate.setDate(nextWeekDate.getDate() + 7);
+
+                this.state.projects.filter(p => p.status !== 'done').forEach(p => {
+                    p.tasks.forEach(t => {
+                        const isDone = p.type === 'agile' ? t.agileStatus === 'done' : t.status === 'done';
+                        if (!isDone) {
+                            if (!t.dueDate) {
+                                noDateCount++;
+                            } else {
+                                const d = new Date(t.dueDate);
+                                if (d < todayDate) overdueCount++;
+                                else if (d <= nextWeekDate) atRiskCount++;
+                                else onTrackCount++;
+                            }
+                        }
+                    });
+                });
+                const totalOpenTasksForDeadlines = overdueCount + atRiskCount + onTrackCount + noDateCount;
 
                 return `
                     <div class="mb-8">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
                             
-                            <div class="glass-panel p-5 md:p-6 rounded-2xl flex flex-col h-48 md:h-56">
-                                <div class="flex justify-between items-start mb-4 md:mb-6">
-                                    <h3 class="text-xs md:text-sm text-app-textSecondary">Charge par collaborateur</h3>
+                            <!-- KPI 1 : Santé des Échéances -->
+                            <div class="glass-panel p-5 md:p-6 rounded-2xl flex flex-col h-64">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xs md:text-sm font-semibold text-white">Santé des Échéances</h3>
+                                    <i data-lucide="calendar-alert" class="w-4 h-4 text-app-textSecondary opacity-50"></i>
+                                </div>
+                                <p class="text-[10px] text-app-textSecondary mb-6">Sur l'ensemble des tâches actives.</p>
+                                
+                                <div class="space-y-4 flex-1 flex flex-col justify-center">
+                                    ${totalOpenTasksForDeadlines === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucune tâche ouverte.</p>' : ''}
+                                    ${totalOpenTasksForDeadlines > 0 ? `
+                                        <div>
+                                            <div class="flex justify-between text-[10px] md:text-xs mb-1.5">
+                                                <span class="text-red-400 font-medium flex items-center gap-1.5"><i data-lucide="alert-triangle" class="w-3 h-3"></i> En retard</span> 
+                                                <span class="text-app-textSecondary font-mono">${overdueCount}</span>
+                                            </div>
+                                            <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
+                                                <div class="bg-red-500 h-full transition-all duration-1000" style="width: ${Math.round((overdueCount/totalOpenTasksForDeadlines)*100)}%"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between text-[10px] md:text-xs mb-1.5">
+                                                <span class="text-app-warning font-medium flex items-center gap-1.5"><i data-lucide="clock" class="w-3 h-3"></i> À risque (< 7j)</span> 
+                                                <span class="text-app-textSecondary font-mono">${atRiskCount}</span>
+                                            </div>
+                                            <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
+                                                <div class="bg-app-warning h-full transition-all duration-1000" style="width: ${Math.round((atRiskCount/totalOpenTasksForDeadlines)*100)}%"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between text-[10px] md:text-xs mb-1.5">
+                                                <span class="text-app-success font-medium flex items-center gap-1.5"><i data-lucide="check-circle-2" class="w-3 h-3"></i> Dans les temps</span> 
+                                                <span class="text-app-textSecondary font-mono">${onTrackCount}</span>
+                                            </div>
+                                            <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
+                                                <div class="bg-app-success h-full transition-all duration-1000" style="width: ${Math.round((onTrackCount/totalOpenTasksForDeadlines)*100)}%"></div>
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+
+                            <!-- KPI 2 : Charge Collaborateurs -->
+                            <div class="glass-panel p-5 md:p-6 rounded-2xl flex flex-col h-64">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xs md:text-sm font-semibold text-white">Charge de l'équipe</h3>
                                     <i data-lucide="users" class="w-4 h-4 text-app-textSecondary opacity-50"></i>
                                 </div>
-                                <div class="space-y-3 md:space-y-4 flex-1 flex flex-col justify-center">
+                                <div class="overflow-y-auto no-scrollbar flex-1 pr-2 space-y-4">
                                     ${userWorkload.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucun projet actif.</p>' : ''}
-                                    ${userWorkload.map((u, i) => {
+                                    ${userWorkload.map(u => {
                                         const pct = Math.round((u.count / maxCount) * 100);
                                         let barColor = "bg-app-accent";
                                         if (u.count > 2) barColor = "bg-app-danger"; 
                                         else if (u.count === 2) barColor = "bg-app-warning"; 
                                         
                                         return `
-                                        <div id="kpi-user-${u.id}">
+                                        <div>
                                             <div class="flex justify-between items-center text-[10px] md:text-xs mb-1.5">
                                                 <div class="flex items-center gap-2">
-                                                    <div class="w-4 h-4 rounded-full ${u.color} flex items-center justify-center text-[8px] font-bold text-white">${u.initials}</div>
-                                                    <span class="text-white">${this.esc(u.name)}</span>
+                                                    <div class="w-4 h-4 rounded-full ${u.color} flex items-center justify-center text-[8px] font-bold text-white shrink-0">${u.initials}</div>
+                                                    <span class="text-white truncate max-w-[100px]">${this.esc(u.name)}</span>
                                                 </div>
-                                                <span class="text-app-textSecondary font-mono">${u.count} projet(s)</span>
+                                                <span class="text-app-textSecondary font-mono shrink-0">${u.count} proj.</span>
                                             </div>
-                                            <div class="w-full bg-app-bg h-1.5 md:h-2 rounded-full overflow-hidden">
+                                            <div class="w-full bg-app-bg h-1.5 rounded-full overflow-hidden">
                                                 <div class="${barColor} h-full rounded-full transition-all duration-1000" style="width: ${pct}%"></div>
                                             </div>
                                         </div>
@@ -1347,30 +1552,31 @@
                                 </div>
                             </div>
 
-                            <div class="glass-panel p-5 md:p-6 rounded-2xl flex flex-col h-48 md:h-56">
-                                <div class="flex justify-between items-start mb-4 md:mb-6">
-                                    <h3 class="text-xs md:text-sm text-app-textSecondary">Répartition par Tag (Actifs)</h3>
+                            <!-- KPI 3 : Répartition par Tag -->
+                            <div class="glass-panel p-5 md:p-6 rounded-2xl flex flex-col h-64">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xs md:text-sm font-semibold text-white">Répartition Domaines</h3>
                                     <i data-lucide="pie-chart" class="w-4 h-4 text-app-textSecondary opacity-50"></i>
                                 </div>
-                                <div class="space-y-3 md:space-y-4 flex-1 flex flex-col justify-center">
-                                    ${sortedTags.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucun tag utilisé.</p>' : ''}
-                                    ${sortedTags.map((tagData, index) => {
-                                        const tagName = tagData[0];
-                                        const tagVal = tagData[1];
-                                        const pct = totalTags > 0 ? Math.round((tagVal / totalTags) * 100) : 0;
-                                        const color = tagColors[index % tagColors.length];
-                                        return `
-                                        <div id="kpi-tag-${index}">
-                                            <div class="flex justify-between text-[10px] md:text-xs mb-1.5">
-                                                <span class="text-white flex items-center gap-1.5"><i data-lucide="tag" class="w-3 h-3 text-app-textSecondary"></i>${this.esc(tagName)}</span> 
-                                                <span class="text-app-textSecondary font-mono">${pct}%</span>
-                                            </div>
-                                            <div class="w-full bg-app-bg h-1.5 md:h-2 rounded-full overflow-hidden">
-                                                <div class="${color} h-full transition-all duration-1000" style="width: ${pct}%"></div>
-                                            </div>
+                                
+                                <div class="flex-1 flex flex-col justify-center">
+                                    ${sortedTags.length === 0 ? '<p class="text-xs text-app-textSecondary italic">Aucun tag utilisé.</p>' : `
+                                        <div class="w-full bg-app-bg rounded-full h-3 flex overflow-hidden border border-app-border gap-0.5 mb-6">
+                                            ${sortedTags.map(tag => `
+                                                <div class="${tag.color} transition-all duration-1000" style="width: ${tag.pct}%" title="${this.esc(tag.name)}: ${tag.pct}%"></div>
+                                            `).join('')}
                                         </div>
-                                        `
-                                    }).join('')}
+                                        
+                                        <div class="flex flex-wrap gap-2 overflow-y-auto no-scrollbar max-h-[100px] content-start">
+                                            ${sortedTags.map(tag => `
+                                                <div class="flex items-center bg-app-bg border border-app-border px-2 py-1 rounded-md">
+                                                    <div class="w-2 h-2 rounded-full ${tag.color} mr-1.5 shrink-0"></div>
+                                                    <span class="text-[9px] text-white font-medium mr-1 truncate max-w-[60px]">${this.esc(tag.name)}</span>
+                                                    <span class="text-[9px] text-app-textSecondary font-mono">${tag.pct}%</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    `}
                                 </div>
                             </div>
 
@@ -1609,6 +1815,7 @@
 
                     <div class="p-4 md:p-8 flex-1 overflow-y-auto bg-app-bg/50">
                         
+                        <!-- PIECES JOINTES -->
                         <div class="mb-8">
                             <div class="flex items-center justify-between mb-3">
                                 <h3 class="text-[10px] md:text-xs font-semibold text-app-textSecondary uppercase tracking-wider flex items-center gap-1.5">
@@ -1642,6 +1849,7 @@
                             </div>
                         </div>
 
+                        <!-- LIGNE 3 COLONNES -->
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8 border-t border-app-border/50 pt-8">
                             <div class="glass-panel p-3 md:p-4 rounded-xl flex items-center gap-3 md:gap-4 relative group overflow-hidden">
                                 <div class="w-8 h-8 md:w-10 md:h-10 rounded-full ${user.color} flex items-center justify-center text-xs md:text-sm font-bold text-white shadow-inner shrink-0">${user.initials}</div>
@@ -1793,7 +2001,7 @@
                         case 'remove-tag': this.removeTag(d.projectId, d.tag); break;
                         case 'trigger-upload': document.getElementById(d.target).click(); break;
                         case 'delete-attachment': this.deleteAttachment(d.projectId, d.attachmentName); break;
-                        case 'add-user': this.addUser(); break; // NOUVELLE ACTION POUR AJOUTER UN COLLABORATEUR
+                        case 'add-user': this.addUser(); break;
                     }
                 });
 
@@ -1877,7 +2085,7 @@
                 
                 document.addEventListener('touchstart', (e) => {
                     if (e.target.closest('.kanban-card')) {
-                         // Configuration passive pour scroll sur mobile
+                         // Configuration passive
                     }
                 }, {passive: true});
             }
