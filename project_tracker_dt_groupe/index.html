@@ -133,35 +133,44 @@
             </button>
         </div>
         
-        <nav class="flex-1 p-3 space-y-0.5 overflow-y-auto mt-2">
-            <div class="text-[10px] font-bold text-app-textSecondary mb-2 mt-2 px-3 tracking-wider uppercase">Pilotage</div>
+        <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto mt-2">
+            <div class="text-[10px] font-bold text-app-textSecondary mb-3 mt-2 px-2 tracking-wider uppercase">Pilotage</div>
             
-            <button data-action="navigate" data-view="dashboard" id="nav-dashboard" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
-                <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Vue d'ensemble
+            <button data-action="navigate" data-view="dashboard" id="nav-dashboard" class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group font-semibold bg-app-panel/30 border border-app-border/50 shadow-sm">
+                <div class="w-6 h-6 rounded bg-app-accent/15 flex items-center justify-center mr-3 group-hover:bg-app-accent/30 transition-colors shrink-0">
+                    <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-app-accent opacity-100"></i>
+                </div>
+                Vue d'ensemble
             </button>
-            <button data-action="navigate" data-view="projects" id="nav-projects" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
-                <i data-lucide="folder-kanban" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Projets
+            <button data-action="navigate" data-view="projects" id="nav-projects" class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="folder-kanban" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent shrink-0"></i> Projets
             </button>
-            <button data-action="navigate" data-view="backlog" id="nav-backlog" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
-                <i data-lucide="list-tree" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Backlog Produit
+            <button data-action="navigate" data-view="backlog" id="nav-backlog" class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="list-tree" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent shrink-0"></i> Backlog Produit
             </button>
-            <button data-action="navigate" data-view="roadmap" id="nav-roadmap" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
-                <i data-lucide="calendar-days" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent"></i> Roadmap
+            <button data-action="navigate" data-view="roadmap" id="nav-roadmap" class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="calendar-days" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 group-hover:text-app-accent shrink-0"></i> Roadmap
             </button>
 
-            <div class="text-[10px] font-bold text-app-textSecondary mb-2 mt-6 px-3 tracking-wider uppercase">Organisation</div>
+            <div class="text-[10px] font-bold text-app-textSecondary mb-3 mt-8 px-2 tracking-wider uppercase">Organisation</div>
             
-            <button data-action="navigate" data-view="team" id="nav-team" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
-                <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100"></i> Équipe
+            <button data-action="navigate" data-view="team" id="nav-team" class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 shrink-0"></i> Équipe
             </button>
-            <button data-action="navigate" data-view="archive" id="nav-archive" class="w-full flex items-center px-3 py-2 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
-                <i data-lucide="archive" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100"></i> Archives
+            <button data-action="navigate" data-view="archive" id="nav-archive" class="w-full flex items-center px-3 py-2.5 rounded-lg text-sm text-app-textSecondary hover:text-white hover:bg-app-hover transition-colors group">
+                <i data-lucide="archive" class="w-4 h-4 mr-3 opacity-70 group-hover:opacity-100 shrink-0"></i> Archives
             </button>
         </nav>
         
-        <div class="px-4 pb-4 pt-2 text-center select-none">
-            <p class="text-[9px] text-app-textSecondary/50 font-medium tracking-wider uppercase">© 2026 DT Prox</p>
-            <p class="text-[9px] text-app-textSecondary/40 mt-1">v1.9.0 • Scalable Dashboards</p>
+        <div class="px-5 pb-5 pt-4 border-t border-app-border/50 bg-app-bg">
+            <div class="flex items-center justify-between text-[10px] text-app-textSecondary font-medium mb-2">
+                <span>© 2026 DT Prox</span>
+                <span class="px-1.5 py-0.5 rounded bg-app-panel border border-app-border">v1.9.1</span>
+            </div>
+            <div class="flex gap-3 text-[10px] text-app-textSecondary/70">
+                <a href="#" class="hover:text-white hover:underline transition-all">Mentions légales</a>
+                <a href="#" class="hover:text-white hover:underline transition-all">Support IT</a>
+            </div>
         </div>
 
         <div class="p-4 border-t border-app-border bg-app-panel/30 cursor-pointer hover:bg-app-hover transition-colors" data-action="open-user-switcher">
@@ -923,7 +932,7 @@
                             <div class="glass-panel rounded-2xl p-5 md:p-6 flex-1 flex flex-col justify-between border border-app-border/80 relative overflow-hidden">
                                 <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 rounded-full bg-app-accent/10 blur-3xl pointer-events-none"></div>
 
-                                <div class="flex items-start justify-between mb-6">
+                                <div class="flex items-start justify-between mb-4">
                                     <div>
                                         <h2 class="text-lg md:text-xl font-bold text-white mb-1">Bonjour, ${this.esc(currentUser.name.split(' ')[0])} 👋</h2>
                                         <p class="text-xs md:text-sm text-app-textSecondary">Voici l'état de la Roadmap Produit & Tech.</p>
@@ -933,7 +942,12 @@
                                     </div>
                                 </div>
                                 
-                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-8 mt-2">
+                                <div class="flex items-baseline space-x-3 mb-6 mt-2">
+                                    <span class="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white drop-shadow-lg leading-none">${pctDone}<span class="text-4xl md:text-5xl lg:text-6xl text-app-textSecondary font-bold">%</span></span>
+                                    <span class="text-xs md:text-sm text-app-textSecondary font-medium pb-1 md:pb-2 leading-snug">d'effort total<br>complété</span>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-6">
                                     <div class="bg-app-bg/50 border border-app-border rounded-xl p-3 hover:bg-app-hover transition-colors">
                                         <div class="text-app-textSecondary text-[9px] md:text-[10px] uppercase font-bold mb-1 tracking-wider">Nouveaux / Prêts</div>
                                         <div class="text-xl md:text-2xl font-bold text-blue-300">${readyProjs}</div>
@@ -954,8 +968,8 @@
 
                                 <div class="mt-auto border-t border-app-border/50 pt-4">
                                     <div class="flex justify-between items-end mb-2">
-                                        <span class="text-[10px] md:text-xs font-semibold text-app-textSecondary uppercase tracking-wider">Avancement Global (Tâches & US)</span>
-                                        <span class="text-xs font-medium text-white">${pctDone}% Terminées</span>
+                                        <span class="text-[10px] md:text-xs font-semibold text-app-textSecondary uppercase tracking-wider">Répartition de l'effort</span>
+                                        <span class="text-[10px] text-app-textSecondary font-mono uppercase">${totalTasks} Tâches au total</span>
                                     </div>
                                     <div class="w-full bg-app-bg rounded-full h-1.5 md:h-2 flex overflow-hidden border border-app-border gap-0.5">
                                         <div class="bg-app-success transition-all duration-1000" style="width: ${pctDone}%" title="Terminées: ${pctDone}%"></div>
@@ -966,23 +980,27 @@
                                 </div>
                             </div>
 
-                            <div class="glass-panel rounded-2xl p-4 md:p-5 flex-1 xl:max-w-md border-t-2 border-t-app-danger flex flex-col bg-gradient-to-b from-app-panel to-transparent">
-                                <div class="flex items-center justify-between mb-4">
-                                    <span class="text-sm font-semibold text-white">Mes Éléments Urgents</span>
-                                    <i data-lucide="clock" class="w-4 h-4 text-app-textSecondary"></i>
+                            <div class="rounded-2xl p-4 md:p-5 flex-1 xl:max-w-md border border-red-900/40 flex flex-col bg-gradient-to-br from-red-950/30 via-app-panel to-app-bg shadow-[inset_0_1px_0_0_rgba(239,68,68,0.1)] relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-red-500/10 blur-3xl rounded-full pointer-events-none -mt-10 -mr-10"></div>
+                                <div class="flex items-center justify-between mb-4 relative z-10">
+                                    <span class="text-sm font-semibold text-white flex items-center gap-2">
+                                        <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                                        Mes Éléments Urgents
+                                    </span>
+                                    <i data-lucide="clock" class="w-4 h-4 text-red-400 opacity-80"></i>
                                 </div>
-                                <div class="flex-1 flex flex-col gap-2 overflow-y-auto max-h-48 xl:max-h-full">
+                                <div class="flex-1 flex flex-col gap-2 overflow-y-auto max-h-48 xl:max-h-full relative z-10">
                                     ${topUrgentTasks.length === 0 ? '<p class="text-xs text-app-textSecondary italic mt-4">Aucune échéance critique.</p>' : ''}
                                     ${topUrgentTasks.map(t => {
                                         const overdue = this.isDateOverdue(t.dueDate);
                                         return `
-                                        <div id="urgent-task-${t.id}" data-action="open-project" data-project-id="${t.projectId}" class="flex items-center justify-between p-2.5 rounded-lg bg-app-bg border border-app-border/50 hover:border-app-border cursor-pointer transition-colors group">
+                                        <div id="urgent-task-${t.id}" data-action="open-project" data-project-id="${t.projectId}" class="flex items-center justify-between p-2.5 rounded-lg bg-app-bg/80 border border-red-900/20 hover:border-red-500/40 cursor-pointer transition-colors group">
                                             <div class="flex flex-col flex-1 min-w-0 pr-3">
-                                                <span class="text-sm text-white font-medium truncate group-hover:text-app-accent transition-colors leading-tight">${this.esc(t.title)}</span>
+                                                <span class="text-sm text-white font-medium truncate group-hover:text-red-300 transition-colors leading-tight">${this.esc(t.title)}</span>
                                                 <span class="text-[10px] text-app-textSecondary truncate mt-0.5">${this.esc(t.projectName)}</span>
                                             </div>
                                             <div class="flex items-center shrink-0">
-                                                <span class="text-[10px] px-2 py-1 rounded-md font-medium ${overdue ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-app-panel text-app-textSecondary border border-app-border'}">
+                                                <span class="text-[10px] px-2 py-1 rounded-md font-medium ${overdue ? 'bg-red-500/20 text-red-300 border border-red-500/30' : 'bg-app-panel text-app-textSecondary border border-app-border'}">
                                                     ${overdue ? 'En retard' : this.formatDateDisplay(t.dueDate)}
                                                 </span>
                                             </div>
