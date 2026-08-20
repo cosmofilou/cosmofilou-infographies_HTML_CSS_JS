@@ -61,6 +61,9 @@ Ce dépôt contient une collection d'infographies interactives, créées avec HT
 * **Description :** Une application front-end responsive et adaptative conçue pour le suivi des projets de la Direction Technique. Elle inclut un mode sombre automatique, une gestion visuelle de l'avancement des projets (ex: Ouverture Licorne, Audit Énergétique) et un menu de navigation latéral optimisé pour mobile.
 * **Accéder au projet :** [Voir le Project Tracker](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/project_tracker_dt_groupe/index.html)
 
+### 6. Infographie « Multiverse Nexus (MCU) »
+* **Description :** Frise chronologique interactive retraçant la trajectoire du Marvel Cinematic Universe (incursions, Doctor Doom, Secret Wars et reboot des X-Men).
+* **Accéder à l'infographie :** [Voir l'infographie "MULTIVERSE NEXUS"](https://cosmofilou.github.io/cosmofilou-infographies_HTML_CSS_JS/infographie_mcu_multiverse_nexus/index.html)
 ---
 
 ## Mentions légales et Licence
