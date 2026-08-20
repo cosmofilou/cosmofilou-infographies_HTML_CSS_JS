@@ -2,7 +2,7 @@
 <html lang="fr" class="scroll-smooth overflow-x-hidden">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Infographie Interactive : Cartographie Multiverselle du MCU</title>
     
     <!-- Script Tailwind CSS -->
@@ -22,17 +22,18 @@
                             950: '#0f172a',
                         },
                         mcu: {
-                            gold: '#FACC15', // Saga Infini / Avengers
-                            emerald: '#34D399', // Loki / TVA
-                            crimson: '#F87171', // Incursions / Chaos
-                            cyan: '#38BDF8', // Mutants / F4
-                            doom: '#4ADE80', // Doom
-                            tva: '#C084FC' // Multivers / Magie
+                            gold: '#FACC15',
+                            emerald: '#34D399',
+                            crimson: '#F87171',
+                            cyan: '#38BDF8',
+                            doom: '#4ADE80',
+                            tva: '#C084FC',
+                            celestial: '#FDBA74'
                         }
                     },
                     animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'spin-slow': 'spin 20s linear infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 25s linear infinite',
                     }
                 }
             }
@@ -40,164 +41,247 @@
     </script>
     
     <style>
-        body { background-color: #0f172a !important; color: #f1f5f9 !important; }
+        body { background-color: #0f172a !important; color: #f1f5f9 !important; -webkit-font-smoothing: antialiased; }
         .hidden-safeguard { display: none !important; }
         
         .glass-panel { 
-            background: rgba(30, 41, 59, 0.8); 
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1); 
+            background: rgba(30, 41, 59, 0.85); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); 
         }
         
+        /* TIMELINE RESPONSIVE FIX */
         .timeline-line::before {
             content: '';
             position: absolute;
-            top: 0; bottom: 0; left: 50%;
+            top: 0; bottom: 0; 
             width: 4px;
-            background: linear-gradient(to bottom, #FACC15 0%, #C084FC 25%, #F87171 50%, #4ADE80 75%, #38BDF8 100%);
-            transform: translateX(-50%);
-            opacity: 0.6;
+            background: linear-gradient(to bottom, #FACC15 0%, #C084FC 20%, #FDBA74 40%, #F87171 60%, #4ADE80 80%, #38BDF8 100%);
+            opacity: 0.5;
+            border-radius: 4px;
         }
+
+        @media (max-width: 767px) {
+            .timeline-line::before { left: 32px; transform: translateX(-50%); }
+            .timeline-node { left: 32px; transform: translateX(-50%); }
+        }
+        @media (min-width: 768px) {
+            .timeline-line::before { left: 50%; transform: translateX(-50%); }
+            .timeline-node { left: 50%; transform: translateX(-50%); }
+        }
+
+        /* INCURSION ANIMATIONS */
+        .universe-orb { transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        /* On utilise 60px pour s'assurer que ça ne déborde pas sur les petits écrans iPhone */
+        .incursion-active .uni-left { transform: translateX(60px); background-color: #F87171; mix-blend-mode: screen; }
+        .incursion-active .uni-right { transform: translateX(-60px); background-color: #F87171; mix-blend-mode: screen; }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #F87171; }
 
-        /* Correction pour les SVG personnalisés */
         .svg-icon { stroke-width: 1.5; stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 
-<body class="antialiased selection:bg-mcu-crimson selection:text-white min-h-screen">
+<body class="selection:bg-mcu-crimson selection:text-white min-h-screen">
 
-    <!-- Header / Nav -->
+    <!-- Header / Nav Responsive -->
     <nav class="fixed w-full z-50 glass-panel border-b border-slate-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded bg-gradient-to-br from-mcu-tva to-mcu-crimson flex items-center justify-center font-black text-white shadow-lg">M</div>
-                    <span class="font-bold text-xl tracking-wider text-white drop-shadow-md">CARTOGRAPHIE <span class="text-mcu-crimson">MCU</span></span>
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                <div class="flex items-center gap-3 h-16 flex-shrink-0">
+                    <div class="w-8 h-8 rounded bg-gradient-to-br from-mcu-tva to-mcu-crimson flex items-center justify-center font-black text-white shadow-lg shadow-mcu-crimson/20">M</div>
+                    <span class="font-bold text-lg sm:text-xl tracking-wider text-white drop-shadow-md truncate">CARTOGRAPHIE <span class="text-mcu-crimson">MCU</span></span>
                 </div>
-                <div class="hidden md:flex items-baseline space-x-4">
-                    <a href="#timeline" class="hover:text-white text-slate-300 px-3 py-2 rounded-md text-sm font-semibold transition-colors">Frise Temporelle</a>
-                    <a href="#doomsday" class="hover:text-white text-slate-300 px-3 py-2 rounded-md text-sm font-semibold transition-colors">Les 4 Bifurcations</a>
-                    <a href="#reboot" class="hover:text-white text-slate-300 px-3 py-2 rounded-md text-sm font-semibold transition-colors">Terre Unifiée</a>
+                
+                <div class="flex overflow-x-auto no-scrollbar py-2 md:py-0 md:h-16 items-center gap-2 md:gap-6 -mx-4 px-4 md:mx-0 md:px-0 border-t border-slate-700 md:border-none">
+                    <a href="#timeline" class="whitespace-nowrap hover:text-white text-slate-300 px-3 py-1.5 md:py-2 rounded-full md:rounded-md text-xs sm:text-sm font-semibold transition-colors bg-slate-800 md:bg-transparent border border-slate-600 md:border-transparent">Frise Temporelle</a>
+                    <a href="#matrix" class="whitespace-nowrap hover:text-white text-slate-300 px-3 py-1.5 md:py-2 rounded-full md:rounded-md text-xs sm:text-sm font-semibold transition-colors bg-slate-800 md:bg-transparent border border-slate-600 md:border-transparent">Simulateur Incursion</a>
+                    <a href="#doomsday" class="whitespace-nowrap hover:text-white text-slate-300 px-3 py-1.5 md:py-2 rounded-full md:rounded-md text-xs sm:text-sm font-semibold transition-colors bg-slate-800 md:bg-transparent border border-slate-600 md:border-transparent">Les 4 Bifurcations</a>
+                    <a href="#reboot" class="whitespace-nowrap hover:text-white text-slate-300 px-3 py-1.5 md:py-2 rounded-full md:rounded-md text-xs sm:text-sm font-semibold transition-colors bg-slate-800 md:bg-transparent border border-slate-600 md:border-transparent">Terre Unifiée</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-gradient-to-b from-slate-900 via-[#130f1e] to-slate-900">
+    <header class="relative pt-36 pb-16 lg:pt-48 lg:pb-32 overflow-hidden bg-gradient-to-b from-slate-900 via-[#130f1e] to-slate-900">
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-mcu-tva/10 blur-[150px] rounded-full pointer-events-none"></div>
         
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
-            <span class="px-5 py-2 rounded-full border-2 border-mcu-emerald bg-mcu-emerald/20 text-mcu-emerald text-sm font-black tracking-widest uppercase mb-6 inline-flex items-center gap-2 shadow-[0_0_15px_rgba(52,211,153,0.3)]">
-                <svg class="w-4 h-4 svg-icon" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <!-- Icône "Oeil de l'observateur" au lieu du dollar -->
+            <span class="px-5 py-2 rounded-full border-2 border-mcu-emerald bg-mcu-emerald/10 text-mcu-emerald text-xs sm:text-sm font-black tracking-widest uppercase mb-6 inline-flex items-center gap-2 shadow-[0_0_15px_rgba(52,211,153,0.2)]">
+                <svg class="w-4 h-4 svg-icon" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                 Rapport Maître MCU
             </span>
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight mb-8 text-white leading-tight drop-shadow-lg">
+            <h1 class="text-3xl sm:text-5xl lg:text-7xl font-black tracking-tight mb-6 sm:mb-8 text-white leading-tight drop-shadow-lg">
                 De la Saga de l'Infini <br>au <span class="text-transparent bg-clip-text bg-gradient-to-r from-mcu-doom to-mcu-gold animate-pulse">Battleworld</span>
             </h1>
-            <p class="mt-6 text-lg md:text-xl text-slate-200 max-w-4xl mx-auto font-medium leading-relaxed bg-slate-900/50 p-6 rounded-xl border border-slate-700/50 backdrop-blur-sm">
-                Cartographie visuelle de la crise cosmique : De la victoire contre Thanos aux incursions, la chute d'Yggdrasil provoquée par Galactus, l'avènement du <strong class="text-white">Docteur Doom</strong> (2026), et le <strong class="text-white">Soft Reboot</strong> (2027).
+            <p class="mt-4 sm:mt-6 text-sm sm:text-lg text-slate-200 max-w-4xl mx-auto font-medium leading-relaxed bg-slate-900/60 p-5 sm:p-6 rounded-2xl border border-slate-700/50 backdrop-blur-md shadow-xl">
+                Cartographie visuelle de la crise cosmique : De la victoire contre Thanos à l'émergence du <strong class="text-mcu-celestial">Céleste</strong>, jusqu'à la chute d'Yggdrasil, l'avènement du <strong class="text-mcu-doom">Docteur Doom</strong> (2026), et le <strong class="text-mcu-cyan">Soft Reboot</strong> (2027).
             </p>
         </div>
     </header>
 
-    <!-- Module 1 : Frise Chronologique avec Pictogrammes -->
-    <section id="timeline" class="py-20 relative border-t border-slate-700 bg-slate-900">
+    <!-- Module 1 : Frise Chronologique Graphique -->
+    <section id="timeline" class="py-16 sm:py-24 relative border-t border-slate-700 bg-slate-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10">
+            <div class="text-center mb-12 sm:mb-20">
                 <h2 class="text-3xl md:text-5xl font-black mb-4 text-white drop-shadow-md">La Frise des Points de Rupture</h2>
-                <p class="text-slate-300 max-w-2xl mx-auto text-lg mb-8">Les événements majeurs ayant conduit à la destruction du Multivers.</p>
+                <p class="text-slate-400 max-w-2xl mx-auto text-base sm:text-lg mb-8">Navigation visuelle à travers les anomalies qui ont condamné le Multivers.</p>
                 
-                <!-- Filtres -->
-                <div class="flex flex-wrap justify-center gap-3" id="timeline-filters">
-                    <button data-filter="all" class="filter-btn active px-5 py-2 rounded-full text-sm font-bold border-2 border-slate-500 bg-slate-700 text-white transition-all">Tout</button>
-                    <button data-filter="infinity" class="filter-btn px-5 py-2 rounded-full text-sm font-bold border-2 border-mcu-gold/50 text-mcu-gold hover:bg-mcu-gold/10 transition-all flex items-center gap-2">Saga de l'Infini</button>
-                    <button data-filter="multiverse" class="filter-btn px-5 py-2 rounded-full text-sm font-bold border-2 border-mcu-tva/50 text-mcu-tva hover:bg-mcu-tva/10 transition-all flex items-center gap-2">Saga du Multivers</button>
-                    <button data-filter="climax" class="filter-btn px-5 py-2 rounded-full text-sm font-bold border-2 border-mcu-crimson/50 text-mcu-crimson hover:bg-mcu-crimson/10 transition-all flex items-center gap-2">Climax (Doom)</button>
+                <div class="flex flex-wrap justify-center gap-2 sm:gap-3" id="timeline-filters">
+                    <button data-filter="all" class="filter-btn active px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold border-2 border-slate-500 bg-slate-700 text-white transition-all shadow-md">Toutes Sagas</button>
+                    <button data-filter="multiverse" class="filter-btn px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold border-2 border-mcu-tva/50 text-mcu-tva hover:bg-mcu-tva/10 transition-all shadow-md">Saga du Multivers</button>
+                    <button data-filter="climax" class="filter-btn px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold border-2 border-mcu-crimson/50 text-mcu-crimson hover:bg-mcu-crimson/10 transition-all shadow-md">Climax (Doom)</button>
                 </div>
             </div>
 
-            <!-- Conteneur Timeline (Généré par JS) -->
-            <div class="relative timeline-line pt-10 pb-10 mt-8" id="timeline-container">
+            <!-- Conteneur Timeline -->
+            <div class="relative timeline-line pt-10 pb-10" id="timeline-container">
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 2 & 3 RESTAURÉ : Nomenclature et Simulateur d'Incursions -->
+    <section id="matrix" class="py-16 sm:py-24 relative bg-slate-800 border-t border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 sm:mb-16">
+                <span class="text-mcu-crimson font-black tracking-widest uppercase text-xs sm:text-sm mb-3 block drop-shadow-[0_0_8px_rgba(248,113,113,0.8)]">Le Déclencheur Multiversel</span>
+                <h2 class="text-3xl md:text-5xl font-black text-white drop-shadow-lg">Nomenclature & Incursions</h2>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-10 lg:gap-12">
+                
+                <!-- Matrice des Terres (Gauche) -->
+                <div class="lg:w-1/2">
+                    <h3 class="text-2xl font-black mb-6 text-white">Référentiel des Réalités Clés</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="w-full text-left p-4 sm:p-5 rounded-xl border-2 border-mcu-gold bg-slate-900 shadow-[0_0_15px_rgba(250,204,21,0.15)]">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-black text-lg sm:text-xl text-mcu-gold">Terre-616</span>
+                                <span class="text-[10px] sm:text-xs bg-slate-800 px-3 py-1.5 rounded-md text-slate-200 font-bold border border-slate-600">Flux Sacré</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">Épicentre de la déstabilisation cosmique. Zone de convergence attirant irrémédiablement les univers voisins.</p>
+                        </div>
+                        
+                        <div class="w-full text-left p-4 sm:p-5 rounded-xl border border-slate-600 bg-slate-900">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-black text-lg sm:text-xl text-mcu-cyan">Terre-10005</span>
+                                <span class="text-[10px] sm:text-xs bg-slate-800 px-3 py-1.5 rounded-md text-slate-200 font-bold border border-slate-600">Saga Mutante</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">Trame dégradée par la perte de son Être Ancre (Logan), restaurée in extremis par Deadpool.</p>
+                        </div>
+
+                        <div class="w-full text-left p-4 sm:p-5 rounded-xl border border-slate-600 bg-slate-900">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-black text-lg sm:text-xl text-blue-400">Terre-828</span>
+                                <span class="text-[10px] sm:text-xs bg-slate-800 px-3 py-1.5 rounded-md text-slate-200 font-bold border border-slate-600">Rétro-Futur</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">Victime de l'entité Galactus, forçant les 4 Fantastiques à fuir vers la 616 et surchargeant le système.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explication Dreamwalking / Incursion Simulator (Droite) -->
+                <div class="lg:w-1/2 flex flex-col justify-center">
+                    <div class="glass-panel bg-slate-900 rounded-3xl p-6 sm:p-8 border-2 border-mcu-crimson/50 relative overflow-hidden shadow-2xl">
+                        <div class="absolute top-0 right-0 w-48 h-48 bg-mcu-crimson/20 rounded-bl-full blur-3xl pointer-events-none"></div>
+                        <h3 class="text-2xl sm:text-3xl font-black mb-4 text-white flex items-center gap-3 drop-shadow-md">
+                            <svg class="w-8 h-8 text-mcu-crimson svg-icon" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                            Mécanique d'Incursion
+                        </h3>
+                        <p class="text-slate-200 mb-4 text-sm sm:text-base leading-relaxed font-medium">
+                            Le <strong class="text-mcu-crimson drop-shadow-[0_0_5px_rgba(248,113,113,0.8)]">Dreamwalking</strong> génère une pollution vibratoire. Deux univers mis en résonance voient leurs orbites dévier jusqu'à la collision.
+                        </p>
+                        
+                        <!-- Simulateur Visuel -->
+                        <div id="incursion-stage" class="relative w-full h-32 sm:h-40 mt-6 bg-slate-950 rounded-2xl flex items-center justify-center border-2 border-slate-700 overflow-hidden shadow-inner">
+                            <div class="uni-left universe-orb absolute w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-mcu-gold/20 border-4 border-mcu-gold flex items-center justify-center z-10 -translate-x-[60px] sm:-translate-x-[80px] shadow-[0_0_20px_rgba(250,204,21,0.5)]">
+                                <span class="font-black text-xs sm:text-sm text-mcu-gold drop-shadow-md">616</span>
+                            </div>
+                            <div class="uni-right universe-orb absolute w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-purple-500/20 border-4 border-purple-400 flex items-center justify-center z-10 translate-x-[60px] sm:translate-x-[80px] shadow-[0_0_20px_rgba(192,132,252,0.5)]">
+                                <span class="font-black text-xs sm:text-sm text-purple-400 drop-shadow-md">838</span>
+                            </div>
+                            <div id="incursion-flash" class="absolute inset-0 bg-mcu-crimson opacity-0 transition-opacity duration-300 z-20 mix-blend-color-dodge"></div>
+                        </div>
+                        
+                        <button id="btn-simulate-incursion" class="mt-6 w-full py-3 sm:py-4 bg-mcu-crimson hover:bg-red-500 text-white font-black rounded-xl transition-all shadow-[0_0_20px_rgba(248,113,113,0.4)] text-center uppercase tracking-widest text-sm sm:text-base flex justify-center items-center gap-2">
+                            Simuler la Collision
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Module 4 : Les 4 Bifurcations Critiques -->
-    <section id="doomsday" class="py-24 relative border-t border-slate-700 bg-gradient-to-b from-slate-900 to-slate-950">
+    <section id="doomsday" class="py-16 sm:py-24 relative border-t border-slate-700 bg-gradient-to-b from-slate-900 to-slate-950">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20">
-                <span class="text-mcu-doom font-black tracking-widest uppercase text-sm mb-3 block drop-shadow-[0_0_8px_rgba(74,222,128,0.8)]">Trajectoire vers Avengers: Doomsday</span>
+            <div class="text-center mb-16 sm:mb-24">
+                <span class="text-mcu-doom font-black tracking-widest uppercase text-xs sm:text-sm mb-3 block drop-shadow-[0_0_8px_rgba(74,222,128,0.8)]">Trajectoire vers Avengers: Doomsday</span>
                 <h2 class="text-3xl md:text-5xl font-black text-white drop-shadow-lg">La Chaîne Causale vers l'Effondrement</h2>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 relative">
-                <!-- Ligne de progression desktop -->
-                <div class="hidden lg:block absolute top-[50px] left-[12.5%] right-[12.5%] h-2 bg-slate-800 rounded-full z-0 overflow-hidden">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-4 relative">
+                <div class="hidden lg:block absolute top-[48px] left-[12.5%] right-[12.5%] h-2 bg-slate-800 rounded-full z-0 overflow-hidden">
                     <div id="doom-progress" class="h-full bg-gradient-to-r from-mcu-tva via-mcu-crimson to-mcu-doom w-0 transition-all duration-1000 relative"></div>
                 </div>
 
-                <!-- Bifurcation 1 -->
                 <div class="bifurcation-step relative z-10 flex flex-col items-center group cursor-pointer" data-step="1">
-                    <div class="w-28 h-28 rounded-full bg-slate-900 border-4 border-mcu-tva flex items-center justify-center mb-6 transition-all shadow-[0_0_25px_rgba(192,132,252,0.6)]">
-                        <!-- Icone TVA/Arbre -->
-                        <svg class="w-12 h-12 text-mcu-tva svg-icon" viewBox="0 0 24 24"><path d="M12 22v-9m0 0l-4-4m4 4l4-4m-4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+                    <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-slate-900 border-4 border-mcu-tva flex items-center justify-center mb-4 sm:mb-6 transition-all shadow-[0_0_25px_rgba(192,132,252,0.6)] hover:scale-105">
+                        <svg class="w-8 h-8 sm:w-12 sm:h-12 text-mcu-tva svg-icon" viewBox="0 0 24 24"><path d="M12 22v-9m0 0l-4-4m4 4l4-4m-4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
                     </div>
-                    <h3 class="text-center font-bold text-xl text-white mb-3">Libération du Flux</h3>
+                    <h3 class="text-center font-bold text-sm sm:text-xl text-white mb-2 leading-tight">Libération du Flux</h3>
                 </div>
 
-                <!-- Bifurcation 2 -->
                 <div class="bifurcation-step relative z-10 flex flex-col items-center group cursor-pointer opacity-60 transition-all duration-500" data-step="2">
-                    <div class="w-28 h-28 rounded-full bg-slate-900 border-4 border-slate-600 group-hover:border-mcu-crimson flex items-center justify-center mb-6 transition-all">
-                        <!-- Icone Fissure/Magie -->
-                        <svg class="w-12 h-12 text-slate-500 group-hover:text-mcu-crimson svg-icon" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-slate-900 border-4 border-slate-600 group-hover:border-mcu-crimson flex items-center justify-center mb-4 sm:mb-6 transition-all hover:scale-105">
+                        <svg class="w-8 h-8 sm:w-12 sm:h-12 text-slate-500 group-hover:text-mcu-crimson svg-icon transition-colors" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                     </div>
-                    <h3 class="text-center font-bold text-xl text-slate-400 group-hover:text-white mb-3 transition-colors">Fissures Dimensionnelles</h3>
+                    <h3 class="text-center font-bold text-sm sm:text-xl text-slate-400 group-hover:text-white mb-2 leading-tight transition-colors">Fissures Dimensionnelles</h3>
                 </div>
 
-                <!-- Bifurcation 3 -->
                 <div class="bifurcation-step relative z-10 flex flex-col items-center group cursor-pointer opacity-60 transition-all duration-500" data-step="3">
-                    <div class="w-28 h-28 rounded-full bg-slate-900 border-4 border-slate-600 group-hover:border-mcu-doom flex items-center justify-center mb-6 transition-all">
-                        <!-- Icone Doom Mask -->
-                        <svg class="w-12 h-12 text-slate-500 group-hover:text-mcu-doom svg-icon" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M9 9h6M9 14h6M9 18h6M9 5h6"/></svg>
+                    <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-slate-900 border-4 border-slate-600 group-hover:border-mcu-doom flex items-center justify-center mb-4 sm:mb-6 transition-all hover:scale-105">
+                        <svg class="w-8 h-8 sm:w-12 sm:h-12 text-slate-500 group-hover:text-mcu-doom svg-icon transition-colors" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M9 9h6M9 14h6M9 18h6M9 5h6"/></svg>
                     </div>
-                    <h3 class="text-center font-bold text-xl text-slate-400 group-hover:text-white mb-3 transition-colors">Chute des Piliers</h3>
+                    <h3 class="text-center font-bold text-sm sm:text-xl text-slate-400 group-hover:text-white mb-2 leading-tight transition-colors">Chute des Piliers</h3>
                 </div>
 
-                <!-- Bifurcation 4 -->
                 <div class="bifurcation-step relative z-10 flex flex-col items-center group cursor-pointer opacity-60 transition-all duration-500" data-step="4">
-                    <div class="w-28 h-28 rounded-full bg-slate-900 border-4 border-slate-600 group-hover:border-mcu-gold flex items-center justify-center mb-6 transition-all">
-                        <!-- Icone Battleworld / Planète -->
-                        <svg class="w-12 h-12 text-slate-500 group-hover:text-mcu-gold svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-slate-900 border-4 border-slate-600 group-hover:border-mcu-gold flex items-center justify-center mb-4 sm:mb-6 transition-all hover:scale-105">
+                        <svg class="w-8 h-8 sm:w-12 sm:h-12 text-slate-500 group-hover:text-mcu-gold svg-icon transition-colors" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                     </div>
-                    <h3 class="text-center font-bold text-xl text-slate-400 group-hover:text-white mb-3 transition-colors">L'Ultime Bataille</h3>
+                    <h3 class="text-center font-bold text-sm sm:text-xl text-slate-400 group-hover:text-white mb-2 leading-tight transition-colors">L'Ultime Bataille</h3>
                 </div>
             </div>
 
             <!-- Focus Panel Doomsday -->
-            <div class="mt-12 w-full max-w-4xl mx-auto glass-panel bg-slate-800 p-8 sm:p-10 rounded-3xl border-2 border-mcu-tva/50 min-h-[220px] transition-all shadow-2xl relative overflow-hidden" id="doom-narrative-panel">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-mcu-tva/10 rounded-full blur-3xl pointer-events-none transition-colors" id="doom-panel-glow"></div>
+            <div class="mt-12 sm:mt-20 w-full max-w-4xl mx-auto glass-panel bg-slate-800 p-6 sm:p-10 rounded-[2rem] border-2 border-mcu-tva/50 min-h-[240px] transition-all shadow-2xl relative overflow-hidden" id="doom-narrative-panel">
+                <div class="absolute top-0 right-0 w-48 h-48 sm:w-64 sm:h-64 bg-mcu-tva/15 rounded-full blur-3xl pointer-events-none transition-colors" id="doom-panel-glow"></div>
                 
                 <div class="relative z-10">
-                    <div class="text-mcu-tva font-black uppercase tracking-widest text-sm mb-3 drop-shadow-md flex items-center gap-2" id="doom-tag">
+                    <div class="text-mcu-tva font-black uppercase tracking-widest text-xs sm:text-sm mb-3 drop-shadow-md flex items-center gap-2" id="doom-tag">
                         <svg class="w-4 h-4 svg-icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                         Bifurcation 1
                     </div>
-                    <h4 class="text-2xl sm:text-3xl font-black text-white mb-4 sm:mb-6 drop-shadow-md" id="doom-title">La Libération du Flux Temporel</h4>
-                    <p class="text-slate-200 leading-relaxed text-base sm:text-lg font-medium" id="doom-text">
+                    <h4 class="text-2xl sm:text-4xl font-black text-white mb-4 sm:mb-6 drop-shadow-md leading-tight" id="doom-title">La Libération du Flux Temporel</h4>
+                    <p class="text-slate-200 leading-relaxed text-sm sm:text-lg font-medium" id="doom-text">
                         L'assassinat de Celui Qui Demeure a brisé l'isolationnisme strict (Flux Temporel Sacré). L'incapacité du Cœur Temporel mécanique à absorber l'expansion infinie a conduit à son implosion. En tressant Yggdrasil, Loki a substitué un contrôle autoritaire par un modèle organique, supprimant les barrières d'isolation et posant les jalons des Incursions.
                     </p>
                 </div>
             </div>
             
-            <div class="text-center mt-12">
-                <button id="btn-next-bifurcation" class="px-10 py-4 bg-slate-800 hover:bg-slate-700 text-white text-lg font-black rounded-full transition-colors border-2 border-slate-600 shadow-xl inline-flex items-center gap-3">
+            <div class="text-center mt-10 sm:mt-12">
+                <button id="btn-next-bifurcation" class="px-8 sm:px-10 py-3 sm:py-4 bg-slate-800 hover:bg-slate-700 text-white text-base sm:text-lg font-black rounded-full transition-colors border-2 border-slate-600 shadow-xl inline-flex items-center gap-3">
                     Étape suivante
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
                 </button>
@@ -206,55 +290,51 @@
     </section>
 
     <!-- Module 5 : Soft Reboot & L'Ère Mutante -->
-    <section id="reboot" class="py-24 relative border-t border-slate-700 overflow-hidden bg-slate-900">
+    <section id="reboot" class="py-16 sm:py-24 relative border-t border-slate-700 overflow-hidden bg-slate-900">
         <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-mcu-cyan/10 via-slate-900 to-slate-900 pointer-events-none"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-16">
-                <span class="text-mcu-cyan font-black tracking-widest uppercase text-sm mb-3 block drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]">Post-Secret Wars (2027+)</span>
+            <div class="text-center mb-12 sm:mb-20">
+                <span class="text-mcu-cyan font-black tracking-widest uppercase text-xs sm:text-sm mb-3 block drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]">Post-Secret Wars (2027+)</span>
                 <h2 class="text-3xl md:text-5xl font-black text-white drop-shadow-lg">Mécanique du Soft Reboot</h2>
-                <p class="mt-6 text-slate-300 max-w-3xl mx-auto text-lg font-medium">La conclusion de la Saga du Multivers se traduit par une restructuration organique vers la <strong class="text-mcu-cyan text-xl">Terre Unifiée (Earth-Prime)</strong>.</p>
+                <p class="mt-4 sm:mt-6 text-slate-300 max-w-3xl mx-auto text-sm sm:text-lg font-medium">La conclusion de la Saga du Multivers se traduit par une restructuration organique vers la <strong class="text-mcu-cyan text-base sm:text-xl">Terre Unifiée (Earth-Prime)</strong>.</p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                 
-                <!-- Zone Visuelle (Corrigée pour le responsive) -->
-                <div class="relative h-[450px] sm:h-[500px] w-full glass-panel bg-slate-950 rounded-[2.5rem] border-2 border-slate-600 flex items-center justify-center overflow-hidden shadow-2xl">
+                <!-- Zone Visuelle -->
+                <div class="relative h-[400px] sm:h-[500px] w-full glass-panel bg-slate-950 rounded-[2.5rem] border-2 border-slate-600 flex flex-col items-center justify-center overflow-hidden shadow-2xl">
                     
-                    <!-- Boutons UI Vue -->
-                    <div class="absolute top-4 sm:top-6 left-4 sm:left-6 z-30 flex flex-col sm:flex-row gap-2 sm:gap-3">
-                        <button id="btn-state-multiverse" class="px-4 py-2 rounded-full bg-mcu-crimson text-white text-xs font-black uppercase tracking-wider shadow-[0_0_15px_rgba(248,113,113,0.5)] transition-colors">Multivers (Avant)</button>
-                        <button id="btn-state-prime" class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 hover:text-white text-xs font-bold uppercase tracking-wider border border-slate-500 transition-colors">Earth-Prime (Après)</button>
+                    <div class="absolute top-4 sm:top-6 left-0 right-0 z-30 flex justify-center gap-3 px-4">
+                        <button id="btn-state-multiverse" class="flex-1 max-w-[160px] py-2 sm:py-2.5 rounded-full bg-mcu-crimson text-white text-[10px] sm:text-xs font-black uppercase tracking-wider shadow-[0_0_15px_rgba(248,113,113,0.5)] transition-colors">Multivers</button>
+                        <button id="btn-state-prime" class="flex-1 max-w-[160px] py-2 sm:py-2.5 rounded-full bg-slate-800 text-slate-300 hover:text-white text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-slate-500 transition-colors">Earth-Prime</button>
                     </div>
 
-                    <!-- Etat 1 : Multivers Éclaté -->
-                    <div id="vis-multiverse" class="absolute inset-0 flex items-center justify-center transition-all duration-1000 transform scale-100 opacity-100">
-                        <div class="absolute w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-mcu-gold/10 border-4 border-mcu-gold flex items-center justify-center -translate-y-20 -translate-x-16 sm:-translate-x-20 shadow-[0_0_30px_rgba(250,204,21,0.3)]">
-                            <span class="font-black text-lg sm:text-xl text-mcu-gold text-center leading-tight">616<br><small class="text-[10px] font-bold uppercase tracking-widest text-slate-200">Avengers</small></span>
+                    <!-- Etat 1 -->
+                    <div id="vis-multiverse" class="absolute inset-0 flex items-center justify-center transition-all duration-700 transform scale-100 opacity-100 pt-10">
+                        <div class="absolute w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-mcu-gold/10 border-4 border-mcu-gold flex items-center justify-center -translate-y-16 -translate-x-12 sm:-translate-x-20 shadow-[0_0_30px_rgba(250,204,21,0.3)]">
+                            <span class="font-black text-lg sm:text-xl text-mcu-gold text-center leading-tight">616<br><small class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-200">Avengers</small></span>
                         </div>
-                        <div class="absolute w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-mcu-cyan/10 border-4 border-mcu-cyan flex items-center justify-center translate-y-20 -translate-x-20 sm:-translate-x-24 shadow-[0_0_30px_rgba(56,189,248,0.3)]">
-                            <span class="font-black text-base sm:text-lg text-mcu-cyan text-center leading-tight">10005<br><small class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-200">X-Men</small></span>
+                        <div class="absolute w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-mcu-cyan/10 border-4 border-mcu-cyan flex items-center justify-center translate-y-20 -translate-x-16 sm:-translate-x-24 shadow-[0_0_30px_rgba(56,189,248,0.3)]">
+                            <span class="font-black text-base sm:text-lg text-mcu-cyan text-center leading-tight">10005<br><small class="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-slate-200">X-Men</small></span>
                         </div>
-                        <div class="absolute w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-blue-500/10 border-4 border-blue-400 flex items-center justify-center translate-x-24 sm:translate-x-28 shadow-[0_0_30px_rgba(96,165,250,0.3)]">
-                            <span class="font-black text-base sm:text-lg text-blue-400 text-center leading-tight">828<br><small class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-200">Fantastic 4</small></span>
+                        <div class="absolute w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-blue-500/10 border-4 border-blue-400 flex items-center justify-center translate-x-20 sm:translate-x-28 shadow-[0_0_30px_rgba(96,165,250,0.3)]">
+                            <span class="font-black text-base sm:text-lg text-blue-400 text-center leading-tight">828<br><small class="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-slate-200">F4</small></span>
                         </div>
                     </div>
 
-                    <!-- Etat 2 : Earth-Prime (Correction Responsive) -->
-                    <div id="vis-prime" class="absolute inset-0 flex items-center justify-center transition-all duration-1000 transform scale-50 opacity-0 pointer-events-none p-4">
-                        <div class="relative w-full max-w-[280px] sm:max-w-[320px] aspect-square">
-                            <div class="absolute inset-0 bg-mcu-cyan/30 rounded-full blur-3xl animate-pulse-slow"></div>
-                            <div class="absolute inset-0 bg-gradient-to-br from-[#0284c7] to-slate-900 rounded-full border-4 border-mcu-cyan shadow-[0_0_60px_rgba(56,189,248,0.6)] flex flex-col items-center justify-center z-10 overflow-hidden p-6">
-                                <!-- Grille sphérique animée -->
-                                <div class="absolute w-[200%] h-[200%] opacity-40 animate-spin-slow" style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+                    <!-- Etat 2 -->
+                    <div id="vis-prime" class="absolute inset-0 flex items-center justify-center transition-all duration-700 transform scale-50 opacity-0 pointer-events-none p-4 pt-16">
+                        <div class="relative w-full max-w-[320px] sm:max-w-[380px] aspect-square rounded-full border-4 border-mcu-cyan shadow-[0_0_60px_rgba(56,189,248,0.5)] flex flex-col items-center justify-center bg-gradient-to-br from-[#0284c7] to-slate-900 overflow-hidden">
+                            <div class="absolute w-[200%] h-[200%] opacity-30 animate-spin-slow" style="background-image: radial-gradient(circle, #ffffff 1.5px, transparent 1.5px); background-size: 24px 24px;"></div>
+                            
+                            <div class="z-20 w-full px-6 sm:px-10 flex flex-col items-center">
+                                <h3 class="text-3xl sm:text-4xl font-black text-white tracking-widest mb-1 drop-shadow-xl text-center">EARTH<br/>PRIME</h3>
+                                <p class="text-[9px] sm:text-[11px] text-mcu-cyan uppercase font-black tracking-widest mb-5 sm:mb-6">La Terre Unifiée</p>
                                 
-                                <div class="text-center z-20 w-full">
-                                    <div class="text-2xl sm:text-4xl font-black text-white tracking-widest mb-1 sm:mb-2 drop-shadow-xl leading-none">EARTH<br/>PRIME</div>
-                                    <div class="text-[9px] sm:text-[10px] text-mcu-cyan uppercase font-black tracking-widest mb-4 sm:mb-6">La Terre Unifiée</div>
-                                    <div class="flex flex-col items-center gap-2 w-full">
-                                        <span class="px-2 py-1.5 bg-slate-900/80 text-mcu-gold text-[9px] sm:text-xs font-black rounded border border-mcu-gold w-full shadow-md">AVENGERS</span>
-                                        <span class="px-2 py-1.5 bg-slate-900/80 text-blue-400 text-[9px] sm:text-xs font-black rounded border border-blue-400 w-full shadow-md">FANTASTIC 4</span>
-                                        <span class="px-2 py-1.5 bg-slate-900/80 text-mcu-emerald text-[9px] sm:text-xs font-black rounded border border-mcu-emerald w-full shadow-md whitespace-nowrap">X-MEN (GÈNE-X)</span>
-                                    </div>
+                                <div class="w-full flex flex-col gap-2 sm:gap-3">
+                                    <div class="bg-slate-900/90 text-mcu-gold text-[10px] sm:text-xs font-black rounded-lg border border-mcu-gold/50 py-2 sm:py-2.5 text-center shadow-md w-full">AVENGERS</div>
+                                    <div class="bg-slate-900/90 text-blue-400 text-[10px] sm:text-xs font-black rounded-lg border border-blue-400/50 py-2 sm:py-2.5 text-center shadow-md w-full">FANTASTIC 4</div>
+                                    <div class="bg-slate-900/90 text-mcu-emerald text-[10px] sm:text-xs font-black rounded-lg border border-mcu-emerald/50 py-2 sm:py-2.5 text-center shadow-md w-full">X-MEN (GÈNE-X)</div>
                                 </div>
                             </div>
                         </div>
@@ -263,9 +343,9 @@
 
                 <!-- Textes Explicatifs -->
                 <div class="space-y-6 sm:space-y-8">
-                    <div class="glass-panel bg-slate-800 p-6 sm:p-8 rounded-2xl border-l-8 border-l-mcu-gold shadow-lg">
-                        <h4 class="text-xl sm:text-2xl font-black text-white mb-2 sm:mb-3 flex items-center gap-3">
-                            <svg class="w-6 h-6 text-mcu-gold svg-icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    <div class="glass-panel bg-slate-800 p-6 sm:p-8 rounded-3xl border-l-8 border-l-mcu-gold shadow-lg">
+                        <h4 class="text-xl sm:text-2xl font-black text-white mb-3 flex items-center gap-3">
+                            <svg class="w-6 h-6 sm:w-8 sm:h-8 text-mcu-gold svg-icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                             Une Nouvelle Hiérarchie
                         </h4>
                         <p class="text-slate-200 text-sm sm:text-base leading-relaxed font-medium">
@@ -273,16 +353,16 @@
                         </p>
                     </div>
 
-                    <div class="glass-panel bg-slate-800 p-6 sm:p-8 rounded-2xl border-l-8 border-l-mcu-cyan shadow-lg">
-                        <h4 class="text-xl sm:text-2xl font-black text-white mb-2 sm:mb-3 flex items-center gap-3">
-                            <svg class="w-6 h-6 text-mcu-cyan svg-icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    <div class="glass-panel bg-slate-800 p-6 sm:p-8 rounded-3xl border-l-8 border-l-mcu-cyan shadow-lg">
+                        <h4 class="text-xl sm:text-2xl font-black text-white mb-3 flex items-center gap-3">
+                            <svg class="w-6 h-6 sm:w-8 sm:h-8 text-mcu-cyan svg-icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                             L'Intégration des X-Men
                         </h4>
-                        <p class="text-slate-200 text-sm sm:text-base leading-relaxed mb-4 sm:mb-5 font-medium">
+                        <p class="text-slate-200 text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 font-medium">
                             L'histoire biologique est réécrite. Les traumatismes multiversels de Secret Wars servent de détonateur, provoquant <strong class="text-mcu-cyan font-black">l'activation massive du Gène-X à l'échelle mondiale</strong>.
                         </p>
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-600 flex items-start gap-3 shadow-inner">
-                            <span class="text-mcu-crimson text-xl mt-[-2px]">♦</span>
+                        <div class="bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-600 flex items-start gap-4 shadow-inner">
+                            <span class="text-mcu-crimson text-xl sm:text-2xl mt-[-2px]">♦</span>
                             <p class="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">
                                 <strong class="text-white font-bold">Prélude (2026) :</strong> Introduction de Jean Grey (incarnée par Sadie Sink) dans <em>Spider-Man: Brand New Day</em>.
                             </p>
@@ -294,41 +374,42 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-slate-950 py-10 border-t border-slate-800 text-center">
+    <footer class="bg-slate-950 py-8 sm:py-10 border-t border-slate-800 text-center">
         <div class="max-w-7xl mx-auto px-4">
-            <p class="text-slate-400 text-xs sm:text-sm font-bold tracking-widest uppercase">RAPPORT MAÎTRE : CARTOGRAPHIE MULTIVERSELLE & CHRONOLOGIE VISUELLE DU MCU</p>
+            <p class="text-slate-500 text-[10px] sm:text-xs font-black tracking-widest uppercase">RAPPORT MAÎTRE : CARTOGRAPHIE MULTIVERSELLE DU MCU</p>
         </div>
     </footer>
 
-    <!-- Modale de détail (Corrigée et Lumineuse) -->
-    <div id="info-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden-safeguard" style="display: none;">
+    <!-- Modale de détail -->
+    <div id="info-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 hidden-safeguard" style="display: none;">
         <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md modal-backdrop"></div>
         
-        <div class="relative bg-slate-800 border-2 border-slate-600 rounded-3xl w-full max-w-2xl p-6 sm:p-8 pt-12 shadow-2xl transform scale-95 opacity-0 transition-all duration-300 max-h-[90vh] overflow-y-auto" id="modal-content">
+        <div class="relative bg-slate-800 border-2 border-slate-600 rounded-[2rem] w-full max-w-2xl p-6 sm:p-8 pt-12 shadow-2xl transform scale-95 opacity-0 transition-all duration-300 max-h-[90vh] overflow-y-auto" id="modal-content">
             
-            <button class="absolute top-4 right-4 bg-slate-700 hover:bg-mcu-crimson hover:text-white text-slate-200 rounded-full p-2 transition-colors modal-close z-50 shadow-md">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <button class="absolute top-4 right-4 sm:top-5 sm:right-5 bg-slate-700 hover:bg-mcu-crimson hover:text-white text-slate-200 rounded-full p-2 transition-colors modal-close z-50 shadow-md">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
             
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 pr-10 border-b border-slate-700 pb-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 pr-8 border-b border-slate-700 pb-5">
                 <div>
-                    <div class="mb-2 text-xs text-slate-300 font-black tracking-widest uppercase" id="modal-date">Date</div>
-                    <div class="inline-block px-3 py-1.5 rounded-md text-xs font-black uppercase tracking-wider border shadow-sm" id="modal-badge"></div>
+                    <div class="mb-2 text-[10px] sm:text-xs text-slate-400 font-black tracking-widest uppercase" id="modal-date">Date</div>
+                    <div class="inline-block px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-wider border shadow-sm" id="modal-badge"></div>
                 </div>
                 <div class="sm:text-right">
-                    <span class="text-[10px] text-slate-400 block uppercase font-black tracking-widest mb-1">Localisation</span>
-                    <span class="text-sm font-black text-white bg-slate-900 border border-slate-600 px-3 py-1.5 rounded-lg shadow-inner inline-block" id="modal-earth">Terre-???</span>
+                    <span class="text-[9px] sm:text-[10px] text-slate-500 block uppercase font-black tracking-widest mb-1">Localisation</span>
+                    <span class="text-xs sm:text-sm font-black text-white bg-slate-900 border border-slate-600 px-3 py-1.5 rounded-lg shadow-inner inline-block" id="modal-earth">Terre-???</span>
                 </div>
             </div>
             
-            <h3 class="text-2xl sm:text-3xl font-black text-white mb-4 leading-tight drop-shadow-md flex items-center gap-3" id="modal-title-container">
-                <span id="modal-icon-container"></span>
+            <h3 class="text-2xl sm:text-3xl font-black text-white mb-4 leading-tight drop-shadow-md flex items-center gap-3">
+                <span id="modal-icon-container" class="flex-shrink-0"></span>
                 <span id="modal-title">Titre</span>
             </h3>
-            <p class="text-slate-200 text-sm sm:text-base leading-relaxed mb-8 font-medium" id="modal-desc">Description</p>
+            
+            <p class="text-slate-200 text-sm sm:text-base leading-relaxed mb-8 font-medium bg-slate-900/40 p-4 rounded-xl border border-slate-700/50" id="modal-desc">Description</p>
             
             <div class="bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-700 shadow-inner">
-                <span class="text-xs text-mcu-crimson uppercase font-black tracking-widest block mb-2 drop-shadow-sm flex items-center gap-2">
+                <span class="text-[10px] sm:text-xs text-mcu-crimson uppercase font-black tracking-widest block mb-2 drop-shadow-sm flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     Impact Multiversel
                 </span>
@@ -340,29 +421,30 @@
     <!-- SCRIPT PRINCIPAL -->
     <script>
         (function() {
-            /* 1. DONNÉES DE LA FRISE AVEC ICONS SVG (Lucide-like inline) */
-            // Ajout du gant pour Infinity Saga, Entité/Galactus pour la 828
-            const iconInfinity = `<svg class="w-10 h-10 text-mcu-gold svg-icon" viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>`;
-            const iconTVA = `<svg class="w-10 h-10 text-mcu-emerald svg-icon" viewBox="0 0 24 24"><path d="M12 22v-9m0 0l-4-4m4 4l4-4m-4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>`;
-            const iconSpider = `<svg class="w-10 h-10 text-mcu-crimson svg-icon" viewBox="0 0 24 24"><path d="M2 12h20M12 2v20M5 5l14 14M5 19L19 5"/></svg>`;
-            const iconMagic = `<svg class="w-10 h-10 text-purple-400 svg-icon" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`;
-            const iconQuantum = `<svg class="w-10 h-10 text-mcu-gold svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>`;
-            const iconMutant = `<svg class="w-10 h-10 text-mcu-cyan svg-icon" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>`;
-            const iconGalactus = `<svg class="w-10 h-10 text-blue-400 svg-icon" viewBox="0 0 24 24"><path d="M12 2L4 10l1 8 7 2 7-2 1-8-8-8z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>`;
-            const iconDoom = `<svg class="w-10 h-10 text-mcu-doom svg-icon" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M9 9h6M9 14h6M9 18h6M9 5h6"/></svg>`;
-            const iconBattleworld = `<svg class="w-10 h-10 text-white svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`;
+            /* 1. DONNÉES DE LA FRISE AVEC ICONS SVG */
+            const iconInfinity = `<svg class="w-full h-full svg-icon" viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>`;
+            const iconTVA = `<svg class="w-full h-full svg-icon" viewBox="0 0 24 24"><path d="M12 22v-9m0 0l-4-4m4 4l4-4m-4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>`;
+            const iconSpider = `<svg class="w-full h-full svg-icon" viewBox="0 0 24 24"><path d="M2 12h20M12 2v20M5 5l14 14M5 19L19 5"/></svg>`;
+            const iconMagic = `<svg class="w-full h-full svg-icon" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`;
+            const iconCelestial = `<svg class="w-full h-full svg-icon" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 0-5 5v2a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z"/><path d="M7 15c-3 0-5 2-5 5v2h20v-2c0-3-2-5-5-5"/><circle cx="12" cy="7" r="1.5" fill="currentColor"/><path d="M12 12v3"/></svg>`;
+            const iconQuantum = `<svg class="w-full h-full svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>`;
+            const iconMutant = `<svg class="w-full h-full svg-icon" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>`;
+            const iconGalactus = `<svg class="w-full h-full svg-icon" viewBox="0 0 24 24"><path d="M12 2L4 10l1 8 7 2 7-2 1-8-8-8z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>`;
+            const iconDoom = `<svg class="w-full h-full svg-icon" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M9 9h6M9 14h6M9 18h6M9 5h6"/></svg>`;
+            const iconBattleworld = `<svg class="w-full h-full svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`;
 
             const timelineEvents = [
-                { id: 1, saga: "infinity", title: "Avengers: Infinity War & Endgame", date: "Avril 2018 / 2019", earth: "Terre-616", color: "mcu-gold", badge: "Fin d'une Ère", desc: "Le Titan fou Thanos utilise les Pierres d'Infinité pour effacer la moitié de la vie. Les Avengers voyagent dans le temps pour annuler le Snap.", impact: "La chronologie sacrée est préservée, mais Captain America crée une anomalie mineure, préparant le terrain pour le TVA.", icon: iconInfinity },
-                { id: 2, saga: "multiverse", title: "Loki (Saisons 1 & 2)", date: "Juil 2021 / Nov 2023", earth: "TVA / Cœur Temporel", color: "mcu-tva", badge: "Anomalie Primaire", desc: "Assassinat de Celui Qui Demeure. Destruction du Cœur Temporel mécanique. Loki tisse les brins temporels pour ériger l'arbre Yggdrasil.", impact: "Rupture du flux temporel sacré et stabilisation organique temporaire.", icon: iconTVA },
-                { id: 3, saga: "multiverse", title: "Spider-Man: No Way Home", date: "Décembre 2021", earth: "Terre-616", color: "mcu-crimson", badge: "Fissures", desc: "Altération du sort d'amnésie par le Dr Strange. Des variants d'autres univers font irruption dans la dimension 616.", impact: "Fissures Sub-spatiales contenues provisoirement.", icon: iconSpider },
-                { id: 4, saga: "multiverse", title: "Multiverse of Madness", date: "Mai 2022", earth: "Terre-616 / 838", color: "purple-500", badge: "Incursion Active", desc: "Usage abusif du Darkhold et Dreamwalking par Wanda. Pollution vibratoire de la Terre-838 modifiant sa constante gravitationnelle.", impact: "Incursion Active (Signalée par l'entité Clea).", icon: iconMagic },
-                { id: 5, saga: "multiverse", title: "Ant-Man & Wasp: Quantumania", date: "Février 2023", earth: "Royaume Quantique", color: "mcu-gold", badge: "Déstabilisation", desc: "Défaite du variant Kang le Conquérant et mobilisation du Conseil des Kangs à travers le multivers.", impact: "Déstabilisation géopolitique cosmique majeure.", icon: iconQuantum },
-                { id: 6, saga: "climax", title: "Deadpool & Wolverine", date: "Juillet 2024", earth: "Terre-10005", color: "mcu-cyan", badge: "Ancrage Restauré", desc: "La trame mutante, dégradée par la perte de son Être Ancre (Logan), est restaurée grâce au transfert d'un variant.", impact: "Préservation in-extremis du vivier mutant historique.", icon: iconMutant },
-                { id: 7, saga: "climax", title: "The Fantastic Four: First Steps", date: "Juil 2025 (1964)", earth: "Terre-828", color: "blue-400", badge: "L'Entité Galactus", desc: "Consommation planétaire par l'entité cosmique Galactus sur l'univers Rétro-Futuriste 828. Fuite de la famille Richards vers la 616.", impact: "Surcharge des Ancreurs cosmiques sur la 616 provoquant un choc dimensionnel.", icon: iconGalactus },
-                { id: 8, saga: "climax", title: "Spider-Man: Brand New Day", date: "2026", earth: "Terre-616", color: "mcu-crimson", badge: "Prélude Mutant", desc: "Introduction de Jean Grey (Sadie Sink) directement dans la trame principale, sans barrière multiverselle.", impact: "Indice avant-coureur de l'intégration native mutante.", icon: iconSpider },
-                { id: 9, saga: "climax", title: "Avengers: Doomsday", date: "Décembre 2026", earth: "Convergence Globale", color: "mcu-doom", badge: "Point de Rupture", desc: "Incursions convergentes provoquant la collision frontale des réalités. Victor von Doom orchestre la chute contrôlée.", impact: "Incursion Terminale. Doom moissonne les composants vitaux du multivers.", icon: iconDoom },
-                { id: 10, saga: "climax", title: "Avengers: Secret Wars", date: "Décembre 2027", earth: "Battleworld", color: "white", badge: "Soft Reboot", desc: "Annihilation du multivers. Assemblage du monde mosaïque (Battleworld) suivi de la défaite du régime de Doom.", impact: "Création de la Terre Unifiée (Earth-Prime).", icon: iconBattleworld }
+                { id: 1, saga: "infinity", title: "Avengers: Infinity War & Endgame", date: "Avril 2018 / 2019", earth: "Terre-616", color: "mcu-gold", badge: "Saga de l'Infini", desc: "Le Titan Thanos utilise les Pierres d'Infinité pour effacer la moitié de la vie. Les Avengers voyagent dans le temps pour annuler le Snap.", impact: "La chronologie sacrée est préservée, mais Captain America crée une anomalie temporelle mineure.", icon: iconInfinity },
+                { id: 2, saga: "multiverse", title: "Loki (Saisons 1 & 2)", date: "Juil 2021 / Nov 2023", earth: "TVA / Cœur Temporel", color: "mcu-tva", badge: "Anomalie Primaire", desc: "Assassinat de Celui Qui Demeure. Destruction du Cœur Temporel mécanique. Loki tisse les brins temporels pour ériger l'arbre cosmique Yggdrasil.", impact: "Rupture du flux temporel sacré et stabilisation organique temporaire du Multivers.", icon: iconTVA },
+                { id: 3, saga: "multiverse", title: "Spider-Man: No Way Home", date: "Décembre 2021", earth: "Terre-616", color: "mcu-crimson", badge: "Fissures", desc: "Altération du sort d'amnésie par Doctor Strange. Des variants d'autres univers font irruption dans la dimension 616.", impact: "Fissures Sub-spatiales contenues provisoirement.", icon: iconSpider },
+                { id: 4, saga: "multiverse", title: "Multiverse of Madness", date: "Mai 2022", earth: "Terre-616 / 838", color: "mcu-tva", badge: "Incursion Active", desc: "Usage abusif du Darkhold et Dreamwalking par Wanda Maximoff. Pollution vibratoire de la Terre-838.", impact: "Incursion Active, menaçant de détruire deux univers (Signalée par Clea).", icon: iconMagic },
+                { id: 5, saga: "multiverse", title: "L'Émergence du Céleste", date: "2024 / 2025", earth: "Terre-616", color: "mcu-celestial", badge: "Menace Planétaire", desc: "Le Céleste Tiamut commence son émergence, stoppé par les Éternels. Ses restes (Adamantium) deviennent un enjeu géopolitique majeur (Captain America 4).", impact: "Altération physique de la Terre et bouleversement politique global.", icon: iconCelestial },
+                { id: 6, saga: "multiverse", title: "Ant-Man & Wasp: Quantumania", date: "Février 2023", earth: "Royaume Quantique", color: "mcu-gold", badge: "Déstabilisation", desc: "Défaite du variant Kang le Conquérant et mobilisation du Conseil des Kangs à travers le multivers.", impact: "Déstabilisation géopolitique cosmique majeure.", icon: iconQuantum },
+                { id: 7, saga: "climax", title: "Deadpool & Wolverine", date: "Juillet 2024", earth: "Terre-10005", color: "mcu-cyan", badge: "Ancrage Restauré", desc: "La trame mutante, dégradée par la perte de son Être Ancre (Logan), est restaurée grâce au transfert d'un variant par Deadpool.", impact: "Préservation in-extremis du vivier mutant historique de la destruction.", icon: iconMutant },
+                { id: 8, saga: "climax", title: "The Fantastic Four: First Steps", date: "Juil 2025 (1964)", earth: "Terre-828", color: "blue-400", badge: "L'Entité Galactus", desc: "Consommation planétaire par l'entité cosmique Galactus sur l'univers Rétro-Futuriste 828. Fuite inévitable de la famille Richards vers la 616.", impact: "Surcharge des Ancreurs cosmiques sur la 616 provoquant un choc dimensionnel.", icon: iconGalactus },
+                { id: 9, saga: "climax", title: "Spider-Man: Brand New Day", date: "2026", earth: "Terre-616", color: "mcu-crimson", badge: "Prélude Mutant", desc: "Introduction de Jean Grey (incarnée par Sadie Sink) directement dans la trame principale, sans recourir à une anomalie multiverselle.", impact: "Indice cosmique avant-coureur de l'intégration native des mutants.", icon: iconSpider },
+                { id: 10, saga: "climax", title: "Avengers: Doomsday", date: "Décembre 2026", earth: "Convergence Globale", color: "mcu-doom", badge: "Point de Rupture", desc: "Incursions convergentes provoquant la collision frontale des réalités. Victor von Doom émerge et orchestre la chute contrôlée des dimensions.", impact: "Incursion Terminale. Doom moissonne les composants vitaux du multivers.", icon: iconDoom },
+                { id: 11, saga: "climax", title: "Avengers: Secret Wars", date: "Décembre 2027", earth: "Battleworld", color: "white", badge: "Soft Reboot", desc: "Annihilation du multivers. Assemblage du monde mosaïque (Battleworld) suivi de la défaite finale du régime imposé par Doom.", impact: "Création d'une réalité organique unifiée : La Terre Unifiée (Earth-Prime).", icon: iconBattleworld }
             ];
 
             const timelineContainer = document.getElementById('timeline-container');
@@ -376,47 +458,49 @@
                 const filteredEvents = filter === 'all' ? timelineEvents : timelineEvents.filter(e => e.saga === filter);
 
                 if (filteredEvents.length === 0) {
-                    timelineContainer.innerHTML = '<p class="text-center text-slate-500 mt-10">Aucun événement dans cette saga.</p>';
+                    timelineContainer.innerHTML = '<p class="text-center text-slate-500 mt-10 font-bold">Aucun événement dans cette saga.</p>';
                     return;
                 }
 
                 filteredEvents.forEach((ev) => {
-                    const sideClass = isLeft ? 'pr-8 text-right md:w-1/2 ml-auto md:ml-0' : 'pl-8 text-left md:w-1/2 md:ml-auto';
-                    const flexDir = isLeft ? 'flex-row-reverse md:flex-row' : 'flex-row';
-                    
-                    const markerColorMap = {
-                        'mcu-gold': 'border-[#FACC15] bg-yellow-900 text-yellow-500',
-                        'mcu-emerald': 'border-[#34D399] bg-emerald-900 text-emerald-400',
-                        'mcu-crimson': 'border-[#F87171] bg-red-900 text-red-400',
-                        'mcu-cyan': 'border-[#38BDF8] bg-sky-900 text-sky-400',
-                        'mcu-doom': 'border-[#4ADE80] bg-green-900 text-green-400',
-                        'mcu-tva': 'border-[#C084FC] bg-purple-900 text-purple-400',
-                        'purple-500': 'border-purple-400 bg-purple-900 text-purple-400',
-                        'blue-400': 'border-blue-400 bg-blue-900 text-blue-400',
-                        'white': 'border-white bg-slate-700 text-white'
+                    const desktopJustify = isLeft ? 'md:justify-start' : 'md:justify-end';
+                    const desktopPadding = isLeft ? 'md:pr-12 md:pl-0' : 'md:pl-12 md:pr-0';
+                    const headerFlex = isLeft ? 'md:flex-row-reverse' : 'md:flex-row';
+                    const textAlign = isLeft ? 'md:text-right' : 'md:text-left';
+
+                    const colorMap = {
+                        'mcu-gold': 'border-[#FACC15] bg-yellow-950 text-yellow-500 shadow-[0_0_20px_rgba(250,204,21,0.5)]',
+                        'mcu-emerald': 'border-[#34D399] bg-emerald-950 text-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.5)]',
+                        'mcu-crimson': 'border-[#F87171] bg-red-950 text-red-400 shadow-[0_0_20px_rgba(248,113,113,0.5)]',
+                        'mcu-cyan': 'border-[#38BDF8] bg-sky-950 text-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.5)]',
+                        'mcu-doom': 'border-[#4ADE80] bg-green-950 text-green-400 shadow-[0_0_20px_rgba(74,222,128,0.5)]',
+                        'mcu-tva': 'border-[#C084FC] bg-purple-950 text-purple-400 shadow-[0_0_20px_rgba(192,132,252,0.5)]',
+                        'mcu-celestial': 'border-[#FDBA74] bg-orange-950 text-orange-400 shadow-[0_0_20px_rgba(253,186,116,0.5)]',
+                        'blue-400': 'border-blue-400 bg-blue-950 text-blue-400 shadow-[0_0_20px_rgba(96,165,250,0.5)]',
+                        'white': 'border-slate-300 bg-slate-800 text-white shadow-[0_0_20px_rgba(255,255,255,0.4)]'
                     };
-                    const mColor = markerColorMap[ev.color] || 'border-slate-500 bg-slate-800 text-white';
+                    const mColor = colorMap[ev.color] || 'border-slate-500 bg-slate-800 text-white shadow-md';
 
                     const card = document.createElement('div');
-                    card.className = `relative flex items-center justify-between md:justify-normal w-full mb-12 ${flexDir}`;
+                    card.className = `relative flex items-center ${desktopJustify} justify-start w-full mb-12 sm:mb-16`;
                     
                     card.innerHTML = `
-                        <div class="order-1 ${sideClass} w-full md:w-5/12 px-4 cursor-pointer event-card" data-id="${ev.id}">
-                            <div class="glass-panel bg-slate-800 p-6 rounded-2xl border-2 border-slate-700 hover:border-slate-400 transition-all duration-300 shadow-lg group">
-                                <div class="flex justify-between items-center mb-3 ${isLeft ? 'flex-row-reverse' : ''}">
-                                    <span class="text-xs font-black tracking-widest uppercase text-slate-300 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-700">${ev.date}</span>
-                                    <span class="text-[10px] font-black text-white uppercase bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-500 group-hover:bg-slate-600 transition-colors">${ev.badge}</span>
+                        <div class="w-full md:w-1/2 pl-[80px] sm:pl-[100px] ${desktopPadding} z-10 cursor-pointer event-card" data-id="${ev.id}">
+                            <div class="glass-panel bg-slate-800 p-5 sm:p-6 rounded-3xl border-2 border-slate-700 hover:border-slate-400 transition-all duration-300 shadow-xl group text-left ${textAlign}">
+                                
+                                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-4 ${headerFlex}">
+                                    <span class="text-[10px] sm:text-xs font-black tracking-widest uppercase text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-700 self-start ${isLeft ? 'md:self-end' : ''}">${ev.date}</span>
+                                    <span class="text-[9px] sm:text-[10px] font-black text-white uppercase bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-500 group-hover:bg-slate-600 transition-colors self-start ${isLeft ? 'md:self-end' : ''}">${ev.badge}</span>
                                 </div>
-                                <div class="flex items-center gap-4 mb-2 ${isLeft ? 'flex-row-reverse text-right' : ''}">
-                                    <div class="hidden sm:flex flex-shrink-0 w-12 h-12 rounded-full bg-slate-900 border border-slate-700 items-center justify-center shadow-inner">
-                                        ${ev.icon.replace('w-10 h-10', 'w-6 h-6')}
-                                    </div>
-                                    <h3 class="font-black text-xl text-white leading-tight drop-shadow-sm">${ev.title}</h3>
-                                </div>
-                                <p class="text-sm text-slate-300 line-clamp-2 font-medium mt-3">${ev.desc}</p>
+                                
+                                <h3 class="font-black text-lg sm:text-2xl text-white leading-tight drop-shadow-sm mb-3">${ev.title}</h3>
+                                <p class="text-xs sm:text-sm text-slate-300 line-clamp-2 font-medium">${ev.desc}</p>
                             </div>
                         </div>
-                        <div class="z-20 flex items-center order-1 shadow-[0_0_15px_currentColor] w-5 h-5 rounded-full border-4 ${mColor} absolute left-4 md:left-1/2 -translate-x-1/2 transform transition-all hover:scale-[1.7] cursor-pointer event-card" data-id="${ev.id}"></div>
+                        
+                        <div class="timeline-node absolute z-20 flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-full border-4 ${mColor} transform -translate-x-1/2 transition-all hover:scale-110 cursor-pointer event-card bg-slate-950 p-2.5 sm:p-3" data-id="${ev.id}">
+                            ${ev.icon}
+                        </div>
                     `;
                     timelineContainer.appendChild(card);
                     isLeft = !isLeft;
@@ -425,7 +509,6 @@
                 attachModalEvents();
             }
 
-            // Gestion Filtres
             if(filterBtns.length > 0) {
                 filterBtns.forEach(btn => {
                     btn.addEventListener('click', (e) => {
@@ -444,7 +527,7 @@
                 renderTimeline('all');
             }
 
-            /* 2. GESTION DE LA MODALE SÉCURISÉE */
+            /* 2. GESTION DE LA MODALE */
             const modal = document.getElementById('info-modal');
             const modalContent = document.getElementById('modal-content');
             
@@ -455,16 +538,14 @@
                         const ev = timelineEvents.find(e => e.id == parseInt(id));
                         if (!ev) return;
 
-                        // INJECTION
                         document.getElementById('modal-title').innerText = ev.title;
                         document.getElementById('modal-date').innerText = ev.date;
                         document.getElementById('modal-earth').innerText = ev.earth;
                         document.getElementById('modal-desc').innerHTML = ev.desc;
                         document.getElementById('modal-impact').innerText = ev.impact;
                         document.getElementById('modal-badge').innerText = ev.badge;
-                        document.getElementById('modal-icon-container').innerHTML = ev.icon.replace('w-10 h-10', 'w-8 h-8');
+                        document.getElementById('modal-icon-container').innerHTML = ev.icon;
 
-                        // Couleurs
                         const colorMap = {
                             'mcu-gold': 'bg-yellow-500/20 text-yellow-400 border-yellow-400',
                             'mcu-emerald': 'bg-emerald-500/20 text-emerald-400 border-emerald-400',
@@ -472,13 +553,13 @@
                             'mcu-cyan': 'bg-sky-500/20 text-sky-400 border-sky-400',
                             'mcu-doom': 'bg-green-500/20 text-green-400 border-green-400',
                             'mcu-tva': 'bg-purple-500/20 text-purple-400 border-purple-400',
-                            'purple-500': 'bg-purple-500/20 text-purple-400 border-purple-400',
+                            'mcu-celestial': 'bg-orange-500/20 text-orange-400 border-orange-400',
                             'blue-400': 'bg-blue-500/20 text-blue-400 border-blue-400',
                             'white': 'bg-white/10 text-white border-white'
                         };
-                        document.getElementById('modal-badge').className = `inline-block px-3 py-1.5 rounded-md text-xs font-black uppercase tracking-wider border shadow-sm ${colorMap[ev.color]}`;
+                        document.getElementById('modal-badge').className = `inline-block px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-wider border shadow-sm ${colorMap[ev.color]}`;
+                        document.getElementById('modal-icon-container').className = `flex-shrink-0 w-8 h-8 sm:w-12 sm:h-12 flex items-center justify-center ${colorMap[ev.color].split(' ')[1]}`;
 
-                        // Affichage
                         modal.classList.remove('hidden-safeguard');
                         modal.style.display = 'flex';
                         setTimeout(() => modalContent.classList.remove('scale-95', 'opacity-0'), 10);
@@ -497,7 +578,32 @@
             document.querySelector('.modal-close').addEventListener('click', closeModal);
             document.querySelector('.modal-backdrop').addEventListener('click', closeModal);
 
-            /* 3. HUB DOOMSDAY (Bifurcations) */
+            /* 3. SIMULATEUR INCURSION */
+            const btnSimulate = document.getElementById('btn-simulate-incursion');
+            const incursionStage = document.getElementById('incursion-stage');
+            const flash = document.getElementById('incursion-flash');
+            let isAnimating = false;
+
+            if (btnSimulate) {
+                btnSimulate.addEventListener('click', () => {
+                    if(isAnimating) return;
+                    isAnimating = true;
+                    incursionStage.classList.add('incursion-active');
+                    
+                    setTimeout(() => {
+                        flash.style.opacity = '1';
+                        setTimeout(() => {
+                            flash.style.opacity = '0';
+                            setTimeout(() => {
+                                incursionStage.classList.remove('incursion-active');
+                                isAnimating = false;
+                            }, 1000);
+                        }, 300);
+                    }, 1500);
+                });
+            }
+
+            /* 4. HUB DOOMSDAY */
             const doomSteps = document.querySelectorAll('.bifurcation-step');
             const btnNextDoom = document.getElementById('btn-next-bifurcation');
             const doomProgress = document.getElementById('doom-progress');
@@ -525,12 +631,12 @@
                     const icon = circle.firstElementChild;
                     
                     s.classList.remove('opacity-60');
-                    circle.className = 'w-28 h-28 rounded-full bg-slate-900 border-4 flex items-center justify-center mb-6 transition-all shadow-md group-hover:scale-105';
-                    title.className = 'text-center font-bold text-xl mb-3 transition-colors';
+                    circle.className = 'w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-slate-900 border-4 flex items-center justify-center mb-4 sm:mb-6 transition-all shadow-md group-hover:scale-105';
+                    title.className = 'text-center font-bold text-sm sm:text-xl mb-2 leading-tight transition-colors';
                     
                     if (sNum < step) {
                         circle.classList.add('border-slate-600', 'bg-slate-800');
-                        icon.className = 'w-12 h-12 svg-icon text-slate-400';
+                        icon.className = 'w-8 h-8 sm:w-12 sm:h-12 svg-icon text-slate-400';
                         title.classList.add('text-slate-400');
                     } else if (sNum === step) {
                         let glowColor, borderColor, textColor;
@@ -540,12 +646,12 @@
                         if(step === 4) { borderColor='border-mcu-gold'; textColor='text-mcu-gold'; glowColor='shadow-[0_0_25px_rgba(250,204,21,0.6)]'; }
                         
                         circle.classList.add(borderColor, glowColor, 'scale-110');
-                        icon.className = `w-12 h-12 svg-icon drop-shadow-md ${textColor}`;
+                        icon.className = `w-8 h-8 sm:w-12 sm:h-12 svg-icon drop-shadow-md ${textColor}`;
                         title.classList.add('text-white', 'scale-105');
                     } else {
                         s.classList.add('opacity-50');
                         circle.classList.add('border-slate-700', 'bg-slate-900');
-                        icon.className = 'w-12 h-12 svg-icon text-slate-600';
+                        icon.className = 'w-8 h-8 sm:w-12 sm:h-12 svg-icon text-slate-500';
                         title.classList.add('text-slate-500');
                     }
                 });
@@ -556,13 +662,13 @@
                 doomTitle.style.opacity = 0; doomText.style.opacity = 0; doomTag.style.opacity = 0;
                 
                 setTimeout(() => {
-                    doomTag.className = `${data.color} font-black uppercase tracking-widest text-sm mb-3 drop-shadow-md transition-all flex items-center gap-2`;
+                    doomTag.className = `${data.color} font-black uppercase tracking-widest text-xs sm:text-sm mb-3 drop-shadow-md transition-all flex items-center gap-2`;
                     doomTag.innerHTML = `<svg class="w-4 h-4 svg-icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> ${data.tag}`;
                     doomTitle.innerText = data.title;
                     doomText.innerHTML = data.text;
                     
-                    panel.className = `mt-12 w-full max-w-4xl mx-auto glass-panel bg-slate-800 p-8 sm:p-10 rounded-3xl border-2 ${data.border} min-h-[220px] transition-all duration-500 shadow-2xl relative overflow-hidden`;
-                    doomPanelGlow.className = `absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl pointer-events-none transition-all duration-700 ${data.glow}`;
+                    panel.className = `mt-10 sm:mt-16 w-full max-w-4xl mx-auto glass-panel bg-slate-800 p-6 sm:p-10 rounded-3xl border-2 ${data.border} min-h-[240px] transition-all duration-500 shadow-2xl relative overflow-hidden`;
+                    doomPanelGlow.className = `absolute top-0 right-0 w-48 h-48 sm:w-64 sm:h-64 rounded-full blur-3xl pointer-events-none transition-all duration-700 ${data.glow}`;
                     
                     doomTitle.style.opacity = 1; doomText.style.opacity = 1; doomTag.style.opacity = 1;
                 }, 300);
@@ -589,7 +695,7 @@
                 });
             });
 
-            /* 4. GESTION REBOOT EARTH-PRIME */
+            /* 5. GESTION REBOOT EARTH-PRIME */
             const btnMulti = document.getElementById('btn-state-multiverse');
             const btnPrime = document.getElementById('btn-state-prime');
             const visMulti = document.getElementById('vis-multiverse');
